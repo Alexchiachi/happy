@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>幸福餐桌 · 幸福行为艺术 | 品牌系统白皮书</title>
+    <!-- 使用优雅字体与简单重置 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fef7e8;  /* 温柔米色，自然基调 */
+            color: #2d2a24;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* 头部装饰 */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #e6d5b8;
+            padding-bottom: 2rem;
+        }
+
+        .hero-tag {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #b87c4f;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #3e6b3e, #b96f30);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .subhead {
+            font-size: 1.2rem;
+            color: #5b4b3a;
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .visual-quote {
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border-left: 6px solid #d49c6c;
+            padding: 1rem 1.8rem;
+            margin: 2rem 0;
+            border-radius: 24px;
+            font-style: normal;
+            font-weight: 500;
+            background: #fff3e6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        /* 卡片与网格 */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.8rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            border: 1px solid #f0e2d0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 2.6rem;
+            color: #b87c4f;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #3c5e2b;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: #b1622c;
+        }
+
+        /* 对比表格 */
+        .compare-table {
+            background: white;
+            border-radius: 32px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .compare-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 500px;
+        }
+
+        .compare-table th {
+            background: #e9dfcf;
+            padding: 1rem 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .compare-table td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #f0e2d0;
+            vertical-align: top;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight-bg {
+            background: #fef4e9;
+        }
+
+        /* 飞轮区域 (闭环) */
+        .flywheel {
+            background: #f3ede4;
+            border-radius: 48px;
+            padding: 2rem 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .flywheel-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d4a1e;
+        }
+
+        .cycle-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            background: white;
+            border-radius: 60px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        .step i {
+            color: #c47a3a;
+        }
+
+        .arrow-symbol {
+            font-size: 1.5rem;
+            color: #bd8a5c;
+        }
+
+        .loop-diagram {
+            background: #fff8f0;
+            border-radius: 36px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .loop-item {
+            background: #eddfcf;
+            border-radius: 100px;
+            padding: 0.5rem 1.2rem;
+            font-weight: 500;
+        }
+
+        /* 三重优势 */
+        .advantage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .adv-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.6rem;
+            border-top: 6px solid #d49c6c;
+        }
+
+        .badge {
+            background: #f4e3d4;
+            color: #9b5e2c;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* 商业闭环飞轮可视化 */
+        .flywheel-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .wheel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .wheel-node {
+            background: #ffffffdb;
+            backdrop-filter: blur(2px);
+            border-radius: 80px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 8px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e3cfb5;
+            font-size: 0.95rem;
+        }
+
+        .feedback-loop {
+            background: #e4d5c2;
+            border-radius: 40px;
+            padding: 1rem 2rem;
+            font-style: italic;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd0be;
+            color: #7f6b58;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 680px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .card-icon {
+                font-size: 2rem;
+            }
+        }
+
+        .em-p {
+            font-size: 1.05rem;
+            margin: 1rem 0;
+        }
+        .italic-quote {
+            font-style: italic;
+            border-left: 3px solid #cfb187;
+            padding-left: 1rem;
+            margin: 1.2rem 0;
+            color: #4a3b2c;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 头部概念 -->
+    <div class="hero">
+        <div class="hero-tag"><i class="fas fa-seedling"></i> 幸福行为艺术 · 永续上演</div>
+        <h1>幸福餐桌<br>不是一场活动</h1>
+        <div class="subhead">而是一件永不落幕的行为艺术作品 · 用仪式重构商业价值</div>
+        <div class="visual-quote">
+            <i class="fas fa-tree" style="margin-right: 10px; color:#b77c48;"></i> “每一次餐桌都是同一件作品的再一次上演——夏天桑麻之下，秋天挖麻敬土，冬天窖藏暖食。<br>
+            变化的是节气载体，不变的是<strong>‘在自然中郑重地吃一顿幸福饭’</strong>这一行为本身。”
+        </div>
+    </div>
+
+    <!-- 一、本质对比：行为艺术 vs 传统活动 -->
+    <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;"><i class="fas fa-theater-masks"></i> 底层认知 · 行为艺术 vs 活动</h2>
+    <p style="margin-bottom: 1rem; color: #5f4c38;">幸福餐桌的基因是“行为艺术”，每一次都是同一母题的变奏，沉淀仪式、故事与用户共创的情感资产。</p>
+    <div class="compare-table">
+        <table>
+            <thead>
+                <tr><th width="30%">维度</th><th width="35%">❌ 传统活动</th><th width="35%">✅ 幸福行为艺术</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>频次属性</strong></td><td>一次性、有始有终</td><td class="highlight-bg">可重复，每次都是新的变奏，积累经典仪式</td></tr>
+                <tr><td><strong>核心目的</strong></td><td>引流、短期促销</td><td class="highlight-bg">持续塑造“幸福”的可感知形态，成为文化节拍</td></tr>
+                <tr><td><strong>参与感</strong></td><td>消费者旁观/短暂体验</td><td class="highlight-bg">每个人成为“行为共创者”，作品随人传播</td></tr>
+                <tr><td><strong>资产沉淀</strong></td><td>照片、数据报表</td><td class="highlight-bg">仪式脚本、幸福感故事库、年度行为志、用户共创艺术档案</td></tr>
+                <tr><td><strong>定价逻辑</strong></td><td>服务/门票价（比价）</td><td class="highlight-bg">艺术品参与价（参演凭证+限量行为记录）</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 三重核心优势（行为艺术视角） -->
+    <h2 style="font-size: 1.8rem; margin: 2rem 0 1rem;"><i class="fas fa-crown"></i> 未被复制的三重优势 · 行为艺术独家基因</h2>
+    <div class="advantage-grid">
+        <div class="adv-card">
+            <div class="badge"><i class="fas fa-ticket-alt"></i> 仪式即门票</div>
+            <h3 style="margin: 0 0 0.8rem 0;">🎭 从“售卖体验”<br>升级为“邀请参与作品”</h3>
+            <p>参与者买的不是一顿饭，而是成为一件正在发生的艺术作品的共创者。398元不是餐饮消费，是<strong>“参演凭证+亲手熬制的桑葚酱+带编号的行为记录卡”</strong>。艺术品没有标准价，心理比价彻底消失。</p>
+        </div>
+        <div class="adv-card">
+            <div class="badge"><i class="fas fa-sync-alt"></i> 重复即资产</div>
+            <h3 style="margin: 0 0 0.8rem 0;">🏛️ 每一次上演，<br>都在加固品牌护城河</h3>
+            <p>活动做第二次就贬值，行为艺术做第二次才开始成立。连续三个夏天在承德松林上演同一仪式，幸福餐桌就会成为地域性的<strong>季节性文化坐标</strong>。时间维度的累积无法抄袭——壁垒由重复铸就。</p>
+        </div>
+        <div class="adv-card">
+            <div class="badge"><i class="fas fa-eye"></i> 观看即传播</div>
+            <h3 style="margin: 0 0 0.8rem 0;">📡 观众与演员边界消融</h3>
+            <p>现场仅8~10人用餐，但直播镜头与短视频让千万人成为“远程观众”。行为艺术的特性在于：远程观看本身也是作品的一部分。每一个点赞、评论都是对“幸福”的合鸣，创造精神参与式的二次传播。</p>
+        </div>
+    </div>
+
+    <!-- 商业价值闭环 - 飞轮驱动系统 -->
+    <div class="flywheel">
+        <div class="flywheel-title"><i class="fas fa-charging-station"></i> 商业价值闭环 · 行为艺术飞轮</div>
+        <p style="max-width: 700px; margin: 0 auto 1rem;">从一场行为艺术上演，到品牌溢价提升，形成可自我增强的商业系统</p>
+        
+        <div class="flywheel-visual">
+            <div class="wheel">
+                <div class="wheel-node">🎬 行为艺术上演<br>(夏·秋·冬·春)</div>
+                <i class="fas fa-arrow-right arrow-symbol"></i>
+                <div class="wheel-node">✨ 高感知内容<br>(影像+故事+证言)</div>
+                <i class="fas fa-arrow-right arrow-symbol"></i>
+                <div class="wheel-node">📱 线上传播<br>裂变/预约/预售</div>
+            </div>
+            <div class="wheel">
+                <div class="wheel-node">🛍️ 衍生品复购<br>(天麻料包/桑葚酱/行为手册)</div>
+                <i class="fas fa-arrow-right arrow-symbol"></i>
+                <div class="wheel-node">🤝 B端联名授权<br>(高端餐厅「幸福联名季」)</div>
+                <i class="fas fa-arrow-right arrow-symbol"></i>
+                <div class="wheel-node">🏷️ 品牌溢价↑<br>隆兴元康全线产品提价空间打开</div>
+            </div>
+            <div class="feedback-loop">
+                <i class="fas fa-redo-alt"></i> 更强资源投入下一场行为艺术 → 飞轮加速
+            </div>
+        </div>
+
+        <!-- 关键闭环节点简表 -->
+        <div class="loop-diagram">
+            <span class="loop-item"><i class="fas fa-calendar-check"></i> 预售制·提前满席</span>
+            <span class="loop-item"><i class="fas fa-box-open"></i> 现场不卖货·扫码复购</span>
+            <span class="loop-item"><i class="fas fa-handshake"></i> B端品牌授权费</span>
+            <span class="loop-item"><i class="fas fa-chart-line"></i> 农场品提价30%~80%</span>
+        </div>
+    </div>
+
+    <!-- 商业闭环详细说明（行为艺术驱动的完整路径） -->
+    <div class="grid-2" style="margin-top: 1rem;">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-hand-holding-usd"></i></div>
+            <h3>💰 价值闭环 · 第一层</h3>
+            <p><strong>用户端预售+衍生品</strong> — 每季行为艺术提前30天开放“参演席位”，锁定现金流。现场只有体验，所有产品扫码进入小程序，用户离场后复购。艺术体验为电商持续输血，一件天麻料包从几十元变成198元礼盒。</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-building"></i></div>
+            <h3>🤝 价值闭环 · 第二层</h3>
+            <p><strong>B端授权与定制</strong> — 将“幸福餐桌行为艺术”仪式脚本+视觉系统授权给异地高端餐厅，按季收取品牌授权费。同时企业团建包场「幸福行为艺术」单场收费5~10万，品牌从供货商升级为故事供应商。</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-chart-simple"></i></div>
+            <h3>🌱 价值闭环 · 第三层</h3>
+            <p><strong>资产沉淀与护城河</strong> — 每年积累用户共创的幸福感故事库、行为纪录片、年度“幸福志”。承德的夏天从此多了一个文化节拍，后来者无法抄袭“时间累积的仪式感”。</p>
+        </div>
+    </div>
+
+    <!-- 夏季登场最有价值的五重优势总结（系统化） -->
+    <div style="background: #e9dfcf4d; border-radius: 32px; padding: 1.8rem; margin: 2rem 0;">
+        <h2 style="display: flex; align-items: center; gap: 12px;"><i class="fas fa-sun-plant-wilt"></i> 今夏登场 · 行为艺术的独特系统性优势</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 1.2rem; margin-top: 1.2rem;">
+            <div><i class="fas fa-chalkboard-user" style="color:#ab6f3c;"></i> <strong>事件即媒介</strong> — 零预算撬动自发传播，用户拍照发圈即为免费种草。</div>
+            <div><i class="fas fa-tag"></i> <strong>体验即定价</strong> — 绕过原料内卷，直售情绪价值，398元/人艺术门票。</div>
+            <div><i class="fas fa-location-dot"></i> <strong>风土即剧本</strong> — “只有幸福餐桌会在桑树下举办紫色手染午宴”，形成地理垄断认知。</div>
+            <div><i class="fas fa-cubes"></i> <strong>轻资产·快迭代</strong> — 一块空地+几块松木板+一场策划，两周落地，失败成本一顿饭，成功收益一个品牌季。</div>
+            <div><i class="fas fa-store"></i> <strong>B端反哺力</strong> — 给高端餐厅的故事素材包，让渠道从压价转为主动邀约产地体验。</div>
+        </div>
+        <div class="italic-quote" style="margin-top: 1rem;">
+            🌟 场地、产品、季节是底牌，行为艺术才是打出去的赢法。幸福餐桌今夏最大优势：用最低成本、最快节奏、最高感知，完成从“卖产品”到“卖体验”、从“可替代”到“不可复制”的关键一跃。
+        </div>
+    </div>
+
+    <!-- 总结：行为艺术永续上演 -->
+    <div style="text-align: center; margin: 3rem 0 2rem;">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">🍃🎋</div>
+        <h2 style="font-size: 2rem;">幸福不是活动，是永不完结的行为艺术</h2>
+        <p style="max-width: 700px; margin: 1rem auto; font-size: 1.1rem;">它用仪式代替广告，用重复积累壁垒，用参与重构定价。<br>
+        第一次上演不是为了赚多少钱，而是为了证明：<strong>承德的夏天，从此多了一个叫“幸福餐桌”的文化节拍。</strong>此后每一年，这个节拍都会回来。</p>
+        <div style="background: #fff0e0; display: inline-block; border-radius: 60px; padding: 0.7rem 1.8rem; margin-top: 1rem; font-weight: 500;">
+            <i class="fas fa-hand-peace"></i> 今年六月 · 桑麻之下，静待首演
+        </div>
+    </div>
+
+    <!-- 与隆兴元康合作锚点+场景（呼应背景） -->
+    <div style="background: white; border-radius: 32px; padding: 1.6rem; margin: 2rem 0; border: 1px solid #f1e2cf;">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <div><i class="fas fa-leaf" style="font-size: 2rem; color:#57833b;"></i></div>
+            <div style="flex:1"><strong>合作预演 · 承德基地锚点</strong><br>挖一株天麻、摘一颗长果桑、在一棵松树下站一分钟——这些“行为锚点”将成为幸福餐桌的叙事原点。今夏样板间锁定，秋季拳头产品「天麻·深山的清醒」带着故事上市。</div>
+            <div><span class="badge" style="background:#b87c4f20;"><i class="far fa-calendar-alt"></i> 下周四勘查即启动</span></div>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-seedling"></i> 幸福餐桌 · 行为艺术品牌系统  |  每一次餐桌，同一母题的变奏  |  纯绿色无公害 与 文化体验共生
+    </footer>
+</div>
+</body>
+</html>
