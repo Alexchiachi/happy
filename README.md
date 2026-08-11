@@ -181,6 +181,25 @@
 
 ---
 
+## 📚 電子書出版工具鏈
+
+本 repo 另附一套獨立的電子書上架前檢查工具，供白皮書與衍生出版品發行使用。
+涵蓋 **英文 / 繁體中文 / 簡體中文 / 日文 / 韓文** 五語版本，
+對齊 Amazon KDP、Apple Books、Google Play Books、Kobo 的上架規則。
+
+```bash
+python3 -m epubqa check book.epub                    # 檢查
+python3 -m epubqa fix book.epub -o book-fixed.epub   # 自動修正
+python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
+```
+
+- [工具說明](./docs/EPUBQA.md) — 指令、檢查類別、設計原則
+- [上架前檢查清單](./docs/EBOOK_PRELAUNCH_CHECKLIST.md) — 人工核對用，含繁簡轉換陷阱表與各平台差異速查
+
+零依賴（只用 Python 標準函式庫），原始檔案永遠不會被覆寫。
+
+---
+
 ## 📞 聯繫合作
 
 此項目致力於探索農產品文化轉型的新範式。
