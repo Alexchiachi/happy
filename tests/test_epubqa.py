@@ -1,0 +1,451 @@
+#!/usr/bin/env python3
+"""Test suite for epubqa. Standard library only:  python3 -m unittest discover tests"""
+
+from __future__ import annotations
+
+import os
+import shutil
+import sys
+import tempfile
+import unittest
+import zipfile
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from epubqa import fixes
+from epubqa.checks.assets import image_info
+from epubqa.cli import build_report
+from epubqa.issues import Severity
+from epubqa.langprofile import (
+    SIMPLIFIED_ONLY,
+    TRADITIONAL_ONLY,
+    detect_language,
+    profile_for,
+)
+from epubqa.model import Epub, visible_text
+from tools.make_fixtures import BOOKS, build, make_jpeg
+
+
+class FixtureCase(unittest.TestCase):
+    """Builds the five sample books once for the whole suite."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.mkdtemp(prefix="epubqa-test-")
+        cls.paths = {code: build(spec, cls.tmp) for code, spec in BOOKS.items()}
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def codes(self, report) -> set:
+        return {i.code for i in report.issues}
+
+
+# --------------------------------------------------------------- detection
+
+
+class TestDetection(unittest.TestCase):
+    def test_traditional_and_simplified_sets_are_disjoint(self):
+        self.assertEqual(TRADITIONAL_ONLY & SIMPLIFIED_ONLY, set())
+
+    def test_no_false_positives_on_clean_traditional_prose(self):
+        """Regression: 了 was flagged as Simplified because 瞭 simplifies to 了.
+
+        了 appears in nearly every Chinese sentence, so a single bad entry buried
+        a real book's report under hundreds of bogus findings. Every character
+        below is ordinary Traditional Chinese.
+        """
+        prose = (
+            "我們不要就這樣算了，但也不要一直記得。他划著船來了，"
+            "伙伴們坐在茶几旁曬太陽，掛念著那張面孔。"
+            "只有乾淨的風從裡面吹過，以後的事誰知道呢？"
+            "他幹活的樣子，準確得像一台鐘。"
+        )
+        self.assertEqual([c for c in prose if c in SIMPLIFIED_ONLY], [])
+        self.assertEqual(detect_language(prose).lang, "zh-Hant")
+
+    def test_still_detects_genuine_simplified(self):
+        simplified = "我们不要就这样算了，他划着船来了，伙伴们坐在茶几旁晒太阳。"
+        self.assertEqual(detect_language(simplified).lang, "zh-Hans")
+        self.assertTrue([c for c in simplified if c in SIMPLIFIED_ONLY])
+
+    def test_detects_each_language(self):
+        cases = [
+            ("The quick brown fox jumps over the lazy dog repeatedly.", "en"),
+            ("這是一本關於風土與儀式的書，內容談論傳統與現代的對話。", "zh-Hant"),
+            ("这是一本关于风土与仪式的书，内容谈论传统与现代的对话。", "zh-Hans"),
+            ("これは風土と儀式についての本です。伝統と現代の対話を語ります。", "ja"),
+            ("이것은 풍토와 의식에 관한 책입니다. 전통과 현대의 대화를 다룹니다.", "ko"),
+        ]
+        for text, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertEqual(detect_language(text).lang, expected)
+
+    def test_kana_wins_over_shared_kanji(self):
+        # Text that is mostly Han but contains kana must classify as Japanese.
+        self.assertEqual(detect_language("東京都水道局の記録です。").lang, "ja")
+
+    def test_profile_aliases(self):
+        self.assertEqual(profile_for("zh-TW").code, "zh-Hant")
+        self.assertEqual(profile_for("zh-Hant-HK").code, "zh-Hant")
+        self.assertEqual(profile_for("zh-CN").code, "zh-Hans")
+        self.assertEqual(profile_for("en-GB").code, "en")
+        self.assertEqual(profile_for("ja-JP").code, "ja")
+        # A bare "zh" is genuinely ambiguous and must not be guessed.
+        self.assertIsNone(profile_for("zh"))
+
+
+class TestBodyPlaceholders(unittest.TestCase):
+    """Found on a real book whose colophon still read 出版日期：〔待補〕."""
+
+    def matches(self, text: str) -> list:
+        from epubqa.checks.metadata import BODY_PLACEHOLDERS
+
+        return [m.group(0) for m in BODY_PLACEHOLDERS.finditer(text)]
+
+    def test_catches_unfilled_colophon_fields(self):
+        colophon = (
+            "書名：我們不要就這樣算了\n"
+            "出版：〔待補：自費出版平台，如 Amazon KDP〕\n"
+            "出版日期：〔待補〕\n"
+            "ISBN / ASIN：〔待補；KDP 會自動配發 ASIN〕\n"
+            "聯絡方式：〔待補〕\n"
+        )
+        self.assertEqual(len(self.matches(colophon)), 4)
+
+    def test_catches_template_and_lorem(self):
+        self.assertTrue(self.matches("Published by {{PUBLISHER_NAME}} in 2026."))
+        self.assertTrue(self.matches("Lorem ipsum dolor sit amet."))
+        self.assertTrue(self.matches("By [YOUR NAME HERE]"))
+        self.assertTrue(self.matches("出版日期：［待定］"))
+
+    def test_no_false_positives_on_real_prose(self):
+        """Anonymisation and cloze blanks are ordinary CJK writing, not filler."""
+        prose = (
+            "○○先生はそのとき何も言わなかった。＿＿＿に当てはまる語を書きなさい。\n"
+            "他說：「這件事我們（暫時）不談。」ＸＸＸ 醫師搖了搖頭。\n"
+            "TK 是他名字的縮寫。答案是 ____ 分。\n"
+            "把「療癒」這個項目，從你的人生清單上，劃掉。"
+        )
+        self.assertEqual(self.matches(prose), [])
+
+
+class TestIssueCodes(unittest.TestCase):
+    def test_codes_are_unique(self):
+        """Codes are the stable handle for suppression and run-to-run diffing,
+        so two different findings must never share one."""
+        import collections
+        import pathlib
+        import re
+
+        seen = collections.defaultdict(list)
+        checks_dir = pathlib.Path(__file__).resolve().parent.parent / "epubqa" / "checks"
+        for path in sorted(checks_dir.glob("*.py")):
+            src = path.read_text(encoding="utf-8")
+            prefix = re.search(r'^CODE = "(\w+)"', src, re.M)
+            if not prefix:
+                continue
+            for m in re.finditer(r'f"\{CODE\}-(\d+)"', src):
+                seen[f"{prefix.group(1)}-{m.group(1)}"].append(path.name)
+        dupes = {k: v for k, v in seen.items() if len(v) > 1}
+        self.assertEqual(dupes, {}, f"duplicate issue codes: {dupes}")
+        self.assertGreater(len(seen), 100)
+
+    def test_fixable_flag_matches_reality(self):
+        """A finding marked fixable must actually be repaired by the fixer.
+
+        TYPO-016 (a lone em dash) is deliberately NOT fixable: it can be an
+        intentional separator, so it is reported for a human to judge.
+        """
+        import pathlib
+        import re
+
+        typo = (
+            pathlib.Path(__file__).resolve().parent.parent
+            / "epubqa"
+            / "checks"
+            / "typography.py"
+        ).read_text(encoding="utf-8")
+        block = typo[typo.index('f"{CODE}-016"') : typo.index('f"{CODE}-016"') + 800]
+        self.assertNotIn("fixable=True", block)
+
+
+class TestImageHeaders(unittest.TestCase):
+    def test_jpeg_dimensions(self):
+        info = image_info(make_jpeg(1600, 2560))
+        self.assertEqual(info["format"], "jpeg")
+        self.assertEqual((info["width"], info["height"]), (1600, 2560))
+        self.assertFalse(info["cmyk"])
+
+    def test_cmyk_detected(self):
+        self.assertTrue(image_info(make_jpeg(800, 1280, cmyk=True))["cmyk"])
+
+    def test_png_dimensions(self):
+        import struct
+        import zlib
+
+        ihdr = struct.pack(">II", 1200, 1800) + bytes([8, 2, 0, 0, 0])
+        chunk = struct.pack(">I", len(ihdr)) + b"IHDR" + ihdr
+        png = b"\x89PNG\r\n\x1a\n" + chunk
+        info = image_info(png)
+        self.assertEqual((info["width"], info["height"]), (1200, 1800))
+
+
+class TestVisibleText(unittest.TestCase):
+    def test_offsets_are_preserved(self):
+        markup = "<p>hello</p>\n<p>world</p>"
+        text = visible_text(markup)
+        self.assertEqual(len(text), len(markup))
+        self.assertEqual(text.count("\n"), markup.count("\n"))
+        self.assertIn("hello", text)
+
+    def test_script_and_style_stripped(self):
+        markup = "<style>p{color:red}</style><p>keep</p>"
+        text = visible_text(markup)
+        self.assertNotIn("color", text)
+        self.assertIn("keep", text)
+
+
+# ------------------------------------------------------------------ checks
+
+
+class TestChecks(FixtureCase):
+    def test_every_fixture_reports_the_planted_blockers(self):
+        for code, path in self.paths.items():
+            with self.subTest(lang=code):
+                report = build_report(Epub(path))
+                found = self.codes(report)
+                # mimetype not first / compressed
+                self.assertIn("STRUCT-001", found)
+                # OS junk file
+                self.assertIn("STRUCT-005", found)
+                # missing dcterms:modified
+                self.assertIn("META-040", found)
+                # no cover-image property
+                self.assertIn("META-060", found)
+                # chap2 has no lang attribute
+                self.assertIn("LANG-010", found)
+                # no accessibility metadata
+                self.assertIn("A11Y-002", found)
+
+    def test_zh_hant_finds_simplified_leftovers_and_traps(self):
+        report = build_report(Epub(self.paths["zh-Hant"]))
+        found = self.codes(report)
+        self.assertIn("LANG-020", found)  # simplified characters present
+        self.assertIn("LANG-021", found)  # one-to-many conversion traps
+        self.assertIn("LANG-022", found)  # mainland vocabulary
+        traps = [i.message for i in report.issues if i.code == "LANG-021"]
+        self.assertTrue(any("頭髮" in m for m in traps), traps)
+        self.assertTrue(any("輕鬆" in m for m in traps), traps)
+
+    def test_zh_hans_flags_corner_brackets(self):
+        report = build_report(Epub(self.paths["zh-Hans"]))
+        self.assertIn("TYPO-022", self.codes(report))
+
+    def test_bare_zh_language_tag_is_an_error(self):
+        report = build_report(Epub(self.paths["zh-Hans"]))
+        self.assertIn("META-022", self.codes(report))
+
+    def test_zh_tw_suggests_script_subtag(self):
+        report = build_report(Epub(self.paths["zh-Hant"]))
+        self.assertIn("META-023", self.codes(report))
+
+    def test_japanese_flags_mixed_punctuation_and_simplified(self):
+        report = build_report(Epub(self.paths["ja"]))
+        found = self.codes(report)
+        self.assertIn("TYPO-030", found)  # 、。 vs ，．
+        self.assertIn("LANG-030", found)  # PRC simplified characters
+        self.assertIn("TYPO-032", found)  # ruby without rp
+
+    def test_korean_requires_word_break_keep_all(self):
+        report = build_report(Epub(self.paths["ko"]))
+        keep_all = [i for i in report.issues if "word-break" in i.message]
+        self.assertTrue(keep_all)
+        # This is the defect Korean readers complain about, so it is not a nit.
+        self.assertEqual(keep_all[0].severity, Severity.ERROR)
+
+    def test_korean_flags_fullwidth_punctuation(self):
+        report = build_report(Epub(self.paths["ko"]))
+        self.assertIn("TYPO-042", self.codes(report))
+
+    def test_english_flags_straight_quotes(self):
+        report = build_report(Epub(self.paths["en"]))
+        self.assertIn("TYPO-050", self.codes(report))
+
+    def test_english_does_not_get_cjk_punctuation_rules(self):
+        report = build_report(Epub(self.paths["en"]))
+        cjk_only = {"TYPO-010", "TYPO-011", "TYPO-013", "TYPO-042"}
+        self.assertEqual(self.codes(report) & cjk_only, set())
+
+    def test_cover_dimension_check_runs_once_declared(self):
+        # The fixture cover is 600x900: too small and the wrong ratio.
+        path = self.paths["en"]
+        epub = Epub(path)
+        fixes.fix_all(epub, target_lang="en")
+        dest = os.path.join(self.tmp, "cover-check.epub")
+        epub.save(dest)
+        found = self.codes(build_report(Epub(dest)))
+        self.assertIn("ASSET-014", found)  # short edge below 1600px
+
+    def test_language_mismatch_is_a_blocker(self):
+        """A book declaring ja but containing Korean must be blocked."""
+        path = os.path.join(self.tmp, "mismatch.epub")
+        spec = dict(BOOKS["ko"])
+        spec["language"] = "ja"
+        spec["filename"] = "mismatch.epub"
+        build(spec, self.tmp)
+        report = build_report(Epub(path))
+        blockers = [i for i in report.issues if i.code == "LANG-002"]
+        self.assertTrue(blockers, "expected a declared-vs-detected language blocker")
+        self.assertEqual(blockers[0].severity, Severity.BLOCKER)
+
+
+# -------------------------------------------------------------------- fixes
+
+
+class TestFixes(FixtureCase):
+    def fixed(self, code: str):
+        epub = Epub(self.paths[code])
+        result = fixes.fix_all(epub)
+        dest = os.path.join(self.tmp, f"fixed-{code}.epub")
+        epub.save(dest)
+        return dest, result
+
+    def test_fix_clears_all_blockers_for_every_language(self):
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                before = build_report(Epub(self.paths[code]))
+                dest, _ = self.fixed(code)
+                after = build_report(Epub(dest))
+                self.assertGreater(before.counts()[Severity.BLOCKER], 0)
+                self.assertEqual(
+                    after.counts()[Severity.BLOCKER],
+                    0,
+                    [i.message for i in after.issues if i.severity == Severity.BLOCKER],
+                )
+
+    def test_saved_epub_has_conformant_ocf_layout(self):
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                with zipfile.ZipFile(dest) as zf:
+                    first = zf.infolist()[0]
+                    self.assertEqual(first.filename, "mimetype")
+                    self.assertEqual(first.compress_type, zipfile.ZIP_STORED)
+                    self.assertEqual(zf.read("mimetype"), b"application/epub+zip")
+
+    def test_fix_is_idempotent(self):
+        dest, _ = self.fixed("zh-Hant")
+        epub = Epub(dest)
+        second = fixes.fix_all(epub)
+        content_changes = [
+            c for c in second.changes if c.rule in ("TYPO", "LANG") and "設定 lang" not in c.detail
+        ]
+        self.assertEqual(content_changes, [], [c.detail for c in content_changes])
+
+    def test_conversion_traps_are_repaired(self):
+        dest, _ = self.fixed("zh-Hant")
+        epub = Epub(dest)
+        text = epub.text("OEBPS/chap2.xhtml")
+        for wrong, right in (("頭發", "頭髮"), ("輕松", "輕鬆"), ("那里", "那裡"), ("以后", "以後")):
+            self.assertNotIn(wrong, text)
+            self.assertIn(right, text)
+
+    def test_typography_fixes_do_not_corrupt_markup(self):
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                epub = Epub(dest)
+                for item in epub.content_docs():
+                    from xml.etree import ElementTree as ET
+
+                    ET.fromstring(epub.files[item.path])  # raises if malformed
+
+    def test_english_quotes_become_curly_and_balanced(self):
+        dest, _ = self.fixed("en")
+        text = Epub(dest).text("OEBPS/chap1.xhtml")
+        self.assertNotIn('"', text.split("<body>")[1])
+        self.assertEqual(text.count("“"), text.count("”"))
+
+    def test_korean_punctuation_converted_then_spaced(self):
+        dest, _ = self.fixed("ko")
+        text = Epub(dest).text("OEBPS/chap1.xhtml")
+        self.assertNotIn("，", text)
+        self.assertNotIn("。", text)
+        self.assertIn("말했다, 이것은", text)  # halfwidth + following space
+
+    def test_cjk_punctuation_converted(self):
+        dest, _ = self.fixed("zh-Hans")
+        text = Epub(dest).text("OEBPS/chap2.xhtml")
+        self.assertIn("采挖那天，", text)
+
+    def test_a11y_never_claims_alt_text_without_images(self):
+        dest, _ = self.fixed("en")
+        opf = Epub(dest).text("OEBPS/content.opf")
+        # The fixtures have no <img> in content, so alternativeText must not appear.
+        self.assertNotIn("alternativeText", opf)
+        self.assertIn("schema:accessMode", opf)
+        self.assertIn("schema:accessibilityHazard", opf)
+
+    def test_lang_attributes_added_to_every_document(self):
+        dest, _ = self.fixed("ja")
+        epub = Epub(dest)
+        for item in epub.content_docs():
+            self.assertIn('lang="ja"', epub.text(item.path))
+
+    def test_dry_run_does_not_write(self):
+        epub = Epub(self.paths["en"])
+        before = os.path.getsize(self.paths["en"])
+        fixes.fix_all(epub)
+        self.assertEqual(os.path.getsize(self.paths["en"]), before)
+
+
+class TestOptimize(FixtureCase):
+    def test_prune_removes_orphans_but_never_the_cover(self):
+        epub = Epub(self.paths["en"])
+        fixes.optimize(epub, prune=True)
+        dest = os.path.join(self.tmp, "opt.epub")
+        epub.save(dest)
+        names = set(zipfile.ZipFile(dest).namelist())
+        self.assertIn("OEBPS/cover.jpg", names)
+        self.assertNotIn("OEBPS/unused.jpg", names)
+        self.assertNotIn(".DS_Store", names)
+
+    def test_optimize_keeps_the_book_readable(self):
+        epub = Epub(self.paths["ja"])
+        fixes.optimize(epub, prune=True)
+        dest = os.path.join(self.tmp, "opt-ja.epub")
+        epub.save(dest)
+        after = Epub(dest)
+        self.assertEqual(len(after.content_docs()), 3)
+        self.assertTrue(all(after.has(i.path) for i in after.content_docs()))
+
+
+class TestReporters(FixtureCase):
+    def test_all_formats_render(self):
+        from epubqa import report as report_mod
+
+        report = build_report(Epub(self.paths["zh-Hant"]))
+        self.assertIn("上架前檢查", report_mod.render_terminal(report))
+        self.assertIn("LANG-021", report_mod.render_markdown(report))
+        html = report_mod.render_html(report)
+        self.assertIn("<style>", html)
+        self.assertIn("prefers-color-scheme", html)
+        import json
+
+        payload = json.loads(report_mod.render_json(report))
+        self.assertEqual(payload["detected_language"], "zh-Hant")
+        self.assertTrue(payload["issues"])
+
+    def test_html_escapes_content(self):
+        from epubqa import report as report_mod
+        from epubqa.issues import Issue, Report
+
+        rep = Report(epub_path="x.epub")
+        rep.add(Issue("T-1", Severity.WARN, "<script>alert(1)</script>"))
+        self.assertNotIn("<script>alert", report_mod.render_html(rep))
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
