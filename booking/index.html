@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>永恆之子整椎中心 · 線上預約 | Eternity's Child Chiropractic</title>
+<meta name="description" content="永恆之子整椎中心線上預約系統．量子整骨、體雕塑身、整椎正骨、按摩推拿．支援中文／English／日本語／한국어。">
+<meta name="theme-color" content="#1f5f52">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f5f52'/><text y='68' x='50' text-anchor='middle' font-size='56' fill='white' font-family='sans-serif'>永</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">永</div>
+      <div class="logo-text">
+        <div class="logo-name" data-i18n="brand.name">永恆之子整椎中心</div>
+        <div class="logo-sub" data-i18n="brand.en">Eternity's Child Chiropractic</div>
+      </div>
+    </div>
+    <nav class="lang-switch" id="langSwitch" aria-label="Language"></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.tagline">全球化線上預約系統</span>
+    <h1 data-i18n="brand.name">永恆之子整椎中心</h1>
+    <p class="lead" data-i18n="hero.desc">量子整骨 · 體雕塑身 · 整椎正骨 · 按摩推拿</p>
+    <div class="hero-notice">
+      <span aria-hidden="true">🗓</span><span data-i18n="hero.notice">預約時間須為一個月之後</span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#booking" data-i18n="hero.cta">開始預約</a>
+      <a class="btn btn-ghost" href="#info" data-i18n="hours.title">營業時間</a>
+    </div>
+    <div class="price-strip">
+      <div class="price-chip">
+        <div class="amount">NT$ 1,688</div>
+        <div class="unit" data-i18n="duration.40">40 分鐘</div>
+      </div>
+      <div class="price-chip">
+        <div class="amount">NT$ 2,888</div>
+        <div class="unit" data-i18n="duration.60">60 分鐘</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="booking" id="booking">
+  <div class="wrap">
+
+    <ol class="stepper" id="stepper">
+      <li class="node" data-step="1"><span class="dot">1</span><span data-i18n="step.1">選擇項目</span></li>
+      <li class="node" data-step="2"><span class="dot">2</span><span data-i18n="step.2">選擇時間</span></li>
+      <li class="node" data-step="3"><span class="dot">3</span><span data-i18n="step.3">填寫資料</span></li>
+      <li class="node" data-step="4"><span class="dot">4</span><span data-i18n="step.4">確認送出</span></li>
+    </ol>
+
+    <div class="card">
+
+      <!-- ===== Step 1 : service ===== -->
+      <section class="panel active" id="panel-1" aria-labelledby="s1">
+        <h2 class="sr-only" id="s1" data-i18n="step.1">選擇項目</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="visit.title">看診類型</div>
+          <div class="options cols-2" id="visitOptions"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label" data-i18n="service.title">服務項目</div>
+          <div class="options cols-4" id="serviceOptions"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label" data-i18n="duration.title">療程時長</div>
+          <div class="options cols-2" id="durationOptions"></div>
+        </div>
+
+        <div class="form-error" id="err1"></div>
+        <div class="actions">
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="2" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 2 : date & time ===== -->
+      <section class="panel" id="panel-2" aria-labelledby="s2">
+        <h2 class="sr-only" id="s2" data-i18n="step.2">選擇時間</h2>
+
+        <div class="picker">
+        <div class="section">
+          <div class="section-label" data-i18n="date.title">選擇日期</div>
+          <div class="cal-head">
+            <div class="cal-title" id="calTitle"></div>
+            <div class="cal-nav">
+              <button type="button" id="calPrev" aria-label="Previous month">‹</button>
+              <button type="button" id="calNext" aria-label="Next month">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span id="calLegendSun" data-i18n="time.sunday.only">週日僅開放上午時段，且限初診預約</span>
+          </div>
+          <p class="cal-legend" id="calHint" style="color:var(--ink-mute)"></p>
+        </div>
+
+        <div class="section">
+          <div class="section-label" data-i18n="time.title">選擇時段</div>
+          <div id="slotArea"></div>
+        </div>
+        </div>
+
+        <div class="form-error" id="err2"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="1" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="3" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 3 : details ===== -->
+      <section class="panel" id="panel-3" aria-labelledby="s3">
+        <h2 class="sr-only" id="s3" data-i18n="form.title">預約人資料</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="form.title">預約人資料</div>
+          <div class="field-grid">
+            <div class="field" data-field="name">
+              <label for="fName"><span data-i18n="form.name">姓名</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fName" type="text" autocomplete="name" data-i18n-ph="form.name.ph">
+              <span class="err" data-i18n="err.name"></span>
+            </div>
+            <div class="field" data-field="phone">
+              <label for="fPhone"><span data-i18n="form.phone">聯絡電話</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fPhone" type="tel" autocomplete="tel" inputmode="tel" data-i18n-ph="form.phone.ph">
+              <span class="err" data-i18n="err.phone"></span>
+            </div>
+            <div class="field" data-field="email">
+              <label for="fEmail"><span data-i18n="form.email">電子信箱</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fEmail" type="email" autocomplete="email" data-i18n-ph="form.email.ph">
+              <span class="err" data-i18n="err.email"></span>
+            </div>
+            <div class="field" data-field="lang">
+              <label for="fLang" data-i18n="form.lang">希望的溝通語言</label>
+              <select id="fLang"></select>
+            </div>
+            <div class="field full" data-field="notes">
+              <label for="fNotes"><span data-i18n="form.notes">身體狀況或備註</span><span class="hint" data-i18n="form.optional">選填</span></label>
+              <textarea id="fNotes" data-i18n-ph="form.notes.ph"></textarea>
+            </div>
+          </div>
+
+          <label class="check" id="agreeWrap">
+            <input type="checkbox" id="fAgree">
+            <span data-i18n="form.agree">我已閱讀並同意預約與付款須知</span>
+          </label>
+        </div>
+
+        <div class="form-error" id="err3"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="2" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="4" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 4 : review ===== -->
+      <section class="panel" id="panel-4" aria-labelledby="s4">
+        <h2 class="sr-only" id="s4" data-i18n="review.title">確認您的預約</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="review.title">確認您的預約</div>
+          <dl class="summary" id="summary"></dl>
+        </div>
+
+        <div class="pay-box">
+          <h3 data-i18n="pay.title">付款方式 · 銀行轉帳</h3>
+          <div class="pay-line">
+            <span class="k" data-i18n="pay.bank">銀行</span>
+            <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span>
+          </div>
+          <div class="pay-line">
+            <span class="k" data-i18n="pay.acct">帳號</span>
+            <span class="pay-acct" id="acctNo">013004490011</span>
+            <button class="btn btn-ghost btn-sm" id="copyAcct" data-i18n="pay.copy">複製帳號</button>
+          </div>
+          <div class="pay-qr">
+            <img alt="TWQR" id="qrImg" hidden>
+            <span style="font-size:.84rem;color:#7a5f2c" data-i18n="pay.qr">亦可掃描櫃檯 TWQR 條碼付款</span>
+          </div>
+          <p class="pay-note" data-i18n="pay.note"></p>
+        </div>
+
+        <div class="rules">
+          <h3 data-i18n="rules.title">預約須知</h3>
+          <ol>
+            <li data-i18n="rules.1"></li>
+            <li data-i18n="rules.2"></li>
+            <li data-i18n="rules.3"></li>
+            <li data-i18n="rules.4"></li>
+            <li data-i18n="rules.5"></li>
+          </ol>
+        </div>
+
+        <div class="form-error" id="err4"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="3" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" id="submitBtn" data-i18n="btn.submit">送出預約</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 5 : done ===== -->
+      <section class="panel" id="panel-5" aria-labelledby="s5">
+        <div class="done">
+          <div class="icon" aria-hidden="true">✓</div>
+          <h2 id="s5" data-i18n="done.title">預約已送出</h2>
+          <p data-i18n="done.desc"></p>
+          <div><span class="ref-code" id="refCode"></span></div>
+          <p style="font-size:.84rem" id="mailNote"></p>
+          <div class="actions">
+            <button class="btn btn-primary" id="mailBtn" data-i18n="btn.mail">以電子郵件寄出</button>
+            <button class="btn btn-ghost" id="copyBtn" data-i18n="btn.copy">複製預約明細</button>
+            <button class="btn btn-ghost" id="icsBtn" data-i18n="btn.ics">加入行事曆</button>
+          </div>
+          <div class="actions" style="padding-top:0">
+            <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.newBooking">再預約一筆</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<section class="info" id="info">
+  <div class="wrap info-grid">
+    <div class="info-card">
+      <h3 data-i18n="hours.title">營業時間</h3>
+      <div class="hours-row"><span class="d" data-i18n="hours.week">週一至週六</span><span class="t">09:00 – 21:00</span></div>
+      <div class="hours-row"><span class="d" data-i18n="hours.thu">週四</span><span class="t">09:00 – 17:00</span></div>
+      <div class="hours-row"><span class="d" data-i18n="hours.sun">週日</span><span class="t" data-i18n="hours.sun.value">09:00 – 12:00（僅初診）</span></div>
+    </div>
+    <div class="info-card">
+      <h3 data-i18n="rules.title">預約須知</h3>
+      <ol style="padding-inline-start:1.15rem;font-size:.86rem;color:var(--ink-soft)">
+        <li data-i18n="rules.1"></li>
+        <li data-i18n="rules.2"></li>
+        <li data-i18n="rules.4"></li>
+      </ol>
+    </div>
+    <div class="info-card">
+      <h3 data-i18n="footer.contact">聯絡我們</h3>
+      <p style="font-size:.88rem;color:var(--ink-soft)">
+        <a href="mailto:ahanamita88888888@gmail.com" style="color:var(--jade);text-decoration:none">ahanamita88888888@gmail.com</a>
+      </p>
+      <p style="font-size:.86rem;color:var(--ink-soft);margin-top:.6rem">
+        <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span><br>
+        <span style="font-variant-numeric:tabular-nums;letter-spacing:.05em">013004490011</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-note" data-i18n="footer.demo"></div>
+    <div>© <span id="year"></span> <span data-i18n="brand.name">永恆之子整椎中心</span> · <span data-i18n="footer.rights">版權所有</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
