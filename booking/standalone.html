@@ -1916,16 +1916,28 @@ const I18N = {
     state.ref = makeRef();
     saveBooking(state.date, toMin(state.time), toMin(state.time) + state.duration);
 
-    if (CONFIG.endpoint) {
-      fetch(CONFIG.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookingPayload())
-      }).catch(() => { /* the email fallback on the success screen still applies */ });
-    } else {
+    if (!CONFIG.endpoint) {
       try { window.location.href = mailtoUrl(); } catch (e) {}
+      goto(5);
+      return;
     }
-    goto(5);
+
+    const btn = $('#submitBtn');
+    btn.disabled = true;
+    fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bookingPayload())
+    })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({ ok: true })); })
+      .then(res => { if (res && res.ok === false) throw new Error(res.error || 'rejected'); goto(5); })
+      .catch(() => {
+        // the endpoint is unreachable or refused the booking: fall back to email
+        // so the request still reaches the centre
+        try { window.location.href = mailtoUrl(); } catch (e) {}
+        goto(5);
+      })
+      .then(() => { btn.disabled = false; });
   }
 
   function renderDone() {
@@ -1996,7 +2008,20 @@ const I18N = {
     }
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  /* When embedded in an iframe (e.g. a WordPress page), tell the parent how
+     tall we are so it can size the frame — see wordpress/README. */
+  function reportHeight() {
+    if (window.parent === window) return;
+    const h = Math.ceil(document.documentElement.scrollHeight);
+    try { window.parent.postMessage({ eccBookingHeight: h }, '*'); } catch (e) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    init();
+    reportHeight();
+    window.addEventListener('resize', reportHeight);
+    if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+  });
 })();
 
 </script>

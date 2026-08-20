@@ -16,6 +16,7 @@ booking/
 ├── config.js     ★ 營業時間、價格、帳號、收件信箱都在這裡
 ├── app.js        預約流程邏輯（日曆、時段、驗證、送出）
 ├── standalone.html  以上全部合併成的單一檔案（方便寄送或丟到任何空間）
+├── wordpress/    WordPress 部署說明與 PHP 收單程式
 └── assets/       選填：TWQR 收款條碼圖檔
 ```
 
@@ -81,6 +82,9 @@ qrImage: 'assets/twqr.jpg',           // 放上 TWQR 條碼圖檔後填入
 送出後會自動開啟客人的郵件程式，收件人是 `config.js` 裡的 `email`
 （目前為 `ahanamita88888888@gmail.com`），內容已填好完整預約明細。
 若客人的裝置沒有設定郵件程式，完成頁上還有「複製預約明細」按鈕可手動貼上寄出。
+
+> **用 WordPress 的話**：`wordpress/` 資料夾裡有現成的 PHP 收單程式與完整部署步驟，
+> 不用裝外掛，預約會直接寄到中心信箱，並自動用客人的語言回一封確認信。
 
 ### 方式 B（建議）：Google 試算表自動收單
 
