@@ -680,7 +680,8 @@
     $('#copyAcct').addEventListener('click', () => copyText(CONFIG.bank.account, t('pay.copied')));
     $('#copyBtn').addEventListener('click', () => copyText(bookingText(), t('pay.copied')));
     $('#mailBtn').addEventListener('click', () => { window.location.href = mailtoUrl(); });
-    $('#icsBtn').addEventListener('click', () => download(state.ref + '.ics', icsContent(), 'text/calendar'));
+    const icsBtn = $('#icsBtn');
+    if (icsBtn) icsBtn.addEventListener('click', () => download(state.ref + '.ics', icsContent(), 'text/calendar'));
     $('#restartBtn').addEventListener('click', resetAll);
 
     ['fName', 'fPhone', 'fEmail'].forEach(id => {

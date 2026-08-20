@@ -15,6 +15,7 @@ booking/
 ├── i18n.js       四語言字典（中／英／日／韓）
 ├── config.js     ★ 營業時間、價格、帳號、收件信箱都在這裡
 ├── app.js        預約流程邏輯（日曆、時段、驗證、送出）
+├── standalone.html  以上全部合併成的單一檔案（方便寄送或丟到任何空間）
 └── assets/       選填：TWQR 收款條碼圖檔
 ```
 
@@ -43,6 +44,10 @@ booking/
 1. 在 repo 的 **Settings → Pages** 選擇 `Deploy from a branch`，分支選 `main`、資料夾選 `/ (root)`。
 2. 網址即為：`https://<帳號>.github.io/<repo>/booking/`
 3. 想指定語言時可加參數，例如日文版 `.../booking/?lang=ja`（方便貼給不同國家的客人）。
+
+> `standalone.html` 是把 HTML／CSS／JS 全部合併好的單一檔案，
+> 直接用瀏覽器開就能用，也可以整份寄給別人或上傳到任何網頁空間。
+> 改設定時請改 `config.js` 後重新產生，或直接編輯 `standalone.html` 裡的 `CONFIG`。
 
 ---
 
