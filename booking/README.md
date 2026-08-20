@@ -52,6 +52,29 @@ booking/
 
 ---
 
+## 最快的上線方式（靜態主機，30 秒）
+
+`standalone.html` 是單一檔案，任何靜態主機都能直接放：
+
+1. 到 [app.netlify.com/drop](https://app.netlify.com/drop)，把 `standalone.html` 拖進去
+2. 立刻拿到一個 HTTPS 網址，例如 `https://xxx.netlify.app`
+3. 想換成客戶自己的網域，在 Netlify 的 `Domain settings` 綁上去即可
+
+Cloudflare Pages、Vercel 也是一樣的拖放流程。
+
+**唯一要注意的**：靜態主機不能跑 PHP，所以 `wordpress/booking-submit.php` 在這裡用不了。
+靜態主機要收信，最省事的是接一個免費表單服務，`config.js` 兩行就好：
+
+```js
+endpoint: 'https://api.web3forms.com/submit',
+endpointFields: { access_key: '在 web3forms.com 用 Email 免費申請', subject: '新預約' }
+```
+
+不必改任何程式，預約資料就會寄到你申請金鑰時填的信箱。
+（免費方案有每月送信額度，實際數字請以該服務官網為準。）
+
+---
+
 ## 修改設定（只改 `config.js`）
 
 ```js

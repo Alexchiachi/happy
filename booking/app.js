@@ -627,7 +627,7 @@
     fetch(CONFIG.endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bookingPayload())
+      body: JSON.stringify(Object.assign({}, CONFIG.endpointFields || {}, bookingPayload()))
     })
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({ ok: true })); })
       .then(res => { if (res && res.ok === false) throw new Error(res.error || 'rejected'); goto(5); })

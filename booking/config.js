@@ -49,7 +49,14 @@ const CONFIG = {
   /* 公休日（YYYY-MM-DD），可自行增列國定假日 */
   closedDates: [],
 
-  /* 選填：若填入後端網址（Google Apps Script / Formspree 等），
+  /* 選填：若填入後端網址（PHP / Google Apps Script / Web3Forms 等），
      送出時會 POST JSON 過去；留空則改用電子郵件寄送。 */
-  endpoint: ''
+  endpoint: '',
+
+  /* 選填：要一併送出的額外欄位。第三方表單服務通常需要一組金鑰，
+     例如 Web3Forms：
+       endpoint: 'https://api.web3forms.com/submit',
+       endpointFields: { access_key: '你的金鑰', subject: '新預約' }
+     這樣不用改任何程式，靜態主機（Netlify、Cloudflare Pages）也能收信。 */
+  endpointFields: {}
 };
