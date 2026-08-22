@@ -624,18 +624,26 @@ def _fix_css(epub: Epub, lang: str, result: FixResult) -> None:
         for prop, value in profile.required_css.items()
         if not re.search(rf"\b{re.escape(prop)}\s*:", css)
     }
-    if lang in ("zh-Hant", "zh-Hans", "ja") and not re.search(r"text-indent", css):
-        missing["text-indent"] = "2em"
     if not re.search(r"line-height", css):
         missing["line-height"] = "1.8" if lang != "en" else "1.5"
+
+    # text-indent is deliberately NOT auto-applied. It is an *inherited*
+    # property, so writing it here leaks into every block container in the
+    # book — including inline-blocks used as fixed-width badges and the divs
+    # that draw diagrams — pushing their contents out of their boxes. It also
+    # clashes with designs that separate paragraphs by margin instead of
+    # indentation. TYPO-075 reports it; a human decides.
 
     if not missing:
         return
 
     block = "\n".join(f"  {k}: {v};" for k, v in missing.items())
+    # Applied to body only: every property here is inherited, and any rule the
+    # book already has wins on specificity. A broader selector list would
+    # override the author's own layout.
     addition = (
         f"\n\n/* --- epubqa: {profile.name} 排版基準 --- */\n"
-        f"body, p, li, blockquote {{\n{block}\n}}\n"
+        f"body {{\n{block}\n}}\n"
     )
     epub.set_text(target.path, css + addition)
     result.add(

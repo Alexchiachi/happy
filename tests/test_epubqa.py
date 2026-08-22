@@ -400,6 +400,29 @@ class TestFixes(FixtureCase):
         fixes.fix_all(epub)
         self.assertEqual(os.path.getsize(self.paths["en"]), before)
 
+    def test_css_fix_never_injects_text_indent(self):
+        # text-indent is inherited: writing it here would leak into every block
+        # container — inline-block badges, diagram divs — and break the book's
+        # own layout. TYPO-075 reports it; the fixer must not apply it.
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                css = Epub(dest).text("OEBPS/style.css")
+                self.assertNotIn("text-indent", css)
+
+    def test_css_fix_only_targets_body(self):
+        # A wider selector list (p, li, blockquote…) would out-specify the
+        # author's own rules instead of merely providing a baseline.
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                css = Epub(dest).text("OEBPS/style.css")
+                added = css.split("/* --- epubqa:")[1:]
+                self.assertTrue(added, "expected an epubqa CSS baseline block")
+                for block in added:
+                    selector = block.split("*/", 1)[1].split("{", 1)[0].strip()
+                    self.assertEqual(selector, "body")
+
 
 class TestOptimize(FixtureCase):
     def test_prune_removes_orphans_but_never_the_cover(self):
