@@ -237,7 +237,9 @@ ZH_VOCAB_DIVERGENCE = [
     ("激光", "雷射", "zh-Hant 慣用「雷射」"),
     ("打印", "列印", "zh-Hant 慣用「列印」"),
     ("屏幕", "螢幕", "zh-Hant 慣用「螢幕」"),
-    ("數據", "資料", "zh-Hant 慣用「資料」"),
+    # 「數據」 is deliberately absent: unlike the entries above it is standard in
+    # Taiwan too (數據分析、大數據), sitting alongside 「資料」 with a narrower,
+    # numeric sense. Flagging it produced false positives on ordinary prose.
     ("項目", "專案", "zh-Hant 慣用「專案」"),
     ("默認", "預設", "zh-Hant 慣用「預設」"),
 ]

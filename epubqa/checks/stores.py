@@ -161,9 +161,12 @@ def _google_kobo(epub: Epub) -> list:
     for item in epub.content_docs():
         if not epub.has(item.path):
             continue
+        # The ratio measures inline cruft in *prose*. A table of contents is
+        # mostly markup by nature — one span per entry, all class-driven — so
+        # it trips the threshold no matter how cleanly it is written.
+        if "nav" in item.property_set:
+            continue
         markup = epub.text(item.path)
-        for m in re.finditer(r"page-break-(before|after)\s*:\s*always", markup, re.I):
-            pass
         count = len(re.findall(r"<span\b", markup, re.I))
         chars = len(re.sub(r"<[^>]+>", "", markup))
         if chars and count / max(chars, 1) > 0.05:

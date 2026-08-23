@@ -694,6 +694,14 @@ def optimize(epub: Epub, prune: bool = True) -> FixResult:
             if i.is_image() and re.search(r"cover|封面|表紙|표지", i.href, re.I)
         }
         keep_ids |= {i.id for i in epub.manifest.values() if i.is_font()}
+        # Font licences (SIL OFL and friends) must ship with the font, and no
+        # content document ever links to them — exactly the shape the orphan
+        # rule deletes.
+        keep_ids |= {
+            i.id
+            for i in epub.manifest.values()
+            if re.search(r"(^|/)(ofl|license|licence|copying)[^/]*$", i.href, re.I)
+        }
         keep_ids |= {
             i.id
             for i in epub.manifest.values()

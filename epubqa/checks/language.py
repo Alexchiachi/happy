@@ -296,14 +296,30 @@ def _conversion_traps(epub: Epub, expected: str) -> list:
     return issues
 
 
+#: Book, film and article titles are proper nouns: 《明天不是默認值》 must survive
+#: a localisation pass untouched, however mainland the wording reads.
+_TITLE_BRACKETS = re.compile(r"《[^》]{0,80}》|〈[^〉]{0,80}〉")
+
+
+def _title_spans(text: str) -> list:
+    return [m.span() for m in _TITLE_BRACKETS.finditer(text)]
+
+
+def _inside(pos: int, spans) -> bool:
+    return any(start <= pos < end for start, end in spans)
+
+
 def _vocab_divergence(epub: Epub, expected: str) -> list:
     """Region vocabulary that is technically correct but reads as the other market."""
     if expected != "zh-Hant":
         return []
     issues = []
     for item, markup, text in _scan_docs(epub):
+        titles = _title_spans(text)
         for cn, tw, note in ZH_VOCAB_DIVERGENCE:
             for m in re.finditer(re.escape(cn), text):
+                if _inside(m.start(), titles):
+                    continue
                 issues.append(
                     Issue(
                         f"{CODE}-022",

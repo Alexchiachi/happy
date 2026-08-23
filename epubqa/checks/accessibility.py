@@ -172,19 +172,25 @@ def _semantics(epub: Epub) -> list:
             )
         )
 
+    # A page-list maps to the pagination of a *print* edition. A digital-only
+    # book has no page numbers to map to, so asking for one is noise; only a
+    # book that declares a print source can be missing it.
+    has_print_source = bool(epub.first_value("source")) or bool(
+        epub.meta_by_property("dcterms:source")
+    )
     nav_items = [i for i in epub.manifest.values() if "nav" in i.property_set]
     for nav in nav_items:
         if not epub.has(nav.path):
             continue
         markup = epub.text(nav.path)
-        if 'epub:type="page-list"' not in markup:
+        if has_print_source and 'epub:type="page-list"' not in markup:
             issues.append(
                 Issue(
                     f"{CODE}-021",
                     Severity.INFO,
-                    "沒有 page-list 導覽",
+                    "宣告了紙本來源（dc:source）卻沒有 page-list 導覽",
                     file=nav.path,
-                    suggestion="若有對應的紙本版本，加入 page-list 與 dc:source 讓讀者能對照頁碼"
+                    suggestion="加入 page-list 與 pagebreak 標記，讓讀者能對照紙本頁碼"
                     "（教育與圖書館通路常要求）。",
                 )
             )
