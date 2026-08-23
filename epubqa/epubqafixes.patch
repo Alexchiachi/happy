@@ -1,0 +1,496 @@
+From 16e676a6e57839e582004c06d36130f0c94b23bd Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 22 Aug 2026 15:38:23 +0000
+Subject: [PATCH 1/2] fix(fixes): stop injecting inherited text-indent into
+ book CSS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+_fix_css wrote `body, p, li, blockquote { text-indent: 2em }` whenever the
+book had no text-indent of its own. text-indent is an *inherited* property,
+so it reached every block container in the book — including fixed-width
+inline-block badges and the divs used to draw diagrams — pushing their
+contents out of their boxes. In a real book this made table-of-contents
+numerals overlap the chapter titles and staggered the lines of a hexagram
+figure.
+
+Two changes:
+
+  * text-indent is no longer applied automatically. TYPO-075 already
+    reports its absence; whether to indent is a design decision, and books
+    that separate paragraphs by margin must not be indented at all.
+
+  * The remaining baseline properties are written to `body` only. They are
+    all inherited, so a single body rule is enough, and the narrower
+    selector can no longer out-specify the author's own layout rules.
+
+Adds regression tests asserting the fixer never emits text-indent and that
+its CSS block targets body alone.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01TWVhEKkpMiaADSLp97Qco3
+---
+ epubqa/fixes.py      | 14 +++++++++++---
+ tests/test_epubqa.py | 23 +++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+
+diff --git a/epubqa/fixes.py b/epubqa/fixes.py
+index 4bdee95..bc5ef5a 100644
+--- a/epubqa/fixes.py
++++ b/epubqa/fixes.py
+@@ -624,18 +624,26 @@ def _fix_css(epub: Epub, lang: str, result: FixResult) -> None:
+         for prop, value in profile.required_css.items()
+         if not re.search(rf"\b{re.escape(prop)}\s*:", css)
+     }
+-    if lang in ("zh-Hant", "zh-Hans", "ja") and not re.search(r"text-indent", css):
+-        missing["text-indent"] = "2em"
+     if not re.search(r"line-height", css):
+         missing["line-height"] = "1.8" if lang != "en" else "1.5"
+ 
++    # text-indent is deliberately NOT auto-applied. It is an *inherited*
++    # property, so writing it here leaks into every block container in the
++    # book — including inline-blocks used as fixed-width badges and the divs
++    # that draw diagrams — pushing their contents out of their boxes. It also
++    # clashes with designs that separate paragraphs by margin instead of
++    # indentation. TYPO-075 reports it; a human decides.
++
+     if not missing:
+         return
+ 
+     block = "\n".join(f"  {k}: {v};" for k, v in missing.items())
++    # Applied to body only: every property here is inherited, and any rule the
++    # book already has wins on specificity. A broader selector list would
++    # override the author's own layout.
+     addition = (
+         f"\n\n/* --- epubqa: {profile.name} 排版基準 --- */\n"
+-        f"body, p, li, blockquote {{\n{block}\n}}\n"
++        f"body {{\n{block}\n}}\n"
+     )
+     epub.set_text(target.path, css + addition)
+     result.add(
+diff --git a/tests/test_epubqa.py b/tests/test_epubqa.py
+index 84ca426..70d5b64 100644
+--- a/tests/test_epubqa.py
++++ b/tests/test_epubqa.py
+@@ -400,6 +400,29 @@ class TestFixes(FixtureCase):
+         fixes.fix_all(epub)
+         self.assertEqual(os.path.getsize(self.paths["en"]), before)
+ 
++    def test_css_fix_never_injects_text_indent(self):
++        # text-indent is inherited: writing it here would leak into every block
++        # container — inline-block badges, diagram divs — and break the book's
++        # own layout. TYPO-075 reports it; the fixer must not apply it.
++        for code in BOOKS:
++            with self.subTest(lang=code):
++                dest, _ = self.fixed(code)
++                css = Epub(dest).text("OEBPS/style.css")
++                self.assertNotIn("text-indent", css)
++
++    def test_css_fix_only_targets_body(self):
++        # A wider selector list (p, li, blockquote…) would out-specify the
++        # author's own rules instead of merely providing a baseline.
++        for code in BOOKS:
++            with self.subTest(lang=code):
++                dest, _ = self.fixed(code)
++                css = Epub(dest).text("OEBPS/style.css")
++                added = css.split("/* --- epubqa:")[1:]
++                self.assertTrue(added, "expected an epubqa CSS baseline block")
++                for block in added:
++                    selector = block.split("*/", 1)[1].split("{", 1)[0].strip()
++                    self.assertEqual(selector, "body")
++
+ 
+ class TestOptimize(FixtureCase):
+     def test_prune_removes_orphans_but_never_the_cover(self):
+-- 
+2.43.0
+
+
+From 54143cc4fb9c75ca507f9b744095e707e045a3c7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 23 Aug 2026 14:55:58 +0000
+Subject: [PATCH 2/2] fix(checks): stop four advisories from firing on correct
+ books
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Each of these was a false positive found on a real title. A checker that
+flags good work teaches authors to ignore the whole report, so precision
+here matters more than coverage.
+
+  LANG-022  Skipped inside 《…》 and 〈…〉. Work titles are proper nouns:
+            a sequel called 《明天不是默認值》 must survive a localisation
+            pass intact, however mainland the wording reads.
+
+  LANG-022  Dropped 「數據」 from the divergence table. Unlike 軟件/網絡 it
+            is standard in Taiwan too, sitting beside 「資料」 with a
+            narrower, numeric sense.
+
+  A11Y-021  Only fires when the book declares a print source. A page-list
+            maps to the pagination of a print edition; a digital-only book
+            has nothing to map to.
+
+  STORE-021 Skips the nav document. The span-per-character ratio measures
+            inline cruft in prose, but a table of contents is mostly
+            markup by nature — one class-driven span per entry trips the
+            threshold no matter how cleanly it is written.
+
+  ASSET-037 Goes quiet once a font licence file ships with the book, like
+            every other check here, instead of repeating a reminder that
+            has been acted on. Open licences (SIL OFL above all) require
+            the licence text to travel with the font, so bundling it is
+            both the compliance step and the evidence. --prune now keeps
+            those files: no content document links to them, which is
+            exactly the shape the orphan rule deletes.
+
+Also removes a dead re.finditer loop in the store checks.
+
+Adds TestAdvisoryPrecision, covering each case in both directions — the
+false positive stays silent, the genuine defect still reports.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01TWVhEKkpMiaADSLp97Qco3
+---
+ epubqa/checks/accessibility.py |  12 ++-
+ epubqa/checks/assets.py        |  32 ++++++--
+ epubqa/checks/language.py      |  16 ++++
+ epubqa/checks/stores.py        |   7 +-
+ epubqa/fixes.py                |   8 ++
+ epubqa/langprofile.py          |   4 +-
+ tests/test_epubqa.py           | 139 +++++++++++++++++++++++++++++++++
+ 7 files changed, 204 insertions(+), 14 deletions(-)
+
+diff --git a/epubqa/checks/accessibility.py b/epubqa/checks/accessibility.py
+index 30f5de9..892f369 100644
+--- a/epubqa/checks/accessibility.py
++++ b/epubqa/checks/accessibility.py
+@@ -172,19 +172,25 @@ def _semantics(epub: Epub) -> list:
+             )
+         )
+ 
++    # A page-list maps to the pagination of a *print* edition. A digital-only
++    # book has no page numbers to map to, so asking for one is noise; only a
++    # book that declares a print source can be missing it.
++    has_print_source = bool(epub.first_value("source")) or bool(
++        epub.meta_by_property("dcterms:source")
++    )
+     nav_items = [i for i in epub.manifest.values() if "nav" in i.property_set]
+     for nav in nav_items:
+         if not epub.has(nav.path):
+             continue
+         markup = epub.text(nav.path)
+-        if 'epub:type="page-list"' not in markup:
++        if has_print_source and 'epub:type="page-list"' not in markup:
+             issues.append(
+                 Issue(
+                     f"{CODE}-021",
+                     Severity.INFO,
+-                    "沒有 page-list 導覽",
++                    "宣告了紙本來源（dc:source）卻沒有 page-list 導覽",
+                     file=nav.path,
+-                    suggestion="若有對應的紙本版本，加入 page-list 與 dc:source 讓讀者能對照頁碼"
++                    suggestion="加入 page-list 與 pagebreak 標記，讓讀者能對照紙本頁碼"
+                     "（教育與圖書館通路常要求）。",
+                 )
+             )
+diff --git a/epubqa/checks/assets.py b/epubqa/checks/assets.py
+index 83f7a4e..96ff087 100644
+--- a/epubqa/checks/assets.py
++++ b/epubqa/checks/assets.py
+@@ -487,15 +487,31 @@ def _fonts(epub: Epub, lang: str) -> list:
+                     stores=("apple", "google"),
+                 )
+             )
+-        issues.append(
+-            Issue(
+-                f"{CODE}-037",
+-                Severity.INFO,
+-                f"內嵌了 {len(fonts)} 個字型檔",
+-                suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
+-                "商用字型多數需另購電子書授權，這是上架後最常見的法務風險。",
+-            )
++        # Open licences (SIL OFL above all) require the licence text to travel
++        # with the font. Bundling it is both the compliance step and the
++        # evidence that the licence question was actually looked at.
++        licence = next(
++            (
++                name
++                for name in epub.files
++                if re.search(r"(^|/)(ofl|license|licence|copying)[^/]*$", name, re.I)
++            ),
++            None,
+         )
++        # Once the licence travels with the book the question has been answered,
++        # so — like every other check here — this one goes quiet.
++        if not licence:
++            issues.append(
++                Issue(
++                    f"{CODE}-037",
++                    Severity.INFO,
++                    f"內嵌了 {len(fonts)} 個字型檔，未附授權文件",
++                    suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
++                    "商用字型多數需另購電子書授權，這是上架後最常見的法務風險；"
++                    "SIL OFL 等開放授權則要求隨檔附上授權全文（OFL.txt），"
++                    "並將它列入 manifest。",
++                )
++            )
+     elif is_cjk_lang:
+         issues.append(
+             Issue(
+diff --git a/epubqa/checks/language.py b/epubqa/checks/language.py
+index 481488a..44448f9 100644
+--- a/epubqa/checks/language.py
++++ b/epubqa/checks/language.py
+@@ -296,14 +296,30 @@ def _conversion_traps(epub: Epub, expected: str) -> list:
+     return issues
+ 
+ 
++#: Book, film and article titles are proper nouns: 《明天不是默認值》 must survive
++#: a localisation pass untouched, however mainland the wording reads.
++_TITLE_BRACKETS = re.compile(r"《[^》]{0,80}》|〈[^〉]{0,80}〉")
++
++
++def _title_spans(text: str) -> list:
++    return [m.span() for m in _TITLE_BRACKETS.finditer(text)]
++
++
++def _inside(pos: int, spans) -> bool:
++    return any(start <= pos < end for start, end in spans)
++
++
+ def _vocab_divergence(epub: Epub, expected: str) -> list:
+     """Region vocabulary that is technically correct but reads as the other market."""
+     if expected != "zh-Hant":
+         return []
+     issues = []
+     for item, markup, text in _scan_docs(epub):
++        titles = _title_spans(text)
+         for cn, tw, note in ZH_VOCAB_DIVERGENCE:
+             for m in re.finditer(re.escape(cn), text):
++                if _inside(m.start(), titles):
++                    continue
+                 issues.append(
+                     Issue(
+                         f"{CODE}-022",
+diff --git a/epubqa/checks/stores.py b/epubqa/checks/stores.py
+index 1f833c9..1b75382 100644
+--- a/epubqa/checks/stores.py
++++ b/epubqa/checks/stores.py
+@@ -161,9 +161,12 @@ def _google_kobo(epub: Epub) -> list:
+     for item in epub.content_docs():
+         if not epub.has(item.path):
+             continue
++        # The ratio measures inline cruft in *prose*. A table of contents is
++        # mostly markup by nature — one span per entry, all class-driven — so
++        # it trips the threshold no matter how cleanly it is written.
++        if "nav" in item.property_set:
++            continue
+         markup = epub.text(item.path)
+-        for m in re.finditer(r"page-break-(before|after)\s*:\s*always", markup, re.I):
+-            pass
+         count = len(re.findall(r"<span\b", markup, re.I))
+         chars = len(re.sub(r"<[^>]+>", "", markup))
+         if chars and count / max(chars, 1) > 0.05:
+diff --git a/epubqa/fixes.py b/epubqa/fixes.py
+index bc5ef5a..40cf2ab 100644
+--- a/epubqa/fixes.py
++++ b/epubqa/fixes.py
+@@ -694,6 +694,14 @@ def optimize(epub: Epub, prune: bool = True) -> FixResult:
+             if i.is_image() and re.search(r"cover|封面|表紙|표지", i.href, re.I)
+         }
+         keep_ids |= {i.id for i in epub.manifest.values() if i.is_font()}
++        # Font licences (SIL OFL and friends) must ship with the font, and no
++        # content document ever links to them — exactly the shape the orphan
++        # rule deletes.
++        keep_ids |= {
++            i.id
++            for i in epub.manifest.values()
++            if re.search(r"(^|/)(ofl|license|licence|copying)[^/]*$", i.href, re.I)
++        }
+         keep_ids |= {
+             i.id
+             for i in epub.manifest.values()
+diff --git a/epubqa/langprofile.py b/epubqa/langprofile.py
+index 8f22aa5..86d37d8 100644
+--- a/epubqa/langprofile.py
++++ b/epubqa/langprofile.py
+@@ -237,7 +237,9 @@ ZH_VOCAB_DIVERGENCE = [
+     ("激光", "雷射", "zh-Hant 慣用「雷射」"),
+     ("打印", "列印", "zh-Hant 慣用「列印」"),
+     ("屏幕", "螢幕", "zh-Hant 慣用「螢幕」"),
+-    ("數據", "資料", "zh-Hant 慣用「資料」"),
++    # 「數據」 is deliberately absent: unlike the entries above it is standard in
++    # Taiwan too (數據分析、大數據), sitting alongside 「資料」 with a narrower,
++    # numeric sense. Flagging it produced false positives on ordinary prose.
+     ("項目", "專案", "zh-Hant 慣用「專案」"),
+     ("默認", "預設", "zh-Hant 慣用「預設」"),
+ ]
+diff --git a/tests/test_epubqa.py b/tests/test_epubqa.py
+index 70d5b64..faa6991 100644
+--- a/tests/test_epubqa.py
++++ b/tests/test_epubqa.py
+@@ -19,6 +19,7 @@ from epubqa.issues import Severity
+ from epubqa.langprofile import (
+     SIMPLIFIED_ONLY,
+     TRADITIONAL_ONLY,
++    ZH_VOCAB_DIVERGENCE,
+     detect_language,
+     profile_for,
+ )
+@@ -41,6 +42,29 @@ class FixtureCase(unittest.TestCase):
+     def codes(self, report) -> set:
+         return {i.code for i in report.issues}
+ 
++    def variant(self, code: str, name: str, edits: dict) -> str:
++        """A copy of a fixture with some entries rewritten, added or dropped.
++
++        A value of ``None`` deletes the entry; ``str``/``bytes`` replace or add
++        it. Keeps mimetype first and stored, as the OCF spec requires.
++        """
++        src = self.paths[code]
++        dest = os.path.join(self.tmp, f"{name}.epub")
++        with zipfile.ZipFile(src) as zin:
++            entries = [(i.filename, zin.read(i.filename)) for i in zin.infolist()]
++        original = dict(entries)
++        kept = [(n, edits.get(n, d)) for n, d in entries if edits.get(n, d) is not None]
++        kept += [(n, v) for n, v in edits.items() if v is not None and n not in original]
++        with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as zout:
++            mime = zipfile.ZipInfo("mimetype")
++            mime.compress_type = zipfile.ZIP_STORED
++            zout.writestr(mime, b"application/epub+zip")
++            for n, data in kept:
++                if n == "mimetype":
++                    continue
++                zout.writestr(n, data)
++        return dest
++
+ 
+ # --------------------------------------------------------------- detection
+ 
+@@ -424,6 +448,121 @@ class TestFixes(FixtureCase):
+                     self.assertEqual(selector, "body")
+ 
+ 
++class TestAdvisoryPrecision(FixtureCase):
++    """Advisories that used to fire on correct books.
++
++    Every one of these was a false positive found on a real title; a checker
++    that cries wolf on good work teaches authors to ignore it.
++    """
++
++    def report_for(self, path, lang="zh-Hant"):
++        return build_report(Epub(path), lang)
++
++    def test_mainland_vocabulary_ignored_inside_work_titles(self):
++        chapter = """<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
++<head><title>x</title></head><body>
++<p>二部曲《明天不是默認值》即將開始。</p>
++</body></html>
++"""
++        path = self.variant("zh-Hant", "titles", {"OEBPS/chap2.xhtml": chapter})
++        hits = [
++            i
++            for i in self.report_for(path).issues
++            if i.code == "LANG-022" and i.file == "OEBPS/chap2.xhtml"
++        ]
++        self.assertEqual(hits, [], [i.message for i in hits])
++
++    def test_mainland_vocabulary_still_flagged_in_ordinary_prose(self):
++        chapter = """<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
++<head><title>x</title></head><body>
++<p>這個項目的軟件很好用。</p>
++</body></html>
++"""
++        path = self.variant("zh-Hant", "prose", {"OEBPS/chap2.xhtml": chapter})
++        hits = {
++            i.message
++            for i in self.report_for(path).issues
++            if i.code == "LANG-022" and i.file == "OEBPS/chap2.xhtml"
++        }
++        self.assertEqual(len(hits), 2, hits)
++
++    def test_shuju_is_not_treated_as_mainland_only(self):
++        # 「數據」 is standard in Taiwan too; flagging it was a false positive.
++        self.assertNotIn("數據", {cn for cn, _tw, _note in ZH_VOCAB_DIVERGENCE})
++
++    def test_page_list_only_expected_when_a_print_source_is_declared(self):
++        digital = self.report_for(self.paths["zh-Hant"])
++        self.assertNotIn("A11Y-021", self.codes(digital))
++
++        with zipfile.ZipFile(self.paths["zh-Hant"]) as z:
++            text = z.read("OEBPS/content.opf").decode("utf-8")
++        text = text.replace("</metadata>", "<dc:source>978-9-570-00000-0</dc:source></metadata>")
++        path = self.variant("zh-Hant", "printsource", {"OEBPS/content.opf": text})
++        self.assertIn("A11Y-021", self.codes(self.report_for(path)))
++
++    def test_span_density_ignores_the_table_of_contents(self):
++        # One class-driven span per entry is how a nav document is supposed to
++        # look; the ratio only means something in prose.
++        nav = """<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
++      lang="zh-Hant" xml:lang="zh-Hant">
++<head><title>目錄</title></head><body>
++<nav epub:type="toc" id="toc"><h1>目錄</h1><ol>
++<li><a href="chap1.xhtml"><span class="n">壹</span><span class="t">風土</span></a></li>
++<li><a href="chap2.xhtml"><span class="n">貳</span><span class="t">儀式</span></a></li>
++</ol></nav>
++</body></html>
++"""
++        path = self.variant("zh-Hant", "densenav", {"OEBPS/nav.xhtml": nav})
++        hits = [i for i in self.report_for(path).issues if i.code == "STORE-021"]
++        self.assertEqual(hits, [], [i.file for i in hits])
++
++    def test_font_licence_reminder_stops_once_the_licence_ships(self):
++        font = ("OEBPS/NotoSerifTC.woff2", b"wOF2" + b"\0" * 64)
++        manifest_item = '<item id="f1" href="NotoSerifTC.woff2" media-type="font/woff2"/>'
++        with zipfile.ZipFile(self.paths["zh-Hant"]) as z:
++            opf = z.read("OEBPS/content.opf").decode("utf-8")
++        opf_with_font = opf.replace("</manifest>", manifest_item + "</manifest>")
++
++        without = self.variant(
++            "zh-Hant", "font-nolicence",
++            {"OEBPS/content.opf": opf_with_font, font[0]: font[1]},
++        )
++        self.assertIn("ASSET-037", self.codes(self.report_for(without)))
++
++        licence_item = '<item id="ofl" href="OFL.txt" media-type="text/plain"/>'
++        with_licence = self.variant(
++            "zh-Hant", "font-licence",
++            {
++                "OEBPS/content.opf": opf_with_font.replace(
++                    "</manifest>", licence_item + "</manifest>"
++                ),
++                font[0]: font[1],
++                "OEBPS/OFL.txt": "SIL OPEN FONT LICENSE Version 1.1",
++            },
++        )
++        self.assertNotIn("ASSET-037", self.codes(self.report_for(with_licence)))
++
++    def test_prune_never_deletes_a_bundled_font_licence(self):
++        licence_item = '<item id="ofl" href="OFL.txt" media-type="text/plain"/>'
++        with zipfile.ZipFile(self.paths["en"]) as z:
++            opf = z.read("OEBPS/content.opf").decode("utf-8")
++        path = self.variant(
++            "en", "prune-licence",
++            {
++                "OEBPS/content.opf": opf.replace("</manifest>", licence_item + "</manifest>"),
++                "OEBPS/OFL.txt": "SIL OPEN FONT LICENSE Version 1.1",
++            },
++        )
++        epub = Epub(path)
++        fixes.optimize(epub, prune=True)
++        dest = os.path.join(self.tmp, "pruned-licence.epub")
++        epub.save(dest)
++        self.assertIn("OEBPS/OFL.txt", set(zipfile.ZipFile(dest).namelist()))
++
++
+ class TestOptimize(FixtureCase):
+     def test_prune_removes_orphans_but_never_the_cover(self):
+         epub = Epub(self.paths["en"])
+-- 
+2.43.0
+
