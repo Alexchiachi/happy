@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>連繫 · 大道至簡</title>
+  <meta name="description" content="寫信給我們，或加入幸福誌訂閱。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">大道至簡<small>Dao is simple</small></a>
+  <button class="nav-toggle" aria-label="menu">≡</button>
+  <ul class="nav-menu">
+    <li><a href="yunnan.html">雲南</a></li>
+    <li><a href="taiwan.html">台灣</a></li>
+    <li><a href="journal.html">幸福誌</a></li>
+    <li><a href="services.html">服務體驗</a></li>
+    <li><a href="about.html">關於</a></li>
+    <li><a href="connect.html" class="active">連繫</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- Full-height Hero -->
+  <section class="hero" style="min-height: 70vh;">
+    <div class="container">
+      <div class="eyebrow hero-eyebrow reveal">Connect · 連繫</div>
+      <h1 class="reveal" style="font-family: var(--font-han); font-size: clamp(3rem, 8vw, 6rem); font-weight: 200; letter-spacing: 0.15em; color: var(--ink); margin-bottom: 2rem;">寫一封信來</h1>
+      <p class="hero-tagline reveal">不急，慢慢寫。我們會慢慢看，慢慢回。</p>
+    </div>
+  </section>
+
+  <!-- Contact Cards -->
+  <section class="container">
+    <div class="contact-cards">
+      <div class="contact-card reveal">
+        <div class="icon-mark">信</div>
+        <h3>電子郵件</h3>
+        <p class="value">hello@daoissimple.com</p>
+        <p>所有合作、選物、服務洽詢</p>
+      </div>
+      <div class="contact-card reveal">
+        <div class="icon-mark">話</div>
+        <h3>電話</h3>
+        <p class="value">+886 02-2345-6789</p>
+        <p>週二至週六 · 14:00–18:00</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Letter Form -->
+  <section class="section">
+    <div class="container">
+      <header style="text-align:center; margin-bottom: 2rem;">
+        <div class="eyebrow reveal">A letter · 一封信</div>
+        <h2 class="h-section reveal" style="margin-top:1rem;">想跟我們說什麼都可以</h2>
+      </header>
+      <form class="letter-form reveal" novalidate>
+        <div class="row">
+          <label for="name">您的稱呼</label>
+          <input type="text" id="name" name="name" placeholder="怎麼稱呼您？" required>
+        </div>
+        <div class="row">
+          <label for="email">電子郵件</label>
+          <input type="email" id="email" name="email" placeholder="我們會用這個信箱回覆您" required>
+        </div>
+        <div class="row">
+          <label for="subject">想聊的事情</label>
+          <input type="text" id="subject" name="subject" placeholder="選物 / 服務 / 合作 / 其他都好">
+        </div>
+        <div class="row">
+          <label for="message">寫信內容</label>
+          <textarea id="message" name="message" placeholder="想到什麼就寫什麼，不用客套" required></textarea>
+        </div>
+        <button type="submit">寄出這封信 →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ Accordion -->
+  <section class="section" style="background: var(--paper-deep);">
+    <div class="container">
+      <header style="text-align:center; margin-bottom: 2rem;">
+        <div class="eyebrow reveal">Frequently asked · 常見問題</div>
+        <h2 class="h-section reveal" style="margin-top:1rem;">先回答幾個問題</h2>
+      </header>
+      <div class="faq">
+        <div class="faq-item reveal">
+          <button class="faq-q">選物有實體店嗎？可以親自去看嗎？</button>
+          <div class="faq-a"><p>目前沒有實體店面。雲南選物與台灣選物都是線上銷售加產地直送的方式。如果您想親自接觸到這些物與人，最好的方式是參加我們的「稻田裡的餐桌」或「去有風的地方」服務體驗。</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">海外可以下單嗎？運費怎麼算？</button>
+          <div class="faq-a"><p>香港、澳門、馬來西亞、新加坡可以下單，運費依商品重量與目的地計算，下單後我們會以信件確認。其他地區請來信告訴我們需求，我們會評估配送可行性。</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">想送禮給朋友，可以代寫卡片或包裝嗎？</button>
+          <div class="faq-a"><p>可以。每件商品結帳時都可選擇禮物包裝（簡單質樸的款式），並可附上手寫卡片。如果是企業或大量送禮，建議直接看「服務體驗」中的「選物顧問・私人定制」項目。</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">我是創業者，想參加沙龍要怎麼申請？</button>
+          <div class="faq-a"><p>「創業者幸福共創沙龍」每月限額 8 位，採邀請制。您可以透過上面的表單寄信給我們，簡單介紹您正在做的事，我們會在收到後一週內回覆。</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">想合作或邀稿，請聯絡誰？</button>
+          <div class="faq-a"><p>媒體、品牌合作、邀請演講或稿件邀約，請來信至 hello@daoissimple.com，主旨註明「合作邀請」，我們會在三個工作日內回覆。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing Seal -->
+  <section class="seal">
+    <div class="seal-mark reveal">
+      <span>大道</span>
+      <span>至簡</span>
+    </div>
+    <p class="seal-tag reveal">寫信給簡家旗 · Dao is simple</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">大道至簡</div>
+        <div class="footer-brand-en">Dao is simple</div>
+        <p class="footer-brand-desc">做幸福的事，讓幸福變成有價值的事。雲南與台灣的好物與生活提案，由簡家旗主理。</p>
+      </div>
+      <div><h4>選物</h4><ul><li><a href="yunnan.html">雲南選物</a></li><li><a href="taiwan.html">台灣選物</a></li></ul></div>
+      <div><h4>內容</h4><ul><li><a href="journal.html">幸福誌</a></li><li><a href="about.html">關於</a></li></ul></div>
+      <div><h4>連繫</h4><ul><li><a href="services.html">服務體驗</a></li><li><a href="connect.html">寫信給我們</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 大道至簡 · Dao is simple</p>
+      <p>Designed in stillness · 設計於靜處</p>
+    </div>
+  </div>
+</footer>
+
+<script src="scripts.js"></script>
+</body>
+</html>
