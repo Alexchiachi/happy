@@ -68,16 +68,60 @@
     });
   });
 
-  // --- Letter form (placeholder behavior) ---
+  // --- Letter form → Google 試算表 ---
+  // 部署 docs/google-sheet-form.gs 之後，把拿到的 /exec 網址貼進 FORM_ENDPOINT。
+  // 留空時表單「不會」假裝寄出，而是請訪客改用 Email —— 寧可麻煩，也不要讓來信憑空消失。
+  const FORM_ENDPOINT = '';
+  const FALLBACK_EMAIL = 'hello@daoissimple.com';
+
   const letterForm = document.querySelector('.letter-form');
   if (letterForm) {
+    const btn = letterForm.querySelector('button[type=submit]');
+    const status = letterForm.querySelector('.form-status');
+    const btnLabel = btn ? btn.textContent : '';
+
+    const say = (text, kind) => {
+      if (!status) return;
+      status.textContent = text || '';
+      status.className = 'form-status' + (kind ? ' ' + kind : '');
+    };
+
     letterForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = letterForm.querySelector('button[type=submit]');
-      if (btn) {
-        btn.textContent = '已寄出 · 謝謝您';
-        btn.disabled = true;
+
+      const data = new FormData(letterForm);
+      const missing = ['name', 'email', 'message']
+        .find((k) => !String(data.get(k) || '').trim());
+
+      if (missing) {
+        say('請填寫稱呼、電子郵件與信件內容。', 'err');
+        const field = letterForm.querySelector('[name="' + missing + '"]');
+        if (field) field.focus();
+        return;
       }
+
+      if (!FORM_ENDPOINT) {
+        say('線上表單尚未啟用，請改寄 ' + FALLBACK_EMAIL + '，我們一樣會回覆您。', 'err');
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = '寄送中…'; }
+      say('');
+
+      // 用 FormData 送出（multipart），瀏覽器不會發 CORS 預檢請求，
+      // Apps Script 才收得到。改成 JSON 會因為預檢失敗。
+      fetch(FORM_ENDPOINT, { method: 'POST', body: data })
+        .then((res) => res.json())
+        .then((out) => {
+          if (!out || !out.ok) throw new Error((out && out.error) || 'failed');
+          letterForm.reset();
+          if (btn) btn.textContent = '已寄出 · 謝謝您';
+          say('收到了，我們會在三個工作日內回覆。', 'ok');
+        })
+        .catch(() => {
+          if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
+          say('寄送沒有成功，請改寄 ' + FALLBACK_EMAIL + '，或稍後再試一次。', 'err');
+        });
     });
   }
 })();
