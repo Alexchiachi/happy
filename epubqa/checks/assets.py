@@ -487,15 +487,31 @@ def _fonts(epub: Epub, lang: str) -> list:
                     stores=("apple", "google"),
                 )
             )
-        issues.append(
-            Issue(
-                f"{CODE}-037",
-                Severity.INFO,
-                f"內嵌了 {len(fonts)} 個字型檔",
-                suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
-                "商用字型多數需另購電子書授權，這是上架後最常見的法務風險。",
-            )
+        # Open licences (SIL OFL above all) require the licence text to travel
+        # with the font. Bundling it is both the compliance step and the
+        # evidence that the licence question was actually looked at.
+        licence = next(
+            (
+                name
+                for name in epub.files
+                if re.search(r"(^|/)(ofl|license|licence|copying)[^/]*$", name, re.I)
+            ),
+            None,
         )
+        # Once the licence travels with the book the question has been answered,
+        # so — like every other check here — this one goes quiet.
+        if not licence:
+            issues.append(
+                Issue(
+                    f"{CODE}-037",
+                    Severity.INFO,
+                    f"內嵌了 {len(fonts)} 個字型檔，未附授權文件",
+                    suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
+                    "商用字型多數需另購電子書授權，這是上架後最常見的法務風險；"
+                    "SIL OFL 等開放授權則要求隨檔附上授權全文（OFL.txt），"
+                    "並將它列入 manifest。",
+                )
+            )
     elif is_cjk_lang:
         issues.append(
             Issue(
