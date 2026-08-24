@@ -223,3 +223,17 @@ python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
 **願每一個參與幸福餐桌的人，都能帶走一段「幸福片段」。**
 
 *Three years later, "Happiness Dining Table in Chengde Summer" will be as natural as "Cherry Blossoms in Japanese Spring."*
+
+---
+
+## 🌐 網站結構（GitHub Pages）
+
+本 repo 同時發布兩個靜態網站：
+
+| 路徑 | 內容 | 原始檔 |
+| --- | --- | --- |
+| `/` | 大道至簡 · daoissimple 官網（七頁） | 根目錄 `index.html`、`about.html`、`journal.html`、`yunnan.html`、`taiwan.html`、`services.html`、`connect.html`、`styles.css`、`scripts.js` |
+| `/whitepaper/` | 幸福餐桌 · 天麻品牌系統白皮書 | `whitepaper/index.html` |
+
+部署由 `.github/workflows/pages.yml` 自動處理（push 到 `main` 即上線）。
+大道至簡網站的設計系統說明與上線前待辦見 `docs/DAOISSIMPLE_SITE.md`。
