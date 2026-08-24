@@ -44,3 +44,12 @@ sips -Z 1600 原圖.jpg --out 壓好的.jpg
 ```
 
 或用線上工具 [squoosh.app](https://squoosh.app)（拖進去、選 MozJPEG、品質 75 左右、下載）。
+
+## 原始素材
+
+行銷長圖、未裁切的原檔用 `-poster` 或 `-source` 結尾保留，例如
+`yunnan-puer-gift-bag-poster.jpg`。網站實際用的是裁切過的
+`yunnan-puer-gift-bag.jpg`。這樣之後要重新裁切還有原檔可用。
+
+注意：行銷長圖通常把規格、價格燒在圖上，直接拿來當商品卡圖會和卡片本身的
+HTML 文字重複。請只裁出照片區域。
