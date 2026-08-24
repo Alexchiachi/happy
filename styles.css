@@ -596,7 +596,13 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    In production, replace with real photography
    ============================================================ */
 .img-placeholder {
-  background: linear-gradient(135deg, var(--paper-deep) 0%, var(--line) 100%);
+  /* --img  掛上真實照片時由 HTML 的 style 屬性設定
+     --tone 沒有照片時的色塊，由下面的 .tea/.moss/.dark 決定 */
+  --tone: linear-gradient(135deg, var(--paper-deep) 0%, var(--line) 100%);
+  /* 兩層：有圖蓋在色塊上；圖還沒上傳(404)時自動露出下層色塊，不會開天窗 */
+  background-image: var(--img, none), var(--tone);
+  background-size: cover;
+  background-position: center;
   position: relative;
   overflow: hidden;
 }
@@ -605,9 +611,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   background-image: radial-gradient(circle at 30% 30%, rgba(139, 111, 71, 0.08) 0%, transparent 50%),
                     radial-gradient(circle at 70% 70%, rgba(92, 122, 90, 0.06) 0%, transparent 50%);
 }
-.img-placeholder.tea { background: linear-gradient(135deg, #C9B28A 0%, #8B6F47 100%); }
-.img-placeholder.moss { background: linear-gradient(135deg, #A8B89A 0%, #5C7A5A 100%); }
-.img-placeholder.dark { background: linear-gradient(135deg, #5A4F45 0%, #2A2520 100%); }
+.img-placeholder.tea { --tone: linear-gradient(135deg, #C9B28A 0%, #8B6F47 100%); }
+.img-placeholder.moss { --tone: linear-gradient(135deg, #A8B89A 0%, #5C7A5A 100%); }
+.img-placeholder.dark { --tone: linear-gradient(135deg, #5A4F45 0%, #2A2520 100%); }
 .img-placeholder span {
   position: absolute; bottom: var(--s-2); right: var(--s-2);
   font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.3em;
