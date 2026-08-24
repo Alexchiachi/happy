@@ -1,954 +1,204 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>幸福餐桌 · 天麻品牌系统 | 行为艺术商业化白皮书</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #fef7e8;
-            color: #2d2a24;
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-        }
-
-        /* ===== 品牌色彩系统 ===== */
-        :root {
-            --brand-green: #3e6b3e;
-            --brand-brown: #b87c4f;
-            --brand-beige: #fef7e8;
-            --accent-warm: #d49c6c;
-            --text-dark: #2d2a24;
-            --warning-red: #c94c4c;
-            --success-gold: #d4a574;
-        }
-
-        /* ===== 头部系统 ===== */
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-            border-bottom: 3px solid var(--brand-green);
-            padding-bottom: 2rem;
-        }
-
-        .hero-tag {
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--brand-brown);
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-        }
-
-        h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--brand-green), var(--brand-brown));
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.8rem;
-            line-height: 1.2;
-        }
-
-        .subhead {
-            font-size: 1.3rem;
-            color: #5b4b3a;
-            max-width: 700px;
-            margin: 0 auto;
-            font-weight: 500;
-        }
-
-        h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--brand-green);
-            margin: 2.5rem 0 1rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        h3 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 1.2rem 0 0.8rem;
-            color: var(--brand-brown);
-        }
-
-        h4 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 1rem 0 0.5rem;
-            color: var(--brand-brown);
-        }
-
-        p {
-            margin-bottom: 1rem;
-            line-height: 1.7;
-        }
-
-        /* ===== 卡片系统 ===== */
-        .card {
-            background: white;
-            border-radius: 32px;
-            padding: 2rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 6px solid var(--accent-warm);
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-        }
-
-        .card-icon {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin: 2rem 0;
-        }
-
-        /* ===== 对比表格 ===== */
-        .compare-table {
-            background: white;
-            border-radius: 32px;
-            overflow-x: auto;
-            margin: 2rem 0;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-
-        .compare-table table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-            min-width: 500px;
-        }
-
-        .compare-table th {
-            background: linear-gradient(135deg, var(--brand-green), var(--brand-brown));
-            color: white;
-            padding: 1.2rem;
-            font-weight: 700;
-            text-align: left;
-        }
-
-        .compare-table td {
-            padding: 1rem 1.2rem;
-            border-bottom: 1px solid #f0e2d0;
-        }
-
-        .compare-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .highlight-bg {
-            background: #fef4e9;
-            font-weight: 600;
-        }
-
-        /* ===== 飞轮系统 ===== */
-        .flywheel-section {
-            background: linear-gradient(135deg, #f3ede4 0%, #fff8f0 100%);
-            border-radius: 48px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-            border: 2px solid var(--accent-warm);
-        }
-
-        .flywheel-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--brand-green);
-        }
-
-        .wheel-flow {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .flow-step {
-            background: white;
-            border-radius: 40px;
-            padding: 1rem 1.8rem;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 2px solid var(--brand-green);
-            font-size: 0.9rem;
-            text-align: center;
-            min-width: 140px;
-        }
-
-        .flow-arrow {
-            font-size: 1.8rem;
-            color: var(--accent-warm);
-        }
-
-        /* ===== 徽章和标签 ===== */
-        .badge {
-            background: #f4e3d4;
-            color: var(--brand-brown);
-            border-radius: 40px;
-            padding: 0.3rem 1.2rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ===== 信息块系统 ===== */
-        .info-block {
-            background: #fff3e6;
-            border-left: 6px solid var(--brand-brown);
-            border-radius: 16px;
-            padding: 1.6rem;
-            margin: 1.5rem 0;
-        }
-
-        .info-block strong {
-            color: var(--brand-green);
-        }
-
-        /* ===== 警告/重要块 ===== */
-        .warning-block {
-            background: #f5e6e6;
-            border-left: 6px solid var(--warning-red);
-            border-radius: 16px;
-            padding: 1.6rem;
-            margin: 1.5rem 0;
-        }
-
-        .warning-block strong {
-            color: var(--warning-red);
-        }
-
-        /* ===== 特殊强调 ===== */
-        .emphasis {
-            background: #e9dfcf;
-            border-radius: 32px;
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        .emphasis h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .emphasis-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.2rem;
-            text-align: left;
-            margin-top: 1rem;
-        }
-
-        .emphasis-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 16px;
-            border-top: 4px solid var(--brand-brown);
-        }
-
-        /* ===== 流程图 ===== */
-        .process-timeline {
-            position: relative;
-            padding: 2rem 0;
-        }
-
-        .timeline-item {
-            background: white;
-            border-radius: 24px;
-            padding: 1.6rem;
-            margin: 1.5rem 0;
-            padding-left: 60px;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            border-left: 4px solid var(--accent-warm);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 18px;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            background: var(--brand-green);
-            border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 0 0 0 2px var(--brand-green);
-        }
-
-        /* ===== 分层设计 ===== */
-        .tier-section {
-            background: linear-gradient(135deg, #f0f4f0 0%, #fefaf5 100%);
-            border-radius: 32px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 2px solid var(--brand-green);
-        }
-
-        .tier-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--brand-green);
-        }
-
-        .tier-content {
-            background: white;
-            border-radius: 24px;
-            padding: 1.8rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .tier-content h4 {
-            color: var(--brand-brown);
-            margin-bottom: 1rem;
-        }
-
-        .tier-content ul {
-            margin-left: 1.5rem;
-            margin-top: 0.8rem;
-        }
-
-        .tier-content li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-        }
-
-        /* ===== 关键数据框 ===== */
-        .metrics-box {
-            background: white;
-            border-radius: 24px;
-            padding: 1.8rem;
-            margin: 1.5rem 0;
-            border-top: 4px solid var(--success-gold);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        }
-
-        .metrics-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--brand-brown);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .metrics-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--brand-green);
-            margin-bottom: 0.3rem;
-        }
-
-        .metrics-desc {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        /* ===== 响应式 ===== */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            h2 {
-                font-size: 1.6rem;
-            }
-            .container {
-                padding: 1.5rem;
-            }
-            .wheel-flow {
-                gap: 1rem;
-            }
-            .flow-step {
-                min-width: 120px;
-                padding: 0.8rem 1.2rem;
-                font-size: 0.8rem;
-            }
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--brand-green);
-            color: #7f6b58;
-            font-size: 0.9rem;
-        }
-
-        /* ===== 配色块 ===== */
-        .bg-green {
-            background: var(--brand-green);
-            color: white;
-        }
-
-        .text-brown {
-            color: var(--brand-brown);
-        }
-
-        .accent {
-            color: var(--accent-warm);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大道至簡 · Dao is simple</title>
+  <meta name="description" content="做幸福的事，讓幸福變成有價值的事。雲南與台灣的幸福好物與生活提案。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
 
-    <!-- ===== 第一部分：品牌定位 ===== -->
-    <div class="hero">
-        <div class="hero-tag"><i class="fas fa-leaf"></i> 天麻品牌系统·行为艺术驱动</div>
-        <h1>幸福餐桌<br>重新定义产品价值</h1>
-        <div class="subhead">从农产品到文化体验｜以行为艺术为杠杆，用季节仪式沉淀品牌资产</div>
+<nav class="nav">
+  <a class="nav-brand" href="index.html">
+    大道至簡
+    <small>Dao is simple</small>
+  </a>
+  <button class="nav-toggle" aria-label="menu">≡</button>
+  <ul class="nav-menu">
+    <li><a href="yunnan.html">雲南</a></li>
+    <li><a href="taiwan.html">台灣</a></li>
+    <li><a href="journal.html">幸福誌</a></li>
+    <li><a href="services.html">服務體驗</a></li>
+    <li><a href="about.html">關於</a></li>
+    <li><a href="connect.html">連繫</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow hero-eyebrow reveal">Dao is simple · 簡家旗</div>
+    <h1 class="hero-title reveal">
+      大<span class="accent">道</span>至簡
+    </h1>
+    <p class="hero-tagline reveal">做幸福的事，讓幸福變成有價值的事。</p>
+    <div class="hero-meta reveal">
+      <span>雲南</span>
+      <span>台灣</span>
+      <span>幸福</span>
     </div>
+  </div>
+  <div class="hero-scroll">scroll ↓</div>
+</section>
 
-    <!-- ===== 第二部分：品牌系统全景 ===== -->
-    <h2><i class="fas fa-diagram-project"></i> 品牌系统全景：三层构造</h2>
-    <p>幸福餐桌不是一次活动，而是围绕<strong>天麻产品</strong>打造的品牌系统。该系统由三层递进式的价值创造组成：</p>
+<!-- Pull Quote -->
+<section class="pull-quote">
+  <div class="container narrow">
+    <q class="reveal">真正重要的事，總是簡單的。一杯雲南的茶，一碗台灣的米。</q>
+    <p class="pull-quote-attr reveal">— 大道至簡</p>
+  </div>
+</section>
 
-    <div class="grid-3">
-        <div class="card">
-            <div class="card-icon" style="color: var(--brand-green);">🌾</div>
-            <h3>第一层：产品本质</h3>
-            <p>天麻是原材料，却被定义为"幸福的物质载体"。不在功效（增强记忆、安神），而在<strong>风土故事</strong>：承德松林、四季节气、手工工艺。</p>
-        </div>
-        <div class="card">
-            <div class="card-icon" style="color: var(--brand-brown);">🎭</div>
-            <h3>第二层：行为艺术</h3>
-            <p>通过季节性的"幸福餐桌"仪式上演，让消费者从旁观者变成共创者。每一次都是同一作品的变奏，积累品牌仪式资本。</p>
-        </div>
-        <div class="card">
-            <div class="card-icon" style="color: var(--accent-warm);">💰</div>
-            <h3>第三层：商业闭环</h3>
-            <p>从参演凭证、衍生品复购、B端授权，到农产品提价，形成自我增强的商业飞轮。每一环都以行为艺术作为信息源和传播杠杆。</p>
-        </div>
+<!-- Three Doors -->
+<section class="section-tight">
+  <div class="container">
+    <header style="text-align:center; margin-bottom: 4rem;">
+      <div class="eyebrow reveal">Three doors · 三扇門</div>
+      <h2 class="h-section reveal" style="margin-top:1rem;">從這裡進來</h2>
+    </header>
+  </div>
+  <div class="doors">
+    <a href="yunnan.html" class="door reveal">
+      <div>
+        <div class="door-num">— 01 —</div>
+        <h3 class="door-title">雲南</h3>
+        <div class="door-en">From the high mountains</div>
+      </div>
+      <div>
+        <p class="door-desc">高山茶、菌菇、香料、織染、銀器。彩雲之南的厚度，被一件一件帶回來。</p>
+        <span class="door-cta">入山選物 →</span>
+      </div>
+    </a>
+    <a href="taiwan.html" class="door reveal">
+      <div>
+        <div class="door-num">— 02 —</div>
+        <h3 class="door-title">台灣</h3>
+        <div class="door-en">From the island fields</div>
+      </div>
+      <div>
+        <p class="door-desc">稻米、海鹽、職人器物、農家蔬果。從稻田裡的餐桌走出來的選物。</p>
+        <span class="door-cta">島上選物 →</span>
+      </div>
+    </a>
+    <a href="journal.html" class="door reveal">
+      <div>
+        <div class="door-num">— 03 —</div>
+        <h3 class="door-title">幸福誌</h3>
+        <div class="door-en">Journal of well-being</div>
+      </div>
+      <div>
+        <p class="door-desc">產地的故事、節氣的提案、做事的人、選物背後的心法。慢慢讀，不急。</p>
+        <span class="door-cta">慢讀文章 →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Duet 雲南 × 台灣 -->
+<section class="section">
+  <div class="container">
+    <header style="text-align:center; margin-bottom: 3rem;">
+      <div class="eyebrow reveal">A dialogue · 對話</div>
+      <h2 class="h-section reveal" style="margin-top:1rem;">兩地的呼吸</h2>
+      <p class="lede reveal" style="margin: 1.5rem auto 0;">雲南與台灣不是兩個分區，而是一場對話。山與島，茶與米，霧與光。</p>
+    </header>
+    <div class="duet">
+      <div class="duet-side yunnan reveal">
+        <div class="duet-han">雲南</div>
+        <div class="duet-en">Yunnan</div>
+        <p class="duet-tagline">高山的耐心，茶馬的緩慢。</p>
+      </div>
+      <div class="duet-cross reveal">×</div>
+      <div class="duet-side taiwan reveal">
+        <div class="duet-han">台灣</div>
+        <div class="duet-en">Taiwan</div>
+        <p class="duet-tagline">海島的清亮，土地的誠實。</p>
+      </div>
     </div>
+  </div>
+</section>
 
-    <!-- ===== 第三部分：天麻产品线的品牌化 ===== -->
-    <h2><i class="fas fa-crown"></i> 天麻产品线：从商品到文化符号</h2>
-    <p>天麻的品牌化路径不是"功效宣传"，而是"情感资产化"：</p>
-
-    <div class="compare-table">
-        <table>
-            <thead>
-                <tr>
-                    <th width="25%">维度</th>
-                    <th width="35%">❌ 传统农产品营销</th>
-                    <th width="40%">✅ 幸福·天麻新定义</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>产品定位</strong></td>
-                    <td>功效类商品<br>（便宜→对标→价格战）</td>
-                    <td class="highlight-bg">情绪价值载体<br>（稀缺→仪式→溢价空间）</td>
-                </tr>
-                <tr>
-                    <td><strong>传播渠道</strong></td>
-                    <td>商超、线上平台<br>依赖打折和流量</td>
-                    <td class="highlight-bg">行为艺术现场、直播、用户共创<br>自发传播，形成文化符号</td>
-                </tr>
-                <tr>
-                    <td><strong>价格逻辑</strong></td>
-                    <td>成本+利润</td>
-                    <td class="highlight-bg">成本 + 故事价值 + 仪式溢价 + 品牌资本<br>398元/人不是天麻的价格，是文化体验费</td>
-                </tr>
-                <tr>
-                    <td><strong>用户关系</strong></td>
-                    <td>一次性交易</td>
-                    <td class="highlight-bg">每年回访、季节共创、身份认同<br>"我是幸福的参与者"</td>
-                </tr>
-                <tr>
-                    <td><strong>资产沉淀</strong></td>
-                    <td>销售数据、库存</td>
-                    <td class="highlight-bg">仪式故事库、用户艺术档案、品牌文化IP</td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Services -->
+<section class="section">
+  <div class="container">
+    <header style="text-align:center; margin-bottom: 3rem;">
+      <div class="eyebrow reveal">Services · 服務體驗</div>
+      <h2 class="h-section reveal" style="margin-top:1rem;">把幸福做成一件事</h2>
+    </header>
+    <div class="services">
+      <a href="services.html" class="service reveal">
+        <div class="service-num">01</div>
+        <h3 class="service-title">稻田裡的餐桌</h3>
+        <p class="service-en">Table in the rice field</p>
+        <p class="service-desc">2012 年發起的台灣產地到餐桌引領計畫。在田間、海邊、茶園擺起餐桌，把職人主廚帶到土地上。</p>
+      </a>
+      <a href="services.html" class="service reveal">
+        <div class="service-num">02</div>
+        <h3 class="service-title">創業者幸福共創沙龍</h3>
+        <p class="service-en">Founders' salon</p>
+        <p class="service-desc">給仍相信慢、相信善、相信本來的創業者。我們不教 KPI，我們聊使命。</p>
+      </a>
+      <a href="services.html" class="service reveal">
+        <div class="service-num">03</div>
+        <h3 class="service-title">去有風的地方</h3>
+        <p class="service-en">Go where the wind blows</p>
+        <p class="service-desc">雲南旅居體驗。在大理、麗江、有風的小院裡，住下來，慢下來，看見自己。</p>
+      </a>
     </div>
+  </div>
+</section>
 
-    <!-- ===== 战略核心：参与者分层设计 ===== -->
-    <h2><i class="fas fa-users"></i> 参与者分层：从共创者到品牌大使的进阶</h2>
-    
-    <div class="warning-block">
-        <strong>🎯 战略关键：</strong> 与其追求"所有人都买产品"，不如先让核心层成为无损益的品牌大使。他们的传播价值远超他们的消费价值。
-    </div>
+<!-- Closing Seal -->
+<section class="seal">
+  <div class="seal-mark reveal">
+    <span>大道</span>
+    <span>至簡</span>
+  </div>
+  <p class="seal-tag reveal">Dao is simple · 簡家旗</p>
+</section>
 
-    <div class="tier-section">
-        <div class="tier-header">
-            <i class="fas fa-star"></i> 第一层：核心创作者（邀请制）
-        </div>
-        <div class="tier-content">
-            <h4>身份定义</h4>
-            <p>每季邀请5-8位"故事好手"成为节目组成员，不付费但深度参与。他们是：艺术家、设计师、内容创作者、社会观察者。</p>
-            
-            <h4>他们的角色</h4>
-            <ul>
-                <li><strong>共同创意：</strong> 参与仪式设计、现场布景、叙事脚本</li>
-                <li><strong>深度参与：</strong> 从筹备到上演全程在线，形成"创作者"身份</li>
-                <li><strong>自发传播：</strong> 将参演经历纳入个人作品集，自主发声</li>
-                <li><strong>社区种子：</strong> 他们带来的粉丝/朋友是下一层的主要来源</li>
-            </ul>
-
-            <h4>品牌获得</h4>
-            <ul>
-                <li>内容生产的确定性 + 专业度</li>
-                <li>真实的共创关系，而非虚假的"消费者身份"</li>
-                <li>媒体背书和社交传播的自然放大</li>
-            </ul>
-
-            <h4>参与凭证</h4>
-            <ul>
-                <li>创作者证书（在纪录片中署名）</li>
-                <li>参演服装（限量设计品）</li>
-                <li>独家素材库访问权</li>
-                <li>无需支付任何费用</li>
-            </ul>
-        </div>
-
-        <div class="tier-header" style="margin-top: 2rem;">
-            <i class="fas fa-users"></i> 第二层：开放参与者（付费体验）
-        </div>
-        <div class="tier-content">
-            <h4>身份定义</h4>
-            <p>每季开放50-100个名额，付费参与完整的行为艺术仪式。价格：398元/人。</p>
-
-            <h4>参与内容</h4>
-            <ul>
-                <li><strong>仪式体验：</strong> 完整参与所有环节（挖天麻→手工→共餐→颁证）</li>
-                <li><strong>现场气氛：</strong> 与创作者互动，感受专业级的视听体验</li>
-                <li><strong>身份获得：</strong> 获得参演凭证，成为"幸福餐桌的参与者"</li>
-                <li><strong>纪念品：</strong> 亲手制作的手工艺品、季节性纪念品</li>
-            </ul>
-
-            <h4>关键承诺</h4>
-            <p><strong style="color: var(--warning-red);">现场仅提供体验，不进行任何销售转化。</strong> 参与者需要什么、想买什么，完全由他们自发决定，而非预设转化路径。</p>
-
-            <h4>参演凭证的价值</h4>
-            <ul>
-                <li>纪录片中出现（身份认同）</li>
-                <li>参与者名单墙（社交价值）</li>
-                <li>年度幸福志收录（文化资产）</li>
-                <li>下一季优先报名权</li>
-            </ul>
-        </div>
-
-        <div class="tier-header" style="margin-top: 2rem;">
-            <i class="fas fa-globe"></i> 第三层：远程观众（直播免费）
-        </div>
-        <div class="tier-content">
-            <h4>身份定义</h4>
-            <p>百万级直播观众，通过屏幕参与整个仪式。免费观看，但有选择性购买的权力。</p>
-
-            <h4>观看体验</h4>
-            <ul>
-                <li><strong>高质感直播：</strong> 多机位、航拍、实时切换，堪比电视节目</li>
-                <li><strong>实时互动：</strong> 评论区参与、点赞投票、虚拟"掌声"</li>
-                <li><strong>后续内容：</strong> 每周发布"幕后花絮"，延长参与感</li>
-            </ul>
-
-            <h4>商业转化（自然路径，非强转）</h4>
-            <ul>
-                <li><strong>衍生品展示：</strong> 直播中自然露出手工品、天麻料包</li>
-                <li><strong>自发购买：</strong> 想买的人主动进入小程序，不被引导</li>
-                <li><strong>社区讨论：</strong> "��个料包我也想要"的自发评论是最好的转化</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ===== 第四部分：行为艺术的三重商业杠杆 ===== -->
-    <h2><i class="fas fa-theater-masks"></i> 行为艺术的三重商业杠杆</h2>
-
-    <div class="grid-2">
-        <div class="card">
-            <h3>🎬 杠杆一：信息生成器</h3>
-            <p>每场幸福餐桌上演，产生大量高感知内容：</p>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li><strong>影像：</strong> 短视频、直播、后期纪录片</li>
-                <li><strong>故事：</strong> 参与者证言、时令传说、工艺细节</li>
-                <li><strong>文化符号：</strong> "桑树下的紫色手染"、"松林午宴"</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>转化：</strong> 这些内容直接成为天麻产品的传播素材，用文化说服代替功效宣传。</p>
-        </div>
-
-        <div class="card">
-            <h3>💳 杠杆二：身份确认器</h3>
-            <p>参与变成身份，身份产生溢价：</p>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li><strong>参演凭证：</strong> 参与者获得视觉化身份（纪录片、名单墙）</li>
-                <li><strong>社交价值：</strong> "我参加过幸福餐桌"成为社交故事素材</li>
-                <li><strong>衍生购买：</strong> 身份确认后，购买衍生品变成"身份维系"而非"消费"</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>转化：</strong> 衍生品销售从"推销"变成"自发复购"。</p>
-        </div>
-
-        <div class="card">
-            <h3>🤝 杠杆三：B端授权工具</h3>
-            <p>将幸福餐桌的仪式脚本标准化，授权给高端餐厅和企业：</p>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li><strong>品牌授权费：</strong> 按季/按年收取</li>
-                <li><strong>产品需求：</strong> 每授权一家餐厅，新增天麻料包订单</li>
-                <li><strong>品牌传播：</strong> 异地触点，全国化布局</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>转化：</strong> 授权费收入 + 产品销量倍增 + 品牌认知提升。</p>
-        </div>
-    </div>
-
-    <!-- ===== 重新设计的收入模型 ===== -->
-    <h2><i class="fas fa-charging-station"></i> 单季收入模型（重新设计）</h2>
-
-    <p><strong>核心逻辑改变：</strong> 不以"直接转化"为KPI，而以"参与者满意度"和"自发复购率"为真正的增长杠杆。</p>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-        <div class="metrics-box">
-            <div class="metrics-label">💎 核心创作者 (邀请制)</div>
-            <div class="metrics-value">0元</div>
-            <div class="metrics-desc">5-8人，无成本但深度参与。他们的传播价值估算：20-40万</div>
-        </div>
-
-        <div class="metrics-box">
-            <div class="metrics-label">🎫 参演凭证销售</div>
-            <div class="metrics-value">39,800元</div>
-            <div class="metrics-desc">100人 × 398元，纯仪式体验，无衍生销售目标</div>
-        </div>
-
-        <div class="metrics-box">
-            <div class="metrics-label">📱 自发衍生品购买</div>
-            <div class="metrics-value">25,000-35,000元</div>
-            <div class="metrics-desc">参与者 + 直播观众的自发购买，转化率预计15-20%</div>
-        </div>
-
-        <div class="metrics-box">
-            <div class="metrics-label">📺 直播及内容</div>
-            <div class="metrics-value">10,000-15,000元</div>
-            <div class="metrics-desc">平台分成、赞助、内容授权</div>
-        </div>
-
-        <div class="metrics-box">
-            <div class="metrics-label">🤝 B端授权</div>
-            <div class="metrics-value">40,000-60,000元</div>
-            <div class="metrics-desc">3-5家餐厅授权费 + 产品供应</div>
-        </div>
-
-        <div class="metrics-box">
-            <div class="metrics-label">✨ 品牌资本积累</div>
-            <div class="metrics-value">长期溢价</div>
-            <div class="metrics-desc">3年后，天麻产品提价30%-80%的基础建立</div>
-        </div>
-    </div>
-
-    <div style="background: white; border-radius: 24px; padding: 1.5rem; margin-top: 2rem; text-align: center; border-top: 4px solid var(--success-gold);">
-        <strong style="font-size: 1.2rem; color: var(--brand-green);">单季直接收入预期：</strong>
-        <p style="font-size: 1.05rem; margin-top: 1rem;">
-            参演凭证 + 衍生品 + 直播 + B端授权 = 
-            <span style="color: var(--brand-brown); font-weight: 700;">114,800-149,800元/季度</span>
-        </p>
-        <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">加上核心创作者的传播价值（20-40万）和长期品牌资本，实际ROI远超短期收入</p>
-    </div>
-
-    <!-- ===== 最关键的心态转变 ===== -->
-    <h2><i class="fas fa-lightbulb"></i> 最关键的战略心态转变</h2>
-
-    <div class="info-block">
-        <strong style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-check-circle"></i> 从"一次性转化"到"多年身份构建"
-        </strong>
-        <p style="margin-top: 0.8rem;">第1年的参与者，不期望他们一次性购买齐全。真正的商业价值在于：</p>
-        <ul style="margin-left: 1.5rem; margin-top: 0.8rem;">
-            <li><strong>第1年：</strong> 参与仪式，获得身份凭证 → 满意度90%+</li>
-            <li><strong>第2年：</strong> 自发回访，主动购买衍生品 → 复购率40-50%</li>
-            <li><strong>第3年：</strong> 成为品牌大使，推荐朋友参与 → 口碑裂变</li>
-            <li><strong>第4-5年：</strong> 天麻零售产品提价成功，这批人成为最强的定价防守者</li>
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">大道至簡</div>
+        <div class="footer-brand-en">Dao is simple</div>
+        <p class="footer-brand-desc">做幸福的事，讓幸福變成有價值的事。雲南與台灣的好物與生活提案，由簡家旗主理。</p>
+      </div>
+      <div>
+        <h4>選物</h4>
+        <ul>
+          <li><a href="yunnan.html">雲南選物</a></li>
+          <li><a href="taiwan.html">台灣選物</a></li>
         </ul>
-    </div>
-
-    <div class="info-block">
-        <strong style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-check-circle"></i> 从"参与者是消费者"到"参与者是共创者"
-        </strong>
-        <p style="margin-top: 0.8rem;">两者的价值差异巨大：</p>
-        <ul style="margin-left: 1.5rem; margin-top: 0.8rem;">
-            <li><strong>消费者：</strong> 一次性交易，需要刺激（打折、赠品）才会重复购买</li>
-            <li><strong>共创者：</strong> 参与了作品的诞生，获得了身份认同，自发传播、自发复购</li>
+      </div>
+      <div>
+        <h4>內容</h4>
+        <ul>
+          <li><a href="journal.html">幸福誌</a></li>
+          <li><a href="about.html">關於</a></li>
         </ul>
+      </div>
+      <div>
+        <h4>連繫</h4>
+        <ul>
+          <li><a href="services.html">服務體驗</a></li>
+          <li><a href="connect.html">寫信給我們</a></li>
+        </ul>
+      </div>
     </div>
-
-    <!-- ===== 第六部分：季节循环与产品迭代 ===== -->
-    <h2><i class="fas fa-calendar-alt"></i> 季节循环：年度仪式规划</h2>
-    <p>天麻的品牌价值通过四季不同的仪式形态来积累。每一季都是产品的新故事入口：</p>
-
-    <div class="grid-2">
-        <div class="card">
-            <div class="badge" style="background: #c8e6c9;">🌱 春季</div>
-            <h3>萌芽的承诺</h3>
-            <p><strong>仪式：</strong> 破土仪式 · 手植天麻苗</p>
-            <p><strong>产品：</strong> 天麻种苗、春季养生料包</p>
-            <p><strong>传播：</strong> 用户成为"天麻父母"，全程记录生长</p>
-        </div>
-
-        <div class="card">
-            <div class="badge" style="background: #fff9c4;">☀️ 夏季</div>
-            <h3>丰盛的相聚</h3>
-            <p><strong>仪式：</strong> 桑树下的紫色手染午宴</p>
-            <p><strong>产品：</strong> 鲜天麻、手工料包、桑葚酱</p>
-            <p><strong>传播：</strong> 直播盛事，全网参与</p>
-        </div>
-
-        <div class="card">
-            <div class="badge" style="background: #ffcc80;">🍂 秋季</div>
-            <h3>收获的致敬</h3>
-            <p><strong>仪式：</strong> 采挖仪式 · 敬土感恩祭</p>
-            <p><strong>产品：</strong> 鲜挖天麻、冬储料包、"秋天手册"</p>
-            <p><strong>传播：</strong> 丰收故事，感恩叙事</p>
-        </div>
-
-        <div class="card">
-            <div class="badge" style="background: #e0e0e0;">❄️ 冬季</div>
-            <h3>沉淀的力量</h3>
-            <p><strong>仪式：</strong> 窖藏仪式 · 年度幸福志发布</p>
-            <p><strong>产品：</strong> 陈年天麻、冬季滋补包、年度艺术纪录片</p>
-            <p><strong>传播：</strong> 回顾总结，预售下一年</p>
-        </div>
+    <div class="footer-bottom">
+      <p>© 2026 大道至簡 · Dao is simple</p>
+      <p>Designed in stillness · 設計於靜處</p>
     </div>
+  </div>
+</footer>
 
-    <!-- ===== 第七部分：品牌系统的五大护城河 ===== -->
-    <h2><i class="fas fa-shield-alt"></i> 未被复制的五大护城河</h2>
-
-    <div class="emphasis">
-        <h3>为什么别人做不了这个系统？</h3>
-        <div class="emphasis-list">
-            <div class="emphasis-item">
-                <strong>① 地理垄断</strong>
-                <p>"只有幸福餐桌会在承德松林下举办"，形成地理认知独占。场景即品牌。</p>
-            </div>
-            <div class="emphasis-item">
-                <strong>② 仪式资本</strong>
-                <p>每一年的重复，都在加固品牌记忆。连续3年，幸福餐桌成为承德的文化节拍。</p>
-            </div>
-            <div class="emphasis-item">
-                <strong>③ 用户共创</strong>
-                <p>参与者不是消费者，是作品的共创者。身份认同带来的粘性远超传统营销。</p>
-            </div>
-            <div class="emphasis-item">
-                <strong>④ 内容优势</strong>
-                <p>行为艺术源源不断地生成"可传播的高感知内容"，零广告成本的品牌塑造。</p>
-            </div>
-            <div class="emphasis-item">
-                <strong>⑤ 商业体系</strong>
-                <p>从参演凭证、衍生品、授权费到产品溢价，形成完整的价值链闭环。单点突破无法复制整体效应。</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== 第八部分：执行路线图 ===== -->
-    <h2><i class="fas fa-map"></i> 首季执行路线图（2026年夏季）</h2>
-
-    <div class="grid-2">
-        <div class="card">
-            <div class="badge">📅 预售阶段（4月中旬）</div>
-            <h3>邀请核心创作者</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>确认5-8位创作者名单</li>
-                <li>举办私密筹备会</li>
-                <li>共同设计仪式脚本</li>
-                <li>划分各自的创意贡献</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="badge">📢 宣传阶段（5月初）</div>
-            <h3>发布视觉预告</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>创作者集体发布"参创海报"</li>
-                <li>展示场景设计图、仪式流程</li>
-                <li>开放参演报名（限100人）</li>
-                <li>预售价：398元/人</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="badge">🎬 筹备阶段（5月中旬-6月初）</div>
-            <h3>场景搭建与内容规划</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>确认承德松林场地</li>
-                <li>制作参演凭证（高质感设计）</li>
-                <li>邀请纪录片导演、摄像团队</li>
-                <li>规划直播细节</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="badge">🎪 上演阶段（6月15日）</div>
-            <h3>行为艺术现场</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>100人现场参与，百万级直播观众</li>
-                <li>每30分钟一次互动，展示衍生品（不强转）</li>
-                <li>现场采集参与者视频证言</li>
-                <li>颁发参演凭证和纪念品</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="badge">📱 自然转化阶段（6月-7月）</div>
-            <h3>衍生品自发销售</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>推送衍生品链接（被动式，非主动推销）</li>
-                <li>鼓励参与者分享购买故事</li>
-                <li>预期转化率：20-25%（远高于无体验的转化）</li>
-                <li>目标：25,000-35,000元收入</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="badge">🏢 B端阶段（7月-8月）</div>
-            <h3>品牌授权洽谈</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-                <li>展示纪录片和参与者反馈数据</li>
-                <li>接触5-10家高端餐厅/企业</li>
-                <li>谈定授权模式（脚本、视觉系统）</li>
-                <li>目标：签订3-5家合作</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ===== 第九部分：核心指标（重新设计） ===== -->
-    <h2><i class="fas fa-chart-line"></i> 核心业绩指标（重新设计）</h2>
-
-    <div class="compare-table">
-        <table>
-            <thead>
-                <tr>
-                    <th width="20%">指标类别</th>
-                    <th width="25%">新的KPI目标</th>
-                    <th width="25%">为什么这个指标更重要</th>
-                    <th width="30%">评估方法</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>参与者满意度</strong></td>
-                    <td class="highlight-bg">90%+</td>
-                    <td>直接决定口碑和复购</td>
-                    <td>问卷调研、NPS评分</td>
-                </tr>
-                <tr>
-                    <td><strong>自发复购率</strong></td>
-                    <td class="highlight-bg">40-50%</td>
-                    <td>衡量身份认同是否成立</td>
-                    <td>购买者追踪、重复用户统计</td>
-                </tr>
-                <tr>
-                    <td><strong>参与者口碑传播</strong></td>
-                    <td class="highlight-bg">30%</td>
-                    <td>反映"共创者"身份的有效性</td>
-                    <td>推荐新参与者数占总参与者比例</td>
-                </tr>
-                <tr>
-                    <td><strong>直播内容传播</strong></td>
-                    <td class="highlight-bg">10M+曝光，100k+互动</td>
-                    <td>衡量品牌资本的积累</td>
-                    <td>直播观看数 + 短视频播放 + 社交转发</td>
-                </tr>
-                <tr>
-                    <td><strong>创作者传播价值</strong></td>
-                    <td class="highlight-bg">20-40万等值</td>
-                    <td>核心创作者的价值往往被低估</td>
-                    <td>媒体提及、粉丝互动、舆论热度</td>
-                </tr>
-                <tr>
-                    <td><strong>B端授权签约数</strong></td>
-                    <td class="highlight-bg">3-5家</td>
-                    <td>品牌系统可复制性的证明</td>
-                    <td>合作协议签订数</td>
-                </tr>
-                <tr>
-                    <td><strong>品牌认知建立</strong></td>
-                    <td class="highlight-bg">本地认知度40%+</td>
-                    <td>为后续溢价奠定基础</td>
-                    <td>用户调研 + 搜索指数</td>
-                </tr>
-                <tr>
-                    <td><strong>产品溢价基础</strong></td>
-                    <td class="highlight-bg">为3年后提价做准备</td>
-                    <td>长期品牌价值的起点</td>
-                    <td>品牌好感度、购买意愿调研</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- ===== 总结与愿景 ===== -->
-    <div style="background: linear-gradient(135deg, #3e6b3e, #b87c4f); color: white; border-radius: 48px; padding: 2.5rem; margin: 3rem 0; text-align: center;">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌾🎭💚</div>
-        <h2 style="color: white; margin-bottom: 1rem;">从一粒天麻到一个品牌季节</h2>
-        <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 1.5rem; line-height: 1.8;">
-            天麻不再是农产品，而是"幸福的物质承载"。<br>
-            幸福餐桌不是活动，而是品牌的文化时间表。<br>
-            <strong>每一年的重复，都在锁定下一年的增长。</strong>
-        </p>
-        <p style="font-size: 1rem; font-style: italic;">
-            三年后，"承德的夏天有幸福餐桌"就像"日本春天有樱花"一样自然。<br>
-            届时，天麻的品牌价值已成为护城河。
-        </p>
-    </div>
-
-    <!-- ===== 合作锚点 ===== -->
-    <div class="info-block">
-        <i class="fas fa-handshake" style="color: var(--brand-brown); font-size: 1.5rem; margin-right: 1rem;"></i>
-        <div>
-            <strong style="font-size: 1.1rem;">与隆兴元康的协作方向</strong>
-            <p style="margin-top: 0.5rem;">基地选址、天麻供应链、季节仪式场景搭建、产品衍生设计、B端渠道拓展。</p>
-            <p style="margin-top: 0.5rem;">每一个环节都让幸福餐桌更真实、产品故事更有说服力。</p>
-        </div>
-    </div>
-
-    <footer>
-        <i class="fas fa-leaf"></i> 幸福餐桌 · 天麻品牌系统白皮书 v2.0<br>
-        从产品本质、行为艺术、到商业闭环的完整系统<br>
-        <strong>优化逻辑：从短期转化到长期身份构建</strong>
-    </footer>
-</div>
+<script src="scripts.js"></script>
 </body>
 </html>
