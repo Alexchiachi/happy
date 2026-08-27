@@ -1,0 +1,183 @@
+# 如何新增一篇幸福誌文章
+
+每篇文章要動兩個地方：
+
+1. **文章本體** — 在 `journal/` 資料夾裡新增一個 HTML 檔
+2. **列表卡片** — 在 `journal.html` 加一張卡，連到那個檔
+
+沒有資料庫、沒有後台、不用安裝任何東西。複製、改字、上傳，就這樣。
+
+---
+
+## 步驟一：建立文章檔
+
+複製 `journal/_template.html`，另存成新檔名，放在同一個 `journal/` 資料夾裡。
+
+**檔名規則**（很重要，這會變成網址）：
+
+```
+年-月-英文短名.html
+```
+
+例如：
+
+| 文章 | 檔名 |
+| --- | --- |
+| 大理蒼山下的老茶倉 | `2026-04-dali-tea-warehouse.html` |
+| 節氣穀雨泡新茶 | `2026-04-guyu-new-tea.html` |
+| 宜蘭三星的稻田 | `2026-05-yilan-rice-field.html` |
+
+- 全部小寫，用 `-` 連接，**不要有中文、空格、底線**
+- 中文檔名在網址裡會變成一長串亂碼，也容易在某些主機上失效
+- 檔名一旦公開就別再改 —— 改了舊連結會壞掉
+
+打開新檔案，會看到 `①` 到 `⑧` 的註解標記，照著改就好：
+
+| 標記 | 改什麼 |
+| --- | --- |
+| ① | 瀏覽器分頁標題 |
+| ② | 摘要（給 Google 和社群分享用） |
+| ③ | 分類 · 年月 |
+| ④ | 文章大標 |
+| ⑤ | 開場摘要 |
+| ⑥ | 作者、閱讀時間 |
+| ⑦ | 首圖 |
+| ⑧ | 內文 |
+
+**分類請從這四個裡挑一個**（要跟 `journal.html` 上方的篩選列一致）：
+生活提案 ／ 產地故事 ／ 選物筆記 ／ 二地對話
+
+---
+
+## 步驟二：寫內文
+
+內文區塊在 `<div class="article-body">` 和 `</div>` 之間。可用的東西：
+
+```html
+<p>一般段落。每段用一組 p 標籤包起來。</p>
+
+<h2>大標，用來分章節</h2>
+
+<h3>小標，茶褐色</h3>
+
+<blockquote>
+  想被記住的一句話。
+  <cite>— 說話的人 · 地點</cite>
+</blockquote>
+
+<ul>
+  <li>條列第一點</li>
+  <li>條列第二點</li>
+</ul>
+
+<figure>
+  <div class="img-placeholder moss"><span>PHOTO</span></div>
+  <figcaption>圖說。</figcaption>
+</figure>
+
+<hr>   <!-- 三顆點的分隔 · · · -->
+```
+
+間距、行高、字級都由 `styles.css` 自動處理，**不要自己加 `style=""` 調間距**，會跑掉。
+
+---
+
+## 步驟三：放照片（可選）
+
+沒有照片也沒關係 —— 版面用的是色塊，本來就長得好看。
+
+有照片的話：
+
+1. 圖片放進根目錄的 `images/` 資料夾
+2. 檔名一樣用小寫英文和 `-`
+3. 建議寬度 1600px 以內，JPG，壓到 300KB 以下（圖太大網站會變慢）
+4. 把色塊那行改成帶 `--img` 的寫法：
+
+```html
+<!-- 原本（色塊） -->
+<div class="img-placeholder tea article-cover reveal"><span>JOURNAL</span></div>
+
+<!-- 改成（真照片） -->
+<div class="img-placeholder article-cover reveal" style="--img: url('../images/dali-warehouse.jpg');"></div>
+```
+
+> 注意路徑前面的 `../` —— 文章在 `journal/` 資料夾裡，要往上一層才找得到 `images/`。
+> 這樣寫的好處：萬一圖片沒上傳成功，會自動露出底下的色塊，不會開天窗。
+
+三種色塊可選：`tea`（雲南・茶褐）、`moss`（台灣・苔綠）、`dark`（墨黑）。
+
+---
+
+## 步驟四：加到列表
+
+打開 `journal.html`，找到 `<div class="article-list">`。那裡有一塊註解寫著怎麼做。把這段貼在最上面（最新的文章排最前）：
+
+```html
+<a href="journal/2026-05-你的檔名.html" class="article-card reveal">
+  <div class="img-placeholder moss"><span>TAIWAN</span></div>
+  <div class="meta">產地故事 · 2026.05</div>
+  <h3>文章標題</h3>
+  <p>兩三句摘要，跟文章開頭的 lede 可以一樣。</p>
+</a>
+```
+
+注意外層是 `<a>` 不是 `<article>` —— 這樣整張卡片都可以點。
+
+**想換首頁那篇精選文章**：改 `journal.html` 上方 `<article class="article-feature">` 區塊的標題、摘要，還有「繼續閱讀 →」的 `href`。
+
+---
+
+## 步驟五：預覽
+
+上傳前先在自己電腦上看一眼。打開「終端機」，貼上：
+
+```bash
+cd ~/Desktop/happy      # 換成你放專案的位置
+python3 -m http.server 8080
+```
+
+然後瀏覽器開 <http://localhost:8080/journal.html>。按 `Control + C` 停掉。
+
+**要檢查的三件事**：
+
+- [ ] 從 journal.html 點得進文章
+- [ ] 文章裡「← 回幸福誌」點得回去
+- [ ] 手機寬度也正常（瀏覽器視窗拉窄看看）
+
+---
+
+## 步驟六：上線
+
+```bash
+cd ~/Desktop/happy
+git add .
+git commit -m "新增文章：大理蒼山下的老茶倉"
+git push
+```
+
+推上去之後 GitHub Pages 大約 **1～2 分鐘**會更新。網址是：
+
+```
+https://alexchiachi.github.io/happy/journal/你的檔名.html
+```
+
+看不到更新的話，多半是瀏覽器快取 —— 用 `Shift + 重新整理` 強制重載。
+
+---
+
+## 常見狀況
+
+**文章打開變成沒有樣式的白底黑字**
+`../styles.css` 的 `../` 掉了。文章在子資料夾裡，一定要有 `../`。
+
+**點進去 404**
+`journal.html` 裡的 `href` 跟實際檔名對不上。檢查大小寫 —— GitHub Pages 分大小寫，`Dali.html` 和 `dali.html` 是兩個不同的檔案。
+
+**照片沒出現**
+路徑錯，或檔名大小寫不符。先確認 `images/` 裡真的有那個檔。
+
+**文字擠在一起／間距怪怪的**
+檢查是不是漏了 `</p>` 或 `</div>` 的收尾標籤。
+
+**想一次寫好幾篇**
+文章之間互不影響，複製模板複製幾次都可以，最後一起 commit。
