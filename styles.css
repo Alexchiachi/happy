@@ -663,3 +663,148 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   font-size: 1.2rem;
   letter-spacing: 0.1em;
 }
+
+/* ============================================================
+   Journal article — single post page
+   單篇文章頁。版心 760px，長文閱讀用。
+   ============================================================ */
+
+/* --- 文章開頭 --- */
+.article-hero {
+  padding: var(--s-6) 0 var(--s-4);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--s-5);
+}
+.article-hero .meta {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--tea);
+  margin-bottom: var(--s-3);
+}
+.article-hero h1 {
+  font-family: var(--font-han);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  margin-bottom: var(--s-3);
+}
+.article-hero .lede {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  margin-bottom: var(--s-4);
+}
+.article-hero .byline {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--mist);
+  text-transform: uppercase;
+}
+
+/* 首圖：滿版於版心之上 */
+.article-cover {
+  aspect-ratio: 16/9;
+  margin-bottom: var(--s-5);
+}
+
+/* --- 內文 --- */
+.article-body { font-size: 1.05rem; line-height: 2.05; color: var(--ink); }
+.article-body > * + * { margin-top: var(--s-3); }
+.article-body p { text-wrap: pretty; }
+
+.article-body h2 {
+  font-family: var(--font-han);
+  font-size: 1.55rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+.article-body h3 {
+  font-family: var(--font-han);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--tea);
+  margin-top: var(--s-4);
+}
+
+.article-body ul, .article-body ol { padding-left: 1.4em; color: var(--ink-soft); }
+.article-body li + li { margin-top: var(--s-1); }
+
+.article-body blockquote {
+  border-left: 2px solid var(--tea);
+  padding: var(--s-1) 0 var(--s-1) var(--s-3);
+  margin-top: var(--s-4);
+  margin-bottom: var(--s-4);
+  font-family: var(--font-han);
+  font-size: 1.2rem;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.article-body blockquote cite {
+  display: block;
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-style: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* 圖片 + 圖說 */
+.article-body figure { margin-top: var(--s-5); margin-bottom: var(--s-5); }
+.article-body figure .img-placeholder { aspect-ratio: 3/2; }
+.article-body figcaption {
+  margin-top: var(--s-2);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--mist);
+  text-align: center;
+}
+
+/* 分隔：三顆點，不是一條線 */
+.article-body hr {
+  border: 0;
+  margin: var(--s-5) auto;
+  text-align: center;
+}
+.article-body hr::after {
+  content: "· · ·";
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.5em;
+  color: var(--line);
+}
+
+/* --- 文末落款 --- */
+.article-foot {
+  margin-top: var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.article-foot .seal {
+  font-family: var(--font-han);
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  color: var(--seal);
+}
+
+/* --- 讓 journal.html 的卡片可以整張點擊 --- */
+a.article-card { display: block; color: inherit; }
+a.article-card h3 { transition: color var(--dur) var(--ease); }
+a.article-card:hover h3 { color: var(--tea); }
+a.article-card .img-placeholder { transition: transform var(--dur) var(--ease); }
+a.article-card:hover .img-placeholder { transform: translateY(-4px); }
