@@ -394,7 +394,6 @@ def _fonts(epub: Epub, lang: str) -> list:
     issues = []
     fonts = [i for i in epub.manifest.values() if i.is_font()]
     css_text = "\n".join(epub.text(i.path) for i in epub.css_docs() if epub.has(i.path))
-    is_cjk_lang = lang in ("zh-Hant", "zh-Hans", "ja", "ko")
 
     declared_srcs = set()
     for m in re.finditer(r"@font-face\s*{([^}]*)}", css_text, re.S | re.I):
@@ -512,17 +511,10 @@ def _fonts(epub: Epub, lang: str) -> list:
                     "並將它列入 manifest。",
                 )
             )
-    elif is_cjk_lang:
-        issues.append(
-            Issue(
-                f"{CODE}-038",
-                Severity.INFO,
-                f"未內嵌字型（{lang}）",
-                suggestion="通常是正確選擇：中日韓字型體積大，且各閱讀器內建字型較佳。"
-                "請確認 CSS 的 font-family 有列出泛用字族（serif / sans-serif）作為後援。",
-                lang=lang,
-            )
-        )
+    # Not embedding a CJK font used to be reported here (ASSET-038). It is the
+    # recommended choice for Chinese — the files are huge and readers ship
+    # better ones — so the finding fired on books doing the right thing, and
+    # the only thing it asked them to verify is what ASSET-039 already checks.
 
     if css_text and not re.search(r"font-family[^;]*(serif|sans-serif|monospace)", css_text, re.I):
         if re.search(r"font-family", css_text, re.I):
