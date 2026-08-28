@@ -34,11 +34,24 @@ python3 book/build.py
 
 ## 上架前檢查
 
+兩個都要跑。epubqa 查的是通路規則與中文排版，epubcheck 查的是 EPUB 規格本身 ——
+各通路（Readmoo、Apple、Google）上傳時跑的就是 epubcheck，它擋下來的東西 epubqa
+不一定看得到。
+
 ```bash
 python3 -m epubqa check "book/我們不要就這樣算了，但也不要一直記得.epub" --lang zh-Hant
+
+npm install epubchecker
+java -Dfile.encoding=UTF-8 \
+  -jar node_modules/epubchecker/vendors/epubcheck-*/epubcheck.jar \
+  "book/我們不要就這樣算了，但也不要一直記得.epub"
 ```
 
-目前狀態：**0 阻擋、0 錯誤、0 警告、0 建議**。
+epubcheck 是 Java 程式，讀不動中文檔名時會回報 `File not found` 卻仍印出
+「0 errors」—— 那不是通過，是根本沒讀到檔案。看到這行就先複製成英文檔名再跑。
+
+目前狀態：epubqa **0 阻擋、0 錯誤、0 警告、0 建議**；epubcheck **0 fatals / 0
+errors / 0 warnings**。
 
 ## 幾個刻意的決定
 
@@ -53,5 +66,7 @@ python3 -m epubqa check "book/我們不要就這樣算了，但也不要一直�
 **不自動加 `text-indent`。** 本書段落靠 1.1em 下邊距分隔，不靠首行縮排。`text-indent` 會繼承到每一個區塊容器 —— 包括目錄的定寬編號和卦象線條 —— 把內容推出框外。
 
 **`.numeral` 帶 `aria-hidden="true"`。** 章首那個大字「壹貳參」是浮水印，正下方的 `.chno` 已經用文字寫了「第一章」。標成裝飾才不會被螢幕閱讀器唸兩次，也才不必為它的低對比負責。
+
+**目錄裡不放空標籤。** EPUB 3 導覽文件的內容模型比一般 XHTML 嚴格：`<nav>` 之內的 `<span>` 與 `<a>` 必須含有文字。曾經為了對齊，在沒有編號的條目放了空的 `<span class="tocnum"></span>`，被通路的 epubcheck 判為 6 個 RSC-005 錯誤、三家通路全部退件。要留空間就用 CSS —— `ol.toc a` 的 `padding-left` 配上 `.tocnum` 的負 `margin-left`，沒有編號的條目自然就對齊到標題起點。
 
 **配色須符合 WCAG AA。** `content.opf` 宣告了 `wcag-aa`，那就得是真的：一般文字對比度至少 4.5:1。在米底 `#EDE8DC` 上，這代表文字色不能比 `#6E675B` 更淺。

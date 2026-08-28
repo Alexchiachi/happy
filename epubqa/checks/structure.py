@@ -389,6 +389,43 @@ def _check_nav(epub: Epub) -> list:
                     stores=("kdp",),
                 )
             )
+        issues += _nav_content_model(nav.path, markup)
+    return issues
+
+
+#: An empty <span> or <a> inside a <nav>. The EPUB 3 navigation document has a
+#: content model far stricter than ordinary XHTML — every span and anchor must
+#: hold text — and empty ones are easy to introduce on purpose, as fixed-width
+#: spacers that line a table of contents up.
+_EMPTY_IN_NAV = re.compile(r"<(span|a)\b[^>]*>\s*</\1>", re.I)
+
+
+def _nav_content_model(path: str, markup: str) -> list:
+    """Empty spans/anchors inside <nav> — an epubcheck RSC-005 error.
+
+    Found the hard way: a book that passed every check here was rejected by
+    the store, whose validator is epubcheck. Six empty `<span class="tocnum">`
+    spacers, one per unnumbered entry.
+    """
+    issues = []
+    for nav_block in re.finditer(r"<nav\b.*?</nav>", markup, re.S | re.I):
+        for m in _EMPTY_IN_NAV.finditer(nav_block.group(0)):
+            tag = m.group(1).lower()
+            offset = nav_block.start() + m.start()
+            issues.append(
+                Issue(
+                    f"{CODE}-046",
+                    Severity.BLOCKER,
+                    f"導覽文件中有空的 <{tag}>，epubcheck 會判為 RSC-005 錯誤",
+                    file=path,
+                    line=markup.count("\n", 0, offset) + 1,
+                    excerpt=m.group(0),
+                    suggestion="EPUB 3 導覽文件規定 <span> 與 <a> 必須含有文字。"
+                    "若空元素是用來對齊版面，改用 CSS（padding 加負 margin 的懸掛縮排）"
+                    "留出空間，不要放空標籤。",
+                    stores=("readmoo", "apple", "google", "kobo", "kdp"),
+                )
+            )
     return issues
 
 

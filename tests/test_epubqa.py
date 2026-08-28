@@ -448,6 +448,53 @@ class TestFixes(FixtureCase):
                     self.assertEqual(selector, "body")
 
 
+class TestNavContentModel(FixtureCase):
+    """A book that passed every check here was rejected by a store.
+
+    Its validator is epubcheck, which enforces the navigation document's
+    content model: spans and anchors inside <nav> must contain text. Six
+    empty `<span class="tocnum">` spacers, one per unnumbered entry, each an
+    RSC-005 error.
+    """
+
+    NAV = """<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+      lang="zh-Hant" xml:lang="zh-Hant">
+<head><title>目錄</title></head><body>
+<nav epub:type="toc" id="toc"><h1>目錄</h1><ol>
+<li><a href="chap1.xhtml">%s第一章</a></li>
+<li><a href="chap2.xhtml"><span class="n">貳</span>第二章</a></li>
+</ol></nav>
+</body></html>
+"""
+
+    def codes_for(self, nav_markup, name):
+        path = self.variant("zh-Hant", name, {"OEBPS/nav.xhtml": nav_markup})
+        return [i for i in build_report(Epub(path), "zh-Hant").issues if i.code == "STRUCT-046"]
+
+    def test_empty_span_in_nav_is_a_blocker(self):
+        hits = self.codes_for(self.NAV % '<span class="n"></span>', "nav-empty-span")
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0].severity, Severity.BLOCKER)
+        self.assertEqual(hits[0].file, "OEBPS/nav.xhtml")
+
+    def test_empty_anchor_in_nav_is_a_blocker(self):
+        nav = self.NAV % ""
+        nav = nav.replace('<li><a href="chap1.xhtml">第一章</a></li>',
+                          '<li><a href="chap1.xhtml"></a></li>')
+        self.assertEqual(len(self.codes_for(nav, "nav-empty-a")), 1)
+
+    def test_populated_spans_are_fine(self):
+        self.assertEqual(self.codes_for(self.NAV % '<span class="n">壹</span>', "nav-ok"), [])
+
+    def test_empty_span_outside_nav_is_not_reported(self):
+        # Only the navigation document has this restriction; an empty span in
+        # ordinary content is valid XHTML and must not be flagged.
+        nav = self.NAV % ""
+        nav = nav.replace("</nav>", '</nav><p><span class="spacer"></span></p>')
+        self.assertEqual(self.codes_for(nav, "nav-outside"), [])
+
+
 class TestAdvisoryPrecision(FixtureCase):
     """Advisories that used to fire on correct books.
 
