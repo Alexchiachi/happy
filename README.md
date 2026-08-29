@@ -237,3 +237,15 @@ python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
 
 部署由 `.github/workflows/pages.yml` 自動處理（push 到 `main` 即上線）。
 大道至簡網站的設計系統說明與上線前待辦見 `docs/DAOISSIMPLE_SITE.md`。
+
+---
+
+## 🔧 WordPress 站台維運（daoissimple.com）
+
+`daoissimple.com` 另外跑在 WordPress（Blocksy 主題 · cPanel 共享主機）上。
+內容與文案的日常維護，走本機 Claude Code：
+
+- [設定與操作指南](./docs/WORDPRESS_MAINTENANCE.md) — 備份、安裝、應用程式密碼、第一次改文案
+- [工作區範本](./tools/wp-workspace/) — 拉取／推送工具、品牌守則、權限護欄
+
+主題外觀與程式碼改動不走那條路，留在本 repo 做。
