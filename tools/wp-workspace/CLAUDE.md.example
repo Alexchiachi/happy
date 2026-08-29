@@ -12,18 +12,26 @@
 ```bash
 ./wp.py list pages            # 先看有哪些頁面
 ./wp.py pull pages 12         # 拉一頁下來
-# 改 content/pages-12-*.html
+# 改 content/pages-12-*.html（內文）
+# 改 content/pages-12-*.json（title 標題、excerpt 摘要）
 ./wp.py diff pages 12         # 推之前一定先看差異
-./wp.py draft pages 12 --yes  # 存成草稿讓人先看
 ./wp.py push pages 12 --yes   # 確認沒問題才上線
 ```
 
+新增文章：`./wp.py new posts "標題" --yes` 建立草稿，寫完再 `push`。
+
 **這個站沒有 staging 測試站。** 所以：
 
-- 有疑慮就用 `draft`，不要直接 `push`
 - `push` 之前一定先 `diff`，把改了什麼講給我聽，我確認了再推
 - 一次改一頁。不要為了效率一口氣推五頁
 - `content/_backup/` 是自動存的推送前快照，不要刪
+
+**不要用 `draft` 當預覽。** 已發布的頁面設成草稿，是把它從網站上撤下來，
+不是做預覽版——WordPress 沒有「已發布頁面的草稿版」。`draft` 只用在
+還沒發布過的新文章上。
+
+**不要改 `.json` 裡底線開頭的欄位。** 尤其是 `_slug`：改網址會讓所有
+既有連結失效。真要改網址,請叫我停下來,那要到後台做並設轉址。
 
 ## 品牌禁區（比什麼都重要）
 

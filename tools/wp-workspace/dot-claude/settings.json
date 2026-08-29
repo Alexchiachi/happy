@@ -11,7 +11,8 @@
     ],
     "ask": [
       "Bash(./wp.py push:*)",
-      "Bash(./wp.py draft:*)"
+      "Bash(./wp.py draft:*)",
+      "Bash(./wp.py new:*)"
     ],
     "deny": [
       "Bash(curl:*)",

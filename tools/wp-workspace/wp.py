@@ -10,8 +10,12 @@
   ./wp.py pull pages 12           把第 12 頁拉到 content/
   ./wp.py pull-all [pages|posts]  全部拉下來（等於一份內容快照）
   ./wp.py diff pages 12           比對本機檔案與線上版本
-  ./wp.py draft pages 12 --yes    推成草稿，線上版本不動（建議先走這條）
-  ./wp.py push pages 12 --yes     推上線（--yes 是刻意的煞車）
+  ./wp.py new posts "標題" --yes   建立一篇新草稿
+  ./wp.py push pages 12 --yes     存檔並發布（--yes 是刻意的煞車）
+  ./wp.py draft pages 12 --yes    存成草稿（只適用於尚未發布的東西）
+
+已發布的頁面沒有「草稿版」可言——WordPress 沒這功能。要確認改了什麼，
+用 diff；推上去之後若不滿意，用後台的「修訂版本」還原。
 
 只用 Python 標準函式庫，不需要安裝任何東西。
 """
@@ -21,6 +25,7 @@ import difflib
 import html
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -65,12 +70,20 @@ def load_env():
     return conf
 
 
-ENV = load_env()
-API = ENV["WP_SITE"] + "/wp-json/wp/v2"
+_ENV = {}
+
+
+def env():
+    """延後到真正要連線時才讀 .env，這樣 --help 不用先設定就能看。"""
+    if not _ENV:
+        _ENV.update(load_env())
+    return _ENV
 
 
 def api(method, path, body=None):
     """所有對外請求都收斂在這裡：一個地方就看得完網站會被怎麼碰。"""
+    ENV = env()
+    API = ENV["WP_SITE"] + "/wp-json/wp/v2"
     token = base64.b64encode(
         (ENV["WP_USER"] + ":" + ENV["WP_APP_PASSWORD"]).encode("utf-8")
     ).decode("ascii")
@@ -109,7 +122,22 @@ def title_of(item):
 
 
 def stem_of(kind, item):
-    return "{}-{}-{}".format(kind, item["id"], item.get("slug") or "untitled")
+    # 中文標題產生的 slug 是百分號編碼的，當檔名沒法看，一律退回 untitled。
+    slug = item.get("slug") or ""
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]*", slug):
+        slug = "untitled"
+    return "{}-{}-{}".format(kind, item["id"], slug)
+
+
+def meta_of(local_file):
+    """讀 .html 旁邊那份 .json。標題和摘要放在那裡。"""
+    path = local_file.with_suffix(".json")
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        die("讀不懂 {}（{}）。JSON 壞了，多半是少了逗號或引號。".format(path.name, exc))
 
 
 def find_local(kind, post_id):
@@ -120,7 +148,7 @@ def find_local(kind, post_id):
 def cmd_whoami(argv):
     me = api("GET", "/users/me?context=edit")
     print("連線成功")
-    print("  站台：" + ENV["WP_SITE"])
+    print("  站台：" + env()["WP_SITE"])
     print("  身分：{} ({})".format(me.get("name"), me.get("slug")))
     print("  角色：" + (", ".join(me.get("roles") or []) or "未回報"))
 
@@ -159,13 +187,22 @@ def cmd_pull(argv):
     stem = stem_of(kind, item)
     body = (item.get("content") or {}).get("raw") or ""
     (CONTENT / (stem + ".html")).write_text(body, encoding="utf-8")
-    meta = {k: item.get(k) for k in ("id", "slug", "status", "link", "modified")}
-    meta["title"] = (item.get("title") or {}).get("raw", "")
+    meta = {
+        "_說明": "title 和 excerpt 可以改，push 時會一起送上去。"
+                 "底線開頭的欄位只是參考，改了不會生效。",
+        "title": (item.get("title") or {}).get("raw", ""),
+        "excerpt": (item.get("excerpt") or {}).get("raw", ""),
+        "_id": item["id"],
+        "_slug": item.get("slug"),
+        "_status": item.get("status"),
+        "_link": item.get("link"),
+        "_modified": item.get("modified"),
+    }
     (CONTENT / (stem + ".json")).write_text(
         json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print("已拉下 content/{}.html  ← 這是你要改的內容".format(stem))
-    print("        content/{}.json  ← 標題與狀態，不要手改".format(stem))
+    print("已拉下 content/{}.html  ← 內文".format(stem))
+    print("        content/{}.json  ← 標題與摘要".format(stem))
 
 
 def cmd_pull_all(argv):
@@ -191,20 +228,39 @@ def cmd_diff(argv):
     local_file = find_local(kind, post_id)
     if not local_file:
         die("本機沒有 {} {}，先跑：./wp.py pull {} {}".format(kind, post_id, kind, post_id))
-    _, remote = online_body(kind, post_id)
+    item, remote = online_body(kind, post_id)
+    meta = meta_of(local_file)
+
+    changed = False
+    for field, label in (("title", "標題"), ("excerpt", "摘要")):
+        if field not in meta:
+            continue
+        was = (item.get(field) or {}).get("raw", "")
+        now = meta.get(field) or ""
+        if was != now:
+            changed = True
+            print("{}：".format(label))
+            print("  線上　{}".format(was or "（空白）"))
+            print("  本機　{}".format(now or "（空白）"))
+            print()
+
     local = local_file.read_text(encoding="utf-8")
     delta = list(
         difflib.unified_diff(
             remote.splitlines(True), local.splitlines(True), "線上版本", "本機版本"
         )
     )
-    if not delta:
+    if delta:
+        changed = True
+        sys.stdout.writelines(delta)
+        if not delta[-1].endswith("\n"):
+            print()
+
+    if not changed:
         print("一模一樣，沒有待推送的改動。")
-        return
-    sys.stdout.writelines(delta)
 
 
-def do_push(argv, status_override):
+def do_push(argv, status):
     if len(argv) < 2:
         die("用法：./wp.py push <pages|posts> <id> --yes")
     kind, post_id = check_type(argv[0]), argv[1]
@@ -214,24 +270,60 @@ def do_push(argv, status_override):
     if not local_file:
         die("本機沒有 {} {} 的檔案，先跑：./wp.py pull {} {}".format(kind, post_id, kind, post_id))
 
-    # 推送前先把線上現況存一份。沒有 staging 站的時候，這是最後一道防線。
+    # 先把本機檔案讀完、確認沒問題，再碰網路。壞掉的 .json 不該先害我們
+    # 存下一份沒用的快照。
+    meta = meta_of(local_file)
+    payload = {"content": local_file.read_text(encoding="utf-8"), "status": status}
+    for field in ("title", "excerpt"):
+        if field in meta:
+            payload[field] = meta[field] or ""
+
     item, _ = online_body(kind, post_id)
+
+    # WordPress 沒有「已發布頁面的草稿版本」這種東西。把一個已發布的頁面設成
+    # draft，是直接把它從網站上撤下來，不是做一份預覽版。
+    if status == "draft" and item.get("status") == "publish" and "--unpublish" not in argv:
+        die(
+            "{} {} 目前是「已發布」。draft 會把它從網站上撤下來，不是做預覽版——\n"
+            "      WordPress 沒有「已發布頁面的草稿版」這種功能。\n"
+            "      想先確認改了什麼：./wp.py diff {} {}\n"
+            "      真的要下架：在最後再加上 --unpublish".format(kind, post_id, kind, post_id)
+        )
+
+    # 推送前先把線上現況存一份。沒有 staging 站的時候，這是最後一道防線。
     BACKUP.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     snapshot = BACKUP / "{}-{}-{}.json".format(kind, post_id, stamp)
     snapshot.write_text(json.dumps(item, ensure_ascii=False, indent=2), encoding="utf-8")
     info("推送前的線上版本已存到 content/_backup/" + snapshot.name)
 
-    payload = {"content": local_file.read_text(encoding="utf-8")}
-    if status_override:
-        payload["status"] = status_override
+    # slug 刻意不推。改了網址，所有既有連結、書籤、搜尋結果就全部指向 404。
+    # 真要改請到後台手動改，並且自己決定要不要設轉址。
+    if meta.get("_slug") and meta["_slug"] != item.get("slug"):
+        info("注意：_slug 被改過，但網址不會跟著變更——改網址會讓舊連結全部失效。")
+        info("      真的要改請到 WordPress 後台改，並記得設定轉址。")
     result = api("POST", "/{}/{}".format(kind, post_id), payload)
     print("已推送。狀態：{}   網址：{}".format(result.get("status"), result.get("link")))
     print("WordPress 後台的「修訂版本」也留了一份，可以在那裡一鍵還原。")
 
 
+def cmd_new(argv):
+    if len(argv) < 2:
+        die('用法：./wp.py new <pages|posts> "標題" --yes')
+    kind, title = check_type(argv[0]), argv[1]
+    if "--yes" not in argv[2:]:
+        die("這會在網站上建立一筆新草稿。確定的話請在最後加上 --yes。")
+    item = api("POST", "/" + kind, {"title": title, "status": "draft", "content": ""})
+    print("已建立草稿 #{}：{}".format(item["id"], title))
+    cmd_pull([kind, str(item["id"])])
+    print()
+    print("草稿不會出現在網站上。寫完內容後：")
+    print("  ./wp.py diff {} {}          看看要送出什麼".format(kind, item["id"]))
+    print("  ./wp.py push {} {} --yes    才會真的上線".format(kind, item["id"]))
+
+
 def cmd_push(argv):
-    do_push(argv, None)
+    do_push(argv, "publish")
 
 
 def cmd_draft(argv):
@@ -244,6 +336,7 @@ COMMANDS = {
     "pull": cmd_pull,
     "pull-all": cmd_pull_all,
     "diff": cmd_diff,
+    "new": cmd_new,
     "push": cmd_push,
     "draft": cmd_draft,
 }
