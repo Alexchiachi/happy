@@ -240,10 +240,13 @@ python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
 
 ---
 
-## 🔧 WordPress 站台維護（daoissimple.com）
+## 🔧 網站分層與 AI 協作分工
 
-`daoissimple.com` 另外跑在 WordPress（Blocksy 主題 · cPanel 共享主機）上。
-內容與文案的維護**刻意不接自動化**——理由、算過的數字，以及什麼時候該重新評估，
-見 [決策紀錄](./docs/WORDPRESS_AI_DECISION.md)。
+| 層級 | 網站 | 角色 |
+| --- | --- | --- |
+| **戰略** | daoissimple.com（WordPress） | 簡家旗個人 IP，經營三年。收費實操在這裡 |
+| **戰術** | 本 repo → GitHub Pages | 雲南台灣選物與資訊交流。未來會有更多 |
+| **通路** | 微信公眾號 | 自成一套，不與前兩者統一 |
 
-那份文件也收錄了實際在用的品牌文案守則，以及一件還沒解決的事：備份。
+分工、決策理由、品牌文案守則，以及一件還沒解決的事（備份），
+見 [AI 協作分工](./docs/AI_COLLABORATION.md)。
