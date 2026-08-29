@@ -528,11 +528,15 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* ============================================================
    Connect page — cards & form
    ============================================================ */
-.contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.contact-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
 .contact-card {
   background: var(--paper);
   padding: var(--s-5) var(--s-4);
   text-align: center;
+  /* 三張卡的內容高度不一（QR 比圓形標記高），置中對齊才不會參差 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .contact-card .icon-mark {
   font-family: var(--font-han);
@@ -547,7 +551,18 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .contact-card .value a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
 .contact-card .value a:hover { color: var(--tea); border-bottom-color: var(--tea); }
 .contact-card p { font-size: 0.88rem; color: var(--mist); }
-@media (max-width: 760px) { .contact-cards { grid-template-columns: 1fr; } }
+
+/* QR 碼（微信公眾號）。尺寸對齊 icon-mark 的置中節奏，白底留掃描靜區 */
+.contact-card .qr-mark {
+  width: 156px; height: 156px;
+  margin: 0 auto var(--s-3);
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 6px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) { .contact-cards { grid-template-columns: 1fr; } }
 
 /* Letter form */
 .letter-form { max-width: 640px; margin: 0 auto; padding: var(--s-5) 0; }

@@ -18,6 +18,24 @@
 
 掛上真實照片時，通常把裡面的 `<span>` 標籤拿掉（那是佔位符用的角落文字）。
 
+## 待補：微信公眾號 QR
+
+`connect.html` 的微信卡片已經接好 `images/wechat-qr.jpg`，**圖還沒放進來**。
+
+放進來之前，卡片會自動顯示一個「微」字圓形標記（跟旁邊兩張卡同一套樣式），
+所以看起來是完整的，不會破圖、也不會出現「待補」字樣。圖片一放進來就會自動變成 QR。
+
+```bash
+# 把微信後台下載的 QR 存成這個檔名，放進 images/
+cd ~/Desktop/happy      # 換成你放專案的位置
+# 建議先壓到 800px 左右
+sips -Z 800 ~/Downloads/你下載的QR.jpg --out images/wechat-qr.jpg
+git add images/wechat-qr.jpg && git commit -m "加入微信公眾號 QR" && git push
+```
+
+規格：正方形、`.jpg`、800px 以內、白底。QR 四周原本的留白（靜區）不要裁掉，
+裁太緊會掃不到。
+
 ## 照片規格
 
 | 項目 | 建議 |

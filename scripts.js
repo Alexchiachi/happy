@@ -9,6 +9,23 @@
 (function () {
   'use strict';
 
+  // --- 圖片載不到時的替代標記 ---
+  // 帶 data-fallback-mark 的 <img> 若 404，換成圓形字標（與其他卡片同一套樣式），
+  // 讓版面在「圖還沒上傳」時看起來仍然是完整的，而不是破圖或「待補」字樣。
+  document.querySelectorAll('img[data-fallback-mark]').forEach((img) => {
+    const swap = () => {
+      if (!img.isConnected) return;
+      const mark = document.createElement('div');
+      mark.className = 'icon-mark';
+      mark.textContent = img.dataset.fallbackMark;
+      img.replaceWith(mark);
+    };
+    // 這支腳本掛在 </body> 前，圖片 404 可能在腳本執行前就發生了，
+    // 所以除了監聽 error，也要補檢查「已經載入失敗」的狀態。
+    if (img.complete && img.naturalWidth === 0) swap();
+    else img.addEventListener('error', swap, { once: true });
+  });
+
   // --- Nav scroll state ---
   const nav = document.querySelector('.nav');
   if (nav) {
