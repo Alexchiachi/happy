@@ -84,7 +84,7 @@ DNS 設定指向後即可上線，整個過程約 15 分鐘。
 
 1. **替換圖片佔位符**——目前所有圖片區都是色塊（`.img-placeholder`），需替換為真實攝影。雲南建議山霧、茶倉、職人雙手；台灣建議稻田、海岸、職人器物。風格偏自然光、低飽和、有空氣感，避免商業過修圖。
 2. **替換內容文案**——商品價格、職人姓名、文章內容目前是示範資料，需替換為真實資訊。
-3. **接通表單後端**——`connect.html` 中的表單目前只在前端模擬送出，需接上 Formspree、Resend、或自架後端。
+3. ~~**接通表單後端**~~——已接上 Google Apps Script（`docs/google-sheet-form.gs`），來信會寫進 Google 試算表。端點設定在 `scripts.js` 的 `FORM_ENDPOINT`。若之後改了 `.gs` 的程式碼，記得重新[部署]→[管理部署作業]→版本選「新版本」，否則線上跑的還是舊版。
 4. ~~**設定 Email / Phone**~~——已設定：`dadaoissimple@gmail.com`、臉書粉絲頁 `facebook.com/dream2walker`。電話已移除。改動處：`connect.html` 聯絡卡片與 FAQ、`scripts.js` 的 `FALLBACK_EMAIL`。
 5. **加入 GA / Search Console**——上線前在每頁 `<head>` 加入追蹤碼。
 6. **確認字型 fallback**——若擔心 Google Fonts 載入慢，可改為 self-host 或使用系統字型。

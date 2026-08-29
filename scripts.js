@@ -88,7 +88,7 @@
   // --- Letter form → Google 試算表 ---
   // 部署 docs/google-sheet-form.gs 之後，把拿到的 /exec 網址貼進 FORM_ENDPOINT。
   // 留空時表單「不會」假裝寄出，而是請訪客改用 Email —— 寧可麻煩，也不要讓來信憑空消失。
-  const FORM_ENDPOINT = '';
+  const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwlq6c4hwhrLKG3dS095Sn68E-ncHrRxSI323dpuXw6Fkg3g8Im3ZFSEuknsx-zkwh1/exec';
   const FALLBACK_EMAIL = 'dadaoissimple@gmail.com';
 
   const letterForm = document.querySelector('.letter-form');
