@@ -5,10 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>內耗狀態自我評估與自洽引導工具 · Inner Flow Assessment</title>
 <meta name="description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測：測量你的內耗熵值，從混沌中重構自我流動。" />
+<link rel="canonical" href="https://alexchiachi.github.io/happy/inner-flow.html" />
 
-<!-- ===== 外部依賴（皆為公開 CDN，無建置流程） ===== -->
-<!-- 1. Tailwind CSS（Play CDN，開發／單檔部署用） -->
-<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<!-- ===== 社群分享預覽（Open Graph / Twitter Card） ===== -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Inner Flow Assessment" />
+<meta property="og:locale" content="zh_TW" />
+<meta property="og:url" content="https://alexchiachi.github.io/happy/inner-flow.html" />
+<meta property="og:title" content="測量你的內耗熵值：從混沌中重構自我流動" />
+<meta property="og:description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測。" />
+<meta property="og:image" content="https://alexchiachi.github.io/happy/images/inner-flow-og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="內耗熵值檢測" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="測量你的內耗熵值：從混沌中重構自我流動" />
+<meta name="twitter:description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測。" />
+<meta name="twitter:image" content="https://alexchiachi.github.io/happy/images/inner-flow-og.png" />
+<meta name="theme-color" content="#F7F5F0" />
+<link rel="icon" href="images/inner-flow-favicon.png" type="image/png" />
+
+<!-- ===== 分析工具掛載點 =====
+     頁面已內建漏斗事件（見下方 track()），支援 GA4（gtag）、Plausible 與 GTM（dataLayer）。
+     擇一在此貼上官方程式碼即可開始收數據，不需改動其他地方：
+
+     GA4：
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+     gtag('js',new Date());gtag('config','G-XXXXXXX');</script>
+
+     Plausible：
+     <script defer data-domain="你的網域" src="https://plausible.io/js/script.js"></script>
+     <script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
+-->
+
+<!-- ===== 外部依賴（樣式已內嵌，僅雷達圖與字體來自 CDN） ===== -->
+<!-- 1. Tailwind CSS：預先編譯後內嵌（見 tools/build-inner-flow-css.sh），
+        不再依賴 Play CDN 於瀏覽器即時編譯，避免首次繪製前的樣式閃爍。 -->
 <!-- 2. Chart.js（雷達圖），固定版本避免破壞性更新 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <!-- 3. Gumroad Overlay（付費報告彈窗）。若 CDN 被封鎖，下方 JS 會自動退回開新視窗 -->
@@ -18,30 +51,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet" />
 
-<!-- ===== Tailwind 主題設定：米白 / 炭黑 / 風土暖棕 / 鼠尾草綠 ===== -->
-<script>
-  // 若 Tailwind CDN 載入失敗，跳過設定而不拋錯（頁面仍可運作）
-  if (window.tailwind) tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          paper: '#F7F5F0',   // 米白溫潤背景
-          ink:   '#2A2723',   // 深灰炭黑主文字
-          clay:  '#A67C52',   // 風土暖棕（重點色）
-          sage:  '#7A8B7B',   // 鼠尾草綠（次重點色）
-        },
-        fontFamily: {
-          serif: ['"Noto Serif TC"', 'Songti TC', 'serif'],
-          sans:  ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
-        },
-      },
-    },
-  };
-</script>
+<!-- 1. Tailwind CSS：預先編譯後內嵌（見 tools/build-inner-flow-css.sh），
+        不再依賴 Play CDN 於瀏覽器即時編譯，避免首次繪製前的樣式閃爍。 -->
+
+<!-- ===== Tailwind 編譯輸出（米白 / 炭黑 / 風土暖棕 / 鼠尾草綠） ===== -->
+<style id="tailwind-build">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Noto Sans TC,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-14{margin-bottom:3.5rem}.mb-16{margin-bottom:4rem}.mb-20{margin-bottom:5rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-7{margin-bottom:1.75rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:.5rem}.mr-4{margin-right:1rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-14{margin-top:3.5rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-24{margin-top:6rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-4{height:1rem}.h-6{height:1.5rem}.h-\[2px\]{height:2px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-16{width:4rem}.w-24{width:6rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-lg{max-width:32rem}.max-w-xl{max-width:36rem}.flex-grow{flex-grow:1}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-y-4{row-gap:1rem}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-clay{--tw-border-opacity:1;border-color:rgb(166 124 82/var(--tw-border-opacity,1))}.border-clay\/40{border-color:rgba(166,124,82,.4)}.border-ink{--tw-border-opacity:1;border-color:rgb(42 39 35/var(--tw-border-opacity,1))}.border-ink\/15{border-color:rgba(42,39,35,.15)}.border-ink\/20{border-color:rgba(42,39,35,.2)}.border-ink\/25{border-color:rgba(42,39,35,.25)}.border-sage{--tw-border-opacity:1;border-color:rgb(122 139 123/var(--tw-border-opacity,1))}.border-sage\/35{border-color:hsla(124,7%,51%,.35)}.bg-clay{--tw-bg-opacity:1;background-color:rgb(166 124 82/var(--tw-bg-opacity,1))}.bg-clay\/\[0\.06\]{background-color:rgba(166,124,82,.06)}.bg-ink{--tw-bg-opacity:1;background-color:rgb(42 39 35/var(--tw-bg-opacity,1))}.bg-ink\/10{background-color:rgba(42,39,35,.1)}.bg-sage{--tw-bg-opacity:1;background-color:rgb(122 139 123/var(--tw-bg-opacity,1))}.bg-sage\/\[0\.06\]{background-color:hsla(124,7%,51%,.06)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/40{background-color:hsla(0,0%,100%,.4)}.p-8{padding:2rem}.px-10{padding-left:2.5rem;padding-right:2.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.pb-2{padding-bottom:.5rem}.pb-28{padding-bottom:7rem}.text-left{text-align:left}.text-center{text-align:center}.font-sans{font-family:Noto Sans TC,system-ui,sans-serif}.font-serif{font-family:"Noto Serif TC",Songti TC,serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-light{font-weight:300}.uppercase{text-transform:uppercase}.leading-\[1\.6\]{line-height:1.6}.leading-\[1\.9\]{line-height:1.9}.leading-\[2\.2\]{line-height:2.2}.leading-loose{line-height:2}.leading-none{line-height:1}.text-clay{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.text-ink{--tw-text-opacity:1;color:rgb(42 39 35/var(--tw-text-opacity,1))}.text-ink\/30{color:rgba(42,39,35,.3)}.text-ink\/35{color:rgba(42,39,35,.35)}.text-ink\/40{color:rgba(42,39,35,.4)}.text-ink\/45{color:rgba(42,39,35,.45)}.text-ink\/60{color:rgba(42,39,35,.6)}.text-ink\/85{color:rgba(42,39,35,.85)}.text-paper{--tw-text-opacity:1;color:rgb(247 245 240/var(--tw-text-opacity,1))}.text-sage{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.line-through{text-decoration-line:line-through}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-ink::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(42 39 35/var(--tw-placeholder-opacity,1))}.placeholder-ink::placeholder{--tw-placeholder-opacity:1;color:rgb(42 39 35/var(--tw-placeholder-opacity,1))}.placeholder-ink\/30::-moz-placeholder{color:rgba(42,39,35,.3)}.placeholder-ink\/30::placeholder{color:rgba(42,39,35,.3)}.outline{outline-style:solid}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-500{transition-duration:.5s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-clay:hover{--tw-border-opacity:1;border-color:rgb(166 124 82/var(--tw-border-opacity,1))}.hover\:border-sage:hover{--tw-border-opacity:1;border-color:rgb(122 139 123/var(--tw-border-opacity,1))}.hover\:bg-clay\/90:hover{background-color:rgba(166,124,82,.9)}.hover\:text-clay:hover{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.hover\:text-sage:hover{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width:640px){.sm\:block{display:block}.sm\:hidden{display:none}.sm\:p-10{padding:2.5rem}.sm\:py-28{padding-top:7rem;padding-bottom:7rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-\[15px\]{font-size:15px}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-xs{font-size:.75rem;line-height:1rem}}@media (min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:gap-8{gap:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}}</style>
 
 <style>
   /* --- 基礎排版：寬鬆字距與行距，營造安靜的沉澱感 --- */
-  html { scroll-behavior: smooth; }
+  /* 本頁刻意只維持一種視覺世界（米白紙感），因此明確宣告淺色配色與底色。 */
+  :root { color-scheme: light; }
+  html { scroll-behavior: smooth; background-color: #F7F5F0; }
   body {
     background-color: #F7F5F0;
     color: #2A2723;
@@ -80,6 +100,15 @@
   /* --- 表單焦點樣式（移除瀏覽器預設藍框） --- */
   input:focus { outline: none; border-color: #A67C52; }
   ::selection { background: rgba(166,124,82,.25); }
+
+  /* --- 鍵盤焦點：可見但克制 --- */
+  :focus-visible { outline: 1px solid #A67C52; outline-offset: 3px; }
+
+  /* --- 尊重系統的「減少動態」偏好 --- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
 </style>
 </head>
 
@@ -159,9 +188,17 @@
 <section id="result" class="hidden px-6 py-20 sm:py-28">
   <div class="max-w-3xl mx-auto">
 
+    <!-- 3-0 由分享連結進入時顯示（?r=______） -->
+    <div id="sharedBanner" class="hidden text-center mb-14 border border-sage/35 bg-sage/[0.06] px-6 py-5">
+      <p class="text-xs tracking-loose text-ink/60 leading-loose">
+        你正在看一份被分享的結果。
+        <button id="takeOwnBtn" class="text-sage hover:text-clay transition-colors link-underline ml-2">我也要測一次 →</button>
+      </p>
+    </div>
+
     <!-- 3-1 能量狀態標籤 -->
     <div class="text-center mb-20 fade-in">
-      <p class="text-[11px] tracking-looser uppercase text-sage mb-8">Your Energy State</p>
+      <p id="stateEyebrow" class="text-[11px] tracking-looser uppercase text-sage mb-8">Your Energy State</p>
 
       <h2 id="typeTitle" class="font-serif font-light text-2xl sm:text-3xl md:text-4xl leading-[1.6] tracking-loose text-clay mb-10">
         <!-- 由 JS 填入，例：高熵無序型：邊界滲漏與精力耗散 -->
@@ -196,12 +233,16 @@
       </blockquote>
     </div>
 
-    <!-- 重新測驗 -->
-    <div class="text-center mt-16">
+    <!-- 分享與重測 -->
+    <div class="text-center mt-16 flex flex-wrap justify-center items-center gap-x-10 gap-y-4">
+      <button id="shareBtn" class="text-[11px] tracking-loose text-ink/45 hover:text-clay transition-colors link-underline">
+        複製我的結果連結
+      </button>
       <button id="retakeBtn" class="text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
         重新測驗一次
       </button>
     </div>
+    <p id="shareMsg" class="text-center mt-4 text-[11px] tracking-loose text-sage h-4"></p>
   </div>
 </section>
 
@@ -408,8 +449,70 @@
   var current = 0;                                       // 目前題號（0-based）
   var chart = null;                                      // Chart.js 實例
 
+  var lastResult = null;                                 // 供轉化區事件帶上結果脈絡
+  var isShared = false;                                  // 是否由分享連結進入
+
   var $ = function (id) { return document.getElementById(id); };
   var heroEl = $('hero'), quizEl = $('quiz'), resultEl = $('result'), convEl = $('conversion');
+
+  /* ------------------------------------------------------------
+   * 3-1. 漏斗事件追蹤
+   *      同時支援 GA4（gtag）、Plausible 與 GTM（dataLayer）；
+   *      三者都沒裝時安靜略過，不影響任何使用者流程。
+   *      事件：assessment_start → question_answered → assessment_complete
+   *            → lead_submitted / checkout_click / result_link_copied
+   * ---------------------------------------------------------- */
+  function track(name, props) {
+    props = props || {};
+    try {
+      if (typeof window.gtag === 'function') window.gtag('event', name, props);
+      if (typeof window.plausible === 'function') window.plausible(name, { props: props });
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push(Object.assign({ event: name }, props));
+      }
+    } catch (err) { /* 追蹤失敗不應中斷測驗 */ }
+  }
+
+  /* ------------------------------------------------------------
+   * 3-2. 分享碼
+   *      六題答案（各 1–4 分）直接串成 ?r=341244，短、可讀、無需後端。
+   * ---------------------------------------------------------- */
+  var SHARE_PATTERN = /^[1-4]{6}$/;
+
+  function shareCode() { return answers.join(''); }
+
+  function shareUrl() {
+    var base = location.href.split('#')[0].split('?')[0];
+    return base + '?r=' + shareCode();
+  }
+
+  function readSharedAnswers() {
+    var match = /[?&]r=([^&]+)/.exec(location.search);
+    if (!match) return null;
+    var code = decodeURIComponent(match[1]);
+    if (!SHARE_PATTERN.test(code)) return null;                 // 格式不符就當作一般進入
+    return code.split('').map(Number);
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    // 舊瀏覽器 / 非安全來源的退路
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+      document.body.removeChild(ta);
+      ok ? resolve() : reject();
+    });
+  }
 
   /* ------------------------------------------------------------
    * 4. 進場動畫：元素進入視窗時淡入
@@ -467,6 +570,12 @@
     // 視覺回饋：同題其他選項取消選取
     btn.parentNode.querySelectorAll('.option').forEach(function (o) { o.classList.remove('chosen'); });
     btn.classList.add('chosen');
+
+    track('question_answered', {
+      question: qi + 1,
+      dimension: DIMENSIONS[QUESTIONS[qi].dim].name,
+      score: answers[qi],
+    });
 
     // 短暫停頓後切換，讓點擊回饋被看見
     setTimeout(function () {
@@ -549,9 +658,11 @@
   /* ------------------------------------------------------------
    * 8. 完成測驗 → 渲染結果
    * ---------------------------------------------------------- */
-  function finish() {
+  function finish(options) {
+    var shared = !!(options && options.shared);
     var s = computeScores();
     var type = matchType(s.total);
+    lastResult = { type: type.title, entropy: s.entropy };
 
     // 8-1 文字結果
     $('typeTitle').textContent = type.title;
@@ -569,7 +680,18 @@
         '</div>';
     }).join('');
 
-    // 8-3 顯示區塊
+    // 8-3 分享模式：改寫措辭，並提供「我也要測一次」
+    isShared = shared;
+    $('sharedBanner').classList.toggle('hidden', !shared);
+    $('stateEyebrow').textContent = shared ? 'Shared Result' : 'Your Energy State';
+    $('shareBtn').textContent = shared ? '複製這份結果的連結' : '複製我的結果連結';
+
+    // 把結果寫進網址，讓使用者直接複製分享（部分環境如 file:// 不允許，靜默略過）
+    if (!shared) {
+      try { history.replaceState(null, '', shareUrl()); } catch (err) { /* 忽略 */ }
+    }
+
+    // 8-4 顯示區塊
     quizEl.classList.add('hidden');
     resultEl.classList.remove('hidden');
     convEl.classList.remove('hidden');
@@ -577,8 +699,16 @@
     observeFadeIns(convEl);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // 8-4 雷達圖（等區塊顯示後再繪製，確保 canvas 有正確尺寸）
+    // 8-5 雷達圖（等區塊顯示後再繪製，確保 canvas 有正確尺寸）
     setTimeout(function () { drawRadar(s.pct); }, 120);
+
+    track(shared ? 'result_shared_view' : 'assessment_complete', {
+      type: type.title,
+      entropy: s.entropy,
+      boundary: s.pct.boundary,
+      flow: s.pct.flow,
+      work: s.pct.work,
+    });
   }
 
   /* ------------------------------------------------------------
@@ -669,6 +799,7 @@
       if (!valid.test(email)) {
         msg.textContent = '請輸入有效的 Email 位址。';
         msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-clay';
+        track('lead_submitted', { status: 'invalid' });
         return;
       }
 
@@ -680,6 +811,10 @@
         msg.textContent = '已送出，請至信箱收取第 1 天的練習。';
         msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-sage';
         form.reset();
+        track('lead_submitted', {
+          status: 'ok',
+          type: lastResult ? lastResult.type : 'unknown',
+        });
       };
 
       if (!endpoint) {           // 未設定後端 → 模擬成功
@@ -694,6 +829,7 @@
       }).then(done).catch(function () {
         msg.textContent = '傳送失敗，請稍後再試。';
         msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-clay';
+        track('lead_submitted', { status: 'error' });
       });
     });
   }
@@ -706,6 +842,12 @@
   function initGumroad() {
     var btn = $('gumroadBtn');
     btn.addEventListener('click', function (e) {
+      track('checkout_click', {
+        price: 3.99,
+        currency: 'USD',
+        type: lastResult ? lastResult.type : 'unknown',
+      });
+
       var overlayReady = !!window.GumroadOverlay ||
                          !!document.querySelector('.gumroad-scroll-message, iframe.gumroad-overlay');
       if (overlayReady) return;  // 交給 Gumroad 官方腳本處理
@@ -715,7 +857,26 @@
   }
 
   /* ------------------------------------------------------------
-   * 12. 初始化
+   * 12. 重新開始（重測，以及分享頁的「我也要測一次」共用）
+   * ---------------------------------------------------------- */
+  function startOver() {
+    answers = new Array(QUESTIONS.length).fill(null);
+    isShared = false;
+    lastResult = null;
+    document.querySelectorAll('.option.chosen').forEach(function (o) { o.classList.remove('chosen'); });
+    $('shareMsg').textContent = '';
+    $('sharedBanner').classList.add('hidden');
+    resultEl.classList.add('hidden');
+    convEl.classList.add('hidden');
+    quizEl.classList.remove('hidden');
+    // 清掉網址上的分享碼，避免重測後仍停留在他人的結果連結
+    try { history.replaceState(null, '', location.href.split('#')[0].split('?')[0]); } catch (err) { /* 忽略 */ }
+    goTo(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ------------------------------------------------------------
+   * 13. 初始化
    * ---------------------------------------------------------- */
   function init() {
     renderQuestions();
@@ -723,12 +884,38 @@
     initGumroad();
     observeFadeIns();
 
+    // 由分享連結進入（?r=341244）：直接呈現那份結果
+    var sharedAnswers = readSharedAnswers();
+    if (sharedAnswers) {
+      answers = sharedAnswers;
+      heroEl.classList.add('hidden');
+      finish({ shared: true });
+    }
+
     // 開始測驗
     $('startBtn').addEventListener('click', function () {
+      track('assessment_start');
       heroEl.classList.add('hidden');
       quizEl.classList.remove('hidden');
       goTo(0);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 複製結果連結
+    $('shareBtn').addEventListener('click', function () {
+      var msg = $('shareMsg');
+      copyText(shareUrl()).then(function () {
+        msg.textContent = '已複製連結，貼給任何你想邀請的人。';
+        track('result_link_copied', { shared: isShared });
+      }).catch(function () {
+        msg.textContent = '複製失敗，請手動複製網址列的連結。';
+      });
+    });
+
+    // 分享頁的「我也要測一次」
+    $('takeOwnBtn').addEventListener('click', function () {
+      track('shared_cta_click');
+      startOver();
     });
 
     // 回上一題
@@ -738,13 +925,8 @@
 
     // 重新測驗
     $('retakeBtn').addEventListener('click', function () {
-      answers = new Array(QUESTIONS.length).fill(null);
-      document.querySelectorAll('.option.chosen').forEach(function (o) { o.classList.remove('chosen'); });
-      resultEl.classList.add('hidden');
-      convEl.classList.add('hidden');
-      quizEl.classList.remove('hidden');
-      goTo(0);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      track('assessment_retake', { shared: isShared });
+      startOver();
     });
 
     // 鍵盤：1–4 選答，← 回上一題
