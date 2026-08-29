@@ -237,3 +237,16 @@ python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
 
 部署由 `.github/workflows/pages.yml` 自動處理（push 到 `main` 即上線）。
 大道至簡網站的設計系統說明與上線前待辦見 `docs/DAOISSIMPLE_SITE.md`。
+
+---
+
+## 🔧 網站分層與 AI 協作分工
+
+| 層級 | 網站 | 角色 |
+| --- | --- | --- |
+| **戰略** | daoissimple.com（WordPress） | 簡家旗個人 IP，經營三年。收費實操在這裡 |
+| **戰術** | 本 repo → GitHub Pages | 雲南台灣選物與資訊交流。未來會有更多 |
+| **通路** | 微信公眾號 | 自成一套，不與前兩者統一 |
+
+分工、決策理由、品牌文案守則，以及一件還沒解決的事（備份），
+見 [AI 協作分工](./docs/AI_COLLABORATION.md)。
