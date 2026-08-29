@@ -543,7 +543,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   margin: 0 auto var(--s-3);
 }
 .contact-card h3 { font-family: var(--font-han); letter-spacing: 0.15em; margin-bottom: var(--s-2); font-size: 1.1rem; font-weight: 400; }
-.contact-card .value { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); margin-bottom: var(--s-2); letter-spacing: 0.05em; }
+.contact-card .value { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); margin-bottom: var(--s-2); letter-spacing: 0.05em; overflow-wrap: anywhere; }
+.contact-card .value a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.contact-card .value a:hover { color: var(--tea); border-bottom-color: var(--tea); }
 .contact-card p { font-size: 0.88rem; color: var(--mist); }
 @media (max-width: 760px) { .contact-cards { grid-template-columns: 1fr; } }
 

@@ -72,7 +72,7 @@
   // 部署 docs/google-sheet-form.gs 之後，把拿到的 /exec 網址貼進 FORM_ENDPOINT。
   // 留空時表單「不會」假裝寄出，而是請訪客改用 Email —— 寧可麻煩，也不要讓來信憑空消失。
   const FORM_ENDPOINT = '';
-  const FALLBACK_EMAIL = 'hello@daoissimple.com';
+  const FALLBACK_EMAIL = 'dadaoissimple@gmail.com';
 
   const letterForm = document.querySelector('.letter-form');
   if (letterForm) {
