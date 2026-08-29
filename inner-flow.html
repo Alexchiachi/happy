@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>內耗狀態自我評估與自洽引導工具 · Inner Flow Assessment</title>
+<meta name="description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測：測量你的內耗熵值，從混沌中重構自我流動。" />
+
+<!-- ===== 外部依賴（皆為公開 CDN，無建置流程） ===== -->
+<!-- 1. Tailwind CSS（Play CDN，開發／單檔部署用） -->
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<!-- 2. Chart.js（雷達圖），固定版本避免破壞性更新 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- 3. Gumroad Overlay（付費報告彈窗）。若 CDN 被封鎖，下方 JS 會自動退回開新視窗 -->
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<!-- 4. 字體：思源宋體（標題）＋ 思源黑體（內文） -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<!-- ===== Tailwind 主題設定：米白 / 炭黑 / 風土暖棕 / 鼠尾草綠 ===== -->
+<script>
+  // 若 Tailwind CDN 載入失敗，跳過設定而不拋錯（頁面仍可運作）
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: '#F7F5F0',   // 米白溫潤背景
+          ink:   '#2A2723',   // 深灰炭黑主文字
+          clay:  '#A67C52',   // 風土暖棕（重點色）
+          sage:  '#7A8B7B',   // 鼠尾草綠（次重點色）
+        },
+        fontFamily: {
+          serif: ['"Noto Serif TC"', 'Songti TC', 'serif'],
+          sans:  ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  /* --- 基礎排版：寬鬆字距與行距，營造安靜的沉澱感 --- */
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #F7F5F0;
+    color: #2A2723;
+    letter-spacing: 0.05em;
+    line-height: 2;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tracking-loose  { letter-spacing: 0.12em; }
+  .tracking-looser { letter-spacing: 0.22em; }
+
+  /* --- 進場動畫：淡入並輕微上浮 --- */
+  .fade-in { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+  .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+  /* --- 題目切換：左右滑動 + 淡出淡入 --- */
+  .question { display: none; opacity: 0; transform: translateX(24px); transition: opacity .45s ease, transform .45s ease; }
+  .question.active { display: block; }
+  .question.shown  { opacity: 1; transform: translateX(0); }
+
+  /* --- 選項卡：靜置時僅一條極細邊線，hover 時暖棕浮起 --- */
+  .option {
+    transition: border-color .3s ease, background-color .3s ease, transform .3s ease, box-shadow .3s ease;
+  }
+  .option:hover  { border-color: #A67C52; background-color: rgba(166,124,82,.05); transform: translateX(4px); }
+  .option.chosen { border-color: #A67C52; background-color: rgba(166,124,82,.10); }
+
+  /* --- 細節：分隔線、按鈕底線動效 --- */
+  .hairline { height: 1px; background: linear-gradient(to right, transparent, rgba(42,39,35,.18), transparent); }
+  .link-underline { position: relative; }
+  .link-underline::after {
+    content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+    background: currentColor; transition: width .35s ease;
+  }
+  .link-underline:hover::after { width: 100%; }
+
+  /* --- 表單焦點樣式（移除瀏覽器預設藍框） --- */
+  input:focus { outline: none; border-color: #A67C52; }
+  ::selection { background: rgba(166,124,82,.25); }
+</style>
+</head>
+
+<body class="font-sans antialiased">
+
+<!-- ============================================================
+     一、Hero 歡迎區
+     ============================================================ -->
+<header id="hero" class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
+  <div class="max-w-2xl mx-auto fade-in">
+
+    <!-- 眉標 -->
+    <p class="text-[11px] sm:text-xs tracking-looser uppercase text-sage mb-10">
+      Inner&nbsp;Flow&nbsp;Assessment
+    </p>
+
+    <!-- 主標題 -->
+    <h1 class="font-serif font-light text-3xl sm:text-4xl md:text-5xl leading-[1.6] tracking-loose mb-8">
+      測量你的內耗熵值<br class="hidden sm:block" />
+      <span class="text-clay">從混沌中重構自我流動</span>
+    </h1>
+
+    <!-- 副標 -->
+    <p class="text-sm sm:text-base text-ink/60 leading-loose tracking-loose mb-14 max-w-lg mx-auto">
+      基於耗散結構與身心哲學的 2 分鐘輕量自我檢測
+    </p>
+
+    <div class="hairline w-24 mx-auto mb-14"></div>
+
+    <!-- CTA -->
+    <button
+      id="startBtn"
+      class="group inline-flex items-center gap-3 border border-ink/25 hover:border-clay text-ink hover:text-clay px-10 py-4 text-sm tracking-loose transition-colors duration-500">
+      <span>開始探索　Start Assessment</span>
+      <span class="transition-transform duration-500 group-hover:translate-x-1">→</span>
+    </button>
+
+    <p class="mt-10 text-[11px] tracking-loose text-ink/35">6 道題 · 約 2 分鐘 · 無需註冊</p>
+  </div>
+</header>
+
+
+<!-- ============================================================
+     二、評估測驗區（6 題，逐題滑動切換）
+     ============================================================ -->
+<section id="quiz" class="hidden px-6 py-20 sm:py-28">
+  <div class="max-w-2xl mx-auto">
+
+    <!-- 進度列 -->
+    <div class="mb-16">
+      <div class="flex justify-between items-baseline mb-4 text-[11px] tracking-loose text-ink/45">
+        <span>第 <span id="qCurrent">1</span> 題 / 共 6 題</span>
+        <span id="qLabel" class="text-sage">邊界防禦力</span>
+      </div>
+      <div class="h-[2px] w-full bg-ink/10">
+        <div id="progressBar" class="h-full bg-clay transition-all duration-500 ease-out" style="width:16.6%"></div>
+      </div>
+    </div>
+
+    <!-- 題目容器：由 JS 依 QUESTIONS 資料動態渲染 -->
+    <div id="questionWrap"></div>
+
+    <!-- 返回上一題 -->
+    <div class="mt-14 h-6">
+      <button id="prevBtn"
+        class="hidden text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
+        ← 回上一題
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     三、診斷結果與視覺化區
+     ============================================================ -->
+<section id="result" class="hidden px-6 py-20 sm:py-28">
+  <div class="max-w-3xl mx-auto">
+
+    <!-- 3-1 能量狀態標籤 -->
+    <div class="text-center mb-20 fade-in">
+      <p class="text-[11px] tracking-looser uppercase text-sage mb-8">Your Energy State</p>
+
+      <h2 id="typeTitle" class="font-serif font-light text-2xl sm:text-3xl md:text-4xl leading-[1.6] tracking-loose text-clay mb-10">
+        <!-- 由 JS 填入，例：高熵無序型：邊界滲漏與精力耗散 -->
+      </h2>
+
+      <!-- 熵值 -->
+      <div class="inline-flex items-end gap-3">
+        <span id="entropyValue" class="font-serif text-5xl sm:text-6xl font-light leading-none">--</span>
+        <span class="text-[11px] tracking-loose text-ink/45 pb-2">內耗熵值 / 100</span>
+      </div>
+      <p id="entropyNote" class="mt-6 text-xs tracking-loose text-ink/45"></p>
+    </div>
+
+    <!-- 3-2 雷達圖：三大維度 -->
+    <div class="mb-20 fade-in">
+      <div class="hairline w-16 mx-auto mb-14"></div>
+      <div class="relative mx-auto" style="max-width:460px; aspect-ratio:1/1;">
+        <canvas id="radarChart" aria-label="三維度能量雷達圖" role="img"></canvas>
+      </div>
+
+      <!-- 維度數值摘要 -->
+      <div id="dimSummary" class="grid grid-cols-3 gap-4 mt-12 text-center"></div>
+    </div>
+
+    <!-- 3-3 哲學洞察 -->
+    <div class="fade-in">
+      <div class="hairline w-16 mx-auto mb-14"></div>
+      <blockquote class="max-w-xl mx-auto text-center">
+        <p class="text-[11px] tracking-looser uppercase text-sage mb-8">Insight</p>
+        <p id="insightText" class="font-serif text-base sm:text-lg leading-[2.2] tracking-loose text-ink/85"></p>
+        <p id="insightKey" class="mt-10 text-xs tracking-loose text-ink/45"></p>
+      </blockquote>
+    </div>
+
+    <!-- 重新測驗 -->
+    <div class="text-center mt-16">
+      <button id="retakeBtn" class="text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
+        重新測驗一次
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     四、轉化閉環區（Email 訂閱 + Gumroad 付費報告）
+     ============================================================ -->
+<section id="conversion" class="hidden px-6 pb-28">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="hairline w-full mb-20"></div>
+
+    <div class="text-center mb-16 fade-in">
+      <p class="text-[11px] tracking-looser uppercase text-sage mb-6">Next Step</p>
+      <h3 class="font-serif font-light text-xl sm:text-2xl leading-loose tracking-loose">
+        看見狀態，只是開始；<br class="sm:hidden" />重建秩序，才是流動。
+      </h3>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+
+      <!-- 卡片 1：Email 訂閱 -->
+      <div class="border border-ink/12 bg-white/40 p-8 sm:p-10 flex flex-col fade-in">
+        <p class="text-[11px] tracking-looser uppercase text-sage mb-6">Free</p>
+        <h4 class="font-serif text-lg sm:text-xl leading-loose tracking-loose mb-5">
+          7 天能量自洽復位指南
+        </h4>
+        <p class="text-sm text-ink/60 leading-loose tracking-loose mb-8 flex-grow">
+          每天一則 3 分鐘練習：從邊界重設、心智清空到做功對齊，一週重建你的能量閉環。免費，可隨時取消訂閱。
+        </p>
+
+        <!-- 表單：目前為前端模擬；接上 ESP 時改 data-endpoint 即可 -->
+        <form id="emailForm" data-endpoint="" novalidate class="space-y-4">
+          <input
+            id="emailInput" type="email" required autocomplete="email"
+            placeholder="your@email.com"
+            class="w-full bg-transparent border-b border-ink/20 py-3 text-sm tracking-loose placeholder-ink/30 transition-colors" />
+          <button type="submit"
+            class="w-full border border-ink/25 hover:border-sage hover:text-sage py-3.5 text-sm tracking-loose transition-colors duration-500">
+            免費領取指南
+          </button>
+        </form>
+        <p id="emailMsg" class="mt-4 text-[11px] tracking-loose h-4"></p>
+      </div>
+
+      <!-- 卡片 2：Gumroad 付費深度報告 -->
+      <div class="border border-clay/40 bg-clay/[0.06] p-8 sm:p-10 flex flex-col fade-in">
+        <p class="text-[11px] tracking-looser uppercase text-clay mb-6">Deep Report</p>
+        <h4 class="font-serif text-lg sm:text-xl leading-loose tracking-loose mb-5">
+          完整 15 頁破局報告<br />與專屬語音導引
+        </h4>
+        <p class="text-sm text-ink/60 leading-loose tracking-loose mb-8 flex-grow">
+          依你的三維度分數生成：耗散路徑拆解、四階段復位路線圖、12 個情境腳本，附 20 分鐘語音引導音檔。
+        </p>
+
+        <div class="flex items-baseline gap-3 mb-7">
+          <span class="font-serif text-3xl font-light">US$&nbsp;3.99</span>
+          <span class="text-[11px] tracking-loose text-ink/40 line-through">US$ 12</span>
+        </div>
+
+        <!--
+          Gumroad Overlay：
+          gumroad.js 載入後會攔截帶有 data-gumroad-overlay-checkout 的連結並開啟彈窗。
+          正式上線時，把 href 換成你的 Gumroad 產品連結即可（其餘不需更動）。
+        -->
+        <a id="gumroadBtn"
+           href="https://gumroad.com/l/inner-flow-report"
+           data-gumroad-overlay-checkout="true"
+           data-gumroad-single-product="true"
+           class="block text-center bg-clay hover:bg-clay/90 text-paper py-3.5 text-sm tracking-loose transition-colors duration-500">
+          立即解鎖完整報告
+        </a>
+        <p class="mt-4 text-[11px] tracking-loose text-ink/35 text-center">安全結帳由 Gumroad 提供 · 7 天退款保證</p>
+      </div>
+    </div>
+
+    <footer class="text-center mt-24 text-[11px] tracking-loose text-ink/30 leading-loose">
+      本工具為自我覺察用途，不構成醫療或心理診斷建議。<br />
+      Inner Flow Assessment · 以耗散結構視角觀看自身能量
+    </footer>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     JavaScript：題庫、計分、渲染、圖表、轉化
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------
+   * 1. 題庫
+   *    dim：所屬維度（boundary 邊界防禦力 / flow 心智流動度 / work 有效做功能力）
+   *    每題 4 個選項，score 1–4 代表能量耗散程度（1 = 高耗散，4 = 低耗散／流動）
+   * ---------------------------------------------------------- */
+  var DIMENSIONS = {
+    boundary: { name: '邊界防禦力' },
+    flow:     { name: '心智流動度' },
+    work:     { name: '有效做功能力' },
+  };
+
+  var QUESTIONS = [
+    {
+      dim: 'boundary',
+      text: '深夜收到一則「不太緊急、但需要回覆」的訊息時，你通常……',
+      options: [
+        { label: '立刻回覆，否則整晚都會惦記著', score: 1 },
+        { label: '猶豫很久，最後還是回了，並感到疲憊', score: 2 },
+        { label: '視情況而定，多數時候能留到隔天', score: 3 },
+        { label: '平靜地放著，明早再處理，不影響睡眠', score: 4 },
+      ],
+    },
+    {
+      dim: 'boundary',
+      text: '面對一個你其實不想接下的請求，你的第一反應是……',
+      options: [
+        { label: '先答應下來，事後再責怪自己', score: 1 },
+        { label: '想拒絕，但要花很多力氣鋪陳理由', score: 2 },
+        { label: '能夠拒絕，只是事後會短暫不安', score: 3 },
+        { label: '溫和而直接地說不，心裡沒有殘留', score: 4 },
+      ],
+    },
+    {
+      dim: 'flow',
+      text: '一天結束時，你腦中的狀態比較像……',
+      options: [
+        { label: '二十個分頁同時開著，而且還在載入', score: 1 },
+        { label: '某些片段反覆播放，停不下來', score: 2 },
+        { label: '有些雜訊，但大致能被放下', score: 3 },
+        { label: '像清空過的桌面，安靜且留白', score: 4 },
+      ],
+    },
+    {
+      dim: 'flow',
+      text: '當一件事已經結束、無法再改變時，你會……',
+      options: [
+        { label: '在腦中重演許多個「當時應該怎樣」的版本', score: 1 },
+        { label: '偶爾被想起，情緒隨之起伏', score: 2 },
+        { label: '短暫回顧，然後轉向下一件事', score: 3 },
+        { label: '完成即釋放，注意力自然流走', score: 4 },
+      ],
+    },
+    {
+      dim: 'work',
+      text: '回顧最近一週真正推進的事，你會說……',
+      options: [
+        { label: '忙了很久，卻說不出做成了什麼', score: 1 },
+        { label: '有些進展，但多半是被推著走的', score: 2 },
+        { label: '完成了幾件確實重要的事', score: 3 },
+        { label: '節奏清晰，投入與產出彼此對齊', score: 4 },
+      ],
+    },
+    {
+      dim: 'work',
+      text: '你的精力，大多消耗在……',
+      options: [
+        { label: '情緒內耗與反覆的自我說服', score: 1 },
+        { label: '協調、等待與各種摩擦', score: 2 },
+        { label: '一半在雜務，一半在真正的創造', score: 3 },
+        { label: '大部分投入在真正重要的事情上', score: 4 },
+      ],
+    },
+  ];
+
+  /* ------------------------------------------------------------
+   * 2. 結果類型（依總分 6–24 分區間判定）
+   * ---------------------------------------------------------- */
+  var TYPES = [
+    {
+      min: 6, max: 9,
+      title: '臨界耗散型：系統過載與意義塌縮',
+      note: '你的系統正在以高於補給的速度支出能量。',
+      insight: '你並不是不夠努力，而是太久沒有補給。當所有輸入都必須被回應，能量便在維持秩序本身耗盡，來不及流向任何真正屬於你的事。此刻需要的不是更強的意志，而是一次徹底的減載——把「必須」暫時放回地上，讓系統重新獲得可呼吸的餘裕。',
+      key: '起手式：本週選一件事，正式讓它停下。',
+    },
+    {
+      min: 10, max: 14,
+      title: '高熵無序型：邊界滲漏與精力耗散',
+      note: '能量持續外流，卻難以指認流向何處。',
+      insight: '你的能量沒有消失，只是流向了無法回收的地方——他人的期待、未完的對話、腦中不斷重演的版本。混亂不是你的性格，而是缺乏邊界的必然結果。耗散結構告訴我們：系統唯有先劃出界線，才能在流動中維持秩序。先止漏，再談流動。',
+      key: '起手式：找出一個最常滲漏的入口，先關上它。',
+    },
+    {
+      min: 15, max: 19,
+      title: '中熵振盪型：間歇滲漏與自我修復',
+      note: '你已具備復原力，但秩序尚未穩定。',
+      insight: '你已經知道如何回到自己，只是還不夠穩定。好日子與壞日子交替出現，讓你懷疑進展是否真實。其實振盪本身就是系統正在自我組織的訊號。你需要的不是更用力，而是把偶然的好狀態，變成可被重複的結構——讓復原不再依賴運氣。',
+      key: '起手式：把一次順利的狀態，拆成可重複的三個步驟。',
+    },
+    {
+      min: 20, max: 24,
+      title: '低熵流動型：自洽穩態與能量閉環',
+      note: '輸入與輸出彼此對齊，系統維持著低耗散。',
+      insight: '你已建立起難得的內在秩序：邊界清晰、心智留白、做功對齊。但低熵並非終點——過於穩定的系統也會失去演化的動能。此刻真正的課題，是把餘裕投向更遠的地方：允許一些有意義的失序進來，讓流動繼續生成新的形狀，而非只是維持現狀。',
+      key: '起手式：把多出來的餘裕，投向一件尚無把握的事。',
+    },
+  ];
+
+  /* ------------------------------------------------------------
+   * 3. 狀態與 DOM 參照
+   * ---------------------------------------------------------- */
+  var answers = new Array(QUESTIONS.length).fill(null); // 各題得分
+  var current = 0;                                       // 目前題號（0-based）
+  var chart = null;                                      // Chart.js 實例
+
+  var $ = function (id) { return document.getElementById(id); };
+  var heroEl = $('hero'), quizEl = $('quiz'), resultEl = $('result'), convEl = $('conversion');
+
+  /* ------------------------------------------------------------
+   * 4. 進場動畫：元素進入視窗時淡入
+   * ---------------------------------------------------------- */
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  function observeFadeIns(root) {
+    (root || document).querySelectorAll('.fade-in:not(.is-visible)').forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
+  /* ------------------------------------------------------------
+   * 5. 渲染題目
+   * ---------------------------------------------------------- */
+  function renderQuestions() {
+    var wrap = $('questionWrap');
+    var html = QUESTIONS.map(function (q, qi) {
+      var opts = q.options.map(function (opt, oi) {
+        return '' +
+          '<button type="button" class="option w-full text-left border border-ink/15 px-6 py-5 text-sm sm:text-[15px] leading-loose tracking-loose"' +
+          ' data-q="' + qi + '" data-o="' + oi + '" data-score="' + opt.score + '">' +
+          '<span class="text-ink/30 mr-4 text-xs">0' + (oi + 1) + '</span>' + opt.label +
+          '</button>';
+      }).join('');
+
+      return '' +
+        '<div class="question" data-index="' + qi + '">' +
+          '<h2 class="font-serif font-light text-xl sm:text-2xl leading-[1.9] tracking-loose mb-12">' + q.text + '</h2>' +
+          '<div class="space-y-3">' + opts + '</div>' +
+        '</div>';
+    }).join('');
+
+    wrap.innerHTML = html;
+
+    // 事件委派：點選項 → 記分 → 自動前往下一題
+    wrap.addEventListener('click', function (e) {
+      var btn = e.target.closest('.option');
+      if (!btn) return;
+      selectOption(btn);
+    });
+  }
+
+  function selectOption(btn) {
+    var qi = Number(btn.dataset.q);
+    answers[qi] = Number(btn.dataset.score);
+
+    // 視覺回饋：同題其他選項取消選取
+    btn.parentNode.querySelectorAll('.option').forEach(function (o) { o.classList.remove('chosen'); });
+    btn.classList.add('chosen');
+
+    // 短暫停頓後切換，讓點擊回饋被看見
+    setTimeout(function () {
+      if (qi < QUESTIONS.length - 1) {
+        goTo(qi + 1);
+      } else {
+        finish();
+      }
+    }, 320);
+  }
+
+  /* ------------------------------------------------------------
+   * 6. 題目切換與進度
+   * ---------------------------------------------------------- */
+  function goTo(index) {
+    var all = document.querySelectorAll('.question');
+    var next = all[index];
+    if (!next) return;
+
+    all.forEach(function (el) { el.classList.remove('active', 'shown'); });
+    next.classList.add('active');
+    // 強制 reflow，確保 transition 從初始狀態開始播放
+    void next.offsetWidth;
+    next.classList.add('shown');
+
+    current = index;
+    updateProgress();
+
+    // 已作答過的題目，回頭時保留選取狀態
+    if (answers[index] !== null) {
+      next.querySelectorAll('.option').forEach(function (o) {
+        o.classList.toggle('chosen', Number(o.dataset.score) === answers[index]);
+      });
+    }
+
+    $('prevBtn').classList.toggle('hidden', index === 0);
+  }
+
+  function updateProgress() {
+    var pct = ((current + 1) / QUESTIONS.length) * 100;
+    $('progressBar').style.width = pct + '%';
+    $('qCurrent').textContent = current + 1;
+    $('qLabel').textContent = DIMENSIONS[QUESTIONS[current].dim].name;
+  }
+
+  /* ------------------------------------------------------------
+   * 7. 計分
+   *    每維度 2 題，原始分 2–8 → 換算為 0–100
+   *    內耗熵值 = 100 − 整體能量分（分數越低，熵值越高）
+   * ---------------------------------------------------------- */
+  function computeScores() {
+    var raw = { boundary: 0, flow: 0, work: 0 };
+    var count = { boundary: 0, flow: 0, work: 0 };
+
+    QUESTIONS.forEach(function (q, i) {
+      raw[q.dim] += answers[i];
+      count[q.dim] += 1;
+    });
+
+    var pct = {};
+    Object.keys(raw).forEach(function (k) {
+      var min = count[k] * 1, max = count[k] * 4;
+      pct[k] = Math.round(((raw[k] - min) / (max - min)) * 100);
+    });
+
+    var total = answers.reduce(function (a, b) { return a + b; }, 0);       // 6–24
+    var energy = Math.round(((total - 6) / 18) * 100);                       // 0–100
+    var entropy = 100 - energy;                                             // 內耗熵值
+
+    return { pct: pct, total: total, entropy: entropy };
+  }
+
+  function matchType(total) {
+    for (var i = 0; i < TYPES.length; i++) {
+      if (total >= TYPES[i].min && total <= TYPES[i].max) return TYPES[i];
+    }
+    return TYPES[1];
+  }
+
+  /* ------------------------------------------------------------
+   * 8. 完成測驗 → 渲染結果
+   * ---------------------------------------------------------- */
+  function finish() {
+    var s = computeScores();
+    var type = matchType(s.total);
+
+    // 8-1 文字結果
+    $('typeTitle').textContent = type.title;
+    $('entropyValue').textContent = s.entropy;
+    $('entropyNote').textContent = type.note;
+    $('insightText').textContent = type.insight;
+    $('insightKey').textContent = type.key;
+
+    // 8-2 維度摘要
+    $('dimSummary').innerHTML = Object.keys(DIMENSIONS).map(function (k) {
+      return '' +
+        '<div>' +
+          '<p class="font-serif text-2xl sm:text-3xl font-light">' + s.pct[k] + '</p>' +
+          '<p class="mt-2 text-[11px] tracking-loose text-ink/45">' + DIMENSIONS[k].name + '</p>' +
+        '</div>';
+    }).join('');
+
+    // 8-3 顯示區塊
+    quizEl.classList.add('hidden');
+    resultEl.classList.remove('hidden');
+    convEl.classList.remove('hidden');
+    observeFadeIns(resultEl);
+    observeFadeIns(convEl);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 8-4 雷達圖（等區塊顯示後再繪製，確保 canvas 有正確尺寸）
+    setTimeout(function () { drawRadar(s.pct); }, 120);
+  }
+
+  /* ------------------------------------------------------------
+   * 9. Chart.js 雷達圖
+   * ---------------------------------------------------------- */
+  function drawRadar(pct) {
+    if (typeof Chart === 'undefined') return; // CDN 未載入時安靜降級
+    var ctx = $('radarChart').getContext('2d');
+    if (chart) chart.destroy();
+
+    Chart.defaults.font.family = '"Noto Sans TC", system-ui, sans-serif';
+
+    chart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['邊界防禦力', '心智流動度', '有效做功能力'],
+        datasets: [
+          {
+            label: '你的狀態',
+            data: [pct.boundary, pct.flow, pct.work],
+            backgroundColor: 'rgba(166,124,82,0.18)',
+            borderColor: '#A67C52',
+            borderWidth: 1.5,
+            pointBackgroundColor: '#A67C52',
+            pointBorderColor: '#F7F5F0',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+          },
+          {
+            label: '自洽基準線',
+            data: [70, 70, 70],
+            backgroundColor: 'rgba(122,139,123,0.06)',
+            borderColor: 'rgba(122,139,123,0.55)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            pointRadius: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 900, easing: 'easeOutQuart' },
+        scales: {
+          r: {
+            min: 0, max: 100,
+            ticks: { display: false, stepSize: 25 },
+            grid:        { color: 'rgba(42,39,35,0.10)' },
+            angleLines:  { color: 'rgba(42,39,35,0.10)' },
+            pointLabels: { color: 'rgba(42,39,35,0.70)', font: { size: 12 }, padding: 14 },
+          },
+        },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: 'rgba(42,39,35,0.55)',
+              boxWidth: 10, boxHeight: 10, padding: 20,
+              font: { size: 11 },
+            },
+          },
+          tooltip: {
+            backgroundColor: '#2A2723',
+            titleFont: { size: 12 }, bodyFont: { size: 12 },
+            padding: 12, displayColors: false,
+            callbacks: {
+              label: function (c) { return c.dataset.label + '：' + c.parsed.r + ' / 100'; },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  /* ------------------------------------------------------------
+   * 10. 轉化閉環：Email 訂閱
+   *     目前為前端模擬。填入表單的 data-endpoint 後，
+   *     即會改以 POST JSON 送出（ConvertKit / Mailchimp / 自建皆可）。
+   * ---------------------------------------------------------- */
+  function initEmailForm() {
+    var form = $('emailForm'), input = $('emailInput'), msg = $('emailMsg');
+    var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = input.value.trim();
+
+      if (!valid.test(email)) {
+        msg.textContent = '請輸入有效的 Email 位址。';
+        msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-clay';
+        return;
+      }
+
+      var endpoint = form.dataset.endpoint;
+      msg.textContent = '傳送中……';
+      msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-ink/40';
+
+      var done = function () {
+        msg.textContent = '已送出，請至信箱收取第 1 天的練習。';
+        msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-sage';
+        form.reset();
+      };
+
+      if (!endpoint) {           // 未設定後端 → 模擬成功
+        setTimeout(done, 600);
+        return;
+      }
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email }),
+      }).then(done).catch(function () {
+        msg.textContent = '傳送失敗，請稍後再試。';
+        msg.className = 'mt-4 text-[11px] tracking-loose h-4 text-clay';
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------
+   * 11. 轉化閉環：Gumroad Overlay
+   *     gumroad.js 載入時會自行接管 data-gumroad-overlay-checkout 連結；
+   *     若腳本被封鎖或載入失敗，退回以新視窗開啟商品頁。
+   * ---------------------------------------------------------- */
+  function initGumroad() {
+    var btn = $('gumroadBtn');
+    btn.addEventListener('click', function (e) {
+      var overlayReady = !!window.GumroadOverlay ||
+                         !!document.querySelector('.gumroad-scroll-message, iframe.gumroad-overlay');
+      if (overlayReady) return;  // 交給 Gumroad 官方腳本處理
+      e.preventDefault();
+      window.open(btn.href, '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  /* ------------------------------------------------------------
+   * 12. 初始化
+   * ---------------------------------------------------------- */
+  function init() {
+    renderQuestions();
+    initEmailForm();
+    initGumroad();
+    observeFadeIns();
+
+    // 開始測驗
+    $('startBtn').addEventListener('click', function () {
+      heroEl.classList.add('hidden');
+      quizEl.classList.remove('hidden');
+      goTo(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 回上一題
+    $('prevBtn').addEventListener('click', function () {
+      if (current > 0) goTo(current - 1);
+    });
+
+    // 重新測驗
+    $('retakeBtn').addEventListener('click', function () {
+      answers = new Array(QUESTIONS.length).fill(null);
+      document.querySelectorAll('.option.chosen').forEach(function (o) { o.classList.remove('chosen'); });
+      resultEl.classList.add('hidden');
+      convEl.classList.add('hidden');
+      quizEl.classList.remove('hidden');
+      goTo(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 鍵盤：1–4 選答，← 回上一題
+    document.addEventListener('keydown', function (e) {
+      if (quizEl.classList.contains('hidden')) return;
+      if (e.key >= '1' && e.key <= '4') {
+        var opts = document.querySelector('.question.active').querySelectorAll('.option');
+        var target = opts[Number(e.key) - 1];
+        if (target) selectOption(target);
+      } else if (e.key === 'ArrowLeft' && current > 0) {
+        goTo(current - 1);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
