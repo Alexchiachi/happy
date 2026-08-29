@@ -760,7 +760,12 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  // 若腳本在解析完成後才執行（例如被動態注入），直接初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 </body>
