@@ -240,12 +240,10 @@ python3 -m epubqa batch dist/ -o reports/            # 多語版一致性比對
 
 ---
 
-## 🔧 WordPress 站台維運（daoissimple.com）
+## 🔧 WordPress 站台維護（daoissimple.com）
 
 `daoissimple.com` 另外跑在 WordPress（Blocksy 主題 · cPanel 共享主機）上。
-內容與文案的日常維護，走本機 Claude Code：
+內容與文案的維護**刻意不接自動化**——理由、算過的數字，以及什麼時候該重新評估，
+見 [決策紀錄](./docs/WORDPRESS_AI_DECISION.md)。
 
-- [設定與操作指南](./docs/WORDPRESS_MAINTENANCE.md) — 備份、安裝、應用程式密碼、第一次改文案
-- [工作區範本](./tools/wp-workspace/) — 拉取／推送工具、品牌守則、權限護欄
-
-主題外觀與程式碼改動不走那條路，留在本 repo 做。
+那份文件也收錄了實際在用的品牌文案守則，以及一件還沒解決的事：備份。
