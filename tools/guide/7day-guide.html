@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<title>7 天能量自洽復位指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@200;300;400&display=swap" rel="stylesheet" />
+<style>
+  /* ===== A4 版面：210 x 297mm，出血由 .page 自行留白 ===== */
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --paper: #F7F5F0;
+    --ink:   #2A2723;
+    --clay:  #A67C52;
+    --sage:  #7A8B7B;
+  }
+
+  body {
+    font-family: "Noto Sans TC", sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    padding: 30mm 26mm 22mm;
+    background: var(--paper);
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* --- 共用元件 --- */
+  .eyebrow { font-size: 8.5pt; letter-spacing: .34em; color: var(--sage); text-transform: uppercase; }
+  .rule    { width: 22mm; height: .35pt; background: rgba(42,39,35,.28); }
+  h1, h2, h3 { font-family: "Noto Serif TC", serif; font-weight: 300; letter-spacing: .06em; }
+  p  { font-size: 10.5pt; line-height: 2.05; letter-spacing: .05em; color: rgba(42,39,35,.82); }
+  .muted { color: rgba(42,39,35,.55); }
+
+  .folio {
+    position: absolute; left: 26mm; right: 26mm; bottom: 14mm;
+    display: flex; justify-content: space-between;
+    font-size: 7.5pt; letter-spacing: .18em; color: rgba(42,39,35,.35);
+  }
+
+  /* --- 封面 --- */
+  .cover { display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .cover h1 { font-size: 30pt; line-height: 1.7; margin: 14mm 0 10mm; }
+  .cover h1 span { color: var(--clay); }
+  .cover .sub { font-size: 11pt; letter-spacing: .14em; color: rgba(42,39,35,.55); line-height: 2; }
+  .cover svg { margin: 0 auto 4mm; }
+  .cover .foot { position: absolute; left: 0; right: 0; bottom: 24mm; font-size: 8pt; letter-spacing: .28em; color: rgba(42,39,35,.35); }
+
+  /* --- 內頁標題區 --- */
+  .head { display: flex; flex-direction: column; gap: 7mm; margin-bottom: 12mm; }
+  .head h2 { font-size: 19pt; line-height: 1.65; }
+
+  /* --- 三維度卡 --- */
+  .dims { display: flex; flex-direction: column; gap: 9mm; margin-top: 10mm; }
+  .dim { border-left: .6pt solid rgba(166,124,82,.45); padding-left: 7mm; }
+  .dim h3 { font-size: 13pt; margin-bottom: 3mm; }
+  .dim p  { font-size: 10pt; }
+
+  /* --- 每日頁 --- */
+  .day-no {
+    font-family: "Noto Serif TC", serif; font-weight: 200;
+    font-size: 46pt; line-height: 1; color: rgba(166,124,82,.28);
+  }
+  .day-title { font-size: 20pt; line-height: 1.6; margin-top: 4mm; }
+  .block { margin-top: 11mm; }
+  .block .label {
+    font-size: 8.5pt; letter-spacing: .28em; color: var(--sage);
+    display: block; margin-bottom: 4mm;
+  }
+  .practice { background: rgba(166,124,82,.07); border: .4pt solid rgba(166,124,82,.28); padding: 8mm; }
+  .practice p { font-size: 10.5pt; }
+  .reminder { margin-top: 12mm; border-top: .35pt solid rgba(42,39,35,.16); padding-top: 7mm; }
+  .page.day { display: flex; flex-direction: column; }
+  .page.day .reminder { margin-top: auto; margin-bottom: 12mm; }
+  .reminder p { font-family: "Noto Serif TC", serif; font-size: 12pt; line-height: 1.95; color: var(--clay); }
+
+  /* --- 結尾頁 --- */
+  .closing .box { margin-top: 12mm; border: .4pt solid rgba(122,139,123,.45); padding: 9mm; background: rgba(122,139,123,.06); }
+  .closing .box p { font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<section class="page cover">
+  <svg width="150" height="130" viewBox="-75 -70 150 130" fill="none">
+    <polygon points="0,-58 50,29 -50,29" stroke="#2A2723" stroke-opacity=".16" stroke-width="1"/>
+    <polygon points="0,-24 44,26 -30,18" fill="#A67C52" fill-opacity=".14" stroke="#A67C52" stroke-width="1.4"/>
+    <g fill="#A67C52"><circle cx="0" cy="-24" r="2.6"/><circle cx="44" cy="26" r="2.6"/><circle cx="-30" cy="18" r="2.6"/></g>
+  </svg>
+  <div class="eyebrow">Inner Flow Assessment</div>
+  <h1>7 天<span>能量自洽</span>復位指南</h1>
+  <p class="sub">每天一則 3 分鐘練習<br />從邊界重設、心智清空，到做功對齊</p>
+  <div class="foot">內耗狀態自我評估與自洽引導工具 · 隨測驗附贈</div>
+</section>
+
+<!-- ============ 開始之前 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="eyebrow">Before You Begin</div>
+    <h2>開始之前：<br />你不是不夠努力，是系統在漏</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p>物理學裡有一種系統叫「耗散結構」：它必須持續與外界交換能量，才能維持自身的形狀。一旦停止交換，或邊界破了洞，它就走向均質、失序，最後塌縮成一團無法辨認的東西。</p>
+  <p style="margin-top:6mm">人的精力也是這樣運作的。你之所以在一天結束時說不出做了什麼，往往不是因為做得太少，而是能量從你沒注意到的地方流走了——他人的期待、未完的對話、腦中反覆重演的版本。</p>
+  <p style="margin-top:6mm">所以這七天不談效率，也不要求你更自律。它只做一件事：<strong style="font-weight:500">讓你看見自己的能量從哪裡流出去，並把其中一兩個出口關上。</strong></p>
+
+  <div class="block">
+    <span class="label">怎麼使用</span>
+    <p>每天只做一件事，約 3 分鐘。順序是有意義的——先看見，才談收回；先止漏，才談流動。但錯過一天不必從頭來過，接著做下去就好。中斷本身也是一種資料。</p>
+    <p style="margin-top:5mm">準備一個紙本筆記或手機備忘錄，七天用同一個地方記錄。第八天你會回頭看它。</p>
+  </div>
+
+  <div class="folio"><span>7 天能量自洽復位指南</span><span>02</span></div>
+</section>
+
+<!-- ============ 三個維度 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="eyebrow">Three Dimensions</div>
+    <h2>三個維度：<br />你的能量在哪裡被決定</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p>測驗裡的三個維度，也是這七天的結構。它們不是性格分類，而是三個可以被調整的位置。</p>
+
+  <div class="dims">
+    <div class="dim">
+      <h3>邊界防禦力</h3>
+      <p>你能不能決定什麼進得來、什麼進不來。失衡時的樣子：訊息一來就必須回、拒絕需要很長的鋪陳、答應之後責怪自己。這是最上游的一環——邊界不修，後面兩項都補不滿。</p>
+    </div>
+    <div class="dim">
+      <h3>心智流動度</h3>
+      <p>事情結束後，它能不能真的離開你。失衡時的樣子：腦中同時開著二十個分頁、反覆重演已無法改變的場景、睡前特別吵。心智不是儲藏室，東西放久了會發酵。</p>
+    </div>
+    <div class="dim">
+      <h3>有效做功能力</h3>
+      <p>你的投入有沒有留下痕跡。失衡時的樣子：很忙但說不出做成了什麼、多數進展是被推著走的、精力都花在協調與摩擦上。忙碌與做功是兩件事，只有後者會累積。</p>
+    </div>
+  </div>
+
+  <div class="folio"><span>7 天能量自洽復位指南</span><span>03</span></div>
+</section>
+
+<!-- ============ Day 1 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day One · 邊界防禦力</div>
+  <div class="day-no">01</div>
+  <h2 class="day-title">命名你的滲漏點</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>今天不修正任何事，只做觀察。留意一整天裡，有哪三個瞬間你的注意力被拉走了——是誰、因為什麼事、當下身體有什麼反應（胸口緊、肩膀升起、突然想吃東西都算）。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>睡前，把這三個瞬間各寫成一句話。不加解釋，不想解決方案，不評價自己。寫完就闔上。</p>
+  </div>
+
+  <div class="reminder">
+    <p>能量的流失多半不在大事，<br />而在那些你以為「順手就好」的瞬間。</p>
+  </div>
+
+  <div class="folio"><span>Day 1 · 命名你的滲漏點</span><span>04</span></div>
+</section>
+
+<!-- ============ Day 2 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Two · 邊界防禦力</div>
+  <div class="day-no">02</div>
+  <h2 class="day-title">在刺激與回應之間，<br />留一道縫</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>今天收到的每一則非緊急訊息，刻意等三十分鐘再回。用計時器，不要靠意志記得。緊急的照常處理——判斷什麼是緊急，本身就是練習的一部分。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>等待的那三十分鐘裡，觀察焦躁如何升起，又如何自己落下。睡前寫一句：今天最難等的那一則是什麼？為什麼是它？</p>
+  </div>
+
+  <div class="reminder">
+    <p>邊界不是拒絕，<br />是把回應的節奏拿回自己手上。</p>
+  </div>
+
+  <div class="folio"><span>Day 2 · 留一道縫</span><span>05</span></div>
+</section>
+
+<!-- ============ Day 3 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Three · 心智流動度</div>
+  <div class="day-no">03</div>
+  <h2 class="day-title">清空：<br />心智不是儲藏室</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>白天照常過。真正的練習在睡前——你會發現，讓你睡不著的通常不是事情本身，而是那些「還沒被寫下來的東西」。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>睡前三分鐘，把腦中所有未完的事倒在一張紙上。不分輕重、不排順序、不寫解法，能想到什麼寫什麼。時間到就停筆闔上，不重讀。</p>
+  </div>
+
+  <div class="reminder">
+    <p>清單通常比你想像的短。<br />讓你疲憊的是它懸浮著，不是它很長。</p>
+  </div>
+
+  <div class="folio"><span>Day 3 · 清空</span><span>06</span></div>
+</section>
+
+<!-- ============ Day 4 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Four · 心智流動度</div>
+  <div class="day-no">04</div>
+  <h2 class="day-title">完成即釋放：<br />停止重演</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>挑一件已經結束、無論如何都無法再改變的事——一句說錯的話、一個做過的決定、一段結束的關係。今天只處理這一件。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>為它寫下一句結論，句型是：「這件事讓我知道了……」。寫完就收起來。之後每當它又在腦中開始重演，回到那句結論，然後把注意力交給眼前的事。</p>
+  </div>
+
+  <div class="reminder">
+    <p>反覆推演不會改變過去，<br />只會讓過去持續向你收費。</p>
+  </div>
+
+  <div class="folio"><span>Day 4 · 完成即釋放</span><span>07</span></div>
+</section>
+
+<!-- ============ Day 5 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Five · 有效做功能力</div>
+  <div class="day-no">05</div>
+  <h2 class="day-title">一日一事</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>早上先挑一件事：「只要今天完成它，這一天就值得。」把它排在所有雜務之前——不是有空才做，是先做。其他事情往後挪一小時，世界通常不會塌。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>睡前寫下今天做成的那一件事，以及完成它花了多久。連續記錄幾天，你會看見自己真實的產能節奏，而不是想像中的。</p>
+  </div>
+
+  <div class="reminder">
+    <p>忙碌與做功是兩件事。<br />只有後者會累積成你能指認的東西。</p>
+  </div>
+
+  <div class="folio"><span>Day 5 · 一日一事</span><span>08</span></div>
+</section>
+
+<!-- ============ Day 6 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Six · 有效做功能力</div>
+  <div class="day-no">06</div>
+  <h2 class="day-title">移除一個摩擦</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>寫下今天遇到的三個摩擦：等待某人回覆、來回確認同一件事、每次都要重找的檔案或密碼、每天重複的那三個步驟。挑其中一個——最小的那個也可以。</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>今天就把它永久解決：建一個捷徑、寫一份範本、直接把話講清楚、或乾脆停掉那件事。三分鐘做不完的，就先做三分鐘。</p>
+  </div>
+
+  <div class="reminder">
+    <p>不必重建整個系統，<br />只要讓它少漏一個地方。</p>
+  </div>
+
+  <div class="folio"><span>Day 6 · 移除一個摩擦</span><span>09</span></div>
+</section>
+
+<!-- ============ Day 7 ============ -->
+<section class="page day">
+  <div class="eyebrow">Day Seven · 整合</div>
+  <div class="day-no">07</div>
+  <h2 class="day-title">從偶然的好狀態，<br />到可重複的結構</h2>
+
+  <div class="block">
+    <span class="label">今天要做的</span>
+    <p>回頭看這六天的記錄。哪一天你的能量最順？那天你做了什麼不一樣的事？哪一個練習做起來最不費力，卻讓你明顯鬆了一口氣？</p>
+  </div>
+
+  <div class="block practice">
+    <span class="label">三分鐘練習</span>
+    <p>挑出兩個對你最有效的練習，各給它一個固定的時間點——例如「每週日晚上清空」、「每天早上先做一件事」。寫下來，貼在你會看見的地方。只挑兩個，多了就撐不住。</p>
+  </div>
+
+  <div class="reminder">
+    <p>秩序不是靠意志維持的，<br />是靠結構自動運轉的。</p>
+  </div>
+
+  <div class="folio"><span>Day 7 · 建立你的週期</span><span>10</span></div>
+</section>
+
+<!-- ============ 第八天 ============ -->
+<section class="page closing">
+  <div class="head">
+    <div class="eyebrow">Day Eight</div>
+    <h2>第八天：<br />回去重新測一次</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p>七天不足以改變一個人，但足以讓你看見自己的能量地形——哪裡是坡、哪裡是洞。回到測驗再測一次，注意的不是熵值降了幾分，而是三個維度之間的相對變化：哪一項先動了？哪一項紋風不動？</p>
+  <p style="margin-top:6mm">先動的那一項，是你目前的施力點；紋風不動的那一項，通常需要的不是更多努力，而是一次結構上的改變。</p>
+  <p style="margin-top:6mm">也請溫和地看待反覆。振盪不是失敗，是系統正在重新組織自己的訊號。真正的變化以週為單位發生，不是以天。</p>
+
+  <div class="box">
+    <span class="label eyebrow" style="display:block;margin-bottom:4mm">如果你想走得更深</span>
+    <p>完整的破局報告會依你的能量類型，拆解耗散發生的具體路徑、給出四階段的復位路線圖與十二個情境腳本，並附語音導引。你可以在測驗結果頁找到它——但先把這七天做完，再決定要不要往下走。</p>
+  </div>
+
+  <p style="margin-top:14mm" class="muted" style="font-size:9pt">本指南為自我覺察用途，不構成醫療或心理診斷建議。若你的狀態已明顯影響睡眠、飲食或日常功能，請尋求專業協助。</p>
+
+  <div class="folio"><span>Inner Flow Assessment</span><span>11</span></div>
+</section>
+
+</body>
+</html>

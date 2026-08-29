@@ -5,3 +5,6 @@ fixtures/
 reports/
 *-fixed.epub
 *-optimized.epub
+
+# 測試腳本產生的暫存截圖
+v-*.png
