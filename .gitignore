@@ -8,3 +8,4 @@ reports/
 
 # 測試腳本產生的暫存截圖
 v-*.png
+inner-flow-e2e.html

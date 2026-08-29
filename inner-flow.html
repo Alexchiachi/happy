@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>內耗狀態自我評估與自洽引導工具 · Inner Flow Assessment</title>
-<meta name="description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測：測量你的內耗熵值，從混沌中重構自我流動。" />
+<meta name="description" content="融合耗散結構理論與身心自洽心法的 2 分鐘檢測：量化你的內耗熵值，辨識能量原型，重構內在秩序。" />
 <link rel="canonical" href="https://alexchiachi.github.io/happy/inner-flow.html" />
 
 <!-- ===== 社群分享預覽（Open Graph / Twitter Card） ===== -->
@@ -13,14 +13,14 @@
 <meta property="og:locale" content="zh_TW" />
 <meta property="og:url" content="https://alexchiachi.github.io/happy/inner-flow.html" />
 <meta property="og:title" content="測量你的內耗熵值：從混沌中重構自我流動" />
-<meta property="og:description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測。" />
+<meta property="og:description" content="基於耗散結構理論與身心自洽心法的 2 分鐘輕量自我檢測。" />
 <meta property="og:image" content="https://alexchiachi.github.io/happy/images/inner-flow-og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="內耗熵值檢測" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="測量你的內耗熵值：從混沌中重構自我流動" />
-<meta name="twitter:description" content="基於耗散結構與身心哲學的 2 分鐘輕量自我檢測。" />
+<meta name="twitter:description" content="基於耗散結構理論與身心自洽心法的 2 分鐘輕量自我檢測。" />
 <meta name="twitter:image" content="https://alexchiachi.github.io/happy/images/inner-flow-og.png" />
 <meta name="theme-color" content="#F7F5F0" />
 <link rel="icon" href="images/inner-flow-favicon.png" type="image/png" />
@@ -39,23 +39,22 @@
      <script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
 -->
 
-<!-- ===== 外部依賴（樣式已內嵌，僅雷達圖與字體來自 CDN） ===== -->
-<!-- 1. Tailwind CSS：預先編譯後內嵌（見 tools/build-inner-flow-css.sh），
-        不再依賴 Play CDN 於瀏覽器即時編譯，避免首次繪製前的樣式閃爍。 -->
-<!-- 2. Chart.js（雷達圖），固定版本避免破壞性更新 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<!-- 3. Gumroad Overlay（付費報告彈窗）。若 CDN 被封鎖，下方 JS 會自動退回開新視窗 -->
+<!-- ===== 外部依賴 =====
+     樣式與雷達圖都不再依賴外部程式庫：
+     · Tailwind CSS 預先編譯後內嵌（見 tools/build-inner-flow-css.sh）
+     · 力場雷達圖為自行繪製的動態 SVG，無圖表函式庫
+     僅保留兩項： -->
+<!-- 1. canvas-confetti（完成測驗時的克制慶祝動效），固定版本 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+<!-- 2. Gumroad Overlay（付費手冊彈窗）。若載入失敗，下方 JS 會自動退回開新視窗 -->
 <script src="https://gumroad.com/js/gumroad.js"></script>
-<!-- 4. 字體：思源宋體（標題）＋ 思源黑體（內文） -->
+<!-- 3. 字體：思源宋體（標題）＋ 思源黑體（內文） -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet" />
 
-<!-- 1. Tailwind CSS：預先編譯後內嵌（見 tools/build-inner-flow-css.sh），
-        不再依賴 Play CDN 於瀏覽器即時編譯，避免首次繪製前的樣式閃爍。 -->
-
 <!-- ===== Tailwind 編譯輸出（米白 / 炭黑 / 風土暖棕 / 鼠尾草綠） ===== -->
-<style id="tailwind-build">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Noto Sans TC,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-14{margin-bottom:3.5rem}.mb-16{margin-bottom:4rem}.mb-20{margin-bottom:5rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-7{margin-bottom:1.75rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:.5rem}.mr-4{margin-right:1rem}.mt-1{margin-top:.25rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-14{margin-top:3.5rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-24{margin-top:6rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-4{height:1rem}.h-6{height:1.5rem}.h-\[2px\]{height:2px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-16{width:4rem}.w-24{width:6rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-lg{max-width:32rem}.max-w-xl{max-width:36rem}.flex-grow{flex-grow:1}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-y-4{row-gap:1rem}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-clay{--tw-border-opacity:1;border-color:rgb(166 124 82/var(--tw-border-opacity,1))}.border-clay\/40{border-color:rgba(166,124,82,.4)}.border-ink{--tw-border-opacity:1;border-color:rgb(42 39 35/var(--tw-border-opacity,1))}.border-ink\/15{border-color:rgba(42,39,35,.15)}.border-ink\/20{border-color:rgba(42,39,35,.2)}.border-ink\/25{border-color:rgba(42,39,35,.25)}.border-sage{--tw-border-opacity:1;border-color:rgb(122 139 123/var(--tw-border-opacity,1))}.border-sage\/35{border-color:hsla(124,7%,51%,.35)}.bg-clay{--tw-bg-opacity:1;background-color:rgb(166 124 82/var(--tw-bg-opacity,1))}.bg-clay\/\[0\.06\]{background-color:rgba(166,124,82,.06)}.bg-ink{--tw-bg-opacity:1;background-color:rgb(42 39 35/var(--tw-bg-opacity,1))}.bg-ink\/10{background-color:rgba(42,39,35,.1)}.bg-sage{--tw-bg-opacity:1;background-color:rgb(122 139 123/var(--tw-bg-opacity,1))}.bg-sage\/\[0\.06\]{background-color:hsla(124,7%,51%,.06)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/40{background-color:hsla(0,0%,100%,.4)}.p-8{padding:2rem}.px-10{padding-left:2.5rem;padding-right:2.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.pb-2{padding-bottom:.5rem}.pb-28{padding-bottom:7rem}.text-left{text-align:left}.text-center{text-align:center}.font-sans{font-family:Noto Sans TC,system-ui,sans-serif}.font-serif{font-family:"Noto Serif TC",Songti TC,serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-light{font-weight:300}.uppercase{text-transform:uppercase}.leading-\[1\.6\]{line-height:1.6}.leading-\[1\.9\]{line-height:1.9}.leading-\[2\.2\]{line-height:2.2}.leading-loose{line-height:2}.leading-none{line-height:1}.text-clay{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.text-ink{--tw-text-opacity:1;color:rgb(42 39 35/var(--tw-text-opacity,1))}.text-ink\/30{color:rgba(42,39,35,.3)}.text-ink\/35{color:rgba(42,39,35,.35)}.text-ink\/40{color:rgba(42,39,35,.4)}.text-ink\/45{color:rgba(42,39,35,.45)}.text-ink\/60{color:rgba(42,39,35,.6)}.text-ink\/85{color:rgba(42,39,35,.85)}.text-paper{--tw-text-opacity:1;color:rgb(247 245 240/var(--tw-text-opacity,1))}.text-sage{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.line-through{text-decoration-line:line-through}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-ink::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(42 39 35/var(--tw-placeholder-opacity,1))}.placeholder-ink::placeholder{--tw-placeholder-opacity:1;color:rgb(42 39 35/var(--tw-placeholder-opacity,1))}.placeholder-ink\/30::-moz-placeholder{color:rgba(42,39,35,.3)}.placeholder-ink\/30::placeholder{color:rgba(42,39,35,.3)}.outline{outline-style:solid}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-500{transition-duration:.5s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-clay:hover{--tw-border-opacity:1;border-color:rgb(166 124 82/var(--tw-border-opacity,1))}.hover\:border-sage:hover{--tw-border-opacity:1;border-color:rgb(122 139 123/var(--tw-border-opacity,1))}.hover\:bg-clay\/90:hover{background-color:rgba(166,124,82,.9)}.hover\:text-clay:hover{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.hover\:text-sage:hover{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width:640px){.sm\:block{display:block}.sm\:hidden{display:none}.sm\:p-10{padding:2.5rem}.sm\:py-28{padding-top:7rem;padding-bottom:7rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-\[15px\]{font-size:15px}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-xs{font-size:.75rem;line-height:1rem}}@media (min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:gap-8{gap:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}}</style>
+<style id="tailwind-build">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Noto Sans TC,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-14{margin-bottom:3.5rem}.mb-16{margin-bottom:4rem}.mb-20{margin-bottom:5rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-7{margin-bottom:1.75rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:.5rem}.mr-4{margin-right:1rem}.mt-1{margin-top:.25rem}.mt-10{margin-top:2.5rem}.mt-14{margin-top:3.5rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-24{margin-top:6rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-4{height:1rem}.h-6{height:1.5rem}.h-\[2px\]{height:2px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-16{width:4rem}.w-24{width:6rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-grow{flex-grow:1}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-x-8{-moz-column-gap:2rem;column-gap:2rem}.gap-y-4{row-gap:1rem}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.whitespace-pre-line{white-space:pre-line}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-clay\/40{border-color:rgba(166,124,82,.4)}.border-ink\/15{border-color:rgba(42,39,35,.15)}.border-ink\/20{border-color:rgba(42,39,35,.2)}.border-ink\/25{border-color:rgba(42,39,35,.25)}.border-sage\/35{border-color:hsla(124,7%,51%,.35)}.bg-clay{--tw-bg-opacity:1;background-color:rgb(166 124 82/var(--tw-bg-opacity,1))}.bg-clay\/\[0\.06\]{background-color:rgba(166,124,82,.06)}.bg-ink\/10{background-color:rgba(42,39,35,.1)}.bg-sage\/\[0\.06\]{background-color:hsla(124,7%,51%,.06)}.bg-transparent{background-color:transparent}.bg-white\/40{background-color:hsla(0,0%,100%,.4)}.p-8{padding:2rem}.px-10{padding-left:2.5rem;padding-right:2.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-7{padding-left:1.75rem;padding-right:1.75rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.pb-2{padding-bottom:.5rem}.pb-24{padding-bottom:6rem}.pb-28{padding-bottom:7rem}.pl-7{padding-left:1.75rem}.text-left{text-align:left}.text-center{text-align:center}.font-sans{font-family:Noto Sans TC,system-ui,sans-serif}.font-serif{font-family:"Noto Serif TC",Songti TC,serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-light{font-weight:300}.uppercase{text-transform:uppercase}.leading-\[1\.6\]{line-height:1.6}.leading-\[1\.9\]{line-height:1.9}.leading-\[2\.2\]{line-height:2.2}.leading-loose{line-height:2}.leading-none{line-height:1}.text-clay{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.text-ink{--tw-text-opacity:1;color:rgb(42 39 35/var(--tw-text-opacity,1))}.text-ink\/25{color:rgba(42,39,35,.25)}.text-ink\/30{color:rgba(42,39,35,.3)}.text-ink\/35{color:rgba(42,39,35,.35)}.text-ink\/40{color:rgba(42,39,35,.4)}.text-ink\/45{color:rgba(42,39,35,.45)}.text-ink\/50{color:rgba(42,39,35,.5)}.text-ink\/60{color:rgba(42,39,35,.6)}.text-ink\/70{color:rgba(42,39,35,.7)}.text-ink\/75{color:rgba(42,39,35,.75)}.text-ink\/85{color:rgba(42,39,35,.85)}.text-paper{--tw-text-opacity:1;color:rgb(247 245 240/var(--tw-text-opacity,1))}.text-sage{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-ink\/30::-moz-placeholder{color:rgba(42,39,35,.3)}.placeholder-ink\/30::placeholder{color:rgba(42,39,35,.3)}.opacity-50{opacity:.5}.outline{outline-style:solid}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-500{transition-duration:.5s}.ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-clay:hover{--tw-border-opacity:1;border-color:rgb(166 124 82/var(--tw-border-opacity,1))}.hover\:border-sage:hover{--tw-border-opacity:1;border-color:rgb(122 139 123/var(--tw-border-opacity,1))}.hover\:bg-clay\/90:hover{background-color:rgba(166,124,82,.9)}.hover\:text-clay:hover{--tw-text-opacity:1;color:rgb(166 124 82/var(--tw-text-opacity,1))}.hover\:text-sage:hover{--tw-text-opacity:1;color:rgb(122 139 123/var(--tw-text-opacity,1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width:640px){.sm\:block{display:block}.sm\:hidden{display:none}.sm\:p-10{padding:2.5rem}.sm\:py-28{padding-top:7rem;padding-bottom:7rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-\[15px\]{font-size:15px}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-xs{font-size:.75rem;line-height:1rem}}@media (min-width:768px){.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:gap-8{gap:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}}</style>
 
 <style>
   /* --- 基礎排版：寬鬆字距與行距，營造安靜的沉澱感 --- */
@@ -82,9 +81,7 @@
   .question.shown  { opacity: 1; transform: translateX(0); }
 
   /* --- 選項卡：靜置時僅一條極細邊線，hover 時暖棕浮起 --- */
-  .option {
-    transition: border-color .3s ease, background-color .3s ease, transform .3s ease, box-shadow .3s ease;
-  }
+  .option { transition: border-color .3s ease, background-color .3s ease, transform .3s ease; }
   .option:hover  { border-color: #A67C52; background-color: rgba(166,124,82,.05); transform: translateX(4px); }
   .option.chosen { border-color: #A67C52; background-color: rgba(166,124,82,.10); }
 
@@ -97,6 +94,15 @@
   }
   .link-underline:hover::after { width: 100%; }
 
+  /* --- 力場雷達圖：粒子與能量場的緩慢呼吸 --- */
+  #forceField { width: 100%; height: auto; overflow: visible; }
+  .ff-halo   { animation: ff-breathe 6s ease-in-out infinite; transform-origin: center; }
+  .ff-node   { animation: ff-pulse 3.2s ease-in-out infinite; transform-origin: center; }
+  .ff-node:nth-of-type(2) { animation-delay: .8s; }
+  .ff-node:nth-of-type(3) { animation-delay: 1.6s; }
+  @keyframes ff-breathe { 0%, 100% { opacity: .30; transform: scale(1); } 50% { opacity: .55; transform: scale(1.045); } }
+  @keyframes ff-pulse   { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
+
   /* --- 表單焦點樣式（移除瀏覽器預設藍框） --- */
   input:focus { outline: none; border-color: #A67C52; }
   ::selection { background: rgba(166,124,82,.25); }
@@ -107,8 +113,21 @@
   /* --- 尊重系統的「減少動態」偏好 --- */
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   }
+
+  /* --- 列印（＝一鍵輸出高畫質診斷 PDF）：只留診斷本體，向量輸出 --- */
+  @media print {
+    @page { size: A4; margin: 18mm 16mm; }
+    html, body { background: #fff !important; }
+    #hero, #quiz, #conversion, #aiStudio, .no-print { display: none !important; }
+    #result { display: block !important; padding: 0 !important; }
+    .fade-in { opacity: 1 !important; transform: none !important; }
+    .print-only { display: block !important; }
+    #forceField { max-width: 132mm; margin: 0 auto; }
+    section, blockquote, .avoid-break { break-inside: avoid; }
+  }
+  .print-only { display: none; }
 </style>
 </head>
 
@@ -120,25 +139,26 @@
 <header id="hero" class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
   <div class="max-w-2xl mx-auto fade-in">
 
-    <!-- 眉標 -->
     <p class="text-[11px] sm:text-xs tracking-looser uppercase text-sage mb-10">
       Inner&nbsp;Flow&nbsp;Assessment
     </p>
 
-    <!-- 主標題 -->
     <h1 class="font-serif font-light text-3xl sm:text-4xl md:text-5xl leading-[1.6] tracking-loose mb-8">
       測量你的內耗熵值<br class="hidden sm:block" />
       <span class="text-clay">從混沌中重構自我流動</span>
     </h1>
 
-    <!-- 副標 -->
-    <p class="text-sm sm:text-base text-ink/60 leading-loose tracking-loose mb-14 max-w-lg mx-auto">
+    <p class="text-sm sm:text-base text-ink/60 leading-loose tracking-loose mb-8 max-w-lg mx-auto">
       基於耗散結構與身心哲學的 2 分鐘輕量自我檢測
+    </p>
+
+    <p class="text-xs text-ink/45 leading-loose tracking-loose mb-14 max-w-md mx-auto">
+      內耗不是因為你不夠努力，<br />
+      而是系統封閉之後，熵必然增加。
     </p>
 
     <div class="hairline w-24 mx-auto mb-14"></div>
 
-    <!-- CTA -->
     <button
       id="startBtn"
       class="group inline-flex items-center gap-3 border border-ink/25 hover:border-clay text-ink hover:text-clay px-10 py-4 text-sm tracking-loose transition-colors duration-500">
@@ -152,12 +172,11 @@
 
 
 <!-- ============================================================
-     二、評估測驗區（6 題，逐題滑動切換）
+     二、評估測驗區（6 道漸進式情境題）
      ============================================================ -->
 <section id="quiz" class="hidden px-6 py-20 sm:py-28">
   <div class="max-w-2xl mx-auto">
 
-    <!-- 進度列 -->
     <div class="mb-16">
       <div class="flex justify-between items-baseline mb-4 text-[11px] tracking-loose text-ink/45">
         <span>第 <span id="qCurrent">1</span> 題 / 共 6 題</span>
@@ -171,7 +190,6 @@
     <!-- 題目容器：由 JS 依 QUESTIONS 資料動態渲染 -->
     <div id="questionWrap"></div>
 
-    <!-- 返回上一題 -->
     <div class="mt-14 h-6">
       <button id="prevBtn"
         class="hidden text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
@@ -183,49 +201,53 @@
 
 
 <!-- ============================================================
-     三、診斷結果與視覺化區
+     三、診斷結果與力場視覺化
      ============================================================ -->
 <section id="result" class="hidden px-6 py-20 sm:py-28">
   <div class="max-w-3xl mx-auto">
 
-    <!-- 3-0 由分享連結進入時顯示（?r=______） -->
-    <div id="sharedBanner" class="hidden text-center mb-14 border border-sage/35 bg-sage/[0.06] px-6 py-5">
+    <!-- 由分享連結進入時顯示（?r=______） -->
+    <div id="sharedBanner" class="hidden text-center mb-14 border border-sage/35 bg-sage/[0.06] px-6 py-5 no-print">
       <p class="text-xs tracking-loose text-ink/60 leading-loose">
         你正在看一份被分享的結果。
         <button id="takeOwnBtn" class="text-sage hover:text-clay transition-colors link-underline ml-2">我也要測一次 →</button>
       </p>
     </div>
 
-    <!-- 3-1 能量狀態標籤 -->
-    <div class="text-center mb-20 fade-in">
+    <!-- 3-1 原型與熵值 -->
+    <div class="text-center mb-20 fade-in avoid-break">
       <p id="stateEyebrow" class="text-[11px] tracking-looser uppercase text-sage mb-8">Your Energy State</p>
 
-      <h2 id="typeTitle" class="font-serif font-light text-2xl sm:text-3xl md:text-4xl leading-[1.6] tracking-loose text-clay mb-10">
-        <!-- 由 JS 填入，例：高熵無序型：邊界滲漏與精力耗散 -->
-      </h2>
+      <p id="entropyBand" class="text-xs tracking-looser text-ink/45 mb-5"></p>
+      <h2 id="typeTitle" class="font-serif font-light text-2xl sm:text-3xl md:text-4xl leading-[1.6] tracking-loose text-clay mb-10"></h2>
 
-      <!-- 熵值 -->
       <div class="inline-flex items-end gap-3">
         <span id="entropyValue" class="font-serif text-5xl sm:text-6xl font-light leading-none">--</span>
-        <span class="text-[11px] tracking-loose text-ink/45 pb-2">內耗熵值 / 100</span>
+        <span class="text-[11px] tracking-loose text-ink/45 pb-2">內耗熵值 S / 100</span>
       </div>
       <p id="entropyNote" class="mt-6 text-xs tracking-loose text-ink/45"></p>
+      <p id="entropyFormula" class="mt-3 text-[11px] tracking-loose text-ink/30"></p>
     </div>
 
-    <!-- 3-2 雷達圖：三大維度 -->
-    <div class="mb-20 fade-in">
-      <div class="hairline w-16 mx-auto mb-14"></div>
-      <div class="relative mx-auto" style="max-width:460px; aspect-ratio:1/1;">
-        <canvas id="radarChart" aria-label="三維度能量雷達圖" role="img"></canvas>
+    <!-- 3-2 動態 SVG 力場雷達圖 -->
+    <div class="mb-20 fade-in avoid-break">
+      <div class="hairline w-16 mx-auto mb-14 no-print"></div>
+      <div class="mx-auto" style="max-width:460px;">
+        <svg id="forceField" viewBox="0 0 460 420" role="img"
+             aria-labelledby="ffTitle ffDesc">
+          <title id="ffTitle">三維度能量力場圖</title>
+          <desc id="ffDesc">邊界防禦力、心智流動度、有效做功能力三個維度的分數，以及自洽基準線。</desc>
+        </svg>
       </div>
 
-      <!-- 維度數值摘要 -->
-      <div id="dimSummary" class="grid grid-cols-3 gap-4 mt-12 text-center"></div>
+      <!-- 維度數值摘要（含瓶頸標記） -->
+      <div id="dimSummary" class="grid grid-cols-3 gap-4 mt-10 text-center"></div>
+      <p id="bottleneckNote" class="text-center mt-8 text-xs tracking-loose text-ink/50 leading-loose"></p>
     </div>
 
-    <!-- 3-3 哲學洞察 -->
-    <div class="fade-in">
-      <div class="hairline w-16 mx-auto mb-14"></div>
+    <!-- 3-3 洞察 -->
+    <div class="fade-in avoid-break">
+      <div class="hairline w-16 mx-auto mb-14 no-print"></div>
       <blockquote class="max-w-xl mx-auto text-center">
         <p class="text-[11px] tracking-looser uppercase text-sage mb-8">Insight</p>
         <p id="insightText" class="font-serif text-base sm:text-lg leading-[2.2] tracking-loose text-ink/85"></p>
@@ -233,22 +255,75 @@
       </blockquote>
     </div>
 
-    <!-- 分享與重測 -->
-    <div class="text-center mt-16 flex flex-wrap justify-center items-center gap-x-10 gap-y-4">
-      <button id="shareBtn" class="text-[11px] tracking-loose text-ink/45 hover:text-clay transition-colors link-underline">
-        複製我的結果連結
-      </button>
-      <button id="retakeBtn" class="text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
-        重新測驗一次
-      </button>
+    <!-- 列印版頁尾：只在輸出 PDF 時出現 -->
+    <p class="print-only text-center text-[10px] tracking-loose text-ink/40 mt-16">
+      Inner Flow Assessment · 內耗狀態自我評估與自洽引導工具 · 本報告為自我覺察用途，不構成醫療或心理診斷建議
+    </p>
+
+    <!-- 3-4 匯出與分享 -->
+    <div class="mt-16 no-print">
+      <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
+        <button id="exportPdfBtn" class="border border-ink/25 hover:border-clay hover:text-clay px-7 py-3 text-[11px] tracking-loose transition-colors duration-500">
+          下載診斷 PDF
+        </button>
+        <button id="exportHtmlBtn" class="border border-ink/25 hover:border-sage hover:text-sage px-7 py-3 text-[11px] tracking-loose transition-colors duration-500">
+          匯出獨立 HTML
+        </button>
+      </div>
+      <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-4 mt-8">
+        <button id="shareBtn" class="text-[11px] tracking-loose text-ink/45 hover:text-clay transition-colors link-underline">
+          複製我的結果連結
+        </button>
+        <button id="retakeBtn" class="text-[11px] tracking-loose text-ink/40 hover:text-clay transition-colors link-underline">
+          重新測驗一次
+        </button>
+      </div>
+      <p id="shareMsg" class="text-center mt-5 text-[11px] tracking-loose text-sage h-4"></p>
     </div>
-    <p id="shareMsg" class="text-center mt-4 text-[11px] tracking-loose text-sage h-4"></p>
   </div>
 </section>
 
 
 <!-- ============================================================
-     四、轉化閉環區（Email 訂閱 + Gumroad 付費報告）
+     四、AI 深度生成區（連上 /api 後端時才出現）
+     ============================================================ -->
+<section id="aiStudio" class="hidden px-6 pb-24">
+  <div class="max-w-3xl mx-auto">
+    <div class="hairline w-full mb-16"></div>
+
+    <div class="text-center mb-12">
+      <p class="text-[11px] tracking-looser uppercase text-sage mb-6">Personal Generation</p>
+      <h3 class="font-serif font-light text-xl sm:text-2xl leading-loose tracking-loose">
+        依你的三維度分數，生成專屬內容
+      </h3>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+      <div class="border border-ink/12 bg-white/40 p-8">
+        <h4 class="font-serif text-lg leading-loose tracking-loose mb-4">自洽躍遷破局手冊</h4>
+        <p class="text-sm text-ink/60 leading-loose tracking-loose mb-7">五大章節，依你的原型與瓶頸維度生成，最後附一段簡家旗的寄語。</p>
+        <button id="genReportBtn" class="w-full border border-ink/25 hover:border-clay hover:text-clay py-3 text-[11px] tracking-loose transition-colors duration-500">
+          生成手冊
+        </button>
+      </div>
+      <div class="border border-ink/12 bg-white/40 p-8">
+        <h4 class="font-serif text-lg leading-loose tracking-loose mb-4">身心復位冥想導引</h4>
+        <p class="text-sm text-ink/60 leading-loose tracking-loose mb-7">250–350 字導引詞與語音，針對你目前最需要鬆開的那一處。</p>
+        <button id="genAudioBtn" class="w-full border border-ink/25 hover:border-sage hover:text-sage py-3 text-[11px] tracking-loose transition-colors duration-500">
+          生成導引
+        </button>
+      </div>
+    </div>
+
+    <p id="aiMsg" class="text-center mt-6 text-[11px] tracking-loose text-ink/45 h-4"></p>
+    <audio id="aiAudio" controls class="hidden w-full mt-8"></audio>
+    <article id="aiReport" class="hidden mt-14"></article>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     五、轉化閉環區（留資即下載 + Gumroad 付費手冊）
      ============================================================ -->
 <section id="conversion" class="hidden px-6 pb-28">
   <div class="max-w-4xl mx-auto">
@@ -258,13 +333,13 @@
     <div class="text-center mb-16 fade-in">
       <p class="text-[11px] tracking-looser uppercase text-sage mb-6">Next Step</p>
       <h3 class="font-serif font-light text-xl sm:text-2xl leading-loose tracking-loose">
-        看見狀態，只是開始；<br class="sm:hidden" />重建秩序，才是流動。
+        看見狀態，只是開始；<br class="sm:hidden" />引進負熵，才是重構。
       </h3>
     </div>
 
     <div class="grid md:grid-cols-2 gap-6 md:gap-8">
 
-      <!-- 卡片 1：Email 訂閱 -->
+      <!-- 卡片 1：留資即下載 -->
       <div class="border border-ink/12 bg-white/40 p-8 sm:p-10 flex flex-col fade-in">
         <p class="text-[11px] tracking-looser uppercase text-sage mb-6">Free · PDF</p>
         <h4 class="font-serif text-lg sm:text-xl leading-loose tracking-loose mb-5">
@@ -303,19 +378,19 @@
         </p>
       </div>
 
-      <!-- 卡片 2：Gumroad 付費深度報告 -->
+      <!-- 卡片 2：Gumroad 付費手冊 -->
       <div class="border border-clay/40 bg-clay/[0.06] p-8 sm:p-10 flex flex-col fade-in">
         <p class="text-[11px] tracking-looser uppercase text-clay mb-6">Deep Report</p>
         <h4 class="font-serif text-lg sm:text-xl leading-loose tracking-loose mb-5">
-          完整 15 頁破局報告<br />與專屬語音導引
+          自洽躍遷破局手冊<br />與專屬語音導引
         </h4>
         <p class="text-sm text-ink/60 leading-loose tracking-loose mb-8 flex-grow">
-          依你的三維度分數生成：耗散路徑拆解、四階段復位路線圖、12 個情境腳本，附 20 分鐘語音引導音檔。
+          依你的能量原型生成：耗散路徑拆解、四階段復位路線圖、12 個情境腳本，
+          附一段身心復位冥想語音。
         </p>
 
         <div class="flex items-baseline gap-3 mb-7">
           <span class="font-serif text-3xl font-light">US$&nbsp;3.99</span>
-          <span class="text-[11px] tracking-loose text-ink/40 line-through">US$ 12</span>
         </div>
 
         <!--
@@ -328,7 +403,7 @@
            data-gumroad-overlay-checkout="true"
            data-gumroad-single-product="true"
            class="block text-center bg-clay hover:bg-clay/90 text-paper py-3.5 text-sm tracking-loose transition-colors duration-500">
-          立即解鎖完整報告
+          立即解鎖完整手冊
         </a>
         <p class="mt-4 text-[11px] tracking-loose text-ink/35 text-center">安全結帳由 Gumroad 提供 · 7 天退款保證</p>
       </div>
@@ -341,142 +416,169 @@
   </div>
 </section>
 
-
 <!-- ============================================================
-     JavaScript：題庫、計分、渲染、圖表、轉化
+     JavaScript：評估模型、力場視覺化、匯出、轉化、AI 生成
      ============================================================ -->
 <script>
 (function () {
   'use strict';
 
-  /* ------------------------------------------------------------
-   * 1. 題庫
-   *    dim：所屬維度（boundary 邊界防禦力 / flow 心智流動度 / work 有效做功能力）
-   *    每題 4 個選項，score 1–4 代表能量耗散程度（1 = 高耗散，4 = 低耗散／流動）
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 0. 設定
+   * ========================================================== */
+
+  // AI 後端位址（server/ 目錄下的 Express 服務）。
+  // 留空時，頁面完全不需要後端也能運作，AI 生成區塊會自動隱藏。
+  // 例：var API_BASE = 'https://inner-flow-api.onrender.com';
+  var API_BASE = '';
+
+  var GUIDE_PATH = 'downloads/inner-flow-7day-guide.pdf';
+
+  /* ============================================================
+   * 1. 評估模型
+   *
+   * 三大維度，各以 2 道漸進式情境題量化：
+   *   boundary 邊界防禦力：能量護城河、自我界線與拒絕能力
+   *   flow     心智流動度：情緒代謝週期、預設模式網路（DMN）降噪、抗思維反芻
+   *   work     有效做功能力：能量轉化為真實價值的效率、打破完美主義凍結
+   *
+   * 選項 1–4 分，4 分代表該情境下能量耗散最低。
+   * ========================================================== */
   var DIMENSIONS = {
-    boundary: { name: '邊界防禦力' },
-    flow:     { name: '心智流動度' },
-    work:     { name: '有效做功能力' },
+    boundary: { name: '邊界防禦力', note: '能量護城河與拒絕能力' },
+    flow:     { name: '心智流動度', note: '情緒代謝與思維降噪' },
+    work:     { name: '有效做功能力', note: '能量轉化為真實價值' },
   };
 
   var QUESTIONS = [
     {
       dim: 'boundary',
+      text: '有人臨時把一件不屬於你的事推給你，理由聽起來很合理。你通常……',
+      options: [
+        { label: '直接接下，再用自己的時間補回來', score: 1 },
+        { label: '猶豫很久，最後接下，心裡留著委屈', score: 2 },
+        { label: '先問清楚範圍，多數時候只接其中一部分', score: 3 },
+        { label: '平靜說明這不在我這裡，並提出誰更適合', score: 4 },
+      ],
+    },
+    {
+      dim: 'boundary',
       text: '深夜收到一則「不太緊急、但需要回覆」的訊息時，你通常……',
       options: [
         { label: '立刻回覆，否則整晚都會惦記著', score: 1 },
-        { label: '猶豫很久，最後還是回了，並感到疲憊', score: 2 },
+        { label: '拖到很晚才回，過程中一直消耗', score: 2 },
         { label: '視情況而定，多數時候能留到隔天', score: 3 },
         { label: '平靜地放著，明早再處理，不影響睡眠', score: 4 },
       ],
     },
     {
-      dim: 'boundary',
-      text: '面對一個你其實不想接下的請求，你的第一反應是……',
+      dim: 'flow',
+      text: '一件讓你不舒服的事發生後，通常要多久你才真的放得下？',
       options: [
-        { label: '先答應下來，事後再責怪自己', score: 1 },
-        { label: '想拒絕，但要花很多力氣鋪陳理由', score: 2 },
-        { label: '能夠拒絕，只是事後會短暫不安', score: 3 },
-        { label: '溫和而直接地說不，心裡沒有殘留', score: 4 },
+        { label: '好幾天，期間不斷重演當時的細節', score: 1 },
+        { label: '一兩天，情緒隨著想起而起伏', score: 2 },
+        { label: '幾個小時，睡一覺大致就過去了', score: 3 },
+        { label: '當下就代謝完，結束了就是結束了', score: 4 },
       ],
     },
     {
       dim: 'flow',
-      text: '一天結束時，你腦中的狀態比較像……',
+      text: '當你沒有在做特定的事——通勤、洗澡、睡前——腦中通常是……',
       options: [
-        { label: '二十個分頁同時開著，而且還在載入', score: 1 },
-        { label: '某些片段反覆播放，停不下來', score: 2 },
-        { label: '有些雜訊，但大致能被放下', score: 3 },
-        { label: '像清空過的桌面，安靜且留白', score: 4 },
-      ],
-    },
-    {
-      dim: 'flow',
-      text: '當一件事已經結束、無法再改變時，你會……',
-      options: [
-        { label: '在腦中重演許多個「當時應該怎樣」的版本', score: 1 },
-        { label: '偶爾被想起，情緒隨之起伏', score: 2 },
-        { label: '短暫回顧，然後轉向下一件事', score: 3 },
-        { label: '完成即釋放，注意力自然流走', score: 4 },
+        { label: '自動播放最壞的版本，和還沒發生的對話', score: 1 },
+        { label: '反覆整理待辦與擔心，停不下來', score: 2 },
+        { label: '有些雜訊，但能把自己拉回來', score: 3 },
+        { label: '安靜的，甚至能享受那段空白', score: 4 },
       ],
     },
     {
       dim: 'work',
-      text: '回顧最近一週真正推進的事，你會說……',
+      text: '一件重要、但你沒有十足把握的事擺在面前，你通常……',
       options: [
-        { label: '忙了很久，卻說不出做成了什麼', score: 1 },
-        { label: '有些進展，但多半是被推著走的', score: 2 },
-        { label: '完成了幾件確實重要的事', score: 3 },
-        { label: '節奏清晰，投入與產出彼此對齊', score: 4 },
+        { label: '一直準備、一直研究，遲遲沒有開始', score: 1 },
+        { label: '開始了，但反覆修改，很難交出去', score: 2 },
+        { label: '先做出一個粗胚，再一輪輪修', score: 3 },
+        { label: '先讓它存在——完成優先於完美', score: 4 },
       ],
     },
     {
       dim: 'work',
-      text: '你的精力，大多消耗在……',
+      text: '回顧最近一週，你的精力主要變成了什麼？',
       options: [
         { label: '情緒內耗與反覆的自我說服', score: 1 },
         { label: '協調、等待與各種摩擦', score: 2 },
         { label: '一半在雜務，一半在真正的創造', score: 3 },
-        { label: '大部分投入在真正重要的事情上', score: 4 },
+        { label: '大多轉化成看得見的成果', score: 4 },
       ],
     },
   ];
 
   /* ------------------------------------------------------------
-   * 2. 結果類型（依總分 6–24 分區間判定）
+   * 四大能量原型：依內耗熵值 S 劃分
    * ---------------------------------------------------------- */
-  var TYPES = [
+  var ARCHETYPES = [
     {
-      min: 6, max: 9,
-      title: '臨界耗散型：系統過載與意義塌縮',
-      note: '你的系統正在以高於補給的速度支出能量。',
-      insight: '你並不是不夠努力，而是太久沒有補給。當所有輸入都必須被回應，能量便在維持秩序本身耗盡，來不及流向任何真正屬於你的事。此刻需要的不是更強的意志，而是一次徹底的減載——把「必須」暫時放回地上，讓系統重新獲得可呼吸的餘裕。',
-      key: '起手式：本週選一件事，正式讓它停下。',
+      min: 70, max: 100,
+      band: '極高熵',
+      title: '邊界滲漏型：人際討好與界線瓦解',
+      note: '能量在流向自己之前，就已經被支用完畢。',
+      insight: '你的系統不是沒有能量，是沒有牆。所有人的需求都能直接進來，於是你必須不斷用自己的餘裕去平衡別人的失序——這在物理上叫做把能量送給環境。討好從來不是性格缺陷，它只是你曾經最有效的生存策略；但一個沒有邊界的系統，注定只能維持別人的秩序。先立牆，再談流動。',
+      key: '起手式：本週拒絕一件小事，並且不解釋。',
     },
     {
-      min: 10, max: 14,
-      title: '高熵無序型：邊界滲漏與精力耗散',
-      note: '能量持續外流，卻難以指認流向何處。',
-      insight: '你的能量沒有消失，只是流向了無法回收的地方——他人的期待、未完的對話、腦中不斷重演的版本。混亂不是你的性格，而是缺乏邊界的必然結果。耗散結構告訴我們：系統唯有先劃出界線，才能在流動中維持秩序。先止漏，再談流動。',
-      key: '起手式：找出一個最常滲漏的入口，先關上它。',
+      min: 50, max: 69,
+      band: '中高熵',
+      title: '次生擾動型：思維反芻與情緒代謝延遲',
+      note: '事情早已結束，系統卻還在為它運轉。',
+      insight: '真正消耗你的多半不是事件本身，而是事件結束後那場沒有終點的重播。大腦在無事可做時會自動接管——把已經封存的畫面重新開機，於是同一份能量被支付了很多次。這不是想太多，是代謝延遲：情緒沒有被走完，就只能一直排隊。你需要的不是想通，是讓它走完。',
+      key: '起手式：為一件已成定局的事寫下一句結論，然後停在那裡。',
     },
     {
-      min: 15, max: 19,
-      title: '中熵振盪型：間歇滲漏與自我修復',
-      note: '你已具備復原力，但秩序尚未穩定。',
-      insight: '你已經知道如何回到自己，只是還不夠穩定。好日子與壞日子交替出現，讓你懷疑進展是否真實。其實振盪本身就是系統正在自我組織的訊號。你需要的不是更用力，而是把偶然的好狀態，變成可被重複的結構——讓復原不再依賴運氣。',
-      key: '起手式：把一次順利的狀態，拆成可重複的三個步驟。',
+      min: 30, max: 49,
+      band: '中等熵',
+      title: '完美主義凍結型：全有全無與行動癱瘓',
+      note: '能量沒有外流，卻卡在無法轉化的位置。',
+      insight: '你的邊界大致完整，情緒也大致能代謝，卡住的是最後那一段：從想到做。全有全無的標準讓每一次啟動都像一場審判，於是準備變成一種安全的拖延。但秩序不是想出來的，是做出來之後才浮現的——系統必須先運轉，才會顯露它真正的形狀。讓它先醜著存在。',
+      key: '起手式：把一件卡住的事做出一個明知不完美的版本，今天就交出去。',
     },
     {
-      min: 20, max: 24,
-      title: '低熵流動型：自洽穩態與能量閉環',
+      min: 0, max: 29,
+      band: '平衡自洽',
+      title: '動態自洽型：三維均衡與開放流動',
       note: '輸入與輸出彼此對齊，系統維持著低耗散。',
-      insight: '你已建立起難得的內在秩序：邊界清晰、心智留白、做功對齊。但低熵並非終點——過於穩定的系統也會失去演化的動能。此刻真正的課題，是把餘裕投向更遠的地方：允許一些有意義的失序進來，讓流動繼續生成新的形狀，而非只是維持現狀。',
-      key: '起手式：把多出來的餘裕，投向一件尚無把握的事。',
+      insight: '你已經建立起難得的內在秩序：邊界清晰、情緒能代謝、投入能轉化。但耗散結構的核心不是穩定，而是流動——一個過於平衡的系統會停止演化，因為它不再需要重組自己。此刻的課題不是維持，而是把餘裕投向尚無把握的地方，讓一些有意義的失序進來，長出新的形狀。',
+      key: '起手式：把多出來的餘裕，投向一件你還沒有把握的事。',
     },
   ];
 
-  /* ------------------------------------------------------------
-   * 3. 狀態與 DOM 參照
-   * ---------------------------------------------------------- */
-  var answers = new Array(QUESTIONS.length).fill(null); // 各題得分
-  var current = 0;                                       // 目前題號（0-based）
-  var chart = null;                                      // Chart.js 實例
+  /* 瓶頸維度對應的施力點提示 */
+  var BOTTLENECK_HINT = {
+    boundary: '你的最上游是邊界。這一項不修，後面兩項補多少都會漏回去。',
+    flow:     '你的瓶頸在代謝。能量進得來，但舊的情緒還佔著通道，先讓它走完。',
+    work:     '你的瓶頸在轉化。能量守得住、也流得動，只差讓它變成看得見的東西。',
+    balanced: '三個維度大致均衡，沒有單一瓶頸。此刻的施力點不在補短，而在把餘裕投出去。',
+  };
 
-  var lastResult = null;                                 // 供轉化區事件帶上結果脈絡
-  var isShared = false;                                  // 是否由分享連結進入
+  /* ============================================================
+   * 2. 狀態
+   * ========================================================== */
+  var answers = new Array(QUESTIONS.length).fill(null);
+  var current = 0;
+  var lastResult = null;      // 供轉化與 AI 生成帶上結果脈絡
+  var isShared = false;       // 是否由分享連結進入
 
   var $ = function (id) { return document.getElementById(id); };
-  var heroEl = $('hero'), quizEl = $('quiz'), resultEl = $('result'), convEl = $('conversion');
+  var heroEl = $('hero'), quizEl = $('quiz'), resultEl = $('result'),
+      convEl = $('conversion'), aiEl = $('aiStudio');
 
-  /* ------------------------------------------------------------
-   * 3-1. 漏斗事件追蹤
-   *      同時支援 GA4（gtag）、Plausible 與 GTM（dataLayer）；
-   *      三者都沒裝時安靜略過，不影響任何使用者流程。
-   *      事件：assessment_start → question_answered → assessment_complete
-   *            → lead_submitted / checkout_click / result_link_copied
-   * ---------------------------------------------------------- */
+  var prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============================================================
+   * 3. 漏斗事件追蹤
+   *    同時支援 GA4（gtag）、Plausible 與 GTM（dataLayer）；
+   *    三者都沒裝時安靜略過，不影響任何使用者流程。
+   * ========================================================== */
   function track(name, props) {
     props = props || {};
     try {
@@ -488,24 +590,22 @@
     } catch (err) { /* 追蹤失敗不應中斷測驗 */ }
   }
 
-  /* ------------------------------------------------------------
-   * 3-2. 分享碼
-   *      六題答案（各 1–4 分）直接串成 ?r=341244，短、可讀、無需後端。
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 4. 分享碼：六題答案（各 1–4 分）串成 ?r=341244
+   * ========================================================== */
   var SHARE_PATTERN = /^[1-4]{6}$/;
 
   function shareCode() { return answers.join(''); }
 
   function shareUrl() {
-    var base = location.href.split('#')[0].split('?')[0];
-    return base + '?r=' + shareCode();
+    return location.href.split('#')[0].split('?')[0] + '?r=' + shareCode();
   }
 
   function readSharedAnswers() {
     var match = /[?&]r=([^&]+)/.exec(location.search);
     if (!match) return null;
     var code = decodeURIComponent(match[1]);
-    if (!SHARE_PATTERN.test(code)) return null;                 // 格式不符就當作一般進入
+    if (!SHARE_PATTERN.test(code)) return null;
     return code.split('').map(Number);
   }
 
@@ -513,7 +613,6 @@
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text);
     }
-    // 舊瀏覽器 / 非安全來源的退路
     return new Promise(function (resolve, reject) {
       var ta = document.createElement('textarea');
       ta.value = text;
@@ -529,30 +628,12 @@
     });
   }
 
-  /* ------------------------------------------------------------
-   * 4. 進場動畫：元素進入視窗時淡入
-   * ---------------------------------------------------------- */
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  function observeFadeIns(root) {
-    (root || document).querySelectorAll('.fade-in:not(.is-visible)').forEach(function (el) {
-      observer.observe(el);
-    });
-  }
-
-  /* ------------------------------------------------------------
-   * 5. 渲染題目
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 5. 題目渲染與切換
+   * ========================================================== */
   function renderQuestions() {
     var wrap = $('questionWrap');
-    var html = QUESTIONS.map(function (q, qi) {
+    wrap.innerHTML = QUESTIONS.map(function (q, qi) {
       var opts = q.options.map(function (opt, oi) {
         return '' +
           '<button type="button" class="option w-full text-left border border-ink/15 px-6 py-5 text-sm sm:text-[15px] leading-loose tracking-loose"' +
@@ -568,13 +649,9 @@
         '</div>';
     }).join('');
 
-    wrap.innerHTML = html;
-
-    // 事件委派：點選項 → 記分 → 自動前往下一題
     wrap.addEventListener('click', function (e) {
       var btn = e.target.closest('.option');
-      if (!btn) return;
-      selectOption(btn);
+      if (btn) selectOption(btn);
     });
   }
 
@@ -582,7 +659,6 @@
     var qi = Number(btn.dataset.q);
     answers[qi] = Number(btn.dataset.score);
 
-    // 視覺回饋：同題其他選項取消選取
     btn.parentNode.querySelectorAll('.option').forEach(function (o) { o.classList.remove('chosen'); });
     btn.classList.add('chosen');
 
@@ -592,19 +668,12 @@
       score: answers[qi],
     });
 
-    // 短暫停頓後切換，讓點擊回饋被看見
     setTimeout(function () {
-      if (qi < QUESTIONS.length - 1) {
-        goTo(qi + 1);
-      } else {
-        finish();
-      }
+      if (qi < QUESTIONS.length - 1) goTo(qi + 1);
+      else finish();
     }, 320);
   }
 
-  /* ------------------------------------------------------------
-   * 6. 題目切換與進度
-   * ---------------------------------------------------------- */
   function goTo(index) {
     var all = document.querySelectorAll('.question');
     var next = all[index];
@@ -612,35 +681,34 @@
 
     all.forEach(function (el) { el.classList.remove('active', 'shown'); });
     next.classList.add('active');
-    // 強制 reflow，確保 transition 從初始狀態開始播放
-    void next.offsetWidth;
+    void next.offsetWidth;                 // 強制 reflow，讓 transition 從初始狀態播放
     next.classList.add('shown');
 
     current = index;
     updateProgress();
 
-    // 已作答過的題目，回頭時保留選取狀態
     if (answers[index] !== null) {
       next.querySelectorAll('.option').forEach(function (o) {
         o.classList.toggle('chosen', Number(o.dataset.score) === answers[index]);
       });
     }
-
     $('prevBtn').classList.toggle('hidden', index === 0);
   }
 
   function updateProgress() {
-    var pct = ((current + 1) / QUESTIONS.length) * 100;
-    $('progressBar').style.width = pct + '%';
+    $('progressBar').style.width = ((current + 1) / QUESTIONS.length) * 100 + '%';
     $('qCurrent').textContent = current + 1;
     $('qLabel').textContent = DIMENSIONS[QUESTIONS[current].dim].name;
   }
 
-  /* ------------------------------------------------------------
-   * 7. 計分
-   *    每維度 2 題，原始分 2–8 → 換算為 0–100
-   *    內耗熵值 = 100 − 整體能量分（分數越低，熵值越高）
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 6. 計分
+   *
+   *   每維度 2 題，原始分 2–8，標準化為 0–100：
+   *     D = (raw − min) / (max − min) × 100
+   *   內耗熵值（分數越低代表耗散越嚴重，故取補數）：
+   *     S = 100 − (B + F + W) / 3
+   * ========================================================== */
   function computeScores() {
     var raw = { boundary: 0, flow: 0, work: 0 };
     var count = { boundary: 0, flow: 0, work: 0 };
@@ -656,156 +724,304 @@
       pct[k] = Math.round(((raw[k] - min) / (max - min)) * 100);
     });
 
-    var total = answers.reduce(function (a, b) { return a + b; }, 0);       // 6–24
-    var energy = Math.round(((total - 6) / 18) * 100);                       // 0–100
-    var entropy = 100 - energy;                                             // 內耗熵值
+    var order = Object.keys(pct).sort(function (a, b) { return pct[a] - pct[b]; });
+    var entropy = Math.round(100 - (pct.boundary + pct.flow + pct.work) / 3);
 
-    return { pct: pct, total: total, entropy: entropy };
+    // 三維差距在一個級距（每題 1 分 ≈ 17）之內時視為均衡，不指認瓶頸——
+    // 否則平手也會被硬挑一項，讀起來像亂猜。
+    var spread = pct[order[2]] - pct[order[0]];
+    var bottleneck = spread >= 17 ? order[0] : null;
+
+    return { pct: pct, entropy: entropy, bottleneck: bottleneck };
   }
 
-  function matchType(total) {
-    for (var i = 0; i < TYPES.length; i++) {
-      if (total >= TYPES[i].min && total <= TYPES[i].max) return TYPES[i];
+  function matchArchetype(entropy) {
+    for (var i = 0; i < ARCHETYPES.length; i++) {
+      if (entropy >= ARCHETYPES[i].min && entropy <= ARCHETYPES[i].max) return ARCHETYPES[i];
     }
-    return TYPES[1];
+    return ARCHETYPES[1];
   }
 
-  /* ------------------------------------------------------------
+  /* ============================================================
+   * 7. 動態 SVG 力場雷達圖
+   *    自行繪製，不使用圖表函式庫：三軸力場、自洽基準線、
+   *    由中心向外展開的動畫，以及緩慢呼吸的能量場。
+   * ========================================================== */
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var FF = { cx: 230, cy: 205, r: 140, baseline: 70 };
+  var AXES = [
+    { key: 'boundary', angle: -90,  anchor: 'middle', dx: 0,   dy: -26 },
+    { key: 'flow',     angle: 30,   anchor: 'start',  dx: 14,  dy: 20 },
+    { key: 'work',     angle: 150,  anchor: 'end',    dx: -14, dy: 20 },
+  ];
+
+  function el(name, attrs) {
+    var node = document.createElementNS(SVG_NS, name);
+    Object.keys(attrs || {}).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+
+  function point(angleDeg, value) {
+    var rad = angleDeg * Math.PI / 180;
+    var radius = FF.r * (value / 100);
+    return [FF.cx + radius * Math.cos(rad), FF.cy + radius * Math.sin(rad)];
+  }
+
+  function polygonPoints(values) {
+    return AXES.map(function (axis) {
+      var p = point(axis.angle, values[axis.key]);
+      return p[0].toFixed(1) + ',' + p[1].toFixed(1);
+    }).join(' ');
+  }
+
+  function drawForceField(pct) {
+    var svg = $('forceField');
+    // 保留 <title>/<desc>，其餘重畫
+    Array.prototype.slice.call(svg.querySelectorAll('g, polygon, circle, text, defs'))
+      .forEach(function (n) { n.remove(); });
+
+    var defs = el('defs');
+    var grad = el('radialGradient', { id: 'ffGradient', cx: '50%', cy: '50%', r: '50%' });
+    grad.appendChild(el('stop', { offset: '0%',   'stop-color': '#A67C52', 'stop-opacity': '.30' }));
+    grad.appendChild(el('stop', { offset: '100%', 'stop-color': '#A67C52', 'stop-opacity': '.10' }));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    // 底層：同心力場環與三條軸線
+    var grid = el('g', { fill: 'none', stroke: '#2A2723', 'stroke-opacity': '.12' });
+    [25, 50, 75, 100].forEach(function (level) {
+      grid.appendChild(el('polygon', {
+        points: polygonPoints({ boundary: level, flow: level, work: level }),
+      }));
+    });
+    AXES.forEach(function (axis) {
+      var p = point(axis.angle, 100);
+      grid.appendChild(el('line', { x1: FF.cx, y1: FF.cy, x2: p[0].toFixed(1), y2: p[1].toFixed(1) }));
+    });
+    svg.appendChild(grid);
+
+    // 自洽基準線
+    svg.appendChild(el('polygon', {
+      points: polygonPoints({ boundary: FF.baseline, flow: FF.baseline, work: FF.baseline }),
+      fill: 'none', stroke: '#7A8B7B', 'stroke-opacity': '.55',
+      'stroke-width': '1', 'stroke-dasharray': '4 4',
+    }));
+
+    // 能量場光暈（CSS 緩慢呼吸）
+    var halo = el('circle', {
+      class: 'ff-halo', cx: FF.cx, cy: FF.cy,
+      r: (FF.r * 0.82 * (pct.boundary + pct.flow + pct.work) / 300).toFixed(1),
+      fill: 'url(#ffGradient)',
+    });
+    svg.appendChild(halo);
+
+    // 資料多邊形與節點
+    var shape = el('polygon', {
+      fill: 'url(#ffGradient)', stroke: '#A67C52', 'stroke-width': '1.5', 'stroke-linejoin': 'round',
+    });
+    svg.appendChild(shape);
+
+    var nodes = AXES.map(function () {
+      var dot = el('circle', { class: 'ff-node', r: '4.5', fill: '#A67C52',
+                               stroke: '#F7F5F0', 'stroke-width': '2' });
+      svg.appendChild(dot);
+      return dot;
+    });
+
+    // 軸標籤與數值
+    AXES.forEach(function (axis) {
+      var p = point(axis.angle, 100);
+      var label = el('text', {
+        x: (p[0] + axis.dx).toFixed(1), y: (p[1] + axis.dy).toFixed(1),
+        'text-anchor': axis.anchor, fill: 'rgba(42,39,35,.70)',
+        'font-size': '13', 'font-family': '"Noto Sans TC", sans-serif', 'letter-spacing': '1',
+      });
+      label.textContent = DIMENSIONS[axis.key].name;
+      svg.appendChild(label);
+
+      var value = el('text', {
+        x: (p[0] + axis.dx).toFixed(1), y: (p[1] + axis.dy + 20).toFixed(1),
+        'text-anchor': axis.anchor, fill: '#A67C52',
+        'font-size': '15', 'font-family': '"Noto Serif TC", serif',
+      });
+      value.textContent = pct[axis.key];
+      svg.appendChild(value);
+    });
+
+    // 由中心向外展開
+    var duration = prefersReducedMotion ? 0 : 900;
+    var startedAt = null;
+
+    function frame(now) {
+      if (startedAt === null) startedAt = now;
+      var t = duration === 0 ? 1 : Math.min((now - startedAt) / duration, 1);
+      var eased = 1 - Math.pow(1 - t, 3);              // easeOutCubic
+      var values = {
+        boundary: pct.boundary * eased,
+        flow: pct.flow * eased,
+        work: pct.work * eased,
+      };
+      shape.setAttribute('points', polygonPoints(values));
+      AXES.forEach(function (axis, i) {
+        var p = point(axis.angle, values[axis.key]);
+        nodes[i].setAttribute('cx', p[0].toFixed(1));
+        nodes[i].setAttribute('cy', p[1].toFixed(1));
+      });
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* 完成測驗時的克制慶祝：粒子少、速度慢、只用品牌色 */
+  function celebrate() {
+    if (prefersReducedMotion || typeof window.confetti !== 'function') return;
+    window.confetti({
+      particleCount: 46, spread: 62, startVelocity: 28, gravity: 0.9,
+      scalar: 0.8, ticks: 160, origin: { y: 0.32 },
+      colors: ['#A67C52', '#7A8B7B', '#C9B79C', '#D9D2C5'],
+    });
+  }
+
+  /* ============================================================
    * 8. 完成測驗 → 渲染結果
-   * ---------------------------------------------------------- */
+   * ========================================================== */
   function finish(options) {
     var shared = !!(options && options.shared);
     var s = computeScores();
-    var type = matchType(s.total);
-    lastResult = { type: type.title, entropy: s.entropy };
+    var archetype = matchArchetype(s.entropy);
 
-    // 8-1 文字結果
-    $('typeTitle').textContent = type.title;
+    lastResult = {
+      archetype: archetype.title, band: archetype.band, entropy: s.entropy,
+      dimensions: s.pct, bottleneck: s.bottleneck, code: shareCode(),
+    };
+
+    $('entropyBand').textContent = archetype.band;
+    $('typeTitle').textContent = archetype.title;
     $('entropyValue').textContent = s.entropy;
-    $('entropyNote').textContent = type.note;
-    $('insightText').textContent = type.insight;
-    $('insightKey').textContent = type.key;
+    $('entropyNote').textContent = archetype.note;
+    $('entropyFormula').textContent =
+      'S = 100 −（' + s.pct.boundary + ' + ' + s.pct.flow + ' + ' + s.pct.work + '）/ 3';
+    $('insightText').textContent = archetype.insight;
+    $('insightKey').textContent = archetype.key;
 
-    // 8-2 維度摘要
     $('dimSummary').innerHTML = Object.keys(DIMENSIONS).map(function (k) {
+      var isBottleneck = k === s.bottleneck;
       return '' +
         '<div>' +
-          '<p class="font-serif text-2xl sm:text-3xl font-light">' + s.pct[k] + '</p>' +
+          '<p class="font-serif text-2xl sm:text-3xl font-light ' + (isBottleneck ? 'text-clay' : '') + '">' + s.pct[k] + '</p>' +
           '<p class="mt-2 text-[11px] tracking-loose text-ink/45">' + DIMENSIONS[k].name + '</p>' +
+          '<p class="mt-1 text-[10px] tracking-loose ' + (isBottleneck ? 'text-clay' : 'text-ink/25') + '">' +
+            (isBottleneck ? '瓶頸維度' : DIMENSIONS[k].note) +
+          '</p>' +
         '</div>';
     }).join('');
+    $('bottleneckNote').textContent = BOTTLENECK_HINT[s.bottleneck || 'balanced'];
 
-    // 8-3 分享模式：改寫措辭，並提供「我也要測一次」
+    // 分享模式：改寫措辭，並提供「我也要測一次」
     isShared = shared;
     $('sharedBanner').classList.toggle('hidden', !shared);
     $('stateEyebrow').textContent = shared ? 'Shared Result' : 'Your Energy State';
     $('shareBtn').textContent = shared ? '複製這份結果的連結' : '複製我的結果連結';
 
-    // 把結果寫進網址，讓使用者直接複製分享（部分環境如 file:// 不允許，靜默略過）
     if (!shared) {
-      try { history.replaceState(null, '', shareUrl()); } catch (err) { /* 忽略 */ }
+      try { history.replaceState(null, '', shareUrl()); } catch (err) { /* file:// 等環境不允許 */ }
     }
 
-    // 8-4 顯示區塊
     quizEl.classList.add('hidden');
     resultEl.classList.remove('hidden');
     convEl.classList.remove('hidden');
+    if (API_BASE) aiEl.classList.remove('hidden');
     observeFadeIns(resultEl);
     observeFadeIns(convEl);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // 8-5 雷達圖（等區塊顯示後再繪製，確保 canvas 有正確尺寸）
-    setTimeout(function () { drawRadar(s.pct); }, 120);
+    setTimeout(function () { drawForceField(s.pct); }, 120);
+    if (!shared) setTimeout(celebrate, 420);
 
     track(shared ? 'result_shared_view' : 'assessment_complete', {
-      type: type.title,
+      archetype: archetype.title,
+      band: archetype.band,
       entropy: s.entropy,
-      boundary: s.pct.boundary,
-      flow: s.pct.flow,
-      work: s.pct.work,
+      bottleneck: s.bottleneck ? DIMENSIONS[s.bottleneck].name : '無明顯瓶頸',
+      boundary: s.pct.boundary, flow: s.pct.flow, work: s.pct.work,
     });
   }
 
-  /* ------------------------------------------------------------
-   * 9. Chart.js 雷達圖
-   * ---------------------------------------------------------- */
-  function drawRadar(pct) {
-    if (typeof Chart === 'undefined') return; // CDN 未載入時安靜降級
-    var ctx = $('radarChart').getContext('2d');
-    if (chart) chart.destroy();
+  /* ============================================================
+   * 9. 雙重匯出
+   * ========================================================== */
 
-    Chart.defaults.font.family = '"Noto Sans TC", system-ui, sans-serif';
-
-    chart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: ['邊界防禦力', '心智流動度', '有效做功能力'],
-        datasets: [
-          {
-            label: '你的狀態',
-            data: [pct.boundary, pct.flow, pct.work],
-            backgroundColor: 'rgba(166,124,82,0.18)',
-            borderColor: '#A67C52',
-            borderWidth: 1.5,
-            pointBackgroundColor: '#A67C52',
-            pointBorderColor: '#F7F5F0',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-          },
-          {
-            label: '自洽基準線',
-            data: [70, 70, 70],
-            backgroundColor: 'rgba(122,139,123,0.06)',
-            borderColor: 'rgba(122,139,123,0.55)',
-            borderWidth: 1,
-            borderDash: [4, 4],
-            pointRadius: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 900, easing: 'easeOutQuart' },
-        scales: {
-          r: {
-            min: 0, max: 100,
-            ticks: { display: false, stepSize: 25 },
-            grid:        { color: 'rgba(42,39,35,0.10)' },
-            angleLines:  { color: 'rgba(42,39,35,0.10)' },
-            pointLabels: { color: 'rgba(42,39,35,0.70)', font: { size: 12 }, padding: 14 },
-          },
-        },
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: 'rgba(42,39,35,0.55)',
-              boxWidth: 10, boxHeight: 10, padding: 20,
-              font: { size: 11 },
-            },
-          },
-          tooltip: {
-            backgroundColor: '#2A2723',
-            titleFont: { size: 12 }, bodyFont: { size: 12 },
-            padding: 12, displayColors: false,
-            callbacks: {
-              label: function (c) { return c.dataset.label + '：' + c.parsed.r + ' / 100'; },
-            },
-          },
-        },
-      },
-    });
+  /* 9-1 高畫質診斷 PDF：以列印樣式輸出，文字與圖形皆為向量 */
+  function exportPdf() {
+    track('export_pdf', { archetype: lastResult ? lastResult.archetype : 'unknown' });
+    window.print();
   }
 
-  /* ------------------------------------------------------------
+  /* 9-2 單一純 HTML 獨立檔案：內嵌樣式與力場圖，離線可開 */
+  function exportStandaloneHtml() {
+    if (!lastResult) return;
+    var svg = $('forceField').outerHTML;
+    var d = lastResult.dimensions;
+
+    var doc = '<!DOCTYPE html>\n<html lang="zh-Hant">\n<head>\n<meta charset="UTF-8" />\n' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n' +
+      '<title>內耗熵值診斷 · ' + lastResult.archetype + '</title>\n' +
+      '<style>\n' +
+      '  :root { color-scheme: light; }\n' +
+      '  body { margin:0; background:#F7F5F0; color:#2A2723; line-height:2; letter-spacing:.05em;\n' +
+      '         font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }\n' +
+      '  main { max-width:640px; margin:0 auto; padding:72px 24px 96px; text-align:center; }\n' +
+      '  .eyebrow { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#7A8B7B; }\n' +
+      '  h1 { font-family:"Noto Serif TC",serif; font-weight:300; font-size:26px; line-height:1.7;\n' +
+      '       letter-spacing:.08em; color:#A67C52; margin:28px 0 32px; }\n' +
+      '  .score { font-family:"Noto Serif TC",serif; font-size:56px; font-weight:300; line-height:1; }\n' +
+      '  .unit { font-size:11px; letter-spacing:.12em; color:rgba(42,39,35,.45); }\n' +
+      '  .rule { width:64px; height:1px; background:rgba(42,39,35,.2); margin:56px auto; }\n' +
+      '  .dims { display:flex; justify-content:center; gap:40px; margin-top:24px; }\n' +
+      '  .dims b { display:block; font-family:"Noto Serif TC",serif; font-weight:300; font-size:24px; }\n' +
+      '  .dims span { font-size:11px; letter-spacing:.12em; color:rgba(42,39,35,.45); }\n' +
+      '  .insight { font-family:"Noto Serif TC",serif; font-size:16px; line-height:2.2; letter-spacing:.08em;\n' +
+      '             color:rgba(42,39,35,.85); text-align:left; }\n' +
+      '  .key { font-size:12px; letter-spacing:.12em; color:rgba(42,39,35,.5); margin-top:32px; }\n' +
+      '  footer { margin-top:72px; font-size:10px; letter-spacing:.12em; color:rgba(42,39,35,.32); line-height:2; }\n' +
+      '  svg { width:100%; height:auto; max-width:420px; }\n' +
+      '</style>\n</head>\n<body>\n<main>\n' +
+      '  <p class="eyebrow">Inner Flow Assessment · ' + lastResult.band + '</p>\n' +
+      '  <h1>' + lastResult.archetype + '</h1>\n' +
+      '  <p><span class="score">' + lastResult.entropy + '</span> <span class="unit">內耗熵值 S / 100</span></p>\n' +
+      '  ' + svg + '\n' +
+      '  <div class="dims">' +
+      '<div><b>' + d.boundary + '</b><span>邊界防禦力</span></div>' +
+      '<div><b>' + d.flow + '</b><span>心智流動度</span></div>' +
+      '<div><b>' + d.work + '</b><span>有效做功能力</span></div>' +
+      '</div>\n' +
+      '  <div class="rule"></div>\n' +
+      '  <p class="insight">' + $('insightText').textContent + '</p>\n' +
+      '  <p class="key">' + $('insightKey').textContent + '</p>\n' +
+      '  <footer>' + BOTTLENECK_HINT[lastResult.bottleneck || 'balanced'] + '<br />\n' +
+      '  本報告為自我覺察用途，不構成醫療或心理診斷建議。</footer>\n' +
+      '</main>\n</body>\n</html>\n';
+
+    var blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'inner-flow-result-' + lastResult.code + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+
+    $('shareMsg').textContent = '已匯出獨立 HTML 檔案，離線也能開啟。';
+    track('export_html', { archetype: lastResult.archetype });
+  }
+
+  /* ============================================================
    * 10. 轉化閉環：留資即下載
    *     不寄信：驗證通過後把資料送到 data-endpoint（若有設定），
    *     並立即開始下載 PDF 指南。送資料失敗也不擋下載——
    *     使用者已經完成他那一端的交換，不該因為我們的後端而落空。
-   * ---------------------------------------------------------- */
-  var GUIDE_PATH = 'downloads/inner-flow-7day-guide.pdf';
-
+   * ========================================================== */
   function startGuideDownload() {
     if (!GUIDE_PATH) return;                   // 沒有檔案時（例如預覽環境）不做事
     var a = document.createElement('a');
@@ -818,7 +1034,7 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    track('guide_downloaded', { type: lastResult ? lastResult.type : 'unknown' });
+    track('guide_downloaded', { archetype: lastResult ? lastResult.archetype : 'unknown' });
   }
 
   function initLeadForm() {
@@ -851,7 +1067,6 @@
       }
 
       // 先讓使用者拿到東西，再處理我們自己的記錄
-      say('指南下載中……', 'muted');
       link.classList.remove('hidden');
       startGuideDownload();
       say('已開始下載，祝你這七天過得安靜一些。', 'ok');
@@ -859,7 +1074,7 @@
 
       track('lead_submitted', {
         status: 'ok',
-        type: lastResult ? lastResult.type : 'unknown',
+        archetype: lastResult ? lastResult.archetype : 'unknown',
         entropy: lastResult ? lastResult.entropy : null,
       });
 
@@ -872,9 +1087,9 @@
         body: JSON.stringify({
           name: name,
           email: email,
-          type: lastResult ? lastResult.type : '',
+          type: lastResult ? lastResult.archetype : '',
           entropy: lastResult ? lastResult.entropy : null,
-          code: answers.every(function (a) { return a; }) ? shareCode() : '',
+          code: lastResult ? lastResult.code : '',
           submittedAt: new Date().toISOString(),
         }),
       }).catch(function () {
@@ -884,31 +1099,125 @@
     });
   }
 
-  /* ------------------------------------------------------------
+  /* ============================================================
    * 11. 轉化閉環：Gumroad Overlay
    *     gumroad.js 載入時會自行接管 data-gumroad-overlay-checkout 連結；
    *     若腳本被封鎖或載入失敗，退回以新視窗開啟商品頁。
-   * ---------------------------------------------------------- */
+   * ========================================================== */
   function initGumroad() {
     var btn = $('gumroadBtn');
     btn.addEventListener('click', function (e) {
       track('checkout_click', {
-        price: 3.99,
-        currency: 'USD',
-        type: lastResult ? lastResult.type : 'unknown',
+        price: 3.99, currency: 'USD',
+        archetype: lastResult ? lastResult.archetype : 'unknown',
       });
 
       var overlayReady = !!window.GumroadOverlay ||
                          !!document.querySelector('.gumroad-scroll-message, iframe.gumroad-overlay');
-      if (overlayReady) return;  // 交給 Gumroad 官方腳本處理
+      if (overlayReady) return;
       e.preventDefault();
       window.open(btn.href, '_blank', 'noopener,noreferrer');
     });
   }
 
-  /* ------------------------------------------------------------
-   * 12. 重新開始（重測，以及分享頁的「我也要測一次」共用）
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 12. AI 生成區（需要 API_BASE 指向 server/ 的 Express 服務）
+   * ========================================================== */
+  function aiPayload() {
+    return {
+      archetype: lastResult.archetype,
+      band: lastResult.band,
+      entropy: lastResult.entropy,
+      dimensions: lastResult.dimensions,
+      bottleneck: lastResult.bottleneck ? DIMENSIONS[lastResult.bottleneck].name : '無明顯瓶頸',
+      code: lastResult.code,
+    };
+  }
+
+  function callApi(path, button, pendingText) {
+    var msg = $('aiMsg');
+    button.disabled = true;
+    button.classList.add('opacity-50');
+    msg.textContent = pendingText;
+
+    return fetch(API_BASE + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(aiPayload()),
+    }).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).catch(function (err) {
+      msg.textContent = '生成失敗，請稍後再試。';
+      track('ai_generation_failed', { path: path });
+      throw err;
+    }).finally(function () {
+      button.disabled = false;
+      button.classList.remove('opacity-50');
+    });
+  }
+
+  function initAiStudio() {
+    if (!API_BASE) return;                       // 沒有後端時整區不出現
+
+    $('genReportBtn').addEventListener('click', function () {
+      var btn = this;
+      callApi('/api/generate-breakthrough-report', btn, '生成中，約需 20–40 秒……')
+        .then(function (data) {
+          var chapters = (data && data.chapters) || [];
+          $('aiReport').innerHTML = chapters.map(function (ch, i) {
+            return '<section class="mb-14">' +
+              '<p class="text-[11px] tracking-looser uppercase text-sage mb-4">Chapter ' + (i + 1) + '</p>' +
+              '<h4 class="font-serif text-xl leading-loose tracking-loose mb-6">' + ch.title + '</h4>' +
+              '<p class="text-sm text-ink/75 leading-loose tracking-loose whitespace-pre-line">' + ch.body + '</p>' +
+              '</section>';
+          }).join('') + (data && data.message ?
+            '<blockquote class="border-l border-clay/40 pl-7 mt-6">' +
+            '<p class="font-serif text-base leading-[2.2] tracking-loose text-ink/85 whitespace-pre-line">' + data.message + '</p>' +
+            '<p class="mt-5 text-[11px] tracking-loose text-ink/40">— 簡家旗</p></blockquote>' : '');
+          $('aiReport').classList.remove('hidden');
+          $('aiMsg').textContent = '';
+          track('ai_report_generated', { archetype: lastResult.archetype });
+        }).catch(function () { /* 訊息已在 callApi 中處理 */ });
+    });
+
+    $('genAudioBtn').addEventListener('click', function () {
+      var btn = this;
+      callApi('/api/generate-meditation-audio', btn, '合成語音中，約需 15–30 秒……')
+        .then(function (data) {
+          if (data && data.audio && data.audio.base64) {
+            var audio = $('aiAudio');
+            audio.src = 'data:' + (data.audio.mimeType || 'audio/wav') + ';base64,' + data.audio.base64;
+            audio.classList.remove('hidden');
+          }
+          $('aiMsg').textContent = data && data.script ? data.script : '';
+          $('aiMsg').className = 'text-center mt-6 text-sm text-ink/70 leading-loose tracking-loose whitespace-pre-line';
+          track('ai_audio_generated', { archetype: lastResult.archetype });
+        }).catch(function () { /* 訊息已在 callApi 中處理 */ });
+    });
+  }
+
+  /* ============================================================
+   * 13. 進場動畫
+   * ========================================================== */
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  function observeFadeIns(root) {
+    (root || document).querySelectorAll('.fade-in:not(.is-visible)').forEach(function (node) {
+      observer.observe(node);
+    });
+  }
+
+  /* ============================================================
+   * 14. 重新開始（重測，以及分享頁的「我也要測一次」共用）
+   * ========================================================== */
   function startOver() {
     answers = new Array(QUESTIONS.length).fill(null);
     isShared = false;
@@ -916,22 +1225,25 @@
     document.querySelectorAll('.option.chosen').forEach(function (o) { o.classList.remove('chosen'); });
     $('shareMsg').textContent = '';
     $('sharedBanner').classList.add('hidden');
+    $('aiReport').classList.add('hidden');
+    $('aiAudio').classList.add('hidden');
     resultEl.classList.add('hidden');
     convEl.classList.add('hidden');
+    aiEl.classList.add('hidden');
     quizEl.classList.remove('hidden');
-    // 清掉網址上的分享碼，避免重測後仍停留在他人的結果連結
     try { history.replaceState(null, '', location.href.split('#')[0].split('?')[0]); } catch (err) { /* 忽略 */ }
     goTo(0);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ------------------------------------------------------------
-   * 13. 初始化
-   * ---------------------------------------------------------- */
+  /* ============================================================
+   * 15. 初始化
+   * ========================================================== */
   function init() {
     renderQuestions();
     initLeadForm();
     initGumroad();
+    initAiStudio();
     observeFadeIns();
 
     // 由分享連結進入（?r=341244）：直接呈現那份結果
@@ -942,7 +1254,6 @@
       finish({ shared: true });
     }
 
-    // 開始測驗
     $('startBtn').addEventListener('click', function () {
       track('assessment_start');
       heroEl.classList.add('hidden');
@@ -951,7 +1262,13 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // 複製結果連結
+    $('prevBtn').addEventListener('click', function () {
+      if (current > 0) goTo(current - 1);
+    });
+
+    $('exportPdfBtn').addEventListener('click', exportPdf);
+    $('exportHtmlBtn').addEventListener('click', exportStandaloneHtml);
+
     $('shareBtn').addEventListener('click', function () {
       var msg = $('shareMsg');
       copyText(shareUrl()).then(function () {
@@ -962,18 +1279,11 @@
       });
     });
 
-    // 分享頁的「我也要測一次」
     $('takeOwnBtn').addEventListener('click', function () {
       track('shared_cta_click');
       startOver();
     });
 
-    // 回上一題
-    $('prevBtn').addEventListener('click', function () {
-      if (current > 0) goTo(current - 1);
-    });
-
-    // 重新測驗
     $('retakeBtn').addEventListener('click', function () {
       track('assessment_retake', { shared: isShared });
       startOver();
