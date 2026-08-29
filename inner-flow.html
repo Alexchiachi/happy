@@ -1091,7 +1091,11 @@
 
       fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // 刻意用 text/plain 而不是 application/json：
+        // application/json 會觸發瀏覽器的 CORS 預檢（OPTIONS），而 Google Apps Script
+        // 的 /exec 端點不處理 OPTIONS，請求會直接失敗。text/plain 屬於「簡單請求」，
+        // 不預檢，接收端再自行解析 JSON 即可（見 docs/inner-flow-lead-form.gs）。
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           name: name,
           email: email,
