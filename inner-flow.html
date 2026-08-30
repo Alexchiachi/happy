@@ -374,7 +374,8 @@
           沒有自動開始？點此下載
         </a>
         <p class="mt-5 text-[11px] leading-loose tracking-loose text-ink/35">
-          我們只保留你的姓名與 Email 作為聯絡之用，不會提供給第三方。
+          我們只保留你的姓名與 Email 作為聯絡之用，不會寄送電子報，也不會提供給第三方。
+          詳見 <a href="privacy.html" class="link-underline hover:text-clay transition-colors">隱私權政策</a>。
         </p>
       </div>
 
@@ -385,8 +386,8 @@
           自洽躍遷破局手冊<br />與專屬語音導引
         </h4>
         <p class="text-sm text-ink/60 leading-loose tracking-loose mb-8 flex-grow">
-          依你的能量原型生成：耗散路徑拆解、四階段復位路線圖、12 個情境腳本，
-          附一段身心復位冥想語音。
+          依你的能量原型生成 13–15 頁：耗散路徑拆解、四階段復位路線圖、四個情境腳本，
+          附一段身心復位語音導引。
         </p>
 
         <div class="flex items-baseline gap-3 mb-7">
@@ -411,7 +412,8 @@
 
     <footer class="text-center mt-24 text-[11px] tracking-loose text-ink/30 leading-loose">
       本工具為自我覺察用途，不構成醫療或心理診斷建議。<br />
-      Inner Flow Assessment · 以耗散結構視角觀看自身能量
+      Inner Flow Assessment · 以耗散結構視角觀看自身能量<br />
+      <a href="privacy.html" class="link-underline hover:text-clay transition-colors">隱私權政策</a>
     </footer>
   </div>
 </section>
@@ -1091,7 +1093,11 @@
 
       fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // 刻意用 text/plain 而不是 application/json：
+        // application/json 會觸發瀏覽器的 CORS 預檢（OPTIONS），而 Google Apps Script
+        // 的 /exec 端點不處理 OPTIONS，請求會直接失敗。text/plain 屬於「簡單請求」，
+        // 不預檢，接收端再自行解析 JSON 即可（見 docs/inner-flow-lead-form.gs）。
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           name: name,
           email: email,
