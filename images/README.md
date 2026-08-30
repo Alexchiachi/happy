@@ -36,6 +36,23 @@ git add images/wechat-qr.jpg && git commit -m "加入微信公眾號 QR" && git 
 規格：正方形、`.jpg`、800px 以內、白底。QR 四周原本的留白（靜區）不要裁掉，
 裁太緊會掃不到。
 
+## 待補：主理人照片
+
+`about.html` 的主理人區塊已經接好 `images/founder-jianchiachi.jpg`，**圖還沒放進來**。
+
+放進來之前維持原本的茶褐色塊，不會破圖；檔案一放進來就會自動變成照片。
+
+```bash
+cd ~/Desktop/happy      # 換成你放專案的位置
+sips -Z 1200 ~/Downloads/你的照片.jpg --out images/founder-jianchiachi.jpg
+git add images/founder-jianchiachi.jpg && git commit -m "更新主理人照片" && git push
+```
+
+規格：直式 3:4、`.jpg`、寬度 1200px 左右、300KB 以內。版面用 `background-size: cover`
+置中裁切，比例不是 3:4 也不會變形，但上下會被切掉一些——臉不要壓在畫面最上緣。
+
+檔名要一模一樣（全小寫）。GitHub Pages 分大小寫，`Founder-...jpg` 會 404。
+
 ## 照片規格
 
 | 項目 | 建議 |
