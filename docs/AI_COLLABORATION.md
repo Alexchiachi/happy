@@ -120,11 +120,22 @@ Jetpack + WordPress.com 連接器。全部不採用，理由相同。
 出事只能靠備份。方案選 UpdraftPlus 免費版——排程、Google Drive 遠端、
 還原都在免費版裡；付費版才有的（指定時段、多目的地、子資料夾）用不到。
 
-### 第 0 層：主機自帶的
+### 主機是 Bluehost，而它沒有給免費的自動備份
 
-cPanel 有 JetBackup 就是已有一層，但**不能當唯一一層**：主機層備份還原時
-整個帳號一起回到某個時間點，且不保證留幾天。只有「備份精靈 / Backup
-Wizard」＝手動的，等於沒有。
+**已確認**（2026-08，後台截圖）：Bluehost Account Manager 的 BACKUPS 分頁
+底下沒有任何還原點或備份清單，只有一張 Jetpack 推銷橫幅，連 Install 按鈕
+都是灰的。**第 0 層是空的。**
+
+兩個仍可爭取的東西：
+
+- **CodeGuard Basic**（每日備份 + 一鍵還原）免費包含在 **Choice Plus、
+  Online Store、Pro** 方案，Basic 方案沒有（單買約 US$47.88/年）。
+  方案名稱在左側 Hosting 看得到。有就開，那是已經付過的東西
+- **cPanel 的 Backup Wizard**——手動下載完整備份。入口在後台分頁列最右邊的
+  **ADVANCED** → cPanel。這是一次性的保底，不是排程
+
+**但兩者都不能當唯一一層。** Bluehost 的備份屬附贈性質，條款明講不負責，
+標準方案也只有每週一次。UpdraftPlus 仍是主力。
 
 ### 設定值
 
