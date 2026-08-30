@@ -36,15 +36,14 @@ git add images/wechat-qr.jpg && git commit -m "加入微信公眾號 QR" && git 
 規格：正方形、`.jpg`、800px 以內、白底。QR 四周原本的留白（靜區）不要裁掉，
 裁太緊會掃不到。
 
-## 待補：主理人照片
+## 主理人照片
 
-`about.html` 的主理人區塊已經接好 `images/founder-jianchiachi.jpg`，**圖還沒放進來**。
-
-放進來之前維持原本的茶褐色塊，不會破圖；檔案一放進來就會自動變成照片。
+`about.html` 的主理人區塊用 `images/founder-jianchiachi.jpg`，**已經放進來了**
+（1060×1484、116KB）。要換照片就覆蓋同一個檔名，HTML 不用動。
 
 ```bash
 cd ~/Desktop/happy      # 換成你放專案的位置
-sips -Z 1200 ~/Downloads/你的照片.jpg --out images/founder-jianchiachi.jpg
+sips -Z 1200 ~/Downloads/新照片.jpg --out images/founder-jianchiachi.jpg
 git add images/founder-jianchiachi.jpg && git commit -m "更新主理人照片" && git push
 ```
 
