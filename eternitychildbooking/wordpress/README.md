@@ -10,21 +10,21 @@
 ### 方式 A：獨立網址（最簡單、最不會出錯）★推薦
 
 用主機商的**檔案管理員**（cPanel／Plesk）或 **FTP 軟體**（FileZilla、Cyberduck），
-在網站根目錄（跟 `wp-content`、`wp-config.php` 同一層）建立一個 `booking` 資料夾，
+在網站根目錄（跟 `wp-content`、`wp-config.php` 同一層）建立一個 `eternitychildbooking` 資料夾，
 把這些檔案放進去：
 
 ```
 你的網站根目錄/
 ├── wp-content/
 ├── wp-config.php
-└── booking/              ← 新增這個資料夾
+└── eternitychildbooking/              ← 新增這個資料夾
     ├── index.html        ← 把 standalone.html 改名成 index.html
     └── booking-submit.php ← 收信程式（見步驟 ②）
 ```
 
-完成後網址就是 **`https://你的網域/booking/`**。
+完成後網址就是 **`https://你的網域/eternitychildbooking/`**。
 
-最後在 WordPress 後台 `外觀 → 選單 → 自訂連結`，網址填 `/booking/`、
+最後在 WordPress 後台 `外觀 → 選單 → 自訂連結`，網址填 `/eternitychildbooking/`、
 名稱填「線上預約」，加進主選單即可。
 
 > **為什麼建議獨立網址？**
@@ -38,7 +38,7 @@
 插入「自訂 HTML」區塊，貼上：
 
 ```html
-<iframe id="ecc-booking" src="/booking/" title="線上預約"
+<iframe id="ecc-booking" src="/eternitychildbooking/" title="線上預約"
         style="width:100%;height:1600px;border:0;display:block"
         scrolling="no"></iframe>
 <script>
@@ -76,7 +76,7 @@ window.addEventListener('message', function (e) {
 2. 打開 `index.html`（或 `standalone.html`），搜尋 `endpoint`，改成：
 
 ```js
-endpoint: '/booking/booking-submit.php',
+endpoint: '/eternitychildbooking/booking-submit.php',
 ```
 
 3. 存檔上傳，完成。

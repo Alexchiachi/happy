@@ -9,7 +9,7 @@
 ## 目錄結構
 
 ```
-booking/
+eternitychildbooking/
 ├── index.html    頁面結構
 ├── styles.css    版型與樣式
 ├── i18n.js       四語言字典（中／英／日／韓）
@@ -43,8 +43,8 @@ booking/
 ## 快速上線（GitHub Pages）
 
 1. 在 repo 的 **Settings → Pages** 選擇 `Deploy from a branch`，分支選 `main`、資料夾選 `/ (root)`。
-2. 網址即為：`https://<帳號>.github.io/<repo>/booking/`
-3. 想指定語言時可加參數，例如日文版 `.../booking/?lang=ja`（方便貼給不同國家的客人）。
+2. 網址即為：`https://<帳號>.github.io/<repo>/eternitychildbooking/`
+3. 想指定語言時可加參數，例如日文版 `.../eternitychildbooking/?lang=ja`（方便貼給不同國家的客人）。
 
 > `standalone.html` 是把 HTML／CSS／JS 全部合併好的單一檔案，
 > 直接用瀏覽器開就能用，也可以整份寄給別人或上傳到任何網頁空間。

@@ -4,10 +4,10 @@
  * Eternity's Child Chiropractic — booking receiver for WordPress
  *
  * 用法：
- *   1. 把這個檔案上傳到網站根目錄底下的 /booking/ 資料夾
+ *   1. 把這個檔案上傳到網站根目錄底下的 /eternitychildbooking/ 資料夾
  *      （也就是跟 index.html 放在一起）。
  *   2. 在 config.js 把 endpoint 設成：
- *        endpoint: '/booking/booking-submit.php'
+ *        endpoint: '/eternitychildbooking/booking-submit.php'
  *   3. 完成。預約送出後會直接寄到 $CENTER_EMAIL，
  *      同時寄一封確認信給客人（用客人選的語言）。
  *
