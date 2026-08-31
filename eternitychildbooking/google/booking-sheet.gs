@@ -56,9 +56,61 @@ function doPost(e) {
   }
 }
 
-/** 用瀏覽器打開 /exec 網址時看到的健康檢查，方便確認部署成功。 */
-function doGet() {
-  return json_({ ok: true, service: CENTER_NAME, sheet: SHEET_NAME });
+/**
+ * GET 有兩個用途：
+ *   ?action=slots  回傳已成立的時段，預約頁讀回來後把該時段反灰，避免撞單
+ *   （不帶參數）    健康檢查，用瀏覽器打開就能確認部署成功
+ * 狀態欄含「取消」二字的列會被排除，所以在試算表把狀態改成「已取消」，
+ * 那個時段就會立刻重新開放預約。
+ */
+function doGet(e) {
+  const params = (e && e.parameter) || {};
+  if (params.action === 'slots') {
+    return json_({ ok: true, taken: takenSlots_() });
+  }
+  return json_({
+    ok: true, service: CENTER_NAME, sheet: SHEET_NAME,
+    slots: '在網址後面加上 ?action=slots 可看到已被預約的時段'
+  });
+}
+
+/** 回傳 { 'YYYY-MM-DD': [[開始分鐘, 結束分鐘], …] }，分鐘為當日 00:00 起算。 */
+function takenSlots_() {
+  const sheet = getSheet_();
+  const last = sheet.getLastRow();
+  const out = {};
+  if (last < 2) return out;
+
+  const rows = sheet.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  const tz = Session.getScriptTimeZone();
+  rows.forEach(function (r) {
+    if (String(r[2] || '').indexOf('取消') !== -1) return;   // 狀態
+    const date  = fmtDate_(r[3], tz);                        // 日期
+    const start = toMinutes_(r[4], tz);                      // 開始
+    const end   = toMinutes_(r[5], tz);                      // 結束
+    if (!date || start === null || end === null || end <= start) return;
+    if (!out[date]) out[date] = [];
+    out[date].push([start, end]);
+  });
+  return out;
+}
+
+/** 試算表可能把日期存成文字或日期物件，兩種都要能讀。 */
+function fmtDate_(v, tz) {
+  if (v instanceof Date) return Utilities.formatDate(v, tz, 'yyyy-MM-dd');
+  const s = String(v || '').trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : '';
+}
+
+/** 時間同理：可能是文字 'HH:MM'、日期物件，或一天的比例（0.375 = 09:00）。 */
+function toMinutes_(v, tz) {
+  if (v instanceof Date) {
+    return Number(Utilities.formatDate(v, tz, 'H')) * 60 +
+           Number(Utilities.formatDate(v, tz, 'm'));
+  }
+  if (typeof v === 'number' && v >= 0 && v <= 1) return Math.round(v * 24 * 60);
+  const m = String(v || '').trim().match(/^(\d{1,2}):(\d{2})$/);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
 /* ---------- 內部函式 ---------- */

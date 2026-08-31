@@ -65,11 +65,11 @@ const CONFIG = {
   /* 收單網址：送出時會把預約資料 POST 過去。
      留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
 
-     ★ 建議：Google 試算表收單（免費、資料只經過你自己的 Google 帳號）
-       部署 google/booking-sheet.gs 之後，把產生的 /exec 網址貼在下面。
-       做法見 google/README.md。 */
-  endpoint: '',
-  // endpoint: 'https://script.google.com/macros/s/AKfycb.../exec',
+     目前使用 Google 試算表收單（google/booking-sheet.gs）：
+     預約會寫進試算表、寄通知信給中心，並依客人語言回一封確認信。
+     同一個網址也提供 ?action=slots，讓日曆讀回已成立的時段來防止撞單。
+     換一份試算表時，把新的 /exec 網址換掉即可，做法見 google/README.md。 */
+  endpoint: 'https://script.google.com/macros/s/AKfycbx40cgxLzV90wDEpfT6ro4i4uyTgqJQhWZAmY5zxg5vmA1kMeQgDo9m-OW_xDxJBhPl/exec',
 
   /* 其他選擇：
        WordPress 自架 → '/eternitychildbooking/booking-submit.php'

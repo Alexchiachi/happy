@@ -844,11 +844,11 @@ const CONFIG = {
   /* 收單網址：送出時會把預約資料 POST 過去。
      留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
 
-     ★ 建議：Google 試算表收單（免費、資料只經過你自己的 Google 帳號）
-       部署 google/booking-sheet.gs 之後，把產生的 /exec 網址貼在下面。
-       做法見 google/README.md。 */
-  endpoint: '',
-  // endpoint: 'https://script.google.com/macros/s/AKfycb.../exec',
+     目前使用 Google 試算表收單（google/booking-sheet.gs）：
+     預約會寫進試算表、寄通知信給中心，並依客人語言回一封確認信。
+     同一個網址也提供 ?action=slots，讓日曆讀回已成立的時段來防止撞單。
+     換一份試算表時，把新的 /exec 網址換掉即可，做法見 google/README.md。 */
+  endpoint: 'https://script.google.com/macros/s/AKfycbx40cgxLzV90wDEpfT6ro4i4uyTgqJQhWZAmY5zxg5vmA1kMeQgDo9m-OW_xDxJBhPl/exec',
 
   /* 其他選擇：
        WordPress 自架 → '/eternitychildbooking/booking-submit.php'
@@ -1516,6 +1516,12 @@ const I18N = {
     ref: ''
   };
 
+  /* Slots already booked by other clients, read back from the endpoint.
+     Empty until the first successful fetch, so the page still works offline
+     or on a deployment without a slots API. */
+  let serverTaken = {};
+  let takenFetchedAt = 0;
+
   const $  = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -1620,7 +1626,11 @@ const I18N = {
   function takenIntervals(dateKey) {
     let all = {};
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
-    return all[dateKey] || [];
+    const mine = all[dateKey] || [];
+    const theirs = (serverTaken[dateKey] || []).filter(
+      iv => Array.isArray(iv) && typeof iv[0] === 'number' && typeof iv[1] === 'number'
+    );
+    return mine.concat(theirs);
   }
 
   function saveBooking(dateKey, start, end) {
@@ -1628,6 +1638,28 @@ const I18N = {
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
     (all[dateKey] = all[dateKey] || []).push([start, end]);
     try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch (e) { /* private mode */ }
+  }
+
+  function slotsUrl() {
+    if (!CONFIG.endpoint) return '';
+    return CONFIG.endpoint + (CONFIG.endpoint.indexOf('?') === -1 ? '?' : '&') + 'action=slots';
+  }
+
+  /** Refresh the booked-slot list; failures leave the page on local data. */
+  function fetchTakenSlots() {
+    const url = slotsUrl();
+    if (!url) return;
+    if (Date.now() - takenFetchedAt < 30000) return;   // don't hammer it while stepping back and forth
+    takenFetchedAt = Date.now();
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : null))
+      .then(res => {
+        if (!res || !res.taken || typeof res.taken !== 'object') return;
+        serverTaken = res.taken;
+        if (state.step === 2) { renderCalendar(); renderSlots(); }
+      })
+      .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
   function slotsFor(dateKey) {
@@ -1988,6 +2020,7 @@ const I18N = {
     $$('.panel').forEach(p => p.classList.remove('active'));
     $('#panel-' + step).classList.add('active');
     renderStepper();
+    if (step === 2) fetchTakenSlots();
     if (step === 4) renderSummary();
     if (step === 5) renderDone();
     const top = $('#booking').getBoundingClientRect().top + window.scrollY - 70;
@@ -2277,6 +2310,7 @@ const I18N = {
         const ok = res.ok !== false &&
                    res.success !== false && res.success !== 'false';
         if (!ok) throw new Error(res.error || res.message || 'rejected');
+        takenFetchedAt = 0;   // this booking is now on the server too
         goto(5);
       })
       .catch(() => {
@@ -2325,6 +2359,7 @@ const I18N = {
     $('#acctNo').textContent = CONFIG.bank.account;
 
     renderLangSwitch();
+    fetchTakenSlots();
     applyI18n();
     goto(1);
     window.scrollTo({ top: 0 });

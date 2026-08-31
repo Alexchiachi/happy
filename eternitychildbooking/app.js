@@ -23,6 +23,12 @@
     ref: ''
   };
 
+  /* Slots already booked by other clients, read back from the endpoint.
+     Empty until the first successful fetch, so the page still works offline
+     or on a deployment without a slots API. */
+  let serverTaken = {};
+  let takenFetchedAt = 0;
+
   const $  = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -127,7 +133,11 @@
   function takenIntervals(dateKey) {
     let all = {};
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
-    return all[dateKey] || [];
+    const mine = all[dateKey] || [];
+    const theirs = (serverTaken[dateKey] || []).filter(
+      iv => Array.isArray(iv) && typeof iv[0] === 'number' && typeof iv[1] === 'number'
+    );
+    return mine.concat(theirs);
   }
 
   function saveBooking(dateKey, start, end) {
@@ -135,6 +145,28 @@
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
     (all[dateKey] = all[dateKey] || []).push([start, end]);
     try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch (e) { /* private mode */ }
+  }
+
+  function slotsUrl() {
+    if (!CONFIG.endpoint) return '';
+    return CONFIG.endpoint + (CONFIG.endpoint.indexOf('?') === -1 ? '?' : '&') + 'action=slots';
+  }
+
+  /** Refresh the booked-slot list; failures leave the page on local data. */
+  function fetchTakenSlots() {
+    const url = slotsUrl();
+    if (!url) return;
+    if (Date.now() - takenFetchedAt < 30000) return;   // don't hammer it while stepping back and forth
+    takenFetchedAt = Date.now();
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : null))
+      .then(res => {
+        if (!res || !res.taken || typeof res.taken !== 'object') return;
+        serverTaken = res.taken;
+        if (state.step === 2) { renderCalendar(); renderSlots(); }
+      })
+      .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
   function slotsFor(dateKey) {
@@ -495,6 +527,7 @@
     $$('.panel').forEach(p => p.classList.remove('active'));
     $('#panel-' + step).classList.add('active');
     renderStepper();
+    if (step === 2) fetchTakenSlots();
     if (step === 4) renderSummary();
     if (step === 5) renderDone();
     const top = $('#booking').getBoundingClientRect().top + window.scrollY - 70;
@@ -784,6 +817,7 @@
         const ok = res.ok !== false &&
                    res.success !== false && res.success !== 'false';
         if (!ok) throw new Error(res.error || res.message || 'rejected');
+        takenFetchedAt = 0;   // this booking is now on the server too
         goto(5);
       })
       .catch(() => {
@@ -832,6 +866,7 @@
     $('#acctNo').textContent = CONFIG.bank.account;
 
     renderLangSwitch();
+    fetchTakenSlots();
     applyI18n();
     goto(1);
     window.scrollTo({ top: 0 });
