@@ -14,6 +14,11 @@ const CENTER_EMAIL = 'ahanamita88888888@gmail.com';   // 中心收件信箱
 const CENTER_NAME  = '永恆之子整椎中心';
 const SHEET_NAME   = '預約紀錄';
 
+/* 通常留空即可。
+   只有在「不是從試算表的『擴充功能 → Apps Script』開啟」這支程式時才需要填：
+   把試算表網址 .../spreadsheets/d/【這一段】/edit 貼進來。 */
+const SPREADSHEET_ID = '';
+
 const HEADERS = [
   '送出時間', '預約編號', '狀態', '日期', '開始', '結束',
   '服務項目', '選擇部位', '看診類型', '分鐘', '金額',
@@ -23,6 +28,15 @@ const HEADERS = [
 /* ---------- 收單 ---------- */
 
 function doPost(e) {
+  // 從編輯器直接按「執行 doPost」時不會有 e，會在這裡被擋下並說明原因。
+  // 要手動測試請改執行下面的 testWrite。
+  if (!e || !e.postData || !e.postData.contents) {
+    const msg = 'doPost 要由預約頁呼叫才會有資料。' +
+                '若要從編輯器測試，請在上方函式選單改選 testWrite 再按執行。';
+    Logger.log(msg);
+    return json_({ ok: false, error: msg });
+  }
+
   try {
     const d = JSON.parse(e.postData.contents);
     const sheet = getSheet_();
@@ -51,9 +65,40 @@ function doPost(e) {
     notifyCustomer_(d);
     return json_({ ok: true, ref: d.ref || '' });
   } catch (err) {
-    // 寫入或寄信失敗時回報，前端會自動退回「開啟客人信箱程式」
+    // 寫入或寄信失敗時回報，前端會自動退回「開啟客人信箱程式」。
+    // 詳細原因會留在「執行記錄」裡，方便事後追查。
+    Logger.log('收單失敗：' + err + '\n' + (err && err.stack));
     return json_({ ok: false, error: String(err) });
   }
+}
+
+/**
+ * 手動測試用：在編輯器上方的函式選單選 testWrite，按「執行」。
+ * 它會模擬一筆預約，走完「寫入試算表 → 寄通知信 → 寄確認信」的完整流程。
+ * 跑完請到試算表把那一列刪掉。
+ */
+function testWrite() {
+  const demo = {
+    ref: 'TEST-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmmss'),
+    date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd'),
+    startTime: '09:00',
+    endTime: '09:40',
+    serviceLabel: '【測試】量子整骨',
+    partsLabels: [],
+    visit: 'first',
+    durationMinutes: 40,
+    price: 1688,
+    name: '測試客人',
+    phone: '0900000000',
+    email: CENTER_EMAIL,          // 確認信也寄給自己，不會打擾到真實客人
+    preferredLanguage: 'zh',
+    transferLast5: '12345',
+    notes: '這是測試資料，確認無誤後請把這一列刪掉',
+    '預約明細': '這是一筆測試預約，用來確認試算表與寄信是否正常。'
+  };
+  const out = doPost({ postData: { contents: JSON.stringify(demo) } });
+  Logger.log('執行結果：' + out.getContent());
+  Logger.log('試算表：' + getSpreadsheet_().getUrl());
 }
 
 /**
@@ -115,8 +160,19 @@ function toMinutes_(v, tz) {
 
 /* ---------- 內部函式 ---------- */
 
-function getSheet_() {
+/** 取得試算表；沒綁定又沒填 SPREADSHEET_ID 時，給一個看得懂的錯誤。 */
+function getSpreadsheet_() {
+  if (SPREADSHEET_ID) return SpreadsheetApp.openById(SPREADSHEET_ID);
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) {
+    throw new Error('找不到試算表。請從試算表的「擴充功能 → Apps Script」開啟這支程式，' +
+                    '或把試算表網址中的 ID 填進最上方的 SPREADSHEET_ID。');
+  }
+  return ss;
+}
+
+function getSheet_() {
+  const ss = getSpreadsheet_();
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
   if (sheet.getLastRow() === 0) {
@@ -132,7 +188,7 @@ function notifyCentre_(d) {
                   (d.date || '') + ' ' + (d.startTime || '') + ' ' + (d.name || '');
   // 前端已附上排好版的中文明細，直接拿來當信件內容
   const body = (d['預約明細'] || JSON.stringify(d, null, 2)) +
-               '\n\n試算表：' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
+               '\n\n試算表：' + getSpreadsheet_().getUrl();
   const options = { name: CENTER_NAME };
   if (d.email) options.replyTo = d.email;
   MailApp.sendEmail(CENTER_EMAIL, subject, body, options);
