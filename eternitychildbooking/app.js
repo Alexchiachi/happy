@@ -12,12 +12,14 @@
     visit: 'first',
     service: null,
     duration: CONFIG.durations[0],
+    pkg: null,          // index into CONFIG.pickService.packages, for the pick-a-part service
+    parts: [],          // selected part keys, for the pick-a-part service
     date: null,          // 'YYYY-MM-DD'
     time: null,          // 'HH:MM'
     step: 1,
     calYear: 0,
     calMonth: 0,         // 0-based
-    contact: { name: '', phone: '', email: '', lang: '', notes: '' },
+    contact: { name: '', phone: '', email: '', lang: '', last5: '', notes: '' },
     ref: ''
   };
 
@@ -51,6 +53,7 @@
     renderVisitOptions();
     renderServiceOptions();
     renderDurationOptions();
+    renderPartsOptions();
     renderLangSelect();
     renderCalendar();
     renderSlots();
@@ -216,8 +219,34 @@
     });
   }
 
+  /* zh/ja list items with a full-width enumeration comma; en/ko use a plain one */
+  function listSep() {
+    return (state.lang === 'zh' || state.lang === 'ja') ? '、' : ', ';
+  }
+
   function money(n) {
     return CONFIG.currency + ' ' + n.toLocaleString('en-US');
+  }
+
+  /* The pick-a-part service ("醫美整骨") is priced by how many areas the client
+     chooses, not by session length. */
+  function isPickService() {
+    return !!CONFIG.pickService && state.service === CONFIG.pickService.key;
+  }
+
+  function currentPackage() {
+    if (!isPickService() || state.pkg == null) return null;
+    return CONFIG.pickService.packages[state.pkg];
+  }
+
+  function currentPrice() {
+    const p = currentPackage();
+    return p ? p.price : CONFIG.prices[state.duration];
+  }
+
+  function partsLimit() {
+    const p = currentPackage();
+    return p ? p.pick : 0;
   }
 
   function renderServiceOptions() {
@@ -228,14 +257,49 @@
         title: t('service.' + s),
         desc: t('service.' + s + '.desc'),
         selected: state.service === s,
-        onClick: () => { state.service = s; hideError(1); applyI18n(); }
+        onClick: () => {
+          state.service = s;
+          if (isPickService()) {
+            if (state.pkg == null) state.pkg = 0;
+            state.duration = CONFIG.pickService.packages[state.pkg].minutes;
+          } else {
+            state.pkg = null;
+            state.parts = [];
+          }
+          state.time = null;
+          hideError(1);
+          applyI18n();
+        }
       }));
     });
   }
 
   function renderDurationOptions() {
     const box = $('#durationOptions');
+    const label = $('#durationLabel');
     box.innerHTML = '';
+
+    if (isPickService()) {
+      label.textContent = t('pkg.title');
+      CONFIG.pickService.packages.forEach((p, i) => {
+        box.appendChild(optionButton({
+          title: t('pkg.' + p.pick),
+          desc: t('pkg.pick', { n: p.pick }),
+          price: money(p.price),
+          selected: state.pkg === i,
+          onClick: () => {
+            state.pkg = i;
+            state.duration = p.minutes;
+            state.time = null;                       // slot length changed
+            state.parts = state.parts.slice(0, p.pick);  // a smaller package trims the list
+            applyI18n();
+          }
+        }));
+      });
+      return;
+    }
+
+    label.textContent = t('duration.title');
     CONFIG.durations.forEach(d => {
       box.appendChild(optionButton({
         title: t('duration.' + d),
@@ -247,6 +311,39 @@
           applyI18n();
         }
       }));
+    });
+  }
+
+  function renderPartsOptions() {
+    const section = $('#partsSection');
+    if (!isPickService()) { section.hidden = true; return; }
+    section.hidden = false;
+
+    const max = partsLimit();
+    const full = state.parts.length >= max;
+    const counter = $('#partsCount');
+    counter.textContent = t('parts.count', { n: state.parts.length, max: max });
+    counter.classList.toggle('full', full);
+
+    const box = $('#partsOptions');
+    box.innerHTML = '';
+    CONFIG.pickService.parts.forEach(key => {
+      const on = state.parts.indexOf(key) !== -1;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'part';
+      b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = '<span class="box" aria-hidden="true">\u2713</span><span class="txt"></span>';
+      $('.txt', b).textContent = t('part.' + key);
+      if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
+      b.addEventListener('click', () => {
+        const i = state.parts.indexOf(key);
+        if (i === -1) { if (state.parts.length >= max) return; state.parts.push(key); }
+        else state.parts.splice(i, 1);
+        hideError(1);
+        renderPartsOptions();
+      });
+      box.appendChild(b);
     });
   }
 
@@ -414,6 +511,11 @@
   function validateStep(step) {
     if (step === 1) {
       if (!state.service) { showError(1, t('err.service')); return false; }
+      if (isPickService()) {
+        if (state.pkg == null) { showError(1, t('err.pkg')); return false; }
+        const short = partsLimit() - state.parts.length;
+        if (short > 0) { showError(1, t('parts.more', { n: short })); return false; }
+      }
       hideError(1); return true;
     }
     if (step === 2) {
@@ -435,21 +537,26 @@
     c.phone = $('#fPhone').value.trim();
     c.email = $('#fEmail').value.trim();
     c.lang  = $('#fLang').value;
+    c.last5 = $('#fLast5').value.trim();
     c.notes = $('#fNotes').value.trim();
 
     const okName  = c.name.length >= 1;
     const okPhone = /^[0-9+()\-\s.]{6,24}$/.test(c.phone);
     const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email);
+    // optional: the client may not have transferred yet when booking
+    const okLast5 = c.last5 === '' || /^\d{5}$/.test(c.last5);
     const okAgree = $('#fAgree').checked;
 
     setFieldValid('name', okName);
     setFieldValid('phone', okPhone);
     setFieldValid('email', okEmail);
+    setFieldValid('last5', okLast5);
     $('#agreeWrap').classList.toggle('invalid', !okAgree);
 
     if (!okName)  { showError(3, t('err.name'));  return false; }
     if (!okPhone) { showError(3, t('err.phone')); return false; }
     if (!okEmail) { showError(3, t('err.email')); return false; }
+    if (!okLast5) { showError(3, t('err.last5')); return false; }
     if (!okAgree) { showError(3, t('err.agree')); return false; }
     hideError(3);
     return true;
@@ -463,7 +570,7 @@
   function summaryRows() {
     const c = state.contact;
     const langLabel = (LANGS.find(l => l.code === c.lang) || currentLangMeta()).label;
-    return [
+    const rows = [
       [t('review.service'),  t('service.' + state.service)],
       [t('review.visit'),    t(state.visit === 'first' ? 'visit.first' : 'visit.return')],
       [t('review.datetime'), formatDate(state.date) + '  ' + state.time + ' – ' + endTime()],
@@ -472,9 +579,14 @@
       [t('review.phone'),    c.phone],
       [t('review.email'),    c.email],
       [t('review.lang'),     langLabel],
+      [t('review.last5'),    c.last5 || t('review.none')],
       [t('review.notes'),    c.notes || t('review.none')],
-      [t('review.price'),    money(CONFIG.prices[state.duration]), 'total']
+      [t('review.price'),    money(currentPrice()), 'total']
     ];
+    if (isPickService()) {
+      rows.splice(1, 0, [t('review.parts'), state.parts.map(k => t('part.' + k)).join(listSep())]);
+    }
+    return rows;
   }
 
   function renderSummary() {
@@ -510,13 +622,16 @@
       startTime: state.time,
       endTime: endTime(),
       durationMinutes: state.duration,
-      price: CONFIG.prices[state.duration],
+      parts: isPickService() ? state.parts.slice() : [],
+      partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
+      price: currentPrice(),
       currency: CONFIG.currency,
       timezone: CONFIG.tzName,
       name: c.name,
       phone: c.phone,
       email: c.email,
       preferredLanguage: c.lang,
+      transferLast5: c.last5,
       notes: c.notes,
       submittedAt: new Date().toISOString()
     };
@@ -527,8 +642,13 @@
     const L = [
       t('done.code') + ': ' + p.ref,
       '',
-      t('review.service')  + ': ' + t('service.' + p.service) + ' / ' + p.serviceLabel,
+      t('review.service')  + ': ' + t('service.' + p.service) +
+        (t('service.' + p.service) === p.serviceLabel ? '' : ' / ' + p.serviceLabel),
       t('review.visit')    + ': ' + t(p.visit === 'first' ? 'visit.first' : 'visit.return'),
+      p.parts.length
+        ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
+          (state.lang === 'zh' ? '' : ' / ' + p.partsLabels.join('、'))
+        : null,
       t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
       t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
       t('review.price')    + ': ' + money(p.price),
@@ -536,14 +656,35 @@
       t('review.name')  + ': ' + p.name,
       t('review.phone') + ': ' + p.phone,
       t('review.email') + ': ' + p.email,
-      t('review.lang')  + ': ' + p.preferredLanguage,
+      t('review.lang')  + ': ' +
+        ((LANGS.find(l => l.code === p.preferredLanguage) || {}).label || p.preferredLanguage),
+      t('review.last5') + ': ' + (p.transferLast5 || '-'),
       t('review.notes') + ': ' + (p.notes || '-'),
       '',
       t('pay.title'),
       t('pay.bank') + ': ' + t('pay.bank.value'),
       t('pay.acct') + ': ' + CONFIG.bank.account
     ];
-    return L.join('\n');
+    return L.filter(line => line !== null).join('\n');
+  }
+
+  /* Google Apps Script web apps answer no CORS preflight, so an
+     application/json POST is blocked before it ever reaches the script.
+     text/plain keeps the request "simple" and the script reads the body
+     the same way. */
+  function endpointContentType() {
+    if (CONFIG.endpointContentType) return CONFIG.endpointContentType;
+    return /script\.google\.com/.test(CONFIG.endpoint)
+      ? 'text/plain;charset=utf-8'
+      : 'application/json';
+  }
+
+  /* The centre reads its notifications in Chinese regardless of which
+     language the client filled the form in. */
+  function bookingTextZh() {
+    const keep = state.lang;
+    state.lang = 'zh';
+    try { return bookingText(); } finally { state.lang = keep; }
   }
 
   function mailtoUrl() {
@@ -626,11 +767,25 @@
     btn.disabled = true;
     fetch(CONFIG.endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.assign({}, CONFIG.endpointFields || {}, bookingPayload()))
+      headers: { 'Content-Type': endpointContentType() },
+      body: JSON.stringify(Object.assign(
+        {},
+        CONFIG.endpointFields || {},
+        bookingPayload(),
+        // a Chinese-keyed readable block, so a generic form service's
+        // notification email is legible without any template setup
+        { '預約明細': bookingTextZh() }
+      ))
     })
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({ ok: true })); })
-      .then(res => { if (res && res.ok === false) throw new Error(res.error || 'rejected'); goto(5); })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({})); })
+      .then(res => {
+        // our PHP answers {ok:…}; FormSubmit and Web3Forms answer {success:…},
+        // and FormSubmit reports failure as the string "false"
+        const ok = res.ok !== false &&
+                   res.success !== false && res.success !== 'false';
+        if (!ok) throw new Error(res.error || res.message || 'rejected');
+        goto(5);
+      })
       .catch(() => {
         // the endpoint is unreachable or refused the booking: fall back to email
         // so the request still reaches the centre
@@ -647,11 +802,13 @@
 
   function resetAll() {
     state.service = null;
+    state.pkg = null;
+    state.parts = [];
     state.date = null;
     state.time = null;
     state.ref = '';
-    state.contact = { name: '', phone: '', email: '', lang: state.lang, notes: '' };
-    ['fName', 'fPhone', 'fEmail', 'fNotes'].forEach(id => { $('#' + id).value = ''; });
+    state.contact = { name: '', phone: '', email: '', lang: state.lang, last5: '', notes: '' };
+    ['fName', 'fPhone', 'fEmail', 'fLast5', 'fNotes'].forEach(id => { $('#' + id).value = ''; });
     $('#fAgree').checked = false;
     $$('.field').forEach(f => f.classList.remove('invalid'));
     $('#agreeWrap').classList.remove('invalid');
@@ -696,7 +853,7 @@
     if (icsBtn) icsBtn.addEventListener('click', () => download(state.ref + '.ics', icsContent(), 'text/calendar'));
     $('#restartBtn').addEventListener('click', resetAll);
 
-    ['fName', 'fPhone', 'fEmail'].forEach(id => {
+    ['fName', 'fPhone', 'fEmail', 'fLast5'].forEach(id => {
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });

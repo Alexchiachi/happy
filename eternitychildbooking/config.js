@@ -19,10 +19,23 @@ const CONFIG = {
   prices: { 40: 1688, 60: 2888 },
 
   /* 服務項目 key 對應 i18n 字典 */
-  services: ['quantum', 'sculpt', 'spine', 'massage'],
+  services: ['quantum', 'sculpt', 'spine', 'massage', 'aesthetic'],
 
   /* 療程長度（分鐘） */
   durations: [40, 60],
+
+  /* 「醫美整骨」是選部位計價，不是選時長：
+     客人從 parts 的十個部位中挑三項或五項，價格看挑幾項。
+     minutes 決定要佔用多長的時段，可依實際施作時間調整。 */
+  pickService: {
+    key: 'aesthetic',
+    parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
+            'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
+    packages: [
+      { pick: 3, price: 1688, minutes: 40 },
+      { pick: 5, price: 2888, minutes: 60 }
+    ]
+  },
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,
@@ -49,14 +62,25 @@ const CONFIG = {
   /* 公休日（YYYY-MM-DD），可自行增列國定假日 */
   closedDates: [],
 
-  /* 選填：若填入後端網址（PHP / Google Apps Script / Web3Forms 等），
-     送出時會 POST JSON 過去；留空則改用電子郵件寄送。 */
-  endpoint: '',
+  /* 收單網址：送出時會把預約資料 POST 過去。
+     留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
 
-  /* 選填：要一併送出的額外欄位。第三方表單服務通常需要一組金鑰，
-     例如 Web3Forms：
-       endpoint: 'https://api.web3forms.com/submit',
-       endpointFields: { access_key: '你的金鑰', subject: '新預約' }
-     這樣不用改任何程式，靜態主機（Netlify、Cloudflare Pages）也能收信。 */
+     ★ 建議：Google 試算表收單（免費、資料只經過你自己的 Google 帳號）
+       部署 google/booking-sheet.gs 之後，把產生的 /exec 網址貼在下面。
+       做法見 google/README.md。 */
+  endpoint: '',
+  // endpoint: 'https://script.google.com/macros/s/AKfycb.../exec',
+
+  /* 其他選擇：
+       WordPress 自架 → '/eternitychildbooking/booking-submit.php'
+       不想開試算表 → 'https://formsubmit.co/ajax/ahanamita88888888@gmail.com'
+                      （免註冊，第一次送出後要點信中的啟用連結） */
+
+  /* 送出時的 Content-Type。留空會自動判斷：
+     Google Apps Script 必須用 text/plain，否則瀏覽器的 CORS 預檢會被擋下來。 */
+  endpointContentType: '',
+
+  /* 選填：要一併送出的額外欄位（第三方服務的設定或金鑰）。
+     Google 試算表版不需要；FormSubmit 用底線開頭的欄位，Web3Forms 用 access_key。 */
   endpointFields: {}
 };

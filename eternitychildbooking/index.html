@@ -42,11 +42,11 @@
     <div class="price-strip">
       <div class="price-chip">
         <div class="amount">NT$ 1,688</div>
-        <div class="unit" data-i18n="duration.40">40 分鐘</div>
+        <div class="unit"><span data-i18n="duration.40">40 分鐘</span> · <span data-i18n="pkg.3">擇三</span></div>
       </div>
       <div class="price-chip">
         <div class="amount">NT$ 2,888</div>
-        <div class="unit" data-i18n="duration.60">60 分鐘</div>
+        <div class="unit"><span data-i18n="duration.60">60 分鐘</span> · <span data-i18n="pkg.5">擇五</span></div>
       </div>
     </div>
   </div>
@@ -79,8 +79,16 @@
         </div>
 
         <div class="section">
-          <div class="section-label" data-i18n="duration.title">療程時長</div>
+          <div class="section-label" id="durationLabel" data-i18n="duration.title">療程時長</div>
           <div class="options cols-2" id="durationOptions"></div>
+        </div>
+
+        <div class="section" id="partsSection" hidden>
+          <div class="section-label labelled">
+            <span data-i18n="parts.title">選擇部位</span>
+            <span class="count" id="partsCount"></span>
+          </div>
+          <div class="parts-grid" id="partsOptions"></div>
         </div>
 
         <div class="form-error" id="err1"></div>
@@ -150,6 +158,12 @@
             <div class="field" data-field="lang">
               <label for="fLang" data-i18n="form.lang">希望的溝通語言</label>
               <select id="fLang"></select>
+            </div>
+            <div class="field" data-field="last5">
+              <label for="fLast5"><span data-i18n="form.last5">匯款末五碼</span><span class="hint" data-i18n="form.optional">選填</span></label>
+              <input id="fLast5" type="text" inputmode="numeric" maxlength="5" autocomplete="off" data-i18n-ph="form.last5.ph">
+              <span class="note" data-i18n="form.last5.hint"></span>
+              <span class="err" data-i18n="err.last5"></span>
             </div>
             <div class="field full" data-field="notes">
               <label for="fNotes"><span data-i18n="form.notes">身體狀況或備註</span><span class="hint" data-i18n="form.optional">選填</span></label>

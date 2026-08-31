@@ -16,6 +16,7 @@ eternitychildbooking/
 ├── config.js     ★ 營業時間、價格、帳號、收件信箱都在這裡
 ├── app.js        預約流程邏輯（日曆、時段、驗證、送出）
 ├── standalone.html  以上全部合併成的單一檔案（方便寄送或丟到任何空間）
+├── google/       ★ Google 試算表收單程式與部署說明（建議）
 ├── wordpress/    WordPress 部署說明與 PHP 收單程式
 └── assets/       選填：TWQR 收款條碼圖檔
 ```
@@ -27,8 +28,9 @@ eternitychildbooking/
 | 項目 | 說明 |
 |:---|:---|
 | 四語系 | 中／英／日／韓即時切換，並自動偵測瀏覽器語言；也可用 `?lang=ja` 指定 |
-| 四項服務 | 量子整骨、體雕塑身、整椎正骨、按摩推拿 |
+| 五項服務 | 量子整骨、體雕塑身、整椎正骨、按摩推拿、醫美整骨 |
 | 兩種時長 | 40 分鐘 NT$1,688；60 分鐘 NT$2,888 |
+| 醫美整骨 | 改為選部位計價：十個部位擇三 NT$1,688、擇五 NT$2,888，選滿才能進下一步 |
 | 一個月前置 | 日曆自動鎖住今天起一個月內的日期，只開放一個月後至四個月內 |
 | 營業時間 | 週一至週六 09:00–21:00；週四只到 17:00；週日 09:00–12:00 |
 | 週日限制 | 週日只開放上午時段，且僅限「初診」；選「回診」時週日整排自動反灰 |
@@ -78,7 +80,17 @@ endpointFields: { access_key: '在 web3forms.com 用 Email 免費申請', subjec
 ## 修改設定（只改 `config.js`）
 
 ```js
-prices: { 40: 1688, 60: 2888 },       // 調整價格
+prices: { 40: 1688, 60: 2888 },       // 調整價格（按時長計價的服務）
+
+// 醫美整骨：選部位計價。parts 增減部位、packages 調整方案
+pickService: {
+  key: 'aesthetic',
+  parts: ['face','jaw','pelvis','hip','waist','belly','shoulder','hunch','tuina','detail'],
+  packages: [
+    { pick: 3, price: 1688, minutes: 40 },   // 擇三，佔用 40 分鐘時段
+    { pick: 5, price: 2888, minutes: 60 }    // 擇五，佔用 60 分鐘時段
+  ]
+},
 leadMonths: 1,                        // 需提前幾個月預約
 windowMonths: 4,                      // 最多可預約到幾個月後
 slotStep: 30,                         // 時段間隔（分鐘）
@@ -111,7 +123,9 @@ qrImage: 'assets/twqr.jpg',           // 放上 TWQR 條碼圖檔後填入
 
 ### 方式 B（建議）：Google 試算表自動收單
 
-用 Google Apps Script 建立一個免費的收單後端，預約資料會自動寫進試算表並寄信通知：
+**完整的程式與部署步驟請看 [`google/README.md`](google/README.md)**，
+那裡的 `booking-sheet.gs` 除了寫進試算表，還會寄通知信給中心、
+並依客人語言自動回一封確認信。以下是最精簡的版本：
 
 1. 開一個新的 Google 試算表 → **擴充功能 → Apps Script**，貼上：
 
