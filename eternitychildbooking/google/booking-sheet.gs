@@ -30,7 +30,12 @@ const HEADERS = [
 function doPost(e) {
   // 從編輯器直接按「執行 doPost」時不會有 e，會在這裡被擋下並說明原因。
   // 要手動測試請改執行下面的 testWrite。
-  if (!e || !e.postData || !e.postData.contents) {
+  // 預約頁有兩種送法：表單送出時資料在 e.parameter.payload，
+  // 背景請求送出時資料在 e.postData.contents。兩種都要能收。
+  const raw = (e && e.parameter && e.parameter.payload) ? e.parameter.payload
+            : (e && e.postData && e.postData.contents) ? e.postData.contents
+            : '';
+  if (!raw) {
     const msg = 'doPost 要由預約頁呼叫才會有資料。' +
                 '若要從編輯器測試，請在上方函式選單改選 testWrite 再按執行。';
     Logger.log(msg);
@@ -38,7 +43,7 @@ function doPost(e) {
   }
 
   try {
-    const d = JSON.parse(e.postData.contents);
+    const d = JSON.parse(raw);
     const sheet = getSheet_();
 
     sheet.appendRow([

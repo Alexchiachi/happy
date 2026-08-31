@@ -701,6 +701,48 @@
     return L.filter(line => line !== null).join('\n');
   }
 
+  /* 'form' posts through a hidden iframe: a plain form submission is not a
+     cross-origin XHR, so it is subject to neither CORS nor a page's
+     connect-src policy. Nothing can be read back, which is the trade — but
+     it reaches Apps Script from anywhere, which fetch does not. */
+  function submitMode() {
+    if (CONFIG.endpointMode === 'form' || CONFIG.endpointMode === 'fetch') return CONFIG.endpointMode;
+    return /script\.google\.com/.test(CONFIG.endpoint) ? 'form' : 'fetch';
+  }
+
+  function submitViaForm() {
+    const sinkName = 'ecc-sink-' + Date.now();
+    const frame = document.createElement('iframe');
+    frame.name = sinkName;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px';
+    document.body.appendChild(frame);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CONFIG.endpoint;
+    form.target = sinkName;
+    form.style.display = 'none';
+
+    const fields = Object.assign({}, CONFIG.endpointFields || {},
+                                 { payload: JSON.stringify(bookingPayload()),
+                                   '預約明細': bookingTextZh() });
+    Object.keys(fields).forEach(k => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = typeof fields[k] === 'string' ? fields[k] : JSON.stringify(fields[k]);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => { form.remove(); frame.remove(); }, 20000);
+
+    takenFetchedAt = 0;
+    goto(5);
+  }
+
   /* Google Apps Script web apps answer no CORS preflight, so an
      application/json POST is blocked before it ever reaches the script.
      text/plain keeps the request "simple" and the script reads the body
@@ -796,6 +838,8 @@
       return;
     }
 
+    if (submitMode() === 'form') { submitViaForm(); return; }
+
     const btn = $('#submitBtn');
     btn.disabled = true;
     fetch(CONFIG.endpoint, {
@@ -863,6 +907,14 @@
     state.contact.lang = state.lang;
 
     $('#year').textContent = new Date().getFullYear();
+    if (CONFIG.version) $('#ver').textContent = 'v' + CONFIG.version;
+
+    // 開發者確認用：在瀏覽器主控台就能看出這份頁面把預約送去哪裡
+    try {
+      console.info('[預約系統] v' + (CONFIG.version || '?') +
+        ' · 收單：' + (CONFIG.endpoint || '（未設定，會開啟客人的信箱程式）') +
+        (CONFIG.endpoint ? ' · 送出方式：' + submitMode() : ''));
+    } catch (e) {}
     $('#acctNo').textContent = CONFIG.bank.account;
 
     renderLangSwitch();

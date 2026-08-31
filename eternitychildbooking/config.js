@@ -5,6 +5,10 @@
    ============================================================ */
 
 const CONFIG = {
+  /* 版本標記：會顯示在頁尾右下角。改版後更新這個值，
+     就能一眼確認線上跑的是不是最新版（部署沒更新是最難察覺的問題）。 */
+  version: '1.4',
+
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
 
@@ -76,8 +80,13 @@ const CONFIG = {
        不想開試算表 → 'https://formsubmit.co/ajax/ahanamita88888888@gmail.com'
                       （免註冊，第一次送出後要點信中的啟用連結） */
 
-  /* 送出時的 Content-Type。留空會自動判斷：
-     Google Apps Script 必須用 text/plain，否則瀏覽器的 CORS 預檢會被擋下來。 */
+  /* 送出方式。留空會自動判斷，一般不用改：
+       'form'  用隱藏的表單送出（不受 CORS 與網頁安全政策影響，Google 試算表用這個）
+       'fetch' 用背景請求送出，可以讀到後端的回應（自架 PHP 用這個）
+     自動判斷：網址是 script.google.com 就用 form，其餘用 fetch。 */
+  endpointMode: '',
+
+  /* 用 fetch 送出時的 Content-Type，留空自動判斷。 */
   endpointContentType: '',
 
   /* 選填：要一併送出的額外欄位（第三方服務的設定或金鑰）。
