@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1f5f52">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f5f52'/><text y='68' x='50' text-anchor='middle' font-size='52' fill='white' font-family='sans-serif'>手</text></svg>">
+<title>永恆之子維護手冊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+  :root {
+    color-scheme: light;
+    --ground:      #f5f4ef;
+    --surface:     #ffffff;
+    --surface-2:   #fbfaf6;
+    --line:        #e3e7e3;
+    --line-soft:   #eef1ed;
+
+    --ink:         #16201e;
+    --ink-soft:    #475753;
+    --ink-mute:    #7d8b87;
+
+    --jade:        #1f5f52;
+    --jade-deep:   #123c34;
+    --jade-soft:   #e6f0ec;
+    --gold:        #9a7434;
+    --gold-soft:   #f7efdf;
+    --gold-line:   #e3d2ae;
+    --danger:      #a83f36;
+    --danger-soft: #fbeceb;
+    --danger-line: #eccdc9;
+
+    --radius:      13px;
+    --shadow:      0 1px 2px rgba(22,32,30,.05), 0 8px 24px rgba(22,32,30,.05);
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
+            "Noto Sans TC", "Microsoft JhengHei", "Hiragino Sans", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:      #121817;
+      --surface:     #1a2220;
+      --surface-2:   #1e2725;
+      --line:        #2c3835;
+      --line-soft:   #26312e;
+
+      --ink:         #e8efec;
+      --ink-soft:    #adbcb7;
+      --ink-mute:    #7f918c;
+
+      --jade:        #6fb9a5;
+      --jade-deep:   #a5d8c9;
+      --jade-soft:   #1c322d;
+      --gold:        #d3ad6a;
+      --gold-soft:   #2b2418;
+      --gold-line:   #4a3d24;
+      --danger:      #e28379;
+      --danger-soft: #2e1d1b;
+      --danger-line: #4d2f2b;
+
+      --shadow:      0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:      #121817;
+    --surface:     #1a2220;
+    --surface-2:   #1e2725;
+    --line:        #2c3835;
+    --line-soft:   #26312e;
+
+    --ink:         #e8efec;
+    --ink-soft:    #adbcb7;
+    --ink-mute:    #7f918c;
+
+    --jade:        #6fb9a5;
+    --jade-deep:   #a5d8c9;
+    --jade-soft:   #1c322d;
+    --gold:        #d3ad6a;
+    --gold-soft:   #2b2418;
+    --gold-line:   #4a3d24;
+    --danger:      #e28379;
+    --danger-soft: #2e1d1b;
+    --danger-line: #4d2f2b;
+
+    --shadow:      0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.85;
+    letter-spacing: .01em;
+  }
+
+  a { color: var(--jade); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--jade); outline-offset: 3px; border-radius: 4px;
+  }
+
+  code, .mono {
+    font-family: var(--mono);
+    font-size: .88em;
+    background: var(--jade-soft);
+    color: var(--jade-deep);
+    padding: .12em .42em;
+    border-radius: 5px;
+    word-break: break-all;
+  }
+
+  /* ---------- shell ---------- */
+  .page { max-width: 1180px; margin-inline: auto; padding: 0 1.25rem 5rem; }
+
+  .masthead {
+    padding: 3.2rem 0 2.2rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 2.4rem;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--jade);
+  }
+  .masthead h1 {
+    margin: .55rem 0 0;
+    font-size: clamp(1.85rem, 5vw, 2.6rem);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  .masthead .sub {
+    margin: .7rem 0 0;
+    max-width: 34em;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+  }
+  .stamp {
+    display: inline-flex; align-items: center; gap: .5rem;
+    margin-top: 1.3rem; padding: .4rem .9rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px; box-shadow: var(--shadow);
+    font-size: .82rem; color: var(--ink-soft);
+  }
+  .stamp b { color: var(--ink); font-family: var(--mono); font-weight: 600; }
+
+  .layout { display: grid; gap: 2.6rem; align-items: start; }
+  @media (min-width: 940px) {
+    .layout { grid-template-columns: 210px 1fr; gap: 3.2rem; }
+    .toc { position: sticky; top: 1.5rem; }
+  }
+
+  .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+  .toc a {
+    display: block; padding: .34rem .6rem;
+    font-size: .87rem; color: var(--ink-soft); text-decoration: none;
+    border-radius: 7px; border-left: 2px solid transparent;
+  }
+  .toc a:hover { background: var(--surface); color: var(--ink); border-left-color: var(--jade); }
+  .toc .toc-label {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ink-mute);
+    padding: 0 .6rem; margin-bottom: .5rem;
+  }
+
+  .body { min-width: 0; display: grid; gap: 3rem; }
+
+  section h2 {
+    margin: 0 0 .3rem;
+    font-size: 1.42rem; font-weight: 680; letter-spacing: -.015em;
+    text-wrap: balance;
+  }
+  section .lede { margin: 0 0 1.4rem; color: var(--ink-soft); max-width: 40em; }
+  section p { max-width: 40em; }
+
+  h3 {
+    margin: 2rem 0 .6rem;
+    font-size: 1.05rem; font-weight: 650;
+  }
+
+  /* ---------- flow diagram ---------- */
+  .flow {
+    display: grid; gap: .6rem; margin: 1.4rem 0 0;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 700px) {
+    .flow { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; }
+  }
+  .node {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1rem 1.05rem; box-shadow: var(--shadow);
+  }
+  .node .who {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--jade);
+  }
+  .node .what { margin-top: .35rem; font-weight: 650; }
+  .node .desc { margin-top: .3rem; font-size: .86rem; color: var(--ink-mute); line-height: 1.6; }
+  .arrow {
+    display: grid; place-items: center; color: var(--ink-mute);
+    font-family: var(--mono); font-size: 1.1rem;
+  }
+  .arrow::after { content: "→"; }
+  @media (max-width: 699px) { .arrow::after { content: "↓"; } }
+
+  /* ---------- recipe cards ---------- */
+  .recipe {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 1.3rem 1.4rem; margin-top: 1rem;
+  }
+  .recipe > h3 { margin-top: 0; display: flex; align-items: baseline; gap: .6rem; }
+  .recipe > h3 .tag {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+    color: var(--jade); background: var(--jade-soft);
+    padding: .16rem .5rem; border-radius: 999px; white-space: nowrap;
+  }
+  .recipe ol { margin: .7rem 0 0; padding-inline-start: 1.35rem; }
+  .recipe ol li { margin-bottom: .45rem; }
+  .recipe ol li::marker { color: var(--jade); font-weight: 600; }
+
+  /* ---------- callouts ---------- */
+  .note, .warn, .never {
+    border-radius: var(--radius); padding: 1rem 1.15rem; margin: 1.2rem 0 0;
+    font-size: .93rem; line-height: 1.75;
+  }
+  .note  { background: var(--jade-soft);   border: 1px solid var(--line); }
+  .warn  { background: var(--gold-soft);   border: 1px solid var(--gold-line); }
+  .never { background: var(--danger-soft); border: 1px solid var(--danger-line); }
+  .note .head, .warn .head, .never .head {
+    display: block; font-weight: 650; margin-bottom: .3rem; font-size: .88rem;
+    letter-spacing: .02em;
+  }
+  .note  .head { color: var(--jade); }
+  .warn  .head { color: var(--gold); }
+  .never .head { color: var(--danger); }
+  .note p, .warn p, .never p { margin: 0; max-width: none; }
+  .never ul { margin: .4rem 0 0; padding-inline-start: 1.2rem; }
+  .never li { margin-bottom: .3rem; }
+
+  /* ---------- tables ---------- */
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  table {
+    width: 100%; border-collapse: collapse; font-size: .92rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  th, td {
+    text-align: start; padding: .68rem .9rem;
+    border-bottom: 1px solid var(--line-soft); vertical-align: top;
+  }
+  th {
+    font-size: .78rem; letter-spacing: .06em; color: var(--ink-mute);
+    font-weight: 600; background: var(--surface-2); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- glossary ---------- */
+  .glossary { display: grid; gap: .8rem; margin-top: 1rem; }
+  .term {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1rem 1.15rem;
+  }
+  .term dt { font-weight: 650; margin-bottom: .25rem; }
+  .term dd { margin: 0; color: var(--ink-soft); font-size: .93rem; }
+  .term .plain {
+    display: block; margin-top: .4rem; padding-top: .4rem;
+    border-top: 1px dashed var(--line);
+    color: var(--ink-mute); font-size: .88rem;
+  }
+
+  .facts { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 1rem; }
+  .fact {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: .9rem 1rem;
+  }
+  .fact .k {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  .fact .v { margin-top: .3rem; font-weight: 600; word-break: break-all; font-size: .95rem; }
+
+  footer.end {
+    margin-top: 3.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute); font-size: .85rem;
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Eternity's Child · Booking System</div>
+    <h1>永恆之子整椎中心<br>網頁維護手冊</h1>
+    <p class="sub">
+      這本手冊教你怎麼照顧線上預約網站。不用會寫程式，照著步驟做就好。
+      看不懂的字，最後一段有解釋。
+    </p>
+    <div class="stamp">目前網站版本 <b>v1.8</b></div>
+  </header>
+
+  <div class="layout">
+
+    <nav class="toc" aria-label="目錄">
+      <div class="toc-label">目錄</div>
+      <ol>
+        <li><a href="#how">一、它是怎麼運作的</a></li>
+        <li><a href="#daily">二、有人預約時，你要做什麼</a></li>
+        <li><a href="#change">三、我想改東西</a></li>
+        <li><a href="#version">四、改完一定要做的事</a></li>
+        <li><a href="#trouble">五、出問題了</a></li>
+        <li><a href="#never">六、千萬不要做的事</a></li>
+        <li><a href="#words">七、名詞解釋</a></li>
+        <li><a href="#facts">八、重要資料速查</a></li>
+      </ol>
+    </nav>
+
+    <main class="body">
+
+      <!-- 一 -->
+      <section id="how">
+        <h2>一、它是怎麼運作的</h2>
+        <p class="lede">整套系統只有三個東西。先認識它們，後面就都看得懂了。</p>
+
+        <div class="flow">
+          <div class="node">
+            <div class="who">第 1 個</div>
+            <div class="what">網頁</div>
+            <div class="desc">客人用手機打開，選項目、選時間、填資料。就像店門口的一塊看板，只是客人可以在上面寫字。</div>
+          </div>
+          <div class="arrow" aria-hidden="true"></div>
+          <div class="node">
+            <div class="who">第 2 個</div>
+            <div class="what">小幫手</div>
+            <div class="desc">看不見的程式，住在 Google 裡。客人一按送出，它負責把資料抄到預約本、再寄信通知你和客人。</div>
+          </div>
+          <div class="arrow" aria-hidden="true"></div>
+          <div class="node">
+            <div class="who">第 3 個</div>
+            <div class="what">預約本</div>
+            <div class="desc">一份 Google 試算表，名字叫「預約紀錄」。所有預約都會自動寫在這裡，你也可以直接在上面改。</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="head">為什麼要知道這個？</span>
+          <p>因為出問題時，你要先判斷是「哪一個」壞掉。網頁沒更新、小幫手沒反應、預約本沒進資料——是三件不同的事，修法也不一樣。第五段的表格會幫你分辨。</p>
+        </div>
+
+        <h3>網頁還會自己做兩件事</h3>
+        <p>
+          第一，它會去問預約本「哪些時段已經有人約了」，然後把那些時段變成灰色，客人就點不下去。
+          這樣兩個客人不會約到同一個時間。
+        </p>
+        <p>
+          第二，它會擋住太近的日期。規定是「今天起一個月之後」才能約，所以客人打開時，
+          最近一個月的日期全部是灰的，點不動。
+        </p>
+      </section>
+
+      <!-- 二 -->
+      <section id="daily">
+        <h2>二、有人預約時，你要做什麼</h2>
+        <p class="lede">客人按下送出之後，這些事會自動發生，你只要做最後兩步。</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>誰</th><th>做什麼</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>小幫手</td><td>把預約寫進預約本，狀態自動填「待確認」</td></tr>
+              <tr><td>小幫手</td><td>寄一封通知信給你，標題像 <code>[新預約 ECC-260930-A3F2]</code></td></tr>
+              <tr><td>小幫手</td><td>寄一封確認信給客人，用客人選的語言</td></tr>
+              <tr><td><b>你</b></td><td>看信、確認時間可以，回信告訴客人</td></tr>
+              <tr><td><b>你</b></td><td>客人轉帳後，在預約本把狀態改成「已確認」</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="head">回信最快的方法</span>
+          <p>直接按通知信的「回覆」。那封信設定好了，回覆會直接寄到客人的信箱，不用另外複製貼上。</p>
+        </div>
+
+        <h3>客人取消或改期</h3>
+        <p>
+          在預約本找到那一列，把「狀態」欄改成 <code>已取消</code>。
+          只要有「取消」兩個字就算數。
+        </p>
+        <p>
+          改完之後，那個時段會自動變回可以預約，別的客人就能約走了。
+          <b>不要刪掉整列</b>——留著紀錄比較好查，而且改狀態就已經達到目的了。
+        </p>
+      </section>
+
+      <!-- 三 -->
+      <section id="change">
+        <h2>三、我想改東西</h2>
+        <p class="lede">
+          幾乎所有設定都在同一個檔案裡，叫 <code>config.js</code>。
+          它在 GitHub 的 <code>eternitychildbooking</code> 資料夾裡。
+        </p>
+
+        <div class="warn">
+          <span class="head">先記住這個開檔步驟</span>
+          <p>
+            下面每一則都要先做這三步：打開 GitHub 的
+            <code>eternitychildbooking</code> 資料夾 → 點要改的檔案 →
+            點右上角的<b>鉛筆圖示</b>，就可以編輯了。改完往下捲，按綠色的
+            <b>Commit changes</b> 存檔。
+          </p>
+        </div>
+
+        <div class="recipe">
+          <h3>換照片 <span class="tag">最常做</span></h3>
+          <ol>
+            <li>把新照片改名成 <code>photo-1.jpg</code>（或 2、3、4）。</li>
+            <li>打開 <code>eternitychildbooking/assets</code> 資料夾。</li>
+            <li>右上角 <b>Add file → Upload files</b>，把照片拖進去。</li>
+            <li>按 <b>Commit changes</b>。</li>
+          </ol>
+          <p style="margin-top:.8rem;font-size:.9rem;color:var(--ink-mute)">
+            檔名一樣就是「換掉舊的」，不用先刪。照片建議是正方形、寬 800～1200、
+            每張不超過 300KB。<code>photo-1.jpg</code> 比較特別，它同時是貼到 LINE
+            時顯示的那張預覽圖，挑最好看的放。
+          </p>
+        </div>
+
+        <div class="recipe">
+          <h3>改營業時間</h3>
+          <p style="margin:0 0 .6rem">打開 <code>config.js</code>，找到 <code>hours</code> 這一段。數字 0 是星期日、1 是星期一，一直到 6 是星期六。</p>
+          <ol>
+            <li>找到要改的那一天。</li>
+            <li><code>open</code> 是開門時間，<code>close</code> 是關門時間。</li>
+            <li>照原本的格式改，例如把 <code>'21:00'</code> 改成 <code>'20:00'</code>。</li>
+          </ol>
+          <div class="warn" style="margin-top:.9rem">
+            <span class="head">兩個特別的規則</span>
+            <p>
+              星期日那行有 <code>firstVisitOnly: true</code>，意思是「只有初診可以約」。
+              不想要這個限制，把這一段刪掉即可。<br>
+              另外，系統會自動確保療程能在關門前做完。例如關門 17:00、療程 40 分鐘，
+              最晚就只能約 16:00，這不用你算。
+            </p>
+          </div>
+        </div>
+
+        <div class="recipe">
+          <h3>改價格</h3>
+          <p style="margin:0 0 .6rem">價格有兩個地方，因為有兩種算法。</p>
+          <ol>
+            <li>按時間算的（量子整骨等四項）：找 <code>prices</code>，
+              <code>40: 1688</code> 就是 40 分鐘 1688 元。</li>
+            <li>選部位算的（醫美整骨）：找 <code>packages</code>，
+              <code>pick: 3</code> 是選三項、<code>price</code> 是價錢、
+              <code>minutes</code> 是要佔用幾分鐘的時段。</li>
+          </ol>
+        </div>
+
+        <div class="recipe">
+          <h3>加公休日</h3>
+          <p style="margin:0 0 .6rem">打開 <code>config.js</code>，找到 <code>closedDates</code>。把日期寫進中括號裡，格式是「年-月-日」，要加引號和逗號。</p>
+          <p style="margin:0;font-family:var(--mono);font-size:.85rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;overflow-x:auto">closedDates: ['2027-01-01', '2027-02-14'],</p>
+          <p style="margin-top:.7rem;font-size:.9rem;color:var(--ink-mute)">寫進去的日期，客人就點不到了。</p>
+        </div>
+
+        <div class="recipe">
+          <h3>換地圖</h3>
+          <ol>
+            <li>到 Google 地圖搜尋新地址。</li>
+            <li>點<b>分享</b> → 選<b>嵌入地圖</b> → 複製那一整段。</li>
+            <li>那段裡面有一個 <code>src="..."</code>，把引號中間的網址複製下來。</li>
+            <li>貼到 <code>config.js</code> 的 <code>map</code> 裡，取代 <code>embed</code> 原本的網址。</li>
+          </ol>
+        </div>
+
+        <div class="recipe">
+          <h3>改收預約的信箱</h3>
+          <p style="margin:0 0 .6rem">
+            這個<b>不在網頁裡</b>，在小幫手那邊。因為信是小幫手寄的，不是網頁寄的。
+          </p>
+          <ol>
+            <li>打開預約本（Google 試算表）。</li>
+            <li>上方選單 <b>擴充功能 → Apps Script</b>。</li>
+            <li>找到最上面的 <code>CENTER_EMAIL</code>，把信箱改掉。</li>
+            <li>存檔，然後<b>重新部署</b>（做法看下一段的警告框）。</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 四 -->
+      <section id="version">
+        <h2>四、改完一定要做的事</h2>
+        <p class="lede">這一段最重要。漏了它，你改的東西客人看不到，而且完全沒有錯誤訊息。</p>
+
+        <h3>如果你改的是網頁（config.js、照片以外的檔案）</h3>
+        <p>要把「版本號」加一號，總共兩個地方，必須改成一樣的數字：</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>檔案</th><th>找什麼</th><th>改成</th></tr></thead>
+            <tbody>
+              <tr><td class="num">config.js</td><td><code>version: '1.8'</code></td><td><code>version: '1.9'</code></td></tr>
+              <tr><td class="num">index.html</td><td>四個 <code>?v=1.8</code></td><td>四個 <code>?v=1.9</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="head">為什麼要這樣？</span>
+          <p>
+            瀏覽器怕慢，會把網頁影印一份存在自己身上，下次直接看影印本。
+            你改了網頁，它還在看舊的影印本，怎麼重新整理都一樣。
+            版本號加一，等於幫檔案換了一個新名字，瀏覽器發現「這是沒看過的東西」，
+            就會重新去拿一份新的。
+          </p>
+        </div>
+
+        <p>
+          改完等一兩分鐘，打開網站看<b>頁尾右下角</b>的版本號。
+          變成新的數字，就代表成功了。這是最快的檢查方法。
+        </p>
+
+        <div class="warn">
+          <span class="head">如果你改的是小幫手（Apps Script）</span>
+          <p>
+            存檔<b>不會</b>生效，一定要重新部署：<br>
+            <b>部署 → 管理部署作業 → 右上角鉛筆 → 版本選「新版本」→ 部署</b><br>
+            用這個方式更新，網址不會變，不用回去改設定。
+            如果誤按成「新增部署作業」，會拿到另一組網址，那就得回去更新 <code>config.js</code> 了。
+          </p>
+        </div>
+      </section>
+
+      <!-- 五 -->
+      <section id="trouble">
+        <h2>五、出問題了</h2>
+        <p class="lede">照著症狀找，從上往下試。</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>你看到的狀況</th><th>多半是這個原因</th><th>怎麼修</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>改了東西，網站上看不到</td>
+                <td>版本號沒加，或瀏覽器還在看舊的影印本</td>
+                <td>先按 <b>Ctrl+Shift+R</b>（Mac 是 <b>Cmd+Shift+R</b>）強制重新整理。還是舊的，就是版本號忘了加，回第四段</td>
+              </tr>
+              <tr>
+                <td>客人說有預約，但預約本沒有</td>
+                <td>小幫手沒更新，或部署沒做</td>
+                <td>打開網站按 <b>F12</b>，看最上面那行寫的收單網址。寫「未設定」就是網頁是舊的；有網址就去重新部署小幫手</td>
+              </tr>
+              <tr>
+                <td>預約本有資料，但沒收到信</td>
+                <td>Gmail 當天寄信額度用完，或信被丟進垃圾信匣</td>
+                <td>先翻垃圾信匣。都沒有就等隔天，額度每天會重置</td>
+              </tr>
+              <tr>
+                <td>網頁上的地圖不見了</td>
+                <td>某些環境會擋掉外部地圖</td>
+                <td>不用修。地圖下面本來就有「在 Google 地圖開啟」的連結可以點</td>
+              </tr>
+              <tr>
+                <td>照片沒出現</td>
+                <td>檔名不對</td>
+                <td>檔名必須剛好是 <code>photo-1.jpg</code> 到 <code>photo-4.jpg</code>，大小寫和副檔名都要一樣</td>
+              </tr>
+              <tr>
+                <td>某個時段該開放卻是灰的</td>
+                <td>預約本裡有一筆佔著它</td>
+                <td>去預約本找那個日期時間，把「狀態」改成 <code>已取消</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="head">想確認小幫手本身有沒有壞</span>
+          <p>
+            打開預約本 → 擴充功能 → Apps Script，上方函式選單選 <code>testWrite</code>，按執行。
+            它會自己假裝有人預約，走完全部流程。預約本多一列、你收到信，就代表小幫手是好的，
+            問題出在網頁那邊。<br>
+            <b>不要選 <code>doPost</code> 執行</b>，那個一定會出現紅字，那是正常的，不是壞掉。
+          </p>
+        </div>
+      </section>
+
+      <!-- 六 -->
+      <section id="never">
+        <h2>六、千萬不要做的事</h2>
+        <p class="lede">這幾件事會讓系統壞掉，而且不容易救回來。</p>
+
+        <div class="never">
+          <span class="head">不要做</span>
+          <ul>
+            <li><b>不要刪掉預約本，也不要改它的分頁名稱。</b>分頁必須叫「預約紀錄」，小幫手是靠這個名字找到它的。</li>
+            <li><b>不要改預約本第一列的欄位名稱，也不要調換順序。</b>小幫手是照順序讀的，換了就會抄錯格。</li>
+            <li><b>不要刪掉整列預約。</b>要放掉時段，把狀態改成「已取消」就好。</li>
+            <li><b>不要改照片的檔名規則。</b>一定是 <code>photo-1.jpg</code> 到 <code>photo-4.jpg</code>。</li>
+            <li><b>不要在 <code>config.js</code> 裡刪掉逗號或引號。</b>少一個符號整個網頁就打不開。只改引號中間的內容最安全。</li>
+            <li><b>改完不確定對不對，先不要關掉頁面。</b>GitHub 每次存檔都會留紀錄，真的改壞了可以找回來——但先問過再動比較快。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 七 -->
+      <section id="words">
+        <h2>七、名詞解釋</h2>
+        <p class="lede">聽到這些字不用緊張，意思其實很單純。</p>
+
+        <div class="glossary">
+          <dl class="term">
+            <dt>GitHub</dt>
+            <dd>放網站檔案的地方，也會自動幫你把網站發佈出去。
+              <span class="plain">就像一個公用的檔案櫃，而且你每改一次，它都會拍照存證，改壞了可以翻回去。</span>
+            </dd>
+          </dl>
+          <dl class="term">
+            <dt>Apps Script</dt>
+            <dd>寫在 Google 試算表裡的小程式，也就是這本手冊說的「小幫手」。
+              <span class="plain">像是請了一個工讀生，專門負責抄寫和打電話通知。</span>
+            </dd>
+          </dl>
+          <dl class="term">
+            <dt>部署</dt>
+            <dd>把改好的小幫手「正式上工」的動作。
+              <span class="plain">你改了工讀生的工作說明書，但沒告訴他。部署就是通知他「從現在起照新的做」。沒部署，他還是照舊的做。</span>
+            </dd>
+          </dl>
+          <dl class="term">
+            <dt>快取</dt>
+            <dd>瀏覽器把看過的網頁存一份在自己身上，下次開比較快。
+              <span class="plain">像把課本影印了一份放抽屜。老師改了課本，你還在看影印本。強制重新整理，就是去拿新的那本。</span>
+            </dd>
+          </dl>
+          <dl class="term">
+            <dt>Commit</dt>
+            <dd>在 GitHub 上按下「存檔」。
+              <span class="plain">沒按這個，你改的東西只是寫在螢幕上，沒有真的存進去。</span>
+            </dd>
+          </dl>
+          <dl class="term">
+            <dt>版本號</dt>
+            <dd>網頁頁尾右下角那個 <code>v1.8</code>。
+              <span class="plain">用來確認「現在網站上跑的是哪一版」。你改完後它有變，就代表更新成功了。</span>
+            </dd>
+          </dl>
+        </div>
+      </section>
+
+      <!-- 八 -->
+      <section id="facts">
+        <h2>八、重要資料速查</h2>
+        <p class="lede">要用的時候回來這裡找。</p>
+
+        <div class="facts">
+          <div class="fact">
+            <div class="k">預約網址</div>
+            <div class="v"><a href="https://alexchiachi.github.io/happy/eternitychildbooking/" target="_blank" rel="noopener">alexchiachi.github.io/happy/eternitychildbooking/</a></div>
+          </div>
+          <div class="fact">
+            <div class="k">檔案位置</div>
+            <div class="v">GitHub → happy → eternitychildbooking</div>
+          </div>
+          <div class="fact">
+            <div class="k">設定檔</div>
+            <div class="v">config.js</div>
+          </div>
+          <div class="fact">
+            <div class="k">照片資料夾</div>
+            <div class="v">assets／photo-1～4.jpg</div>
+          </div>
+          <div class="fact">
+            <div class="k">預約本分頁名</div>
+            <div class="v">預約紀錄</div>
+          </div>
+          <div class="fact">
+            <div class="k">收預約的信箱</div>
+            <div class="v">ahanamita88888888@gmail.com</div>
+          </div>
+          <div class="fact">
+            <div class="k">收款帳號</div>
+            <div class="v">臺灣銀行 004<br>013004490011</div>
+          </div>
+          <div class="fact">
+            <div class="k">語言切換</div>
+            <div class="v">網址後加 ?lang=ja（日）、ko（韓）、en（英）</div>
+          </div>
+        </div>
+
+        <h3>目前的營業設定</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>項目</th><th>設定</th></tr></thead>
+            <tbody>
+              <tr><td>週一至週六</td><td class="num">09:00 – 21:00</td></tr>
+              <tr><td>週四</td><td class="num">09:00 – 17:00</td></tr>
+              <tr><td>週日</td><td class="num">09:00 – 12:00（只有初診可約）</td></tr>
+              <tr><td>可預約範圍</td><td>今天起一個月之後，最多四個月內</td></tr>
+              <tr><td>時段間隔</td><td class="num">30 分鐘</td></tr>
+              <tr><td>40 分鐘 / 擇三</td><td class="num">NT$ 1,688</td></tr>
+              <tr><td>60 分鐘 / 擇五</td><td class="num">NT$ 2,888</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>預約本的欄位順序</h3>
+        <p style="font-size:.92rem;color:var(--ink-soft)">
+          送出時間、預約編號、狀態、日期、開始、結束、服務項目、選擇部位、看診類型、
+          分鐘、金額、姓名、電話、Email、語言、匯款末五碼、備註
+        </p>
+        <p style="font-size:.9rem;color:var(--ink-mute)">
+          這個順序不能動。要看得方便，用 Google 試算表的「隱藏欄」功能，不要刪除或搬移。
+        </p>
+      </section>
+
+      <footer class="end">
+        本手冊對應網站版本 v1.8。網站改版後，若操作步驟有變動，請一併更新這份手冊。
+      </footer>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
