@@ -42,11 +42,11 @@
     <div class="price-strip">
       <div class="price-chip">
         <div class="amount">NT$ 1,688</div>
-        <div class="unit" data-i18n="duration.40">40 分鐘</div>
+        <div class="unit"><span data-i18n="duration.40">40 分鐘</span> · <span data-i18n="pkg.3">擇三</span></div>
       </div>
       <div class="price-chip">
         <div class="amount">NT$ 2,888</div>
-        <div class="unit" data-i18n="duration.60">60 分鐘</div>
+        <div class="unit"><span data-i18n="duration.60">60 分鐘</span> · <span data-i18n="pkg.5">擇五</span></div>
       </div>
     </div>
   </div>
@@ -79,8 +79,16 @@
         </div>
 
         <div class="section">
-          <div class="section-label" data-i18n="duration.title">療程時長</div>
+          <div class="section-label" id="durationLabel" data-i18n="duration.title">療程時長</div>
           <div class="options cols-2" id="durationOptions"></div>
+        </div>
+
+        <div class="section" id="partsSection" hidden>
+          <div class="section-label labelled">
+            <span data-i18n="parts.title">選擇部位</span>
+            <span class="count" id="partsCount"></span>
+          </div>
+          <div class="parts-grid" id="partsOptions"></div>
         </div>
 
         <div class="form-error" id="err1"></div>

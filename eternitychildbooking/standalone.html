@@ -234,6 +234,41 @@ input, select, textarea { font: inherit; color: inherit; }
   .picker .section + .section { margin-top: 0; }
 }
 
+/* ---------- Pick-a-part chips ---------- */
+.section-label.labelled {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+}
+.section-label .count {
+  font-size: .78rem; font-weight: 600; letter-spacing: 0;
+  text-transform: none; color: var(--jade);
+  background: var(--jade-soft); padding: .18rem .6rem; border-radius: 999px;
+}
+.section-label .count.full { color: var(--gold); background: var(--gold-soft); }
+
+.parts-grid {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.part {
+  display: flex; align-items: center; gap: .55rem;
+  padding: .6rem .8rem; border-radius: 10px;
+  border: 1.5px solid var(--line); background: var(--surface-2);
+  font-size: .9rem; font-weight: 550; text-align: start;
+  transition: border-color .16s, background .16s, box-shadow .16s, opacity .16s;
+}
+.part .box {
+  width: 18px; height: 18px; flex: none; border-radius: 5px;
+  border: 1.5px solid #c2ccc9; background: #fff;
+  display: grid; place-items: center; font-size: .62rem; color: transparent;
+  transition: .16s;
+}
+.part:hover:not([disabled]) { border-color: #b9cdc7; background: #fff; }
+.part[aria-pressed="true"] {
+  border-color: var(--jade); background: #fff; box-shadow: 0 0 0 3px rgba(31,95,82,.09);
+}
+.part[aria-pressed="true"] .box { background: var(--jade); border-color: var(--jade); color: #fff; }
+.part[disabled] { opacity: .42; cursor: not-allowed; }
+
 /* ---------- Calendar ---------- */
 .cal-head {
   display: flex; align-items: center; justify-content: space-between;
@@ -491,11 +526,11 @@ input, select, textarea { font: inherit; color: inherit; }
     <div class="price-strip">
       <div class="price-chip">
         <div class="amount">NT$ 1,688</div>
-        <div class="unit" data-i18n="duration.40">40 分鐘</div>
+        <div class="unit"><span data-i18n="duration.40">40 分鐘</span> · <span data-i18n="pkg.3">擇三</span></div>
       </div>
       <div class="price-chip">
         <div class="amount">NT$ 2,888</div>
-        <div class="unit" data-i18n="duration.60">60 分鐘</div>
+        <div class="unit"><span data-i18n="duration.60">60 分鐘</span> · <span data-i18n="pkg.5">擇五</span></div>
       </div>
     </div>
   </div>
@@ -528,8 +563,16 @@ input, select, textarea { font: inherit; color: inherit; }
         </div>
 
         <div class="section">
-          <div class="section-label" data-i18n="duration.title">療程時長</div>
+          <div class="section-label" id="durationLabel" data-i18n="duration.title">療程時長</div>
           <div class="options cols-2" id="durationOptions"></div>
+        </div>
+
+        <div class="section" id="partsSection" hidden>
+          <div class="section-label labelled">
+            <span data-i18n="parts.title">選擇部位</span>
+            <span class="count" id="partsCount"></span>
+          </div>
+          <div class="parts-grid" id="partsOptions"></div>
         </div>
 
         <div class="form-error" id="err1"></div>
@@ -748,10 +791,23 @@ const CONFIG = {
   prices: { 40: 1688, 60: 2888 },
 
   /* 服務項目 key 對應 i18n 字典 */
-  services: ['quantum', 'sculpt', 'spine', 'massage'],
+  services: ['quantum', 'sculpt', 'spine', 'massage', 'aesthetic'],
 
   /* 療程長度（分鐘） */
   durations: [40, 60],
+
+  /* 「醫美整骨」是選部位計價，不是選時長：
+     客人從 parts 的十個部位中挑三項或五項，價格看挑幾項。
+     minutes 決定要佔用多長的時段，可依實際施作時間調整。 */
+  pickService: {
+    key: 'aesthetic',
+    parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
+            'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
+    packages: [
+      { pick: 3, price: 1688, minutes: 40 },
+      { pick: 5, price: 2888, minutes: 60 }
+    ]
+  },
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,
@@ -834,6 +890,29 @@ const I18N = {
     'service.spine.desc': '脊椎與骨盆矯正，改善姿勢與痠痛',
     'service.massage': '按摩推拿',
     'service.massage.desc': '經絡推拿與筋膜放鬆，舒緩肌肉疲勞',
+
+    'service.aesthetic': '醫美整骨',
+    'service.aesthetic.desc': '小臉、緊實曲線、輕盈體態，十個部位任選',
+    'pkg.title': '方案',
+    'pkg.3': '擇三',
+    'pkg.5': '擇五',
+    'pkg.pick': '任選 {n} 個部位',
+    'parts.title': '選擇部位',
+    'parts.count': '已選 {n} / {max}',
+    'parts.more': '請再選 {n} 個部位',
+    'parts.full': '已選滿 {max} 項，要換請先取消其他項目',
+    'part.face': '大小臉',
+    'part.jaw': '下顎線',
+    'part.pelvis': '縮骨盆',
+    'part.hip': '臀部調整',
+    'part.waist': '腰線明顯',
+    'part.belly': '腹部平坦',
+    'part.shoulder': '肩膀內扣',
+    'part.hunch': '駝背消厚',
+    'part.tuina': '全身推拿',
+    'part.detail': '精雕細琢',
+    'review.parts': '選擇部位',
+    'err.pkg': '請選擇方案',
 
     'duration.title': '療程時長',
     'duration.40': '40 分鐘',
@@ -960,6 +1039,29 @@ const I18N = {
     'service.massage': 'Massage & Tui Na',
     'service.massage.desc': 'Meridian Tui Na and fascia release for tired muscles',
 
+    'service.aesthetic': 'Aesthetic Bone Sculpting',
+    'service.aesthetic.desc': 'A smaller face, firmer curves, a lighter frame — pick from ten areas',
+    'pkg.title': 'Package',
+    'pkg.3': 'Choose 3',
+    'pkg.5': 'Choose 5',
+    'pkg.pick': 'Any {n} areas',
+    'parts.title': 'Select Areas',
+    'parts.count': '{n} of {max} selected',
+    'parts.more': 'Please choose {n} more area(s)',
+    'parts.full': 'All {max} chosen — deselect one to swap',
+    'part.face': 'Facial symmetry',
+    'part.jaw': 'Jawline',
+    'part.pelvis': 'Pelvis narrowing',
+    'part.hip': 'Hip shaping',
+    'part.waist': 'Waistline',
+    'part.belly': 'Flatter abdomen',
+    'part.shoulder': 'Rounded shoulders',
+    'part.hunch': 'Upper back & posture',
+    'part.tuina': 'Full-body Tui Na',
+    'part.detail': 'Fine detailing',
+    'review.parts': 'Areas',
+    'err.pkg': 'Please choose a package',
+
     'duration.title': 'Session Length',
     'duration.40': '40 minutes',
     'duration.60': '60 minutes',
@@ -1084,6 +1186,29 @@ const I18N = {
     'service.spine.desc': '背骨と骨盤を矯正し、姿勢と痛みを改善します',
     'service.massage': 'マッサージ・推拿',
     'service.massage.desc': '経絡推拿と筋膜リリースで筋肉の疲れを和らげます',
+
+    'service.aesthetic': '美容整骨',
+    'service.aesthetic.desc': '小顔・引き締まったライン・軽やかな体へ。10部位からお選びいただけます',
+    'pkg.title': 'プラン',
+    'pkg.3': '3部位',
+    'pkg.5': '5部位',
+    'pkg.pick': 'お好きな{n}部位',
+    'parts.title': '部位を選択',
+    'parts.count': '{max}部位中 {n}部位を選択',
+    'parts.more': 'あと{n}部位お選びください',
+    'parts.full': '{max}部位を選択済みです。変更するには他の部位を解除してください',
+    'part.face': '顔の左右差',
+    'part.jaw': 'フェイスライン',
+    'part.pelvis': '骨盤の引き締め',
+    'part.hip': 'ヒップ調整',
+    'part.waist': 'くびれ形成',
+    'part.belly': 'お腹の引き締め',
+    'part.shoulder': '巻き肩',
+    'part.hunch': '猫背・背中の厚み',
+    'part.tuina': '全身推拿',
+    'part.detail': '仕上げの微調整',
+    'review.parts': '選択部位',
+    'err.pkg': 'プランをお選びください',
 
     'duration.title': '施術時間',
     'duration.40': '40分',
@@ -1210,6 +1335,29 @@ const I18N = {
     'service.massage': '마사지·추나',
     'service.massage.desc': '경락 추나와 근막 이완으로 근육 피로를 풀어 줍니다',
 
+    'service.aesthetic': '미용 정골',
+    'service.aesthetic.desc': '작은 얼굴, 탄탄한 라인, 가벼운 체형 — 10가지 부위 중 선택',
+    'pkg.title': '패키지',
+    'pkg.3': '3가지 선택',
+    'pkg.5': '5가지 선택',
+    'pkg.pick': '원하는 {n}가지 부위',
+    'parts.title': '부위 선택',
+    'parts.count': '{max}가지 중 {n}가지 선택',
+    'parts.more': '{n}가지 더 선택해 주세요',
+    'parts.full': '{max}가지를 모두 선택했습니다. 변경하려면 먼저 해제해 주세요',
+    'part.face': '얼굴 비대칭',
+    'part.jaw': '턱선',
+    'part.pelvis': '골반 축소',
+    'part.hip': '힙 라인 조정',
+    'part.waist': '허리 라인',
+    'part.belly': '복부 평탄화',
+    'part.shoulder': '말린 어깨',
+    'part.hunch': '굽은 등·등살',
+    'part.tuina': '전신 추나',
+    'part.detail': '정밀 마무리',
+    'review.parts': '선택 부위',
+    'err.pkg': '패키지를 선택해 주세요',
+
     'duration.title': '시술 시간',
     'duration.40': '40분',
     'duration.60': '60분',
@@ -1319,6 +1467,8 @@ const I18N = {
     visit: 'first',
     service: null,
     duration: CONFIG.durations[0],
+    pkg: null,          // index into CONFIG.pickService.packages, for the pick-a-part service
+    parts: [],          // selected part keys, for the pick-a-part service
     date: null,          // 'YYYY-MM-DD'
     time: null,          // 'HH:MM'
     step: 1,
@@ -1358,6 +1508,7 @@ const I18N = {
     renderVisitOptions();
     renderServiceOptions();
     renderDurationOptions();
+    renderPartsOptions();
     renderLangSelect();
     renderCalendar();
     renderSlots();
@@ -1523,8 +1674,34 @@ const I18N = {
     });
   }
 
+  /* zh/ja list items with a full-width enumeration comma; en/ko use a plain one */
+  function listSep() {
+    return (state.lang === 'zh' || state.lang === 'ja') ? '、' : ', ';
+  }
+
   function money(n) {
     return CONFIG.currency + ' ' + n.toLocaleString('en-US');
+  }
+
+  /* The pick-a-part service ("醫美整骨") is priced by how many areas the client
+     chooses, not by session length. */
+  function isPickService() {
+    return !!CONFIG.pickService && state.service === CONFIG.pickService.key;
+  }
+
+  function currentPackage() {
+    if (!isPickService() || state.pkg == null) return null;
+    return CONFIG.pickService.packages[state.pkg];
+  }
+
+  function currentPrice() {
+    const p = currentPackage();
+    return p ? p.price : CONFIG.prices[state.duration];
+  }
+
+  function partsLimit() {
+    const p = currentPackage();
+    return p ? p.pick : 0;
   }
 
   function renderServiceOptions() {
@@ -1535,14 +1712,49 @@ const I18N = {
         title: t('service.' + s),
         desc: t('service.' + s + '.desc'),
         selected: state.service === s,
-        onClick: () => { state.service = s; hideError(1); applyI18n(); }
+        onClick: () => {
+          state.service = s;
+          if (isPickService()) {
+            if (state.pkg == null) state.pkg = 0;
+            state.duration = CONFIG.pickService.packages[state.pkg].minutes;
+          } else {
+            state.pkg = null;
+            state.parts = [];
+          }
+          state.time = null;
+          hideError(1);
+          applyI18n();
+        }
       }));
     });
   }
 
   function renderDurationOptions() {
     const box = $('#durationOptions');
+    const label = $('#durationLabel');
     box.innerHTML = '';
+
+    if (isPickService()) {
+      label.textContent = t('pkg.title');
+      CONFIG.pickService.packages.forEach((p, i) => {
+        box.appendChild(optionButton({
+          title: t('pkg.' + p.pick),
+          desc: t('pkg.pick', { n: p.pick }),
+          price: money(p.price),
+          selected: state.pkg === i,
+          onClick: () => {
+            state.pkg = i;
+            state.duration = p.minutes;
+            state.time = null;                       // slot length changed
+            state.parts = state.parts.slice(0, p.pick);  // a smaller package trims the list
+            applyI18n();
+          }
+        }));
+      });
+      return;
+    }
+
+    label.textContent = t('duration.title');
     CONFIG.durations.forEach(d => {
       box.appendChild(optionButton({
         title: t('duration.' + d),
@@ -1554,6 +1766,39 @@ const I18N = {
           applyI18n();
         }
       }));
+    });
+  }
+
+  function renderPartsOptions() {
+    const section = $('#partsSection');
+    if (!isPickService()) { section.hidden = true; return; }
+    section.hidden = false;
+
+    const max = partsLimit();
+    const full = state.parts.length >= max;
+    const counter = $('#partsCount');
+    counter.textContent = t('parts.count', { n: state.parts.length, max: max });
+    counter.classList.toggle('full', full);
+
+    const box = $('#partsOptions');
+    box.innerHTML = '';
+    CONFIG.pickService.parts.forEach(key => {
+      const on = state.parts.indexOf(key) !== -1;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'part';
+      b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = '<span class="box" aria-hidden="true">\u2713</span><span class="txt"></span>';
+      $('.txt', b).textContent = t('part.' + key);
+      if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
+      b.addEventListener('click', () => {
+        const i = state.parts.indexOf(key);
+        if (i === -1) { if (state.parts.length >= max) return; state.parts.push(key); }
+        else state.parts.splice(i, 1);
+        hideError(1);
+        renderPartsOptions();
+      });
+      box.appendChild(b);
     });
   }
 
@@ -1721,6 +1966,11 @@ const I18N = {
   function validateStep(step) {
     if (step === 1) {
       if (!state.service) { showError(1, t('err.service')); return false; }
+      if (isPickService()) {
+        if (state.pkg == null) { showError(1, t('err.pkg')); return false; }
+        const short = partsLimit() - state.parts.length;
+        if (short > 0) { showError(1, t('parts.more', { n: short })); return false; }
+      }
       hideError(1); return true;
     }
     if (step === 2) {
@@ -1770,7 +2020,7 @@ const I18N = {
   function summaryRows() {
     const c = state.contact;
     const langLabel = (LANGS.find(l => l.code === c.lang) || currentLangMeta()).label;
-    return [
+    const rows = [
       [t('review.service'),  t('service.' + state.service)],
       [t('review.visit'),    t(state.visit === 'first' ? 'visit.first' : 'visit.return')],
       [t('review.datetime'), formatDate(state.date) + '  ' + state.time + ' – ' + endTime()],
@@ -1780,8 +2030,12 @@ const I18N = {
       [t('review.email'),    c.email],
       [t('review.lang'),     langLabel],
       [t('review.notes'),    c.notes || t('review.none')],
-      [t('review.price'),    money(CONFIG.prices[state.duration]), 'total']
+      [t('review.price'),    money(currentPrice()), 'total']
     ];
+    if (isPickService()) {
+      rows.splice(1, 0, [t('review.parts'), state.parts.map(k => t('part.' + k)).join(listSep())]);
+    }
+    return rows;
   }
 
   function renderSummary() {
@@ -1817,7 +2071,9 @@ const I18N = {
       startTime: state.time,
       endTime: endTime(),
       durationMinutes: state.duration,
-      price: CONFIG.prices[state.duration],
+      parts: isPickService() ? state.parts.slice() : [],
+      partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
+      price: currentPrice(),
       currency: CONFIG.currency,
       timezone: CONFIG.tzName,
       name: c.name,
@@ -1836,6 +2092,10 @@ const I18N = {
       '',
       t('review.service')  + ': ' + t('service.' + p.service) + ' / ' + p.serviceLabel,
       t('review.visit')    + ': ' + t(p.visit === 'first' ? 'visit.first' : 'visit.return'),
+      p.parts.length
+        ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
+          ' / ' + p.partsLabels.join('、')
+        : null,
       t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
       t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
       t('review.price')    + ': ' + money(p.price),
@@ -1850,7 +2110,7 @@ const I18N = {
       t('pay.bank') + ': ' + t('pay.bank.value'),
       t('pay.acct') + ': ' + CONFIG.bank.account
     ];
-    return L.join('\n');
+    return L.filter(line => line !== null).join('\n');
   }
 
   function mailtoUrl() {
@@ -1954,6 +2214,8 @@ const I18N = {
 
   function resetAll() {
     state.service = null;
+    state.pkg = null;
+    state.parts = [];
     state.date = null;
     state.time = null;
     state.ref = '';

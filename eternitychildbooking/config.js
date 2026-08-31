@@ -19,10 +19,23 @@ const CONFIG = {
   prices: { 40: 1688, 60: 2888 },
 
   /* 服務項目 key 對應 i18n 字典 */
-  services: ['quantum', 'sculpt', 'spine', 'massage'],
+  services: ['quantum', 'sculpt', 'spine', 'massage', 'aesthetic'],
 
   /* 療程長度（分鐘） */
   durations: [40, 60],
+
+  /* 「醫美整骨」是選部位計價，不是選時長：
+     客人從 parts 的十個部位中挑三項或五項，價格看挑幾項。
+     minutes 決定要佔用多長的時段，可依實際施作時間調整。 */
+  pickService: {
+    key: 'aesthetic',
+    parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
+            'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
+    packages: [
+      { pick: 3, price: 1688, minutes: 40 },
+      { pick: 5, price: 2888, minutes: 60 }
+    ]
+  },
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,

@@ -68,6 +68,15 @@ $lang     = in_array(isset($d['preferredLanguage']) ? $d['preferredLanguage'] : 
             ? $d['preferredLanguage'] : 'zh';
 $notes    = mb_substr(sanitize_textarea_field(isset($d['notes']) ? $d['notes'] : ''), 0, 1000);
 
+/* 醫美整骨才會有：客人挑選的部位 */
+$parts = [];
+if (isset($d['partsLabels']) && is_array($d['partsLabels'])) {
+    foreach (array_slice($d['partsLabels'], 0, 10) as $one) {
+        $parts[] = mb_substr(sanitize_text_field((string) $one), 0, 20);
+    }
+}
+$partsLine = $parts ? implode('、', $parts) : '';
+
 if ($name === '' || $phone === '' || !is_email($email)) fail('missing_fields');
 if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date))        fail('bad_date');
 if (!preg_match('/^\d{2}:\d{2}$/', $start))             fail('bad_time');
@@ -78,7 +87,7 @@ $lines = [
     "",
     "日期時間：$date  $start–$end（台北時間）",
     "服務項目：$service",
-    "看診類型：$visit",
+    ($partsLine !== '' ? "選擇部位：$partsLine\n" : '') . "看診類型：$visit",
     "療程時長：$minutes 分鐘",
     "費用：NT$ " . number_format($price),
     "",
@@ -135,7 +144,7 @@ $customer = implode("\n", [
     $t['body'], '',
     $t['detail'] . '：',
     "  $date  $start–$end",
-    "  $service / $minutes min / NT$ " . number_format($price),
+    "  $service" . ($partsLine !== '' ? "（$partsLine）" : '') . " / $minutes min / NT$ " . number_format($price),
     "  $ref", '',
     $t['pay'], '',
     $t['foot'], '',

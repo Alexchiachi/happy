@@ -27,8 +27,9 @@ eternitychildbooking/
 | 項目 | 說明 |
 |:---|:---|
 | 四語系 | 中／英／日／韓即時切換，並自動偵測瀏覽器語言；也可用 `?lang=ja` 指定 |
-| 四項服務 | 量子整骨、體雕塑身、整椎正骨、按摩推拿 |
+| 五項服務 | 量子整骨、體雕塑身、整椎正骨、按摩推拿、醫美整骨 |
 | 兩種時長 | 40 分鐘 NT$1,688；60 分鐘 NT$2,888 |
+| 醫美整骨 | 改為選部位計價：十個部位擇三 NT$1,688、擇五 NT$2,888，選滿才能進下一步 |
 | 一個月前置 | 日曆自動鎖住今天起一個月內的日期，只開放一個月後至四個月內 |
 | 營業時間 | 週一至週六 09:00–21:00；週四只到 17:00；週日 09:00–12:00 |
 | 週日限制 | 週日只開放上午時段，且僅限「初診」；選「回診」時週日整排自動反灰 |
@@ -78,7 +79,17 @@ endpointFields: { access_key: '在 web3forms.com 用 Email 免費申請', subjec
 ## 修改設定（只改 `config.js`）
 
 ```js
-prices: { 40: 1688, 60: 2888 },       // 調整價格
+prices: { 40: 1688, 60: 2888 },       // 調整價格（按時長計價的服務）
+
+// 醫美整骨：選部位計價。parts 增減部位、packages 調整方案
+pickService: {
+  key: 'aesthetic',
+  parts: ['face','jaw','pelvis','hip','waist','belly','shoulder','hunch','tuina','detail'],
+  packages: [
+    { pick: 3, price: 1688, minutes: 40 },   // 擇三，佔用 40 分鐘時段
+    { pick: 5, price: 2888, minutes: 60 }    // 擇五，佔用 60 分鐘時段
+  ]
+},
 leadMonths: 1,                        // 需提前幾個月預約
 windowMonths: 4,                      // 最多可預約到幾個月後
 slotStep: 30,                         // 時段間隔（分鐘）
