@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" version="3.0" unique-identifier="bookid" xml:lang="zh-Hant">
+<metadata>
+<dc:identifier id="bookid">urn:uuid:8f2a6c14-5d3b-4c77-9e21-b7c0a1d4f931</dc:identifier>
+<dc:title>我們不要就這樣算了，但也不要一直記得</dc:title>
+<dc:creator id="au">簡家旗</dc:creator>
+<meta refines="#au" property="role" scheme="marc:relators">aut</meta>
+<dc:language>zh-Hant</dc:language>
+<dc:publisher>大道至簡　DAO IS SIMPLE</dc:publisher>
+<dc:description>「我們不要就這樣算了。」——那句讓全島流淚的台詞，說中的其實不是復仇，是一整代人被忍耐折疊起來的傷。本書是「幸福三部曲」首部曲・損之卷，主題是清淤：把堵住的先挖開，而不是急著填上意義。從「忍耐是台灣人的母語」這句文化考古開始，十章依《易經》卦象展開——揭露之後為什麼房間反而更安靜、憤怒是能量而不是身分、不原諒也可以放下、為道日損的每日減法、身體記得所以要從身體放。作者簡家旗以餐桌與土地為現場，寫給每一個「說出來了，卻還沒有好起來」的人。這不是一本教你療癒的書，是一本陪你把傷放回原本大小的書。</dc:description>
+<dc:subject>心靈成長</dc:subject>
+<dc:subject>情緒療癒</dc:subject>
+<dc:subject>老莊哲學</dc:subject>
+<dc:subject>台灣文學</dc:subject>
+<dc:subject id="bisac1">SEL031000</dc:subject>
+<meta refines="#bisac1" property="authority">BISAC</meta>
+<meta refines="#bisac1" property="term">SEL031000</meta>
+<dc:subject id="bisac2">OCC019000</dc:subject>
+<meta refines="#bisac2" property="authority">BISAC</meta>
+<meta refines="#bisac2" property="term">OCC019000</meta>
+<dc:subject id="bisac3">PHI023000</dc:subject>
+<meta refines="#bisac3" property="authority">BISAC</meta>
+<meta refines="#bisac3" property="term">PHI023000</meta>
+<dc:date>2026-08-22</dc:date>
+<meta property="dcterms:modified">2026-08-22T00:00:00Z</meta>
+<meta name="cover" content="cover-image" />
+<dc:rights>© 2026 簡家旗（Chien Chia-Chi）. 版權所有，翻印必究。未經著作權人書面同意，不得以任何形式重製、轉載、改編、公開傳輸或散布本書之全部或部分內容。</dc:rights><meta refines="#au" property="file-as">簡, 家旗</meta><meta refines="#au" property="role">aut</meta><meta property="schema:accessMode">textual</meta><meta property="schema:accessMode">visual</meta><meta property="schema:accessModeSufficient">textual</meta><meta property="schema:accessibilityFeature">readingOrder</meta><meta property="schema:accessibilityFeature">structuralNavigation</meta><meta property="schema:accessibilityFeature">tableOfContents</meta><meta property="schema:accessibilityFeature">alternativeText</meta><meta property="schema:accessibilityHazard">none</meta><meta property="schema:accessibilitySummary">本書為結構化文字內容，可調整字級、可由螢幕閱讀器朗讀。具備完整目錄與章節導覽。所有圖片皆附替代文字。</meta><link rel="dcterms:conformsTo" href="http://www.idpf.org/epub/a11y/accessibility-20170105.html#wcag-aa" /></metadata>
+<manifest>
+<item id="s0" href="cover.xhtml" media-type="application/xhtml+xml" />
+<item id="s1" href="title.xhtml" media-type="application/xhtml+xml" />
+<item id="s2" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav" />
+<item id="s3" href="f1.xhtml" media-type="application/xhtml+xml" />
+<item id="s4" href="f2.xhtml" media-type="application/xhtml+xml" />
+<item id="s5" href="c01.xhtml" media-type="application/xhtml+xml" />
+<item id="s6" href="c02.xhtml" media-type="application/xhtml+xml" />
+<item id="s7" href="c03.xhtml" media-type="application/xhtml+xml" />
+<item id="s8" href="c04.xhtml" media-type="application/xhtml+xml" />
+<item id="s9" href="c05.xhtml" media-type="application/xhtml+xml" />
+<item id="s10" href="c06.xhtml" media-type="application/xhtml+xml" />
+<item id="s11" href="c07.xhtml" media-type="application/xhtml+xml" />
+<item id="s12" href="c08.xhtml" media-type="application/xhtml+xml" />
+<item id="s13" href="c09.xhtml" media-type="application/xhtml+xml" />
+<item id="s14" href="c10.xhtml" media-type="application/xhtml+xml" />
+<item id="s15" href="b13.xhtml" media-type="application/xhtml+xml" />
+<item id="s16" href="b14.xhtml" media-type="application/xhtml+xml" />
+<item id="s17" href="b15.xhtml" media-type="application/xhtml+xml" />
+<item id="css" href="style.css" media-type="text/css" />
+<item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image" />
+<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
+<item id="colophon" href="colophon.xhtml" media-type="application/xhtml+xml" /></manifest>
+<spine toc="ncx">
+<itemref idref="s0" />
+<itemref idref="s1" />
+<itemref idref="s2" />
+<itemref idref="s3" />
+<itemref idref="s4" />
+<itemref idref="s5" />
+<itemref idref="s6" />
+<itemref idref="s7" />
+<itemref idref="s8" />
+<itemref idref="s9" />
+<itemref idref="s10" />
+<itemref idref="s11" />
+<itemref idref="s12" />
+<itemref idref="s13" />
+<itemref idref="s14" />
+<itemref idref="s15" />
+<itemref idref="s16" />
+<itemref idref="s17" />
+<itemref idref="colophon" /></spine>
+<guide><reference type="cover" title="封面" href="cover.xhtml" /><reference type="toc" title="目錄" href="nav.xhtml" /></guide>
+</package>

@@ -19,6 +19,7 @@ from epubqa.issues import Severity
 from epubqa.langprofile import (
     SIMPLIFIED_ONLY,
     TRADITIONAL_ONLY,
+    ZH_VOCAB_DIVERGENCE,
     detect_language,
     profile_for,
 )
@@ -40,6 +41,29 @@ class FixtureCase(unittest.TestCase):
 
     def codes(self, report) -> set:
         return {i.code for i in report.issues}
+
+    def variant(self, code: str, name: str, edits: dict) -> str:
+        """A copy of a fixture with some entries rewritten, added or dropped.
+
+        A value of ``None`` deletes the entry; ``str``/``bytes`` replace or add
+        it. Keeps mimetype first and stored, as the OCF spec requires.
+        """
+        src = self.paths[code]
+        dest = os.path.join(self.tmp, f"{name}.epub")
+        with zipfile.ZipFile(src) as zin:
+            entries = [(i.filename, zin.read(i.filename)) for i in zin.infolist()]
+        original = dict(entries)
+        kept = [(n, edits.get(n, d)) for n, d in entries if edits.get(n, d) is not None]
+        kept += [(n, v) for n, v in edits.items() if v is not None and n not in original]
+        with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as zout:
+            mime = zipfile.ZipInfo("mimetype")
+            mime.compress_type = zipfile.ZIP_STORED
+            zout.writestr(mime, b"application/epub+zip")
+            for n, data in kept:
+                if n == "mimetype":
+                    continue
+                zout.writestr(n, data)
+        return dest
 
 
 # --------------------------------------------------------------- detection
@@ -399,6 +423,191 @@ class TestFixes(FixtureCase):
         before = os.path.getsize(self.paths["en"])
         fixes.fix_all(epub)
         self.assertEqual(os.path.getsize(self.paths["en"]), before)
+
+    def test_css_fix_never_injects_text_indent(self):
+        # text-indent is inherited: writing it here would leak into every block
+        # container — inline-block badges, diagram divs — and break the book's
+        # own layout. TYPO-075 reports it; the fixer must not apply it.
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                css = Epub(dest).text("OEBPS/style.css")
+                self.assertNotIn("text-indent", css)
+
+    def test_css_fix_only_targets_body(self):
+        # A wider selector list (p, li, blockquote…) would out-specify the
+        # author's own rules instead of merely providing a baseline.
+        for code in BOOKS:
+            with self.subTest(lang=code):
+                dest, _ = self.fixed(code)
+                css = Epub(dest).text("OEBPS/style.css")
+                added = css.split("/* --- epubqa:")[1:]
+                self.assertTrue(added, "expected an epubqa CSS baseline block")
+                for block in added:
+                    selector = block.split("*/", 1)[1].split("{", 1)[0].strip()
+                    self.assertEqual(selector, "body")
+
+
+class TestNavContentModel(FixtureCase):
+    """A book that passed every check here was rejected by a store.
+
+    Its validator is epubcheck, which enforces the navigation document's
+    content model: spans and anchors inside <nav> must contain text. Six
+    empty `<span class="tocnum">` spacers, one per unnumbered entry, each an
+    RSC-005 error.
+    """
+
+    NAV = """<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+      lang="zh-Hant" xml:lang="zh-Hant">
+<head><title>目錄</title></head><body>
+<nav epub:type="toc" id="toc"><h1>目錄</h1><ol>
+<li><a href="chap1.xhtml">%s第一章</a></li>
+<li><a href="chap2.xhtml"><span class="n">貳</span>第二章</a></li>
+</ol></nav>
+</body></html>
+"""
+
+    def codes_for(self, nav_markup, name):
+        path = self.variant("zh-Hant", name, {"OEBPS/nav.xhtml": nav_markup})
+        return [i for i in build_report(Epub(path), "zh-Hant").issues if i.code == "STRUCT-046"]
+
+    def test_empty_span_in_nav_is_a_blocker(self):
+        hits = self.codes_for(self.NAV % '<span class="n"></span>', "nav-empty-span")
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0].severity, Severity.BLOCKER)
+        self.assertEqual(hits[0].file, "OEBPS/nav.xhtml")
+
+    def test_empty_anchor_in_nav_is_a_blocker(self):
+        nav = self.NAV % ""
+        nav = nav.replace('<li><a href="chap1.xhtml">第一章</a></li>',
+                          '<li><a href="chap1.xhtml"></a></li>')
+        self.assertEqual(len(self.codes_for(nav, "nav-empty-a")), 1)
+
+    def test_populated_spans_are_fine(self):
+        self.assertEqual(self.codes_for(self.NAV % '<span class="n">壹</span>', "nav-ok"), [])
+
+    def test_empty_span_outside_nav_is_not_reported(self):
+        # Only the navigation document has this restriction; an empty span in
+        # ordinary content is valid XHTML and must not be flagged.
+        nav = self.NAV % ""
+        nav = nav.replace("</nav>", '</nav><p><span class="spacer"></span></p>')
+        self.assertEqual(self.codes_for(nav, "nav-outside"), [])
+
+
+class TestAdvisoryPrecision(FixtureCase):
+    """Advisories that used to fire on correct books.
+
+    Every one of these was a false positive found on a real title; a checker
+    that cries wolf on good work teaches authors to ignore it.
+    """
+
+    def report_for(self, path, lang="zh-Hant"):
+        return build_report(Epub(path), lang)
+
+    def test_mainland_vocabulary_ignored_inside_work_titles(self):
+        chapter = """<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+<head><title>x</title></head><body>
+<p>二部曲《明天不是默認值》即將開始。</p>
+</body></html>
+"""
+        path = self.variant("zh-Hant", "titles", {"OEBPS/chap2.xhtml": chapter})
+        hits = [
+            i
+            for i in self.report_for(path).issues
+            if i.code == "LANG-022" and i.file == "OEBPS/chap2.xhtml"
+        ]
+        self.assertEqual(hits, [], [i.message for i in hits])
+
+    def test_mainland_vocabulary_still_flagged_in_ordinary_prose(self):
+        chapter = """<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+<head><title>x</title></head><body>
+<p>這個項目的軟件很好用。</p>
+</body></html>
+"""
+        path = self.variant("zh-Hant", "prose", {"OEBPS/chap2.xhtml": chapter})
+        hits = {
+            i.message
+            for i in self.report_for(path).issues
+            if i.code == "LANG-022" and i.file == "OEBPS/chap2.xhtml"
+        }
+        self.assertEqual(len(hits), 2, hits)
+
+    def test_shuju_is_not_treated_as_mainland_only(self):
+        # 「數據」 is standard in Taiwan too; flagging it was a false positive.
+        self.assertNotIn("數據", {cn for cn, _tw, _note in ZH_VOCAB_DIVERGENCE})
+
+    def test_page_list_only_expected_when_a_print_source_is_declared(self):
+        digital = self.report_for(self.paths["zh-Hant"])
+        self.assertNotIn("A11Y-021", self.codes(digital))
+
+        with zipfile.ZipFile(self.paths["zh-Hant"]) as z:
+            text = z.read("OEBPS/content.opf").decode("utf-8")
+        text = text.replace("</metadata>", "<dc:source>978-9-570-00000-0</dc:source></metadata>")
+        path = self.variant("zh-Hant", "printsource", {"OEBPS/content.opf": text})
+        self.assertIn("A11Y-021", self.codes(self.report_for(path)))
+
+    def test_span_density_ignores_the_table_of_contents(self):
+        # One class-driven span per entry is how a nav document is supposed to
+        # look; the ratio only means something in prose.
+        nav = """<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+      lang="zh-Hant" xml:lang="zh-Hant">
+<head><title>目錄</title></head><body>
+<nav epub:type="toc" id="toc"><h1>目錄</h1><ol>
+<li><a href="chap1.xhtml"><span class="n">壹</span><span class="t">風土</span></a></li>
+<li><a href="chap2.xhtml"><span class="n">貳</span><span class="t">儀式</span></a></li>
+</ol></nav>
+</body></html>
+"""
+        path = self.variant("zh-Hant", "densenav", {"OEBPS/nav.xhtml": nav})
+        hits = [i for i in self.report_for(path).issues if i.code == "STORE-021"]
+        self.assertEqual(hits, [], [i.file for i in hits])
+
+    def test_font_licence_reminder_stops_once_the_licence_ships(self):
+        font = ("OEBPS/NotoSerifTC.woff2", b"wOF2" + b"\0" * 64)
+        manifest_item = '<item id="f1" href="NotoSerifTC.woff2" media-type="font/woff2"/>'
+        with zipfile.ZipFile(self.paths["zh-Hant"]) as z:
+            opf = z.read("OEBPS/content.opf").decode("utf-8")
+        opf_with_font = opf.replace("</manifest>", manifest_item + "</manifest>")
+
+        without = self.variant(
+            "zh-Hant", "font-nolicence",
+            {"OEBPS/content.opf": opf_with_font, font[0]: font[1]},
+        )
+        self.assertIn("ASSET-037", self.codes(self.report_for(without)))
+
+        licence_item = '<item id="ofl" href="OFL.txt" media-type="text/plain"/>'
+        with_licence = self.variant(
+            "zh-Hant", "font-licence",
+            {
+                "OEBPS/content.opf": opf_with_font.replace(
+                    "</manifest>", licence_item + "</manifest>"
+                ),
+                font[0]: font[1],
+                "OEBPS/OFL.txt": "SIL OPEN FONT LICENSE Version 1.1",
+            },
+        )
+        self.assertNotIn("ASSET-037", self.codes(self.report_for(with_licence)))
+
+    def test_prune_never_deletes_a_bundled_font_licence(self):
+        licence_item = '<item id="ofl" href="OFL.txt" media-type="text/plain"/>'
+        with zipfile.ZipFile(self.paths["en"]) as z:
+            opf = z.read("OEBPS/content.opf").decode("utf-8")
+        path = self.variant(
+            "en", "prune-licence",
+            {
+                "OEBPS/content.opf": opf.replace("</manifest>", licence_item + "</manifest>"),
+                "OEBPS/OFL.txt": "SIL OPEN FONT LICENSE Version 1.1",
+            },
+        )
+        epub = Epub(path)
+        fixes.optimize(epub, prune=True)
+        dest = os.path.join(self.tmp, "pruned-licence.epub")
+        epub.save(dest)
+        self.assertIn("OEBPS/OFL.txt", set(zipfile.ZipFile(dest).namelist()))
 
 
 class TestOptimize(FixtureCase):

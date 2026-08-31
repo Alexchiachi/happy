@@ -394,7 +394,6 @@ def _fonts(epub: Epub, lang: str) -> list:
     issues = []
     fonts = [i for i in epub.manifest.values() if i.is_font()]
     css_text = "\n".join(epub.text(i.path) for i in epub.css_docs() if epub.has(i.path))
-    is_cjk_lang = lang in ("zh-Hant", "zh-Hans", "ja", "ko")
 
     declared_srcs = set()
     for m in re.finditer(r"@font-face\s*{([^}]*)}", css_text, re.S | re.I):
@@ -487,26 +486,35 @@ def _fonts(epub: Epub, lang: str) -> list:
                     stores=("apple", "google"),
                 )
             )
-        issues.append(
-            Issue(
-                f"{CODE}-037",
-                Severity.INFO,
-                f"內嵌了 {len(fonts)} 個字型檔",
-                suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
-                "商用字型多數需另購電子書授權，這是上架後最常見的法務風險。",
-            )
+        # Open licences (SIL OFL above all) require the licence text to travel
+        # with the font. Bundling it is both the compliance step and the
+        # evidence that the licence question was actually looked at.
+        licence = next(
+            (
+                name
+                for name in epub.files
+                if re.search(r"(^|/)(ofl|license|licence|copying)[^/]*$", name, re.I)
+            ),
+            None,
         )
-    elif is_cjk_lang:
-        issues.append(
-            Issue(
-                f"{CODE}-038",
-                Severity.INFO,
-                f"未內嵌字型（{lang}）",
-                suggestion="通常是正確選擇：中日韓字型體積大，且各閱讀器內建字型較佳。"
-                "請確認 CSS 的 font-family 有列出泛用字族（serif / sans-serif）作為後援。",
-                lang=lang,
+        # Once the licence travels with the book the question has been answered,
+        # so — like every other check here — this one goes quiet.
+        if not licence:
+            issues.append(
+                Issue(
+                    f"{CODE}-037",
+                    Severity.INFO,
+                    f"內嵌了 {len(fonts)} 個字型檔，未附授權文件",
+                    suggestion="確認字型授權允許電子書內嵌（embedding permission）。"
+                    "商用字型多數需另購電子書授權，這是上架後最常見的法務風險；"
+                    "SIL OFL 等開放授權則要求隨檔附上授權全文（OFL.txt），"
+                    "並將它列入 manifest。",
+                )
             )
-        )
+    # Not embedding a CJK font used to be reported here (ASSET-038). It is the
+    # recommended choice for Chinese — the files are huge and readers ship
+    # better ones — so the finding fired on books doing the right thing, and
+    # the only thing it asked them to verify is what ASSET-039 already checks.
 
     if css_text and not re.search(r"font-family[^;]*(serif|sans-serif|monospace)", css_text, re.I):
         if re.search(r"font-family", css_text, re.I):

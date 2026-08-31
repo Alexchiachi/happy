@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台灣選物 · 大道至簡</title>
+  <meta name="description" content="稻米、海鹽、職人器物、農家蔬果。從稻田裡的餐桌走出來的選物。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Mirror palette to moss-green for Taiwan */
+    .taiwan-mirror .door-cta { color: var(--moss); border-bottom-color: var(--moss); }
+    .taiwan-mirror .door-num { color: var(--moss); }
+    .taiwan-mirror .triad-han { color: var(--moss); }
+    .taiwan-mirror .product .cat { color: var(--moss); }
+    .taiwan-mirror .filter.active { color: var(--moss); border-color: var(--moss); }
+    .taiwan-mirror .filter:hover { color: var(--moss); }
+    .taiwan-mirror .pull-quote::before, .taiwan-mirror .pull-quote::after { background: var(--moss); }
+    .taiwan-mirror .seal-mark { border-color: var(--moss); color: var(--moss); background: rgba(92, 122, 90, 0.05); }
+    .taiwan-mirror .svc-cta { color: var(--moss); border-color: var(--moss); }
+    .taiwan-mirror .svc-cta:hover { background: var(--moss); color: var(--paper); }
+    .taiwan-mirror .nav-menu a::after { background: var(--moss); }
+  </style>
+</head>
+<body class="taiwan-mirror">
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">大道至簡<small>Dao is simple</small></a>
+  <button class="nav-toggle" aria-label="menu">≡</button>
+  <ul class="nav-menu">
+    <li><a href="yunnan.html">雲南</a></li>
+    <li><a href="taiwan.html" class="active">台灣</a></li>
+    <li><a href="journal.html">幸福誌</a></li>
+    <li><a href="services.html">服務體驗</a></li>
+    <li><a href="about.html">關於</a></li>
+    <li><a href="connect.html">連繫</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- Large Character Hero -->
+  <section class="hero" style="min-height: 80vh;">
+    <div class="container">
+      <div class="eyebrow hero-eyebrow reveal" style="color: var(--moss);">Taiwan · 福爾摩沙</div>
+      <h1 class="reveal" style="font-family: var(--font-han); font-size: clamp(8rem, 22vw, 18rem); font-weight: 200; letter-spacing: 0.05em; line-height: 0.95; color: var(--moss); margin-bottom: 2rem;">台灣</h1>
+      <p class="hero-tagline reveal">海島的清亮，土地的誠實。</p>
+      <div class="hero-meta reveal">
+        <span>稻米</span>
+        <span>海鹽</span>
+        <span>職人</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 Sub-themes -->
+  <section class="section-tight">
+    <div class="container">
+      <header style="text-align:center; margin-bottom: 2rem;">
+        <div class="eyebrow reveal">Five themes · 五個主題</div>
+        <h2 class="h-section reveal" style="margin-top:1rem;">從田到桌，從手到家</h2>
+      </header>
+    </div>
+    <div class="themes">
+      <a href="#rice" class="theme reveal"><div class="theme-han" style="color: var(--moss);">米</div><div class="theme-en">Rice</div></a>
+      <a href="#salt" class="theme reveal"><div class="theme-han" style="color: var(--moss);">鹽</div><div class="theme-en">Salt</div></a>
+      <a href="#tea" class="theme reveal"><div class="theme-han" style="color: var(--moss);">茶</div><div class="theme-en">Tea</div></a>
+      <a href="#crafts" class="theme reveal"><div class="theme-han" style="color: var(--moss);">器</div><div class="theme-en">Craft</div></a>
+      <a href="#farm" class="theme reveal"><div class="theme-han" style="color: var(--moss);">農</div><div class="theme-en">Farm</div></a>
+    </div>
+  </section>
+
+  <!-- Region brief -->
+  <section class="section-tight">
+    <div class="container narrow">
+      <p class="lede reveal" style="text-align:center;">
+        台灣是一座島，但島上有山、有海、有田。從花蓮的稻、台南的鹽、坪林的茶，到南投的木工、苗栗的窯。我們從在地職人手中選回每一件能說土地故事的物。
+      </p>
+    </div>
+  </section>
+
+  <!-- Product Cards -->
+  <section class="section-tight" id="rice">
+    <div class="container">
+      <header style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);">
+        <h2 class="h-section reveal">當季選物</h2>
+        <a href="#" class="reveal" style="font-family: var(--font-display); font-style: italic; color: var(--moss); letter-spacing: 0.05em;">查看全部 →</a>
+      </header>
+      <div class="products">
+        <a href="#" class="product reveal">
+          <div class="img-placeholder moss"><span>TAIWAN</span></div>
+          <div class="cat moss">米 · RICE</div>
+          <h4>花蓮玉里 有機越光米</h4>
+          <p class="origin">花蓮玉里鎮 · 江漢錡先生</p>
+          <p class="price">NT$ 380 / 1.5kg</p>
+        </a>
+        <a href="#" class="product reveal">
+          <div class="img-placeholder dark"><span>TAIWAN</span></div>
+          <div class="cat moss">鹽 · SALT</div>
+          <h4>台南七股 手工日曬海鹽</h4>
+          <p class="origin">台南七股鹽場 · 老師傅日曬</p>
+          <p class="price">NT$ 280 / 200g</p>
+        </a>
+        <a href="#" class="product reveal">
+          <div class="img-placeholder"><span>TAIWAN</span></div>
+          <div class="cat moss">茶 · TEA</div>
+          <h4>坪林文山包種茶</h4>
+          <p class="origin">新北坪林 · 自然農法</p>
+          <p class="price">NT$ 1,200 / 150g</p>
+        </a>
+        <a href="#" class="product reveal">
+          <div class="img-placeholder moss"><span>TAIWAN</span></div>
+          <div class="cat moss">器 · CRAFT</div>
+          <h4>苗栗 柴燒陶杯（一對）</h4>
+          <p class="origin">苗栗公館 · 林師傅柴窯</p>
+          <p class="price">NT$ 2,800</p>
+        </a>
+        <a href="#" class="product reveal">
+          <div class="img-placeholder dark"><span>TAIWAN</span></div>
+          <div class="cat moss">器 · CRAFT</div>
+          <h4>南投 老梅木砧板</h4>
+          <p class="origin">南投埔里 · 三十年老梅</p>
+          <p class="price">NT$ 1,680</p>
+        </a>
+        <a href="#" class="product reveal">
+          <div class="img-placeholder"><span>TAIWAN</span></div>
+          <div class="cat moss">農 · FARM</div>
+          <h4>宜蘭三星青蔥（季節限定）</h4>
+          <p class="origin">宜蘭三星鄉 · 友善耕作</p>
+          <p class="price">NT$ 320 / 600g</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pull Quote -->
+  <section class="pull-quote">
+    <div class="container narrow">
+      <q class="reveal">土地不會騙人，做事的人不會騙人。我們做的，只是把這份誠實，誠實地介紹給你。</q>
+      <p class="pull-quote-attr reveal">— 簡家旗</p>
+    </div>
+  </section>
+
+  <!-- Farm-to-table story -->
+  <section class="section">
+    <div class="container">
+      <header style="text-align:center; margin-bottom: 3rem;">
+        <div class="eyebrow reveal">Farm to table · 稻田裡的餐桌</div>
+        <h2 class="h-section reveal" style="margin-top:1rem;">從一張餐桌開始的選物</h2>
+      </header>
+      <div class="portrait reveal">
+        <div class="img-placeholder moss"><span>FIELD</span></div>
+        <div>
+          <div class="eyebrow" style="color: var(--moss);">Yilan · 宜蘭三星</div>
+          <h3 class="name" style="margin-top: 1rem;">江漢錡 先生</h3>
+          <p class="role moss">三星有機米農 · 稻田裡的餐桌十四年合作夥伴</p>
+          <blockquote class="moss">
+            一開始把餐桌擺進田裡，我覺得這些城裡人來鬧的。後來年復一年地來，我才明白他們是真的想看一下這碗米從哪裡來。看過了，米的價值就回來了。
+          </blockquote>
+          <p style="color: var(--ink-soft); font-size: 0.95rem; margin-top: 1.5rem;">2012 年「稻田裡的餐桌計畫」第一場就在江先生的有機田中舉辦。十四年來，這片田從一個產地，變成了一個故事的起點，也是台灣選物的初心。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing Seal -->
+  <section class="seal">
+    <div class="seal-mark reveal">
+      <span>台灣</span>
+      <span>選物</span>
+    </div>
+    <p class="seal-tag reveal">From the island fields</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">大道至簡</div>
+        <div class="footer-brand-en">Dao is simple</div>
+        <p class="footer-brand-desc">做幸福的事，讓幸福變成有價值的事。雲南與台灣的好物與生活提案，由簡家旗主理。</p>
+      </div>
+      <div><h4>選物</h4><ul><li><a href="yunnan.html">雲南選物</a></li><li><a href="taiwan.html">台灣選物</a></li></ul></div>
+      <div><h4>內容</h4><ul><li><a href="journal.html">幸福誌</a></li><li><a href="about.html">關於</a></li></ul></div>
+      <div><h4>連繫</h4><ul><li><a href="services.html">服務體驗</a></li><li><a href="connect.html">寫信給我們</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 大道至簡 · Dao is simple　·　<a href="privacy.html">隱私權政策</a></p>
+      <p>Designed in stillness · 設計於靜處</p>
+    </div>
+  </div>
+</footer>
+
+<script src="scripts.js"></script>
+</body>
+</html>

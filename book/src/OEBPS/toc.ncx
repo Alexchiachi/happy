@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="zh-TW">
+<head><meta name="dtb:uid" content="urn:uuid:8f2a6c14-5d3b-4c77-9e21-b7c0a1d4f931"/><meta name="dtb:depth" content="1"/></head>
+<docTitle><text>我們不要就這樣算了，但也不要一直記得</text></docTitle>
+<navMap>
+<navPoint id="np1" playOrder="1"><navLabel><text>〔總序〕幸福三部曲・總序</text></navLabel><content src="f1.xhtml"/></navPoint>
+<navPoint id="np2" playOrder="2"><navLabel><text>〔首部曲序〕餐桌，是土地長出來的</text></navLabel><content src="f2.xhtml"/></navPoint>
+<navPoint id="np3" playOrder="3"><navLabel><text>第一章　那句台詞，為什麼讓全島流淚</text></navLabel><content src="c01.xhtml"/></navPoint>
+<navPoint id="np4" playOrder="4"><navLabel><text>第二章　忍耐是台灣人的母語</text></navLabel><content src="c02.xhtml"/></navPoint>
+<navPoint id="np5" playOrder="5"><navLabel><text>第三章　說出來之後，房間反而更安靜了</text></navLabel><content src="c03.xhtml"/></navPoint>
+<navPoint id="np6" playOrder="6"><navLabel><text>第四章　憤怒是能量，不是身分</text></navLabel><content src="c04.xhtml"/></navPoint>
+<navPoint id="np7" playOrder="7"><navLabel><text>第五章　不原諒，也可以放下</text></navLabel><content src="c05.xhtml"/></navPoint>
+<navPoint id="np8" playOrder="8"><navLabel><text>第六章　為道日損</text></navLabel><content src="c06.xhtml"/></navPoint>
+<navPoint id="np9" playOrder="9"><navLabel><text>第七章　身體記得，所以從身體放</text></navLabel><content src="c07.xhtml"/></navPoint>
+<navPoint id="np10" playOrder="10"><navLabel><text>第八章　先別急著把傷說成禮物</text></navLabel><content src="c08.xhtml"/></navPoint>
+<navPoint id="np11" playOrder="11"><navLabel><text>第九章　第二次自由</text></navLabel><content src="c09.xhtml"/></navPoint>
+<navPoint id="np12" playOrder="12"><navLabel><text>第十章　損到最後，剩下的就是你</text></navLabel><content src="c10.xhtml"/></navPoint>
+<navPoint id="np13" playOrder="13"><navLabel><text>〔後記〕土地不寫故事，土地只是等</text></navLabel><content src="b13.xhtml"/></navPoint>
+<navPoint id="np14" playOrder="14"><navLabel><text>〔作者簡介〕</text></navLabel><content src="b14.xhtml"/></navPoint>
+<navPoint id="np15" playOrder="15"><navLabel><text>〔致謝〕</text></navLabel><content src="b15.xhtml"/></navPoint>
+</navMap>
+</ncx>

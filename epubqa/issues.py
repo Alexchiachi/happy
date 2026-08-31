@@ -26,13 +26,14 @@ class Severity(enum.IntEnum):
 
 
 #: Store identifiers used by the ``stores`` field of an :class:`Issue`.
-STORES = ("kdp", "apple", "google", "kobo")
+STORES = ("kdp", "apple", "google", "kobo", "readmoo")
 
 STORE_NAMES = {
     "kdp": "Amazon KDP",
     "apple": "Apple Books",
     "google": "Google Play Books",
     "kobo": "Rakuten Kobo",
+    "readmoo": "Readmoo 讀墨",
 }
 
 

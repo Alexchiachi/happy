@@ -1,0 +1,139 @@
+@charset "utf-8";
+html { margin:0; padding:0; }
+body {
+  /* No forced font, no background, no colour: the reader owns all three.
+     The stack still states the intent, but anything here can be overridden. */
+  font-family:"Source Han Serif TC","Noto Serif CJK TC","Noto Serif TC",
+              "Songti TC","PMingLiU",serif;
+  margin:0; padding:0;
+  line-height:2.0; text-align:justify; text-justify:inter-ideograph; -webkit-hyphens:none; }
+.page { padding:1.6em 1.5em 3em 1.5em; }
+p { margin:0 0 1.1em 0; }
+em { font-style:normal; color:#6A6459; }
+strong { font-weight:600; }
+img { max-width:100%; height:auto; }
+body.coverpage { margin:0; padding:0; }
+body.coverpage .page { padding:0; }
+.coverwrap { text-align:center; margin:0; padding:0; }
+.titlepage { text-align:left; padding:14% 4% 0 4%; }
+.series { font-size:0.78em; letter-spacing:0.4em; color:#6A6459; margin:0 0 0.5em 0; }
+.volume { font-size:0.78em; letter-spacing:0.32em; color:#9B3A2C; margin:0 0 2.6em 0; }
+.btitle { font-size:2.05em; font-weight:600; line-height:1.45; letter-spacing:0.02em; margin:0; }
+.btitle2 { font-weight:normal; color:#3B3833; }
+.rule { border-top:1px solid rgba(32,32,29,0.3); margin:2.6em 0 1.4em 0; }
+.author { font-size:0.95em; letter-spacing:0.3em; color:#3B3833; margin:0 0 3.6em 0; }
+.imprint { font-size:0.7em; letter-spacing:0.3em; color:#6E675B; margin:0; }
+.gua { text-align:center; padding:14% 6% 0 6%; page-break-after:always; break-after:page; }
+.kicker { font-size:0.68em; letter-spacing:0.42em; color:#6E675B; margin:0 0 2.4em 0; text-align:center; }
+.kicker.mini { margin:2.6em 0 1.2em 0; color:#9B3A2C; letter-spacing:0.36em; }
+.hex { width:5.6em; margin:0 auto 1.9em auto; }
+.bar { height:0.42em; margin-bottom:0.38em; text-align:center; }
+.bar span { display:inline-block; height:0.42em; vertical-align:top; }
+.bar .full { width:100%; }
+.bar .half { width:41%; }
+.bar .half.r { margin-left:18%; }
+.bar.up span { background:#9B3A2C; }
+.bar.dn span { background:#3B3833; }
+.guaname { font-size:1.8em; letter-spacing:0.26em; margin:0 0 0.5em 0; font-weight:normal; text-align:center; }
+.guatri { font-size:0.72em; letter-spacing:0.3em; color:#6E675B; margin:0; text-align:center; }
+.hairline { width:2.4em; border-top:1px solid rgba(32,32,29,0.35); margin:2.2em auto; }
+.xiang { font-size:1.05em; line-height:2.1; color:#2C2A26; margin:0 0 0.6em 0; text-align:center; }
+.attrib { font-size:0.72em; letter-spacing:0.22em; color:#6E675B; margin:0; text-align:center; }
+.verse p { font-size:0.95em; line-height:2.35; color:#413D37; margin:0; text-align:center; }
+.opener { padding:16% 0 0 0; page-break-after:always; break-after:page; page-break-before:always; }
+.opener.minor { padding:18% 0 0 0; }
+.numeral { font-size:4.4em; line-height:1; color:#D9D0BD; margin:0 0 0.1em 0; }
+.chno { font-size:0.72em; letter-spacing:0.4em; color:#9B3A2C; margin:0 0 1.1em 0; }
+.ctitle { font-size:1.85em; font-weight:600; line-height:1.5; margin:0; }
+.ctitle.mtitle { font-size:1.55em; letter-spacing:0.08em; font-weight:normal; }
+.csub { font-size:0.92em; line-height:1.95; color:#6A6459; margin:1.5em 0 0 0; padding-left:0.9em; border-left:2px solid #9B3A2C; }
+.text { padding-top:0.4em; }
+.sect { font-size:1.12em; font-weight:600; letter-spacing:0.06em; color:#1C1B18;
+  margin:2.9em 0 1.3em 0; padding-bottom:0.55em; border-bottom:1px solid rgba(32,32,29,0.16); text-align:left; }
+.endnote { font-size:0.82em; line-height:2; color:#6E675B; text-align:center; margin:3.2em 0 0 0; padding-top:1.6em; border-top:1px solid rgba(32,32,29,0.16); }
+.sig { text-align:right; font-size:0.9em; letter-spacing:0.2em; color:#4A463F; margin:2.4em 0 0 0; }
+.byname { font-size:1.15em; letter-spacing:0.24em; font-weight:600; margin:0 0 1.4em 0; }
+.toch { margin-bottom:2.4em; }
+ol.toc { list-style:none; margin:0; padding:0; }
+ol.toc li { margin:0 0 1.5em 0; padding:0; }
+ol.toc a { text-decoration:none; color:#20201D; display:block;
+  font-size:1.02em; line-height:1.6; }
+.tocnum { display:inline-block; width:2em; color:#9B3A2C; font-size:0.88em; letter-spacing:0.1em; }
+.tocsub { display:block; margin-left:2em; font-size:0.8em; line-height:1.75; color:#6E675B; }
+
+
+/* --- 標題改用黑體，書名放大 --- */
+.titlepage .btitle, .titlepage .btitle2 {
+  font-family:"Source Han Sans TC","Noto Sans CJK TC","Noto Sans TC",
+              "PingFang TC","Microsoft JhengHei",sans-serif; }
+.titlepage .btitle { font-size:3.1em; font-weight:500; line-height:1.32; letter-spacing:0.01em; }
+.titlepage .btitle2 { font-weight:400; }
+.opener .ctitle {
+  font-family:"Source Han Sans TC","Noto Sans CJK TC","Noto Sans TC",
+              "PingFang TC","Microsoft JhengHei",sans-serif; }
+
+
+/* --- 版權頁 --- */
+.copyright { padding:16% 6% 0 6%; }
+.copyright .kicker { text-align:left; margin:0 0 3.2em 0; }
+.cline { font-size:1.12em; line-height:1.7; font-weight:600; margin:0 0 0.9em 0; }
+.cmeta { font-size:0.8em; letter-spacing:0.16em; color:#6A6459; margin:0 0 0.35em 0; }
+.crule { border-top:1px solid rgba(32,32,29,0.28); margin:2.6em 0 2.2em 0; }
+.cnotice { font-size:0.9em; letter-spacing:0.06em; color:#9B3A2C; margin:0 0 1.8em 0; }
+.clegal { font-size:0.76em; line-height:2.05; color:#4A463F; margin:0 0 1.2em 0; }
+.cmail { font-size:0.76em; letter-spacing:0.04em; color:#6A6459; margin:2.2em 0 0 0; padding-top:1.2em; border-top:1px solid rgba(32,32,29,0.16); }
+
+/* --- 排版基準（CJK 斷行） --- */
+body { line-break: strict; }
+
+/* --- 版面保護 ---
+   閱讀器（或後製工具）可能在 body 注入 text-indent；該屬性會繼承到
+   每一個區塊容器，把定寬的 inline-block 標號與卦象線條推出框外。
+   下列元素一律歸零，確保目錄與圖形在任何閱讀器都不跑版。 */
+.hex, .bar, .bar span,
+ol.toc, ol.toc li, ol.toc a, .tocnum, .tocsub { text-indent: 0; }
+
+/* --- 目錄：懸掛縮排，讓折行的標題與副標對齊標題起點 --- */
+ol.toc a { padding-left: 2.2em; }
+.tocnum { width: 2.5em; margin-left: -2.5em; }
+.tocsub { margin-left: 0; }
+
+
+/* ======================================================================
+   配色：交給閱讀器，設計層只在「閱讀器願意讓我們畫」的時候補上。
+
+   base 規則不再指定 body 的 background / color，所以在不支援 media query
+   的舊閱讀器（多數 RMSDK 機種）上，會落回閱讀器自己的底色與文字色 ——
+   永遠可讀，只是少了米色紙感。
+
+   支援 prefers-color-scheme 的閱讀器則兩邊都補齊：淺色補回設計的米底，
+   深色整組換掉。關鍵是深色那組必須連「裝飾色」一起換 —— 只換底色不換
+   #9B3A2C、#3B3833 這類深色文字，就會變成深底深字。
+   ====================================================================== */
+
+@media (prefers-color-scheme: light) {
+  body, body.coverpage { background:#EDE8DC; color:#20201D; }
+}
+
+@media (prefers-color-scheme: dark) {
+  body, body.coverpage { background:#171614; color:#DCD6C9; }
+
+  em, .series, .csub, .cmeta, .cmail { color:#A79F91; }
+  .imprint, .kicker, .guatri, .attrib, .tocsub, .endnote { color:#938B7D; }
+  .btitle2, .author { color:#CFC8BA; }
+  .volume, .kicker.mini, .chno, .tocnum, .cnotice { color:#D98A72; }
+  .xiang { color:#E4DED2; }
+  .verse p, .sig, .clegal { color:#BDB6A8; }
+  .sect, ol.toc a { color:#E4DED2; }
+  .numeral { color:#3A362F; }
+  .cline { color:#E8E2D6; }
+
+  .bar.up span { background:#C4674F; }
+  .bar.dn span { background:#9E9789; }
+
+  .csub { border-left-color:#C4674F; }
+  .sect { border-bottom-color:rgba(220,214,201,0.18); }
+  .endnote, .cmail { border-top-color:rgba(220,214,201,0.18); }
+  .crule { border-top-color:rgba(220,214,201,0.30); }
+  .rule { border-top-color:rgba(220,214,201,0.30); }
+}
