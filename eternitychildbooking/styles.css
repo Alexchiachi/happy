@@ -346,6 +346,7 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .field textarea { min-height: 108px; resize: vertical; }
 .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
+.field .note { font-size: .76rem; color: var(--ink-mute); line-height: 1.45; }
 .field .err { font-size: .78rem; color: var(--danger); display: none; }
 .field.invalid .err { display: block; }
 

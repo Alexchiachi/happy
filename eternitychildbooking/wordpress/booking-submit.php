@@ -64,6 +64,8 @@ $service  = $clip(isset($d['serviceLabel']) ? $d['serviceLabel'] : '', 40);
 $visit    = (isset($d['visit']) && $d['visit'] === 'first') ? '初診' : '回診';
 $minutes  = (int) (isset($d['durationMinutes']) ? $d['durationMinutes'] : 0);
 $price    = (int) (isset($d['price']) ? $d['price'] : 0);
+$last5    = preg_replace('/\D/', '', (string) (isset($d['transferLast5']) ? $d['transferLast5'] : ''));
+$last5    = mb_substr($last5, 0, 5);
 $lang     = in_array(isset($d['preferredLanguage']) ? $d['preferredLanguage'] : '', ['zh','en','ja','ko'], true)
             ? $d['preferredLanguage'] : 'zh';
 $notes    = mb_substr(sanitize_textarea_field(isset($d['notes']) ? $d['notes'] : ''), 0, 1000);
@@ -95,6 +97,7 @@ $lines = [
     "電話：$phone",
     "Email：$email",
     "溝通語言：$lang",
+    "匯款末五碼：" . ($last5 !== '' ? $last5 : '（尚未填寫）'),
     "備註：" . ($notes !== '' ? $notes : '—'),
     "",
     "送出時間：" . current_time('Y-m-d H:i:s'),

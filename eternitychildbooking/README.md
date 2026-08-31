@@ -16,6 +16,7 @@ eternitychildbooking/
 ├── config.js     ★ 營業時間、價格、帳號、收件信箱都在這裡
 ├── app.js        預約流程邏輯（日曆、時段、驗證、送出）
 ├── standalone.html  以上全部合併成的單一檔案（方便寄送或丟到任何空間）
+├── google/       ★ Google 試算表收單程式與部署說明（建議）
 ├── wordpress/    WordPress 部署說明與 PHP 收單程式
 └── assets/       選填：TWQR 收款條碼圖檔
 ```
@@ -122,7 +123,9 @@ qrImage: 'assets/twqr.jpg',           // 放上 TWQR 條碼圖檔後填入
 
 ### 方式 B（建議）：Google 試算表自動收單
 
-用 Google Apps Script 建立一個免費的收單後端，預約資料會自動寫進試算表並寄信通知：
+**完整的程式與部署步驟請看 [`google/README.md`](google/README.md)**，
+那裡的 `booking-sheet.gs` 除了寫進試算表，還會寄通知信給中心、
+並依客人語言自動回一封確認信。以下是最精簡的版本：
 
 1. 開一個新的 Google 試算表 → **擴充功能 → Apps Script**，貼上：
 

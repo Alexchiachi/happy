@@ -359,6 +359,7 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .field textarea { min-height: 108px; resize: vertical; }
 .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
+.field .note { font-size: .76rem; color: var(--ink-mute); line-height: 1.45; }
 .field .err { font-size: .78rem; color: var(--danger); display: none; }
 .field.invalid .err { display: block; }
 
@@ -643,6 +644,12 @@ input, select, textarea { font: inherit; color: inherit; }
               <label for="fLang" data-i18n="form.lang">希望的溝通語言</label>
               <select id="fLang"></select>
             </div>
+            <div class="field" data-field="last5">
+              <label for="fLast5"><span data-i18n="form.last5">匯款末五碼</span><span class="hint" data-i18n="form.optional">選填</span></label>
+              <input id="fLast5" type="text" inputmode="numeric" maxlength="5" autocomplete="off" data-i18n-ph="form.last5.ph">
+              <span class="note" data-i18n="form.last5.hint"></span>
+              <span class="err" data-i18n="err.last5"></span>
+            </div>
             <div class="field full" data-field="notes">
               <label for="fNotes"><span data-i18n="form.notes">身體狀況或備註</span><span class="hint" data-i18n="form.optional">選填</span></label>
               <textarea id="fNotes" data-i18n-ph="form.notes.ph"></textarea>
@@ -834,15 +841,26 @@ const CONFIG = {
   /* 公休日（YYYY-MM-DD），可自行增列國定假日 */
   closedDates: [],
 
-  /* 選填：若填入後端網址（PHP / Google Apps Script / Web3Forms 等），
-     送出時會 POST JSON 過去；留空則改用電子郵件寄送。 */
-  endpoint: '',
+  /* 收單網址：送出時會把預約資料 POST 過去。
+     留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
 
-  /* 選填：要一併送出的額外欄位。第三方表單服務通常需要一組金鑰，
-     例如 Web3Forms：
-       endpoint: 'https://api.web3forms.com/submit',
-       endpointFields: { access_key: '你的金鑰', subject: '新預約' }
-     這樣不用改任何程式，靜態主機（Netlify、Cloudflare Pages）也能收信。 */
+     ★ 建議：Google 試算表收單（免費、資料只經過你自己的 Google 帳號）
+       部署 google/booking-sheet.gs 之後，把產生的 /exec 網址貼在下面。
+       做法見 google/README.md。 */
+  endpoint: '',
+  // endpoint: 'https://script.google.com/macros/s/AKfycb.../exec',
+
+  /* 其他選擇：
+       WordPress 自架 → '/eternitychildbooking/booking-submit.php'
+       不想開試算表 → 'https://formsubmit.co/ajax/ahanamita88888888@gmail.com'
+                      （免註冊，第一次送出後要點信中的啟用連結） */
+
+  /* 送出時的 Content-Type。留空會自動判斷：
+     Google Apps Script 必須用 text/plain，否則瀏覽器的 CORS 預檢會被擋下來。 */
+  endpointContentType: '',
+
+  /* 選填：要一併送出的額外欄位（第三方服務的設定或金鑰）。
+     Google 試算表版不需要；FormSubmit 用底線開頭的欄位，Web3Forms 用 access_key。 */
   endpointFields: {}
 };
 
@@ -943,6 +961,11 @@ const I18N = {
     'form.email': '電子信箱',
     'form.email.ph': 'your@email.com',
     'form.lang': '希望的溝通語言',
+    'form.last5': '匯款末五碼',
+    'form.last5.ph': '例：12345',
+    'form.last5.hint': '已完成轉帳再填，尚未轉帳可留空',
+    'err.last5': '匯款末五碼請填五位數字，或留空',
+    'review.last5': '匯款末五碼',
     'form.notes': '身體狀況或備註',
     'form.notes.ph': '例如：長期肩頸僵硬、下背痛、曾有手術史⋯⋯（非必填）',
     'form.optional': '選填',
@@ -1091,6 +1114,11 @@ const I18N = {
     'form.email': 'Email',
     'form.email.ph': 'your@email.com',
     'form.lang': 'Preferred Language',
+    'form.last5': 'Last 5 digits of transfer',
+    'form.last5.ph': 'e.g. 12345',
+    'form.last5.hint': 'Only if you have already transferred — otherwise leave blank',
+    'err.last5': 'Please enter exactly 5 digits, or leave it blank',
+    'review.last5': 'Transfer (last 5)',
     'form.notes': 'Condition or Notes',
     'form.notes.ph': 'e.g. chronic neck stiffness, lower back pain, past surgery… (optional)',
     'form.optional': 'optional',
@@ -1239,6 +1267,11 @@ const I18N = {
     'form.email': 'メールアドレス',
     'form.email.ph': 'your@email.com',
     'form.lang': 'ご希望の対応言語',
+    'form.last5': '振込下5桁',
+    'form.last5.ph': '例：12345',
+    'form.last5.hint': 'お振込み済みの方のみご記入ください（未入金の場合は空欄）',
+    'err.last5': '5桁の数字をご入力いただくか、空欄のままにしてください',
+    'review.last5': '振込下5桁',
     'form.notes': 'お身体の状態・ご要望',
     'form.notes.ph': '例：慢性的な首こり、腰痛、手術歴など（任意）',
     'form.optional': '任意',
@@ -1387,6 +1420,11 @@ const I18N = {
     'form.email': '이메일',
     'form.email.ph': 'your@email.com',
     'form.lang': '희망 응대 언어',
+    'form.last5': '이체 뒷 5자리',
+    'form.last5.ph': '예: 12345',
+    'form.last5.hint': '이미 이체하신 경우에만 입력해 주세요 (미입금은 공란)',
+    'err.last5': '숫자 5자리를 입력하시거나 비워 두세요',
+    'review.last5': '이체 뒷 5자리',
     'form.notes': '몸 상태 및 요청 사항',
     'form.notes.ph': '예: 만성 목·어깨 결림, 허리 통증, 수술 이력 등 (선택)',
     'form.optional': '선택',
@@ -1474,7 +1512,7 @@ const I18N = {
     step: 1,
     calYear: 0,
     calMonth: 0,         // 0-based
-    contact: { name: '', phone: '', email: '', lang: '', notes: '' },
+    contact: { name: '', phone: '', email: '', lang: '', last5: '', notes: '' },
     ref: ''
   };
 
@@ -1992,21 +2030,26 @@ const I18N = {
     c.phone = $('#fPhone').value.trim();
     c.email = $('#fEmail').value.trim();
     c.lang  = $('#fLang').value;
+    c.last5 = $('#fLast5').value.trim();
     c.notes = $('#fNotes').value.trim();
 
     const okName  = c.name.length >= 1;
     const okPhone = /^[0-9+()\-\s.]{6,24}$/.test(c.phone);
     const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email);
+    // optional: the client may not have transferred yet when booking
+    const okLast5 = c.last5 === '' || /^\d{5}$/.test(c.last5);
     const okAgree = $('#fAgree').checked;
 
     setFieldValid('name', okName);
     setFieldValid('phone', okPhone);
     setFieldValid('email', okEmail);
+    setFieldValid('last5', okLast5);
     $('#agreeWrap').classList.toggle('invalid', !okAgree);
 
     if (!okName)  { showError(3, t('err.name'));  return false; }
     if (!okPhone) { showError(3, t('err.phone')); return false; }
     if (!okEmail) { showError(3, t('err.email')); return false; }
+    if (!okLast5) { showError(3, t('err.last5')); return false; }
     if (!okAgree) { showError(3, t('err.agree')); return false; }
     hideError(3);
     return true;
@@ -2029,6 +2072,7 @@ const I18N = {
       [t('review.phone'),    c.phone],
       [t('review.email'),    c.email],
       [t('review.lang'),     langLabel],
+      [t('review.last5'),    c.last5 || t('review.none')],
       [t('review.notes'),    c.notes || t('review.none')],
       [t('review.price'),    money(currentPrice()), 'total']
     ];
@@ -2080,6 +2124,7 @@ const I18N = {
       phone: c.phone,
       email: c.email,
       preferredLanguage: c.lang,
+      transferLast5: c.last5,
       notes: c.notes,
       submittedAt: new Date().toISOString()
     };
@@ -2090,11 +2135,12 @@ const I18N = {
     const L = [
       t('done.code') + ': ' + p.ref,
       '',
-      t('review.service')  + ': ' + t('service.' + p.service) + ' / ' + p.serviceLabel,
+      t('review.service')  + ': ' + t('service.' + p.service) +
+        (t('service.' + p.service) === p.serviceLabel ? '' : ' / ' + p.serviceLabel),
       t('review.visit')    + ': ' + t(p.visit === 'first' ? 'visit.first' : 'visit.return'),
       p.parts.length
         ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
-          ' / ' + p.partsLabels.join('、')
+          (state.lang === 'zh' ? '' : ' / ' + p.partsLabels.join('、'))
         : null,
       t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
       t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
@@ -2103,7 +2149,9 @@ const I18N = {
       t('review.name')  + ': ' + p.name,
       t('review.phone') + ': ' + p.phone,
       t('review.email') + ': ' + p.email,
-      t('review.lang')  + ': ' + p.preferredLanguage,
+      t('review.lang')  + ': ' +
+        ((LANGS.find(l => l.code === p.preferredLanguage) || {}).label || p.preferredLanguage),
+      t('review.last5') + ': ' + (p.transferLast5 || '-'),
       t('review.notes') + ': ' + (p.notes || '-'),
       '',
       t('pay.title'),
@@ -2111,6 +2159,25 @@ const I18N = {
       t('pay.acct') + ': ' + CONFIG.bank.account
     ];
     return L.filter(line => line !== null).join('\n');
+  }
+
+  /* Google Apps Script web apps answer no CORS preflight, so an
+     application/json POST is blocked before it ever reaches the script.
+     text/plain keeps the request "simple" and the script reads the body
+     the same way. */
+  function endpointContentType() {
+    if (CONFIG.endpointContentType) return CONFIG.endpointContentType;
+    return /script\.google\.com/.test(CONFIG.endpoint)
+      ? 'text/plain;charset=utf-8'
+      : 'application/json';
+  }
+
+  /* The centre reads its notifications in Chinese regardless of which
+     language the client filled the form in. */
+  function bookingTextZh() {
+    const keep = state.lang;
+    state.lang = 'zh';
+    try { return bookingText(); } finally { state.lang = keep; }
   }
 
   function mailtoUrl() {
@@ -2193,11 +2260,25 @@ const I18N = {
     btn.disabled = true;
     fetch(CONFIG.endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.assign({}, CONFIG.endpointFields || {}, bookingPayload()))
+      headers: { 'Content-Type': endpointContentType() },
+      body: JSON.stringify(Object.assign(
+        {},
+        CONFIG.endpointFields || {},
+        bookingPayload(),
+        // a Chinese-keyed readable block, so a generic form service's
+        // notification email is legible without any template setup
+        { '預約明細': bookingTextZh() }
+      ))
     })
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({ ok: true })); })
-      .then(res => { if (res && res.ok === false) throw new Error(res.error || 'rejected'); goto(5); })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({})); })
+      .then(res => {
+        // our PHP answers {ok:…}; FormSubmit and Web3Forms answer {success:…},
+        // and FormSubmit reports failure as the string "false"
+        const ok = res.ok !== false &&
+                   res.success !== false && res.success !== 'false';
+        if (!ok) throw new Error(res.error || res.message || 'rejected');
+        goto(5);
+      })
       .catch(() => {
         // the endpoint is unreachable or refused the booking: fall back to email
         // so the request still reaches the centre
@@ -2219,8 +2300,8 @@ const I18N = {
     state.date = null;
     state.time = null;
     state.ref = '';
-    state.contact = { name: '', phone: '', email: '', lang: state.lang, notes: '' };
-    ['fName', 'fPhone', 'fEmail', 'fNotes'].forEach(id => { $('#' + id).value = ''; });
+    state.contact = { name: '', phone: '', email: '', lang: state.lang, last5: '', notes: '' };
+    ['fName', 'fPhone', 'fEmail', 'fLast5', 'fNotes'].forEach(id => { $('#' + id).value = ''; });
     $('#fAgree').checked = false;
     $$('.field').forEach(f => f.classList.remove('invalid'));
     $('#agreeWrap').classList.remove('invalid');
@@ -2265,7 +2346,7 @@ const I18N = {
     if (icsBtn) icsBtn.addEventListener('click', () => download(state.ref + '.ics', icsContent(), 'text/calendar'));
     $('#restartBtn').addEventListener('click', resetAll);
 
-    ['fName', 'fPhone', 'fEmail'].forEach(id => {
+    ['fName', 'fPhone', 'fEmail', 'fLast5'].forEach(id => {
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
