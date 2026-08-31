@@ -190,13 +190,133 @@ function getSheet_() {
 
 function notifyCentre_(d) {
   const subject = '[新預約 ' + (d.ref || '') + '] ' +
-                  (d.date || '') + ' ' + (d.startTime || '') + ' ' + (d.name || '');
-  // 前端已附上排好版的中文明細，直接拿來當信件內容
-  const body = (d['預約明細'] || JSON.stringify(d, null, 2)) +
-               '\n\n試算表：' + getSpreadsheet_().getUrl();
-  const options = { name: CENTER_NAME };
+                  prettyDate_(d.date) + ' ' + (d.startTime || '') + ' ' + (d.name || '');
+  const rows = [
+    ['服務項目', esc_(d.serviceLabel || d.service || '')],
+    ['選擇部位', (d.partsLabels || []).join('、')],
+    ['看診類型', d.visit === 'first' ? '初診' : '回診'],
+    ['預約時間', prettyDate_(d.date) + '　' + (d.startTime || '') + '–' + (d.endTime || '')],
+    ['療程時長', (d.durationMinutes || '') + ' 分鐘'],
+    ['費用', money_(d.price)],
+    ['—', ''],
+    ['姓名', esc_(d.name || '')],
+    ['電話', d.phone ? '<a href="tel:' + esc_(d.phone) + '" style="color:#1f5f52">' + esc_(d.phone) + '</a>' : ''],
+    ['Email', d.email ? '<a href="mailto:' + esc_(d.email) + '" style="color:#1f5f52">' + esc_(d.email) + '</a>' : ''],
+    ['溝通語言', LANG_NAME[d.preferredLanguage] || d.preferredLanguage || ''],
+    ['匯款末五碼', d.transferLast5 ? '<strong>' + esc_(d.transferLast5) + '</strong>' : '（尚未填寫）'],
+    ['備註', esc_(d.notes || '') || '—']
+  ];
+
+  const html = mailShell_(
+    '新的線上預約',
+    d.ref || '',
+    tableHtml_(rows) +
+    '<p style="margin:22px 0 0"><a href="' + getSpreadsheet_().getUrl() + '" ' +
+    'style="display:inline-block;padding:11px 22px;background:#1f5f52;color:#fff;' +
+    'border-radius:999px;text-decoration:none;font-weight:600;font-size:14px">開啟預約試算表</a></p>' +
+    '<p style="margin:14px 0 0;font-size:12px;color:#7f8d89">直接回覆這封信，就是回信給客人。</p>'
+  );
+
+  const options = { name: CENTER_NAME, htmlBody: html };
   if (d.email) options.replyTo = d.email;
-  MailApp.sendEmail(CENTER_EMAIL, subject, body, options);
+  MailApp.sendEmail(CENTER_EMAIL, subject, centreText_(d), options);
+}
+
+/** 不支援 HTML 的信箱看到的純文字版本。 */
+function centreText_(d) {
+  return [
+    '預約編號：' + (d.ref || ''),
+    '',
+    '服務項目：' + (d.serviceLabel || d.service || ''),
+    (d.partsLabels || []).length ? '選擇部位：' + d.partsLabels.join('、') : null,
+    '看診類型：' + (d.visit === 'first' ? '初診' : '回診'),
+    '預約時間：' + prettyDate_(d.date) + ' ' + (d.startTime || '') + '–' + (d.endTime || ''),
+    '療程時長：' + (d.durationMinutes || '') + ' 分鐘',
+    '費用：' + money_(d.price),
+    '',
+    '姓名：' + (d.name || ''),
+    '電話：' + (d.phone || ''),
+    'Email：' + (d.email || ''),
+    '溝通語言：' + (LANG_NAME[d.preferredLanguage] || d.preferredLanguage || ''),
+    '匯款末五碼：' + (d.transferLast5 || '（尚未填寫）'),
+    '備註：' + (d.notes || '—'),
+    '',
+    '試算表：' + getSpreadsheet_().getUrl()
+  ].filter(function (l) { return l !== null; }).join('\n');
+}
+
+/* ---------- 信件排版 ---------- */
+
+const LANG_NAME = { zh: '中文', en: 'English', ja: '日本語', ko: '한국어' };
+
+function esc_(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function money_(n) {
+  const num = Number(n || 0);
+  return 'NT$ ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/** 2026-09-30 → 2026年9月30日（週三）。中心一律看中文。 */
+function prettyDate_(s) {
+  return prettyDateLang_(s, 'zh');
+}
+
+/** 依語言排版日期，讓客人收到的確認信讀起來像母語。 */
+function prettyDateLang_(s, lang) {
+  const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return String(s || '');
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  const wd = new Date(y, mo - 1, d).getDay();
+  const WEEK = {
+    zh: ['日', '一', '二', '三', '四', '五', '六'],
+    ja: ['日', '月', '火', '水', '木', '金', '土'],
+    ko: ['일', '월', '화', '수', '목', '금', '토'],
+    en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  };
+  const MON_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (lang === 'ja') return y + '年' + mo + '月' + d + '日（' + WEEK.ja[wd] + '）';
+  if (lang === 'ko') return y + '년 ' + mo + '월 ' + d + '일 (' + WEEK.ko[wd] + ')';
+  if (lang === 'en') return WEEK.en[wd] + ', ' + MON_EN[mo - 1] + ' ' + d + ', ' + y;
+  return y + '年' + mo + '月' + d + '日（週' + WEEK.zh[wd] + '）';
+}
+
+/** 兩欄式明細表；標籤為 '—' 的列會畫成分隔線。 */
+function tableHtml_(rows) {
+  const cells = rows.map(function (r) {
+    if (r[0] === '—') {
+      return '<tr><td colspan="2" style="padding:6px 0"><div style="border-top:1px solid #eef1ee"></div></td></tr>';
+    }
+    if (!r[1]) return '';
+    return '<tr>' +
+      '<td style="padding:7px 16px 7px 0;color:#7f8d89;font-size:13px;white-space:nowrap;vertical-align:top">' + r[0] + '</td>' +
+      '<td style="padding:7px 0;font-size:15px;color:#17211f;vertical-align:top">' + r[1] + '</td>' +
+      '</tr>';
+  }).join('');
+  return '<table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse">' + cells + '</table>';
+}
+
+/** 信件外框：品牌色標題列 + 預約編號 + 內容。 */
+function mailShell_(heading, ref, inner) {
+  return '' +
+'<div style="margin:0;padding:24px 12px;background:#f7f6f2;' +
+'font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',\'PingFang TC\',\'Noto Sans TC\',\'Hiragino Sans\',\'Apple SD Gothic Neo\',sans-serif">' +
+  '<table cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;width:100%;' +
+  'background:#fff;border:1px solid #e2e6e2;border-radius:14px;overflow:hidden">' +
+    '<tr><td style="background:#1f5f52;padding:20px 26px">' +
+      '<div style="color:#cfe3dd;font-size:12px;letter-spacing:.16em">' + esc_(CENTER_NAME) + '</div>' +
+      '<div style="color:#fff;font-size:19px;font-weight:600;margin-top:4px">' + esc_(heading) + '</div>' +
+    '</td></tr>' +
+    (ref ? '<tr><td style="padding:18px 26px 0">' +
+      '<span style="display:inline-block;padding:6px 14px;background:#e8f1ee;color:#1f5f52;' +
+      'border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.06em">' + esc_(ref) + '</span>' +
+    '</td></tr>' : '') +
+    '<tr><td style="padding:16px 26px 26px">' + inner + '</td></tr>' +
+  '</table>' +
+'</div>';
 }
 
 const CUSTOMER_MAIL = {
@@ -206,7 +326,10 @@ const CUSTOMER_MAIL = {
     body: '我們已收到您的預約申請，將於一個工作天內與您確認。',
     detail: '預約明細',
     pay: '付款方式：臺灣銀行（004）帳號 013004490011。確認後請於三日內完成轉帳，並保留後五碼以利核對。',
-    foot: '如需改期或取消，請於預約日前 48 小時與我們聯繫。'
+    foot: '如需改期或取消，請於預約日前 48 小時與我們聯繫。',
+    labels: { service: '服務項目', parts: '選擇部位', datetime: '預約時間', duration: '療程時長', price: '費用' },
+    next: '下一步',
+    steps: ['我們會於一個工作天內與您確認時間', '確認後，請於三日內完成轉帳', '當日請提前 10 分鐘抵達，以利填寫健康問卷']
   },
   en: {
     subject: '[' + CENTER_NAME + '] Booking request received',
@@ -214,7 +337,10 @@ const CUSTOMER_MAIL = {
     body: 'We have received your booking request and will confirm within one business day.',
     detail: 'Booking details',
     pay: 'Payment: Bank of Taiwan (004), account 013004490011. Please transfer within three days of confirmation and keep the last five digits for reconciliation.',
-    foot: 'To reschedule or cancel, please contact us at least 48 hours in advance.'
+    foot: 'To reschedule or cancel, please contact us at least 48 hours in advance.',
+    labels: { service: 'Service', parts: 'Areas', datetime: 'Date & Time', duration: 'Length', price: 'Fee' },
+    next: 'What happens next',
+    steps: ['We will confirm your time within one business day', 'Once confirmed, please transfer within three days', 'Please arrive 10 minutes early to complete the health questionnaire']
   },
   ja: {
     subject: '【' + CENTER_NAME + '】ご予約を受け付けました',
@@ -222,7 +348,10 @@ const CUSTOMER_MAIL = {
     body: 'ご予約申込を受け付けました。1営業日以内にご連絡いたします。',
     detail: 'ご予約内容',
     pay: 'お支払い：台湾銀行（004）口座 013004490011。確定後3日以内にお振込みいただき、下5桁をお控えください。',
-    foot: '変更・キャンセルは予約日の48時間前までにご連絡ください。'
+    foot: '変更・キャンセルは予約日の48時間前までにご連絡ください。',
+    labels: { service: 'メニュー', parts: '選択部位', datetime: '日時', duration: '施術時間', price: '料金' },
+    next: '今後の流れ',
+    steps: ['1営業日以内に日時のご確認をご連絡いたします', '確定後、3日以内にお振込みをお願いいたします', '当日は問診票ご記入のため10分前にお越しください']
   },
   ko: {
     subject: '[' + CENTER_NAME + '] 예약 신청이 접수되었습니다',
@@ -230,27 +359,64 @@ const CUSTOMER_MAIL = {
     body: '예약 신청을 접수했습니다. 영업일 기준 1일 이내에 연락드리겠습니다.',
     detail: '예약 내용',
     pay: '결제: 대만은행(004) 계좌 013004490011. 확정 후 3일 이내에 이체해 주시고 뒤 5자리를 보관해 주세요.',
-    foot: '변경 및 취소는 예약일 48시간 전까지 연락해 주세요.'
+    foot: '변경 및 취소는 예약일 48시간 전까지 연락해 주세요.',
+    labels: { service: '시술', parts: '선택 부위', datetime: '예약 일시', duration: '시술 시간', price: '금액' },
+    next: '다음 단계',
+    steps: ['영업일 기준 1일 이내에 시간을 확인해 드립니다', '확정 후 3일 이내에 이체해 주세요', '당일 문진표 작성을 위해 10분 전에 도착해 주세요']
   }
 };
 
 function notifyCustomer_(d) {
   if (!d.email) return;
   const t = CUSTOMER_MAIL[d.preferredLanguage] || CUSTOMER_MAIL.zh;
-  const body = [
-    t.hello, '',
-    t.body, '',
+  const L = t.labels;
+
+  const lang = d.preferredLanguage || 'zh';
+  const sep = (lang === 'zh' || lang === 'ja') ? '、' : ', ';
+  const service = d.serviceLabelLocal || d.serviceLabel || '';
+  const parts = (d.partsLabelsLocal && d.partsLabelsLocal.length)
+              ? d.partsLabelsLocal : (d.partsLabels || []);
+
+  const rows = [
+    [L.datetime, prettyDateLang_(d.date, lang) + '　' + (d.startTime || '') + '–' + (d.endTime || '')],
+    [L.service, esc_(service)],
+    [L.parts, parts.map(esc_).join(sep)],
+    [L.duration, (d.durationMinutes || '') + ' min'],
+    [L.price, money_(d.price)]
+  ];
+
+  const steps = t.steps.map(function (x, i) {
+    return '<tr><td style="padding:3px 10px 3px 0;color:#b08949;font-size:13px;vertical-align:top">' +
+           (i + 1) + '.</td><td style="padding:3px 0;font-size:14px;color:#4a5a56">' + esc_(x) + '</td></tr>';
+  }).join('');
+
+  const html = mailShell_(t.subject.replace(/^[【\[][^】\]]*[】\]]\s*/, ''), d.ref || '',
+    '<p style="margin:0 0 6px;font-size:15px;color:#17211f">' + esc_(t.hello) + '</p>' +
+    '<p style="margin:0 0 20px;font-size:14px;color:#4a5a56;line-height:1.7">' + esc_(t.body) + '</p>' +
+    tableHtml_(rows) +
+    '<div style="margin:22px 0 0;padding:16px 18px;background:#f6efe1;' +
+    'border:1px solid rgba(176,137,73,.3);border-radius:12px">' +
+      '<div style="font-size:13px;font-weight:600;color:#6f5423;margin-bottom:8px">' + esc_(t.next) + '</div>' +
+      '<table cellpadding="0" cellspacing="0">' + steps + '</table>' +
+      '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(176,137,73,.28);' +
+      'font-size:13px;color:#7a5f2c;line-height:1.65">' + esc_(t.pay) + '</div>' +
+    '</div>' +
+    '<p style="margin:20px 0 0;font-size:12px;color:#7f8d89;line-height:1.7">' + esc_(t.foot) + '</p>'
+  );
+
+  const text = [
+    t.hello, '', t.body, '',
     t.detail + '：',
-    '  ' + (d.date || '') + '  ' + (d.startTime || '') + '–' + (d.endTime || ''),
-    '  ' + (d.serviceLabel || '') +
-      ((d.partsLabels || []).length ? '（' + d.partsLabels.join('、') + '）' : '') +
-      ' / ' + (d.durationMinutes || '') + ' min / NT$ ' + (d.price || ''),
+    '  ' + prettyDateLang_(d.date, lang) + '  ' + (d.startTime || '') + '–' + (d.endTime || ''),
+    '  ' + service +
+      (parts.length ? '（' + parts.join(sep) + '）' : '') +
+      ' / ' + (d.durationMinutes || '') + ' min / ' + money_(d.price),
     '  ' + (d.ref || ''), '',
-    t.pay, '',
-    t.foot, '',
-    CENTER_NAME
+    t.pay, '', t.foot, '', CENTER_NAME
   ].join('\n');
-  MailApp.sendEmail(d.email, t.subject + '（' + (d.ref || '') + '）', body, { name: CENTER_NAME });
+
+  MailApp.sendEmail(d.email, t.subject + '（' + (d.ref || '') + '）', text,
+                    { name: CENTER_NAME, htmlBody: html });
 }
 
 function json_(obj) {
