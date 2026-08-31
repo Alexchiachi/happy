@@ -50,6 +50,8 @@
     document.title = t('meta.title');
 
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    const mapNote = document.getElementById('mapNote');
+    if (mapNote) mapNote.textContent = t('info.map.blocked');
     $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
 
     $$('#langSwitch button').forEach(b => {
@@ -955,6 +957,29 @@
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
+
+    // The map is injected rather than hard-coded so the address lives in
+    // config.js alone, and so pages that block third-party frames degrade to
+    // the plain link instead of an empty box.
+    const mapCard = $('.map-card');
+    if (mapCard && CONFIG.map && CONFIG.map.embed) {
+      const iframe = document.createElement('iframe');
+      iframe.src = CONFIG.map.embed;
+      iframe.loading = 'lazy';
+      iframe.title = t('info.location');
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.setAttribute('allowfullscreen', '');
+      $('#mapFrame').appendChild(iframe);
+      $('#mapLink').href = CONFIG.map.link || CONFIG.map.embed;
+      const note = document.createElement('span');
+      note.className = 'map-note';
+      note.id = 'mapNote';
+      note.textContent = t('info.map.blocked');
+      $('.map-links').appendChild(document.createElement('br'));
+      $('.map-links').appendChild(note);
+    } else if (mapCard) {
+      mapCard.hidden = true;
+    }
 
     if (CONFIG.qrImage) {
       const qrImg = $('#qrImg');

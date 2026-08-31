@@ -39,6 +39,7 @@ eternitychildbooking/
 | 付款資訊 | 臺灣銀行（004）013004490011，可一鍵複製；另可放上 TWQR 條碼 |
 | 送出方式 | 預設寫進 Google 試算表並寄信通知；後端失敗時自動退回寄信 |
 | 防撞單 | 日曆會讀回試算表中已成立的時段，重疊的時段自動鎖住 |
+| 中心位置 | 資訊區嵌入 Google 地圖，客人的確認信也附上地圖連結 |
 | 其他 | 預約編號、預約明細一鍵複製、下載 `.ics` 加入行事曆 |
 
 ---
@@ -113,6 +114,9 @@ hours: {
 },
 
 closedDates: ['2026-01-01'],          // 國定假日或公休日，列在這裡就會關閉
+
+// 中心位置。換地點時到 Google 地圖 → 分享 → 嵌入地圖，把 iframe 的 src 貼進 embed
+map: { embed: 'https://www.google.com/maps/embed?pb=...', link: 'https://maps.google.com/?cid=...' },
 qrImage: 'assets/twqr.jpg',           // 放上 TWQR 條碼圖檔後填入
 ```
 
