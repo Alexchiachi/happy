@@ -6,6 +6,13 @@
 <title>永恆之子整椎中心 · 線上預約 | Eternity's Child Chiropractic</title>
 <meta name="description" content="永恆之子整椎中心線上預約系統．量子整骨、體雕塑身、整椎正骨、按摩推拿．支援中文／English／日本語／한국어。">
 <meta name="theme-color" content="#1f5f52">
+<!-- 社群分享預覽。網域若變更，這四個網址要一起改 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="永恆之子整椎中心 · 線上預約">
+<meta property="og:description" content="量子整骨、體雕塑身、整椎正骨、按摩推拿、醫美整骨。支援中文／English／日本語／한국어線上預約。">
+<meta property="og:image" content="https://alexchiachi.github.io/happy/eternitychildbooking/assets/photo-1.jpg">
+<meta property="og:url" content="https://alexchiachi.github.io/happy/eternitychildbooking/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f5f52'/><text y='68' x='50' text-anchor='middle' font-size='56' fill='white' font-family='sans-serif'>永</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,6 +170,38 @@ input, select, textarea { font: inherit; color: inherit; }
 .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
 .btn-ghost:hover { border-color: var(--jade); color: var(--jade); }
 .btn-sm { padding: .5rem 1rem; font-size: .82rem; }
+
+/* ---------- Gallery ---------- */
+.gallery { padding: 2.6rem 0 .4rem; }
+.gallery-head { margin-bottom: 1.1rem; }
+.gallery-head h2 {
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem); font-weight: 650; letter-spacing: -.01em;
+}
+.gallery-head p { margin-top: .3rem; font-size: .9rem; color: var(--ink-mute); }
+
+.gallery-grid {
+  display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.gallery-grid figure {
+  margin: 0; aspect-ratio: 1 / 1; overflow: hidden;
+  border-radius: var(--radius); border: 1px solid var(--line);
+  background: var(--surface-2); box-shadow: var(--shadow-sm);
+}
+.gallery-grid img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s ease;
+}
+@media (hover: hover) {
+  .gallery-grid figure:hover img { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-grid img { transition: none; }
+  .gallery-grid figure:hover img { transform: none; }
+}
+@media (max-width: 620px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: .55rem; }
+}
 
 /* ---------- Booking shell ---------- */
 .booking { padding: 2.8rem 0 3.4rem; }
@@ -552,6 +591,16 @@ input, select, textarea { font: inherit; color: inherit; }
   </div>
 </section>
 
+<section class="gallery" id="gallery" hidden>
+  <div class="wrap">
+    <div class="gallery-head">
+      <h2 data-i18n="gallery.title">中心實景</h2>
+      <p data-i18n="gallery.lead">安靜、單純，一次只服務一位客人</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
 <main class="booking" id="booking">
   <div class="wrap">
 
@@ -809,7 +858,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.7',
+  version: '1.8',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -819,6 +868,16 @@ const CONFIG = {
 
   /* 選填：TWQR 收款條碼圖檔（放進 assets/ 後填入檔名，例如 'assets/twqr.jpg'） */
   qrImage: '',
+
+  /* 中心實景照片。把檔案放進 assets/ 並用這些檔名即可自動顯示；
+     還沒放上去的照片會自動略過，四張都沒有時整個區塊會隱藏，不會留白。
+     第一張同時用於社群分享的預覽圖（見 index.html 的 og:image）。 */
+  photos: [
+    'assets/photo-1.jpg',
+    'assets/photo-2.jpg',
+    'assets/photo-3.jpg',
+    'assets/photo-4.jpg'
+  ],
 
   /* 中心位置。embed 是 Google 地圖「嵌入地圖」給的網址（iframe 的 src），
      link 是點「在 Google 地圖開啟」時要去的網址。
@@ -1061,6 +1120,9 @@ const I18N = {
     'done.code': '預約編號',
     'done.mailnote': '若未自動開啟郵件程式，請點選下方按鈕，或直接複製明細寄至 {email}。',
 
+    'gallery.title': '中心實景',
+    'gallery.lead': '安靜、單純，一次只服務一位客人',
+    'gallery.alt': '中心實景照片 {n}',
     'info.location': '中心位置',
     'info.map.open': '在 Google 地圖開啟',
     'info.map.blocked': '若地圖沒有顯示，請點上方連結開啟',
@@ -1217,6 +1279,9 @@ const I18N = {
     'done.code': 'Reference',
     'done.mailnote': 'If your mail app did not open, use the button below or copy the details and send them to {email}.',
 
+    'gallery.title': 'Inside the Centre',
+    'gallery.lead': 'Quiet and unhurried — one client at a time',
+    'gallery.alt': 'Photo {n} of the centre',
     'info.location': 'Find Us',
     'info.map.open': 'Open in Google Maps',
     'info.map.blocked': 'If the map does not load, use the link above',
@@ -1373,6 +1438,9 @@ const I18N = {
     'done.code': '予約番号',
     'done.mailnote': 'メールソフトが起動しない場合は、下のボタンを押すか、内容をコピーして {email} までお送りください。',
 
+    'gallery.title': 'センターの様子',
+    'gallery.lead': '静かな空間で、お一人ずつ丁寧に',
+    'gallery.alt': 'センターの写真 {n}',
     'info.location': 'アクセス',
     'info.map.open': 'Google マップで開く',
     'info.map.blocked': '地図が表示されない場合は上のリンクをご利用ください',
@@ -1529,6 +1597,9 @@ const I18N = {
     'done.code': '예약 번호',
     'done.mailnote': '메일 앱이 열리지 않으면 아래 버튼을 누르시거나, 내용을 복사하여 {email} 로 보내 주세요.',
 
+    'gallery.title': '센터 모습',
+    'gallery.lead': '조용한 공간에서 한 분씩 정성껏',
+    'gallery.alt': '센터 사진 {n}',
     'info.location': '오시는 길',
     'info.map.open': 'Google 지도에서 열기',
     'info.map.blocked': '지도가 보이지 않으면 위 링크를 이용해 주세요',
@@ -1597,6 +1668,9 @@ const I18N = {
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     const mapNote = document.getElementById('mapNote');
     if (mapNote) mapNote.textContent = t('info.map.blocked');
+    $$('#galleryGrid img').forEach(img => {
+      img.alt = t('gallery.alt', { n: img.dataset.index });
+    });
     $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
 
     $$('#langSwitch button').forEach(b => {
@@ -2456,6 +2530,40 @@ const I18N = {
     goto(1);
   }
 
+  /* A photo that has not been uploaded yet must leave no gap, so each figure
+     is removed again if its image 404s, and the strip stays hidden until at
+     least one photo has actually loaded. Note: no loading="lazy" here — the
+     figures start hidden and so have no layout, and a lazy image that is
+     never "in the viewport" would never be fetched at all. Four small photos
+     load eagerly at no real cost. */
+  function renderGallery() {
+    const section = $('#gallery');
+    const grid = $('#galleryGrid');
+    if (!section || !grid) return;
+    const list = (CONFIG.photos || []).filter(Boolean);
+    if (!list.length) return;
+
+    list.forEach((src, i) => {
+      const fig = document.createElement('figure');
+      fig.style.order = String(i);            // keep the configured order
+      fig.hidden = true;
+
+      const img = document.createElement('img');
+      img.decoding = 'async';
+      img.dataset.index = String(i + 1);
+      img.alt = t('gallery.alt', { n: i + 1 });
+      img.addEventListener('load', () => {
+        fig.hidden = false;
+        section.hidden = false;
+      });
+      img.addEventListener('error', () => { fig.remove(); });
+
+      fig.appendChild(img);
+      grid.appendChild(fig);
+      img.src = src;
+    });
+  }
+
   /* ---------------- wiring ---------------- */
   function init() {
     state.lang = detectLang();
@@ -2502,6 +2610,8 @@ const I18N = {
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
+
+    renderGallery();
 
     // The map is injected rather than hard-coded so the address lives in
     // config.js alone, and so pages that block third-party frames degrade to
