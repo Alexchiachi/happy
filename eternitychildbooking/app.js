@@ -52,6 +52,9 @@
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     const mapNote = document.getElementById('mapNote');
     if (mapNote) mapNote.textContent = t('info.map.blocked');
+    $$('#galleryGrid img').forEach(img => {
+      img.alt = t('gallery.alt', { n: img.dataset.index });
+    });
     $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
 
     $$('#langSwitch button').forEach(b => {
@@ -911,6 +914,40 @@
     goto(1);
   }
 
+  /* A photo that has not been uploaded yet must leave no gap, so each figure
+     is removed again if its image 404s, and the strip stays hidden until at
+     least one photo has actually loaded. Note: no loading="lazy" here — the
+     figures start hidden and so have no layout, and a lazy image that is
+     never "in the viewport" would never be fetched at all. Four small photos
+     load eagerly at no real cost. */
+  function renderGallery() {
+    const section = $('#gallery');
+    const grid = $('#galleryGrid');
+    if (!section || !grid) return;
+    const list = (CONFIG.photos || []).filter(Boolean);
+    if (!list.length) return;
+
+    list.forEach((src, i) => {
+      const fig = document.createElement('figure');
+      fig.style.order = String(i);            // keep the configured order
+      fig.hidden = true;
+
+      const img = document.createElement('img');
+      img.decoding = 'async';
+      img.dataset.index = String(i + 1);
+      img.alt = t('gallery.alt', { n: i + 1 });
+      img.addEventListener('load', () => {
+        fig.hidden = false;
+        section.hidden = false;
+      });
+      img.addEventListener('error', () => { fig.remove(); });
+
+      fig.appendChild(img);
+      grid.appendChild(fig);
+      img.src = src;
+    });
+  }
+
   /* ---------------- wiring ---------------- */
   function init() {
     state.lang = detectLang();
@@ -957,6 +994,8 @@
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
+
+    renderGallery();
 
     // The map is injected rather than hard-coded so the address lives in
     // config.js alone, and so pages that block third-party frames degrade to

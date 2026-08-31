@@ -8,7 +8,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.7',
+  version: '1.8',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -18,6 +18,16 @@ const CONFIG = {
 
   /* 選填：TWQR 收款條碼圖檔（放進 assets/ 後填入檔名，例如 'assets/twqr.jpg'） */
   qrImage: '',
+
+  /* 中心實景照片。把檔案放進 assets/ 並用這些檔名即可自動顯示；
+     還沒放上去的照片會自動略過，四張都沒有時整個區塊會隱藏，不會留白。
+     第一張同時用於社群分享的預覽圖（見 index.html 的 og:image）。 */
+  photos: [
+    'assets/photo-1.jpg',
+    'assets/photo-2.jpg',
+    'assets/photo-3.jpg',
+    'assets/photo-4.jpg'
+  ],
 
   /* 中心位置。embed 是 Google 地圖「嵌入地圖」給的網址（iframe 的 src），
      link 是點「在 Google 地圖開啟」時要去的網址。

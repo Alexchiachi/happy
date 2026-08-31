@@ -155,6 +155,9 @@ const I18N = {
     'done.code': '預約編號',
     'done.mailnote': '若未自動開啟郵件程式，請點選下方按鈕，或直接複製明細寄至 {email}。',
 
+    'gallery.title': '中心實景',
+    'gallery.lead': '安靜、單純，一次只服務一位客人',
+    'gallery.alt': '中心實景照片 {n}',
     'info.location': '中心位置',
     'info.map.open': '在 Google 地圖開啟',
     'info.map.blocked': '若地圖沒有顯示，請點上方連結開啟',
@@ -311,6 +314,9 @@ const I18N = {
     'done.code': 'Reference',
     'done.mailnote': 'If your mail app did not open, use the button below or copy the details and send them to {email}.',
 
+    'gallery.title': 'Inside the Centre',
+    'gallery.lead': 'Quiet and unhurried — one client at a time',
+    'gallery.alt': 'Photo {n} of the centre',
     'info.location': 'Find Us',
     'info.map.open': 'Open in Google Maps',
     'info.map.blocked': 'If the map does not load, use the link above',
@@ -467,6 +473,9 @@ const I18N = {
     'done.code': '予約番号',
     'done.mailnote': 'メールソフトが起動しない場合は、下のボタンを押すか、内容をコピーして {email} までお送りください。',
 
+    'gallery.title': 'センターの様子',
+    'gallery.lead': '静かな空間で、お一人ずつ丁寧に',
+    'gallery.alt': 'センターの写真 {n}',
     'info.location': 'アクセス',
     'info.map.open': 'Google マップで開く',
     'info.map.blocked': '地図が表示されない場合は上のリンクをご利用ください',
@@ -623,6 +632,9 @@ const I18N = {
     'done.code': '예약 번호',
     'done.mailnote': '메일 앱이 열리지 않으면 아래 버튼을 누르시거나, 내용을 복사하여 {email} 로 보내 주세요.',
 
+    'gallery.title': '센터 모습',
+    'gallery.lead': '조용한 공간에서 한 분씩 정성껏',
+    'gallery.alt': '센터 사진 {n}',
     'info.location': '오시는 길',
     'info.map.open': 'Google 지도에서 열기',
     'info.map.blocked': '지도가 보이지 않으면 위 링크를 이용해 주세요',
