@@ -23,6 +23,12 @@
     ref: ''
   };
 
+  /* Slots already booked by other clients, read back from the endpoint.
+     Empty until the first successful fetch, so the page still works offline
+     or on a deployment without a slots API. */
+  let serverTaken = {};
+  let takenFetchedAt = 0;
+
   const $  = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -127,7 +133,11 @@
   function takenIntervals(dateKey) {
     let all = {};
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
-    return all[dateKey] || [];
+    const mine = all[dateKey] || [];
+    const theirs = (serverTaken[dateKey] || []).filter(
+      iv => Array.isArray(iv) && typeof iv[0] === 'number' && typeof iv[1] === 'number'
+    );
+    return mine.concat(theirs);
   }
 
   function saveBooking(dateKey, start, end) {
@@ -135,6 +145,28 @@
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
     (all[dateKey] = all[dateKey] || []).push([start, end]);
     try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch (e) { /* private mode */ }
+  }
+
+  function slotsUrl() {
+    if (!CONFIG.endpoint) return '';
+    return CONFIG.endpoint + (CONFIG.endpoint.indexOf('?') === -1 ? '?' : '&') + 'action=slots';
+  }
+
+  /** Refresh the booked-slot list; failures leave the page on local data. */
+  function fetchTakenSlots() {
+    const url = slotsUrl();
+    if (!url) return;
+    if (Date.now() - takenFetchedAt < 30000) return;   // don't hammer it while stepping back and forth
+    takenFetchedAt = Date.now();
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : null))
+      .then(res => {
+        if (!res || !res.taken || typeof res.taken !== 'object') return;
+        serverTaken = res.taken;
+        if (state.step === 2) { renderCalendar(); renderSlots(); }
+      })
+      .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
   function slotsFor(dateKey) {
@@ -495,6 +527,7 @@
     $$('.panel').forEach(p => p.classList.remove('active'));
     $('#panel-' + step).classList.add('active');
     renderStepper();
+    if (step === 2) fetchTakenSlots();
     if (step === 4) renderSummary();
     if (step === 5) renderDone();
     const top = $('#booking').getBoundingClientRect().top + window.scrollY - 70;
@@ -668,6 +701,48 @@
     return L.filter(line => line !== null).join('\n');
   }
 
+  /* 'form' posts through a hidden iframe: a plain form submission is not a
+     cross-origin XHR, so it is subject to neither CORS nor a page's
+     connect-src policy. Nothing can be read back, which is the trade — but
+     it reaches Apps Script from anywhere, which fetch does not. */
+  function submitMode() {
+    if (CONFIG.endpointMode === 'form' || CONFIG.endpointMode === 'fetch') return CONFIG.endpointMode;
+    return /script\.google\.com/.test(CONFIG.endpoint) ? 'form' : 'fetch';
+  }
+
+  function submitViaForm() {
+    const sinkName = 'ecc-sink-' + Date.now();
+    const frame = document.createElement('iframe');
+    frame.name = sinkName;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px';
+    document.body.appendChild(frame);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CONFIG.endpoint;
+    form.target = sinkName;
+    form.style.display = 'none';
+
+    const fields = Object.assign({}, CONFIG.endpointFields || {},
+                                 { payload: JSON.stringify(bookingPayload()),
+                                   '預約明細': bookingTextZh() });
+    Object.keys(fields).forEach(k => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = typeof fields[k] === 'string' ? fields[k] : JSON.stringify(fields[k]);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => { form.remove(); frame.remove(); }, 20000);
+
+    takenFetchedAt = 0;
+    goto(5);
+  }
+
   /* Google Apps Script web apps answer no CORS preflight, so an
      application/json POST is blocked before it ever reaches the script.
      text/plain keeps the request "simple" and the script reads the body
@@ -763,6 +838,8 @@
       return;
     }
 
+    if (submitMode() === 'form') { submitViaForm(); return; }
+
     const btn = $('#submitBtn');
     btn.disabled = true;
     fetch(CONFIG.endpoint, {
@@ -784,6 +861,7 @@
         const ok = res.ok !== false &&
                    res.success !== false && res.success !== 'false';
         if (!ok) throw new Error(res.error || res.message || 'rejected');
+        takenFetchedAt = 0;   // this booking is now on the server too
         goto(5);
       })
       .catch(() => {
@@ -829,9 +907,18 @@
     state.contact.lang = state.lang;
 
     $('#year').textContent = new Date().getFullYear();
+    if (CONFIG.version) $('#ver').textContent = 'v' + CONFIG.version;
+
+    // 開發者確認用：在瀏覽器主控台就能看出這份頁面把預約送去哪裡
+    try {
+      console.info('[預約系統] v' + (CONFIG.version || '?') +
+        ' · 收單：' + (CONFIG.endpoint || '（未設定，會開啟客人的信箱程式）') +
+        (CONFIG.endpoint ? ' · 送出方式：' + submitMode() : ''));
+    } catch (e) {}
     $('#acctNo').textContent = CONFIG.bank.account;
 
     renderLangSwitch();
+    fetchTakenSlots();
     applyI18n();
     goto(1);
     window.scrollTo({ top: 0 });

@@ -447,6 +447,7 @@ input, select, textarea { font: inherit; color: inherit; }
 .site-footer a { color: var(--jade); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 .footer-note { max-width: 44rem; line-height: 1.6; }
+.ver { opacity: .5; font-variant-numeric: tabular-nums; margin-inline-start: .3rem; }
 
 /* ---------- Toast ---------- */
 .toast {

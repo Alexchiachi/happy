@@ -460,6 +460,7 @@ input, select, textarea { font: inherit; color: inherit; }
 .site-footer a { color: var(--jade); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 .footer-note { max-width: 44rem; line-height: 1.6; }
+.ver { opacity: .5; font-variant-numeric: tabular-nums; margin-inline-start: .3rem; }
 
 /* ---------- Toast ---------- */
 .toast {
@@ -771,7 +772,7 @@ input, select, textarea { font: inherit; color: inherit; }
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-note" data-i18n="footer.demo"></div>
-    <div>© <span id="year"></span> <span data-i18n="brand.name">永恆之子整椎中心</span> · <span data-i18n="footer.rights">版權所有</span></div>
+    <div>© <span id="year"></span> <span data-i18n="brand.name">永恆之子整椎中心</span> · <span data-i18n="footer.rights">版權所有</span> <span class="ver" id="ver"></span></div>
   </div>
 </footer>
 
@@ -784,6 +785,10 @@ input, select, textarea { font: inherit; color: inherit; }
    ============================================================ */
 
 const CONFIG = {
+  /* 版本標記：會顯示在頁尾右下角。改版後更新這個值，
+     就能一眼確認線上跑的是不是最新版（部署沒更新是最難察覺的問題）。 */
+  version: '1.4',
+
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
 
@@ -844,19 +849,24 @@ const CONFIG = {
   /* 收單網址：送出時會把預約資料 POST 過去。
      留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
 
-     ★ 建議：Google 試算表收單（免費、資料只經過你自己的 Google 帳號）
-       部署 google/booking-sheet.gs 之後，把產生的 /exec 網址貼在下面。
-       做法見 google/README.md。 */
-  endpoint: '',
-  // endpoint: 'https://script.google.com/macros/s/AKfycb.../exec',
+     目前使用 Google 試算表收單（google/booking-sheet.gs）：
+     預約會寫進試算表、寄通知信給中心，並依客人語言回一封確認信。
+     同一個網址也提供 ?action=slots，讓日曆讀回已成立的時段來防止撞單。
+     換一份試算表時，把新的 /exec 網址換掉即可，做法見 google/README.md。 */
+  endpoint: 'https://script.google.com/macros/s/AKfycbx40cgxLzV90wDEpfT6ro4i4uyTgqJQhWZAmY5zxg5vmA1kMeQgDo9m-OW_xDxJBhPl/exec',
 
   /* 其他選擇：
        WordPress 自架 → '/eternitychildbooking/booking-submit.php'
        不想開試算表 → 'https://formsubmit.co/ajax/ahanamita88888888@gmail.com'
                       （免註冊，第一次送出後要點信中的啟用連結） */
 
-  /* 送出時的 Content-Type。留空會自動判斷：
-     Google Apps Script 必須用 text/plain，否則瀏覽器的 CORS 預檢會被擋下來。 */
+  /* 送出方式。留空會自動判斷，一般不用改：
+       'form'  用隱藏的表單送出（不受 CORS 與網頁安全政策影響，Google 試算表用這個）
+       'fetch' 用背景請求送出，可以讀到後端的回應（自架 PHP 用這個）
+     自動判斷：網址是 script.google.com 就用 form，其餘用 fetch。 */
+  endpointMode: '',
+
+  /* 用 fetch 送出時的 Content-Type，留空自動判斷。 */
   endpointContentType: '',
 
   /* 選填：要一併送出的額外欄位（第三方服務的設定或金鑰）。
@@ -1516,6 +1526,12 @@ const I18N = {
     ref: ''
   };
 
+  /* Slots already booked by other clients, read back from the endpoint.
+     Empty until the first successful fetch, so the page still works offline
+     or on a deployment without a slots API. */
+  let serverTaken = {};
+  let takenFetchedAt = 0;
+
   const $  = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -1620,7 +1636,11 @@ const I18N = {
   function takenIntervals(dateKey) {
     let all = {};
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
-    return all[dateKey] || [];
+    const mine = all[dateKey] || [];
+    const theirs = (serverTaken[dateKey] || []).filter(
+      iv => Array.isArray(iv) && typeof iv[0] === 'number' && typeof iv[1] === 'number'
+    );
+    return mine.concat(theirs);
   }
 
   function saveBooking(dateKey, start, end) {
@@ -1628,6 +1648,28 @@ const I18N = {
     try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
     (all[dateKey] = all[dateKey] || []).push([start, end]);
     try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch (e) { /* private mode */ }
+  }
+
+  function slotsUrl() {
+    if (!CONFIG.endpoint) return '';
+    return CONFIG.endpoint + (CONFIG.endpoint.indexOf('?') === -1 ? '?' : '&') + 'action=slots';
+  }
+
+  /** Refresh the booked-slot list; failures leave the page on local data. */
+  function fetchTakenSlots() {
+    const url = slotsUrl();
+    if (!url) return;
+    if (Date.now() - takenFetchedAt < 30000) return;   // don't hammer it while stepping back and forth
+    takenFetchedAt = Date.now();
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : null))
+      .then(res => {
+        if (!res || !res.taken || typeof res.taken !== 'object') return;
+        serverTaken = res.taken;
+        if (state.step === 2) { renderCalendar(); renderSlots(); }
+      })
+      .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
   function slotsFor(dateKey) {
@@ -1988,6 +2030,7 @@ const I18N = {
     $$('.panel').forEach(p => p.classList.remove('active'));
     $('#panel-' + step).classList.add('active');
     renderStepper();
+    if (step === 2) fetchTakenSlots();
     if (step === 4) renderSummary();
     if (step === 5) renderDone();
     const top = $('#booking').getBoundingClientRect().top + window.scrollY - 70;
@@ -2161,6 +2204,48 @@ const I18N = {
     return L.filter(line => line !== null).join('\n');
   }
 
+  /* 'form' posts through a hidden iframe: a plain form submission is not a
+     cross-origin XHR, so it is subject to neither CORS nor a page's
+     connect-src policy. Nothing can be read back, which is the trade — but
+     it reaches Apps Script from anywhere, which fetch does not. */
+  function submitMode() {
+    if (CONFIG.endpointMode === 'form' || CONFIG.endpointMode === 'fetch') return CONFIG.endpointMode;
+    return /script\.google\.com/.test(CONFIG.endpoint) ? 'form' : 'fetch';
+  }
+
+  function submitViaForm() {
+    const sinkName = 'ecc-sink-' + Date.now();
+    const frame = document.createElement('iframe');
+    frame.name = sinkName;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px';
+    document.body.appendChild(frame);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CONFIG.endpoint;
+    form.target = sinkName;
+    form.style.display = 'none';
+
+    const fields = Object.assign({}, CONFIG.endpointFields || {},
+                                 { payload: JSON.stringify(bookingPayload()),
+                                   '預約明細': bookingTextZh() });
+    Object.keys(fields).forEach(k => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = typeof fields[k] === 'string' ? fields[k] : JSON.stringify(fields[k]);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => { form.remove(); frame.remove(); }, 20000);
+
+    takenFetchedAt = 0;
+    goto(5);
+  }
+
   /* Google Apps Script web apps answer no CORS preflight, so an
      application/json POST is blocked before it ever reaches the script.
      text/plain keeps the request "simple" and the script reads the body
@@ -2256,6 +2341,8 @@ const I18N = {
       return;
     }
 
+    if (submitMode() === 'form') { submitViaForm(); return; }
+
     const btn = $('#submitBtn');
     btn.disabled = true;
     fetch(CONFIG.endpoint, {
@@ -2277,6 +2364,7 @@ const I18N = {
         const ok = res.ok !== false &&
                    res.success !== false && res.success !== 'false';
         if (!ok) throw new Error(res.error || res.message || 'rejected');
+        takenFetchedAt = 0;   // this booking is now on the server too
         goto(5);
       })
       .catch(() => {
@@ -2322,9 +2410,18 @@ const I18N = {
     state.contact.lang = state.lang;
 
     $('#year').textContent = new Date().getFullYear();
+    if (CONFIG.version) $('#ver').textContent = 'v' + CONFIG.version;
+
+    // 開發者確認用：在瀏覽器主控台就能看出這份頁面把預約送去哪裡
+    try {
+      console.info('[預約系統] v' + (CONFIG.version || '?') +
+        ' · 收單：' + (CONFIG.endpoint || '（未設定，會開啟客人的信箱程式）') +
+        (CONFIG.endpoint ? ' · 送出方式：' + submitMode() : ''));
+    } catch (e) {}
     $('#acctNo').textContent = CONFIG.bank.account;
 
     renderLangSwitch();
+    fetchTakenSlots();
     applyI18n();
     goto(1);
     window.scrollTo({ top: 0 });
