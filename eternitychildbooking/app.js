@@ -644,8 +644,16 @@
     return 'ECC-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + rand;
   }
 
+  /** Look a key up in a specific language, whatever the UI is showing. */
+  function tIn(lang, key) {
+    const keep = state.lang;
+    state.lang = lang;
+    try { return t(key); } finally { state.lang = keep; }
+  }
+
   function bookingPayload() {
     const c = state.contact;
+    const lang = c.lang || state.lang;
     return {
       ref: state.ref,
       service: state.service,
@@ -657,6 +665,9 @@
       durationMinutes: state.duration,
       parts: isPickService() ? state.parts.slice() : [],
       partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
+      // the centre reads Chinese; the client's confirmation uses their own language
+      serviceLabelLocal: tIn(lang, 'service.' + state.service),
+      partsLabelsLocal: isPickService() ? state.parts.map(k => tIn(lang, 'part.' + k)) : [],
       price: currentPrice(),
       currency: CONFIG.currency,
       timezone: CONFIG.tzName,

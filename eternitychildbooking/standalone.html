@@ -788,7 +788,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.5',
+  version: '1.6',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -2148,8 +2148,16 @@ const I18N = {
     return 'ECC-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + rand;
   }
 
+  /** Look a key up in a specific language, whatever the UI is showing. */
+  function tIn(lang, key) {
+    const keep = state.lang;
+    state.lang = lang;
+    try { return t(key); } finally { state.lang = keep; }
+  }
+
   function bookingPayload() {
     const c = state.contact;
+    const lang = c.lang || state.lang;
     return {
       ref: state.ref,
       service: state.service,
@@ -2161,6 +2169,9 @@ const I18N = {
       durationMinutes: state.duration,
       parts: isPickService() ? state.parts.slice() : [],
       partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
+      // the centre reads Chinese; the client's confirmation uses their own language
+      serviceLabelLocal: tIn(lang, 'service.' + state.service),
+      partsLabelsLocal: isPickService() ? state.parts.map(k => tIn(lang, 'part.' + k)) : [],
       price: currentPrice(),
       currency: CONFIG.currency,
       timezone: CONFIG.tzName,
