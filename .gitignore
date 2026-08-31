@@ -9,3 +9,6 @@ reports/
 # 測試腳本產生的暫存截圖
 v-*.png
 inner-flow-e2e.html
+
+# 預約系統的 Artifact 建置產物
+eternitychildbooking/artifact.html
