@@ -16,6 +16,7 @@ eternitychildbooking/
 ├── config.js     ★ 營業時間、價格、帳號、收件信箱都在這裡
 ├── app.js        預約流程邏輯（日曆、時段、驗證、送出）
 ├── standalone.html  以上全部合併成的單一檔案（方便寄送或丟到任何空間）
+├── manual.html   ★ 維護手冊：給不寫程式的人看的操作說明
 ├── google/       ★ Google 試算表收單程式與部署說明（建議）
 ├── wordpress/    WordPress 部署說明與 PHP 收單程式
 └── assets/       ★ 照片放這裡（photo-1~4.jpg、TWQR 條碼），另附上傳說明
@@ -54,6 +55,17 @@ eternitychildbooking/
 > `standalone.html` 是把 HTML／CSS／JS 全部合併好的單一檔案，
 > 直接用瀏覽器開就能用，也可以整份寄給別人或上傳到任何網頁空間。
 > 改設定時請改 `config.js` 後重新產生，或直接編輯 `standalone.html` 裡的 `CONFIG`。
+
+---
+
+## 維護手冊
+
+`manual.html` 是寫給非技術人員的操作說明：日常收單流程、六種常見的修改步驟、
+出問題時的症狀對照表、名詞解釋。上線後的網址是
+`https://<帳號>.github.io/<repo>/eternitychildbooking/manual.html`。
+
+**改動系統時請一併更新這份手冊**，否則它會變成誤導人的說明書。
+手冊頁尾標有對應的網站版本，改版時記得同步。
 
 ---
 
