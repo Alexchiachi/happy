@@ -8,7 +8,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.6',
+  version: '1.7',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -18,6 +18,14 @@ const CONFIG = {
 
   /* 選填：TWQR 收款條碼圖檔（放進 assets/ 後填入檔名，例如 'assets/twqr.jpg'） */
   qrImage: '',
+
+  /* 中心位置。embed 是 Google 地圖「嵌入地圖」給的網址（iframe 的 src），
+     link 是點「在 Google 地圖開啟」時要去的網址。
+     換地點時到 Google 地圖 → 分享 → 嵌入地圖，複製新的網址貼進來即可。 */
+  map: {
+    embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.9809356376345!2d120.68283367539682!3d23.961114278527212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346931e48b0bf07b%3A0xb09dbf0bc3cb8356!2z5rC45oGG5LmL5a2Q5pW05qSO5Lit5b-D!5e0!3m2!1szh-TW!2s!4v1788172605408!5m2!1szh-TW!2s',
+    link: 'https://maps.google.com/?cid=12726538179269329750'
+  },
 
   /* 幣別與價格（依療程分鐘數） */
   currency: 'NT$',

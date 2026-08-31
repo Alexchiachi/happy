@@ -19,6 +19,9 @@ const SHEET_NAME   = '預約紀錄';
    把試算表網址 .../spreadsheets/d/【這一段】/edit 貼進來。 */
 const SPREADSHEET_ID = '';
 
+/* 中心位置：會附在客人的確認信裡，方便當天找路。 */
+const CENTER_MAP_URL = 'https://maps.google.com/?cid=12726538179269329750';
+
 const HEADERS = [
   '送出時間', '預約編號', '狀態', '日期', '開始', '結束',
   '服務項目', '選擇部位', '看診類型', '分鐘', '金額',
@@ -327,7 +330,7 @@ const CUSTOMER_MAIL = {
     detail: '預約明細',
     pay: '付款方式：臺灣銀行（004）帳號 013004490011。確認後請於三日內完成轉帳，並保留後五碼以利核對。',
     foot: '如需改期或取消，請於預約日前 48 小時與我們聯繫。',
-    labels: { service: '服務項目', parts: '選擇部位', datetime: '預約時間', duration: '療程時長', price: '費用' },
+    labels: { service: '服務項目', parts: '選擇部位', datetime: '預約時間', duration: '療程時長', price: '費用', map: '地圖' },
     next: '下一步',
     steps: ['我們會於一個工作天內與您確認時間', '確認後，請於三日內完成轉帳', '當日請提前 10 分鐘抵達，以利填寫健康問卷']
   },
@@ -338,7 +341,7 @@ const CUSTOMER_MAIL = {
     detail: 'Booking details',
     pay: 'Payment: Bank of Taiwan (004), account 013004490011. Please transfer within three days of confirmation and keep the last five digits for reconciliation.',
     foot: 'To reschedule or cancel, please contact us at least 48 hours in advance.',
-    labels: { service: 'Service', parts: 'Areas', datetime: 'Date & Time', duration: 'Length', price: 'Fee' },
+    labels: { service: 'Service', parts: 'Areas', datetime: 'Date & Time', duration: 'Length', price: 'Fee', map: 'Map' },
     next: 'What happens next',
     steps: ['We will confirm your time within one business day', 'Once confirmed, please transfer within three days', 'Please arrive 10 minutes early to complete the health questionnaire']
   },
@@ -349,7 +352,7 @@ const CUSTOMER_MAIL = {
     detail: 'ご予約内容',
     pay: 'お支払い：台湾銀行（004）口座 013004490011。確定後3日以内にお振込みいただき、下5桁をお控えください。',
     foot: '変更・キャンセルは予約日の48時間前までにご連絡ください。',
-    labels: { service: 'メニュー', parts: '選択部位', datetime: '日時', duration: '施術時間', price: '料金' },
+    labels: { service: 'メニュー', parts: '選択部位', datetime: '日時', duration: '施術時間', price: '料金', map: '地図' },
     next: '今後の流れ',
     steps: ['1営業日以内に日時のご確認をご連絡いたします', '確定後、3日以内にお振込みをお願いいたします', '当日は問診票ご記入のため10分前にお越しください']
   },
@@ -360,7 +363,7 @@ const CUSTOMER_MAIL = {
     detail: '예약 내용',
     pay: '결제: 대만은행(004) 계좌 013004490011. 확정 후 3일 이내에 이체해 주시고 뒤 5자리를 보관해 주세요.',
     foot: '변경 및 취소는 예약일 48시간 전까지 연락해 주세요.',
-    labels: { service: '시술', parts: '선택 부위', datetime: '예약 일시', duration: '시술 시간', price: '금액' },
+    labels: { service: '시술', parts: '선택 부위', datetime: '예약 일시', duration: '시술 시간', price: '금액', map: '지도' },
     next: '다음 단계',
     steps: ['영업일 기준 1일 이내에 시간을 확인해 드립니다', '확정 후 3일 이내에 이체해 주세요', '당일 문진표 작성을 위해 10분 전에 도착해 주세요']
   }
@@ -382,7 +385,9 @@ function notifyCustomer_(d) {
     [L.service, esc_(service)],
     [L.parts, parts.map(esc_).join(sep)],
     [L.duration, (d.durationMinutes || '') + ' min'],
-    [L.price, money_(d.price)]
+    [L.price, money_(d.price)],
+    [L.map, '<a href="' + CENTER_MAP_URL + '" style="color:#1f5f52">' +
+            esc_(CENTER_NAME) + '</a>']
   ];
 
   const steps = t.steps.map(function (x, i) {
@@ -412,6 +417,7 @@ function notifyCustomer_(d) {
       (parts.length ? '（' + parts.join(sep) + '）' : '') +
       ' / ' + (d.durationMinutes || '') + ' min / ' + money_(d.price),
     '  ' + (d.ref || ''), '',
+    L.map + '：' + CENTER_MAP_URL, '',
     t.pay, '', t.foot, '', CENTER_NAME
   ].join('\n');
 

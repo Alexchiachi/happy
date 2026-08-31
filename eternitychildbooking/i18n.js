@@ -155,6 +155,9 @@ const I18N = {
     'done.code': '預約編號',
     'done.mailnote': '若未自動開啟郵件程式，請點選下方按鈕，或直接複製明細寄至 {email}。',
 
+    'info.location': '中心位置',
+    'info.map.open': '在 Google 地圖開啟',
+    'info.map.blocked': '若地圖沒有顯示，請點上方連結開啟',
     'footer.contact': '聯絡我們',
     'footer.rights': '版權所有',
     'footer.demo': '本頁為前端預約介面；送出後將以電子郵件通知中心，實際時段以中心回覆確認為準。',
@@ -308,6 +311,9 @@ const I18N = {
     'done.code': 'Reference',
     'done.mailnote': 'If your mail app did not open, use the button below or copy the details and send them to {email}.',
 
+    'info.location': 'Find Us',
+    'info.map.open': 'Open in Google Maps',
+    'info.map.blocked': 'If the map does not load, use the link above',
     'footer.contact': 'Contact Us',
     'footer.rights': 'All rights reserved',
     'footer.demo': 'This is the front-end booking interface. Your request is emailed to the centre; the final slot is confirmed by our reply.',
@@ -461,6 +467,9 @@ const I18N = {
     'done.code': '予約番号',
     'done.mailnote': 'メールソフトが起動しない場合は、下のボタンを押すか、内容をコピーして {email} までお送りください。',
 
+    'info.location': 'アクセス',
+    'info.map.open': 'Google マップで開く',
+    'info.map.blocked': '地図が表示されない場合は上のリンクをご利用ください',
     'footer.contact': 'お問い合わせ',
     'footer.rights': 'All rights reserved',
     'footer.demo': '本ページは予約フォームです。送信内容はセンターへメールで通知され、実際の枠は返信をもって確定します。',
@@ -614,6 +623,9 @@ const I18N = {
     'done.code': '예약 번호',
     'done.mailnote': '메일 앱이 열리지 않으면 아래 버튼을 누르시거나, 내용을 복사하여 {email} 로 보내 주세요.',
 
+    'info.location': '오시는 길',
+    'info.map.open': 'Google 지도에서 열기',
+    'info.map.blocked': '지도가 보이지 않으면 위 링크를 이용해 주세요',
     'footer.contact': '문의하기',
     'footer.rights': 'All rights reserved',
     'footer.demo': '본 페이지는 예약 신청 화면입니다. 신청 내용은 센터로 메일 발송되며, 최종 시간은 센터의 회신으로 확정됩니다.',

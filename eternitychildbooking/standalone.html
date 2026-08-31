@@ -438,6 +438,19 @@ input, select, textarea { font: inherit; color: inherit; }
 /* ---------- Info section ---------- */
 .info { padding: 0 0 3.4rem; }
 .info-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+/* the map leads the section and takes a row of its own */
+.map-card { grid-column: 1 / -1; }
+
+.map-frame {
+  position: relative; width: 100%; aspect-ratio: 21 / 9;
+  min-height: 220px; border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--line); background: var(--surface-2);
+}
+.map-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map-links { margin-top: .7rem; font-size: .86rem; }
+.map-links a { color: var(--jade); font-weight: 550; text-decoration: none; }
+.map-links a:hover { text-decoration: underline; }
+.map-note { margin-top: .3rem; font-size: .78rem; color: var(--ink-mute); }
 .info-card {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow-sm);
@@ -480,6 +493,7 @@ input, select, textarea { font: inherit; color: inherit; }
 
 @media (max-width: 620px) {
   .wrap { width: calc(100% - 1.6rem); }
+  .map-frame { aspect-ratio: 4 / 3; }
   .logo-mark { width: 32px; height: 32px; font-size: .92rem; }
   .logo-name { font-size: .88rem; }
   .logo-sub { display: none; }
@@ -742,6 +756,13 @@ input, select, textarea { font: inherit; color: inherit; }
 
 <section class="info" id="info">
   <div class="wrap info-grid">
+    <div class="info-card map-card">
+      <h3 data-i18n="info.location">中心位置</h3>
+      <div class="map-frame" id="mapFrame"></div>
+      <p class="map-links">
+        <a id="mapLink" href="#" target="_blank" rel="noopener" data-i18n="info.map.open">在 Google 地圖開啟</a>
+      </p>
+    </div>
     <div class="info-card">
       <h3 data-i18n="hours.title">營業時間</h3>
       <div class="hours-row"><span class="d" data-i18n="hours.week">週一至週六</span><span class="t">09:00 – 21:00</span></div>
@@ -788,7 +809,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.6',
+  version: '1.7',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -798,6 +819,14 @@ const CONFIG = {
 
   /* 選填：TWQR 收款條碼圖檔（放進 assets/ 後填入檔名，例如 'assets/twqr.jpg'） */
   qrImage: '',
+
+  /* 中心位置。embed 是 Google 地圖「嵌入地圖」給的網址（iframe 的 src），
+     link 是點「在 Google 地圖開啟」時要去的網址。
+     換地點時到 Google 地圖 → 分享 → 嵌入地圖，複製新的網址貼進來即可。 */
+  map: {
+    embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.9809356376345!2d120.68283367539682!3d23.961114278527212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346931e48b0bf07b%3A0xb09dbf0bc3cb8356!2z5rC45oGG5LmL5a2Q5pW05qSO5Lit5b-D!5e0!3m2!1szh-TW!2s!4v1788172605408!5m2!1szh-TW!2s',
+    link: 'https://maps.google.com/?cid=12726538179269329750'
+  },
 
   /* 幣別與價格（依療程分鐘數） */
   currency: 'NT$',
@@ -1032,6 +1061,9 @@ const I18N = {
     'done.code': '預約編號',
     'done.mailnote': '若未自動開啟郵件程式，請點選下方按鈕，或直接複製明細寄至 {email}。',
 
+    'info.location': '中心位置',
+    'info.map.open': '在 Google 地圖開啟',
+    'info.map.blocked': '若地圖沒有顯示，請點上方連結開啟',
     'footer.contact': '聯絡我們',
     'footer.rights': '版權所有',
     'footer.demo': '本頁為前端預約介面；送出後將以電子郵件通知中心，實際時段以中心回覆確認為準。',
@@ -1185,6 +1217,9 @@ const I18N = {
     'done.code': 'Reference',
     'done.mailnote': 'If your mail app did not open, use the button below or copy the details and send them to {email}.',
 
+    'info.location': 'Find Us',
+    'info.map.open': 'Open in Google Maps',
+    'info.map.blocked': 'If the map does not load, use the link above',
     'footer.contact': 'Contact Us',
     'footer.rights': 'All rights reserved',
     'footer.demo': 'This is the front-end booking interface. Your request is emailed to the centre; the final slot is confirmed by our reply.',
@@ -1338,6 +1373,9 @@ const I18N = {
     'done.code': '予約番号',
     'done.mailnote': 'メールソフトが起動しない場合は、下のボタンを押すか、内容をコピーして {email} までお送りください。',
 
+    'info.location': 'アクセス',
+    'info.map.open': 'Google マップで開く',
+    'info.map.blocked': '地図が表示されない場合は上のリンクをご利用ください',
     'footer.contact': 'お問い合わせ',
     'footer.rights': 'All rights reserved',
     'footer.demo': '本ページは予約フォームです。送信内容はセンターへメールで通知され、実際の枠は返信をもって確定します。',
@@ -1491,6 +1529,9 @@ const I18N = {
     'done.code': '예약 번호',
     'done.mailnote': '메일 앱이 열리지 않으면 아래 버튼을 누르시거나, 내용을 복사하여 {email} 로 보내 주세요.',
 
+    'info.location': '오시는 길',
+    'info.map.open': 'Google 지도에서 열기',
+    'info.map.blocked': '지도가 보이지 않으면 위 링크를 이용해 주세요',
     'footer.contact': '문의하기',
     'footer.rights': 'All rights reserved',
     'footer.demo': '본 페이지는 예약 신청 화면입니다. 신청 내용은 센터로 메일 발송되며, 최종 시간은 센터의 회신으로 확정됩니다.',
@@ -1554,6 +1595,8 @@ const I18N = {
     document.title = t('meta.title');
 
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    const mapNote = document.getElementById('mapNote');
+    if (mapNote) mapNote.textContent = t('info.map.blocked');
     $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
 
     $$('#langSwitch button').forEach(b => {
@@ -2459,6 +2502,29 @@ const I18N = {
       $('#' + id).addEventListener('input', () => hideError(3));
     });
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
+
+    // The map is injected rather than hard-coded so the address lives in
+    // config.js alone, and so pages that block third-party frames degrade to
+    // the plain link instead of an empty box.
+    const mapCard = $('.map-card');
+    if (mapCard && CONFIG.map && CONFIG.map.embed) {
+      const iframe = document.createElement('iframe');
+      iframe.src = CONFIG.map.embed;
+      iframe.loading = 'lazy';
+      iframe.title = t('info.location');
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.setAttribute('allowfullscreen', '');
+      $('#mapFrame').appendChild(iframe);
+      $('#mapLink').href = CONFIG.map.link || CONFIG.map.embed;
+      const note = document.createElement('span');
+      note.className = 'map-note';
+      note.id = 'mapNote';
+      note.textContent = t('info.map.blocked');
+      $('.map-links').appendChild(document.createElement('br'));
+      $('.map-links').appendChild(note);
+    } else if (mapCard) {
+      mapCard.hidden = true;
+    }
 
     if (CONFIG.qrImage) {
       const qrImg = $('#qrImg');
