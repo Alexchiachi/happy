@@ -25,7 +25,10 @@ const CENTER_MAP_URL = 'https://maps.google.com/?cid=12726538179269329750';
 const HEADERS = [
   '送出時間', '預約編號', '狀態', '日期', '開始', '結束',
   '服務項目', '選擇部位', '看診類型', '分鐘', '金額',
-  '姓名', '電話', 'Email', '語言', '匯款末五碼', '備註'
+  '姓名', '電話', 'Email', '語言', '匯款末五碼', '備註',
+  /* 新欄位一律往後加。插在中間會讓試算表裡既有的列全部錯位，
+     因為表頭只在工作表為空時才會寫入。 */
+  '加贈項目'
 ];
 
 /* ---------- 收單 ---------- */
@@ -66,7 +69,8 @@ function doPost(e) {
       d.email || '',
       d.preferredLanguage || '',
       "'" + (d.transferLast5 || ''),  // 同理，保留開頭的 0
-      d.notes || ''
+      d.notes || '',
+      (d.extrasLabels || []).join('、')
     ]);
 
     notifyCentre_(d);
@@ -140,7 +144,7 @@ function takenSlots_() {
     if (String(r[2] || '').indexOf('取消') !== -1) return;   // 狀態
     const date  = fmtDate_(r[3], tz);                        // 日期
     const start = toMinutes_(r[4], tz);                      // 開始
-    const end   = toMinutes_(r[5], tz);                      // 結束
+    const end   = toMinutes_(r[5], tz);                      // 結束（欄位順序見 HEADERS）
     if (!date || start === null || end === null || end <= start) return;
     if (!out[date]) out[date] = [];
     out[date].push([start, end]);
@@ -197,6 +201,7 @@ function notifyCentre_(d) {
   const rows = [
     ['服務項目', esc_(d.serviceLabel || d.service || '')],
     ['選擇部位', (d.partsLabels || []).join('、')],
+    ['加贈項目', (d.extrasLabels || []).join('、')],
     ['看診類型', d.visit === 'first' ? '初診' : '回診'],
     ['預約時間', prettyDate_(d.date) + '　' + (d.startTime || '') + '–' + (d.endTime || '')],
     ['療程時長', (d.durationMinutes || '') + ' 分鐘'],
@@ -232,6 +237,7 @@ function centreText_(d) {
     '',
     '服務項目：' + (d.serviceLabel || d.service || ''),
     (d.partsLabels || []).length ? '選擇部位：' + d.partsLabels.join('、') : null,
+    (d.extrasLabels || []).length ? '加贈項目：' + d.extrasLabels.join('、') : null,
     '看診類型：' + (d.visit === 'first' ? '初診' : '回診'),
     '預約時間：' + prettyDate_(d.date) + ' ' + (d.startTime || '') + '–' + (d.endTime || ''),
     '療程時長：' + (d.durationMinutes || '') + ' 分鐘',
@@ -284,6 +290,7 @@ function prettyDateLang_(s, lang) {
   if (lang === 'ja') return y + '年' + mo + '月' + d + '日（' + WEEK.ja[wd] + '）';
   if (lang === 'ko') return y + '년 ' + mo + '월 ' + d + '일 (' + WEEK.ko[wd] + ')';
   if (lang === 'en') return WEEK.en[wd] + ', ' + MON_EN[mo - 1] + ' ' + d + ', ' + y;
+  if (lang === 'ar') return d + '/' + mo + '/' + y;
   return y + '年' + mo + '月' + d + '日（週' + WEEK.zh[wd] + '）';
 }
 
@@ -302,10 +309,11 @@ function tableHtml_(rows) {
   return '<table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse">' + cells + '</table>';
 }
 
-/** 信件外框：品牌色標題列 + 預約編號 + 內容。 */
-function mailShell_(heading, ref, inner) {
+/** 信件外框：品牌色標題列 + 預約編號 + 內容。rtl 為真時整封信改為由右至左。 */
+function mailShell_(heading, ref, inner, rtl) {
+  const dir = rtl ? ' dir="rtl"' : '';
   return '' +
-'<div style="margin:0;padding:24px 12px;background:#f7f6f2;' +
+'<div' + dir + ' style="margin:0;padding:24px 12px;background:#f7f6f2;' +
 'font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',\'PingFang TC\',\'Noto Sans TC\',\'Hiragino Sans\',\'Apple SD Gothic Neo\',sans-serif">' +
   '<table cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;width:100%;' +
   'background:#fff;border:1px solid #e2e6e2;border-radius:14px;overflow:hidden">' +
@@ -328,44 +336,55 @@ const CUSTOMER_MAIL = {
     hello: '您好：',
     body: '我們已收到您的預約申請，將於一個工作天內與您確認。',
     detail: '預約明細',
-    pay: '付款方式：臺灣銀行（004）帳號 013004490011。確認後請於三日內完成轉帳，並保留後五碼以利核對。',
-    foot: '如需改期或取消，請於預約日前 48 小時與我們聯繫。',
-    labels: { service: '服務項目', parts: '選擇部位', datetime: '預約時間', duration: '療程時長', price: '費用', map: '地圖' },
+    pay: '付款方式：臺灣銀行（004）帳號 013004490011。請於送出預約的當天完成匯款，並保留後五碼以利核對。',
+    foot: '如需取消，最晚須於預約日的前一天告知。已付款項可延期使用，不接受退款。本中心保留最終解釋權。',
+    labels: { service: '服務項目', parts: '選擇部位', datetime: '預約時間', duration: '療程時長', price: '費用', map: '地圖', extras: '加贈項目', min: '分鐘' },
     next: '下一步',
-    steps: ['我們會於一個工作天內與您確認時間', '確認後，請於三日內完成轉帳', '當日請提前 10 分鐘抵達，以利填寫健康問卷']
+    steps: ['我們會於一個工作天內與您確認時間', '請於送出預約的當天完成匯款', '當日請提前 10 分鐘抵達，以利填寫健康問卷']
   },
   en: {
     subject: '[' + CENTER_NAME + '] Booking request received',
     hello: 'Hello,',
     body: 'We have received your booking request and will confirm within one business day.',
     detail: 'Booking details',
-    pay: 'Payment: Bank of Taiwan (004), account 013004490011. Please transfer within three days of confirmation and keep the last five digits for reconciliation.',
-    foot: 'To reschedule or cancel, please contact us at least 48 hours in advance.',
-    labels: { service: 'Service', parts: 'Areas', datetime: 'Date & Time', duration: 'Length', price: 'Fee', map: 'Map' },
+    pay: 'Payment: Bank of Taiwan (004), account 013004490011. Please transfer on the day you book and keep the last five digits for reconciliation.',
+    foot: 'To cancel, tell us no later than the day before your appointment. Paid sessions may be rescheduled; refunds are not available. The centre reserves the right of final interpretation.',
+    labels: { service: 'Service', parts: 'Areas', datetime: 'Date & Time', duration: 'Length', price: 'Fee', map: 'Map', extras: 'Also includes', min: 'min' },
     next: 'What happens next',
-    steps: ['We will confirm your time within one business day', 'Once confirmed, please transfer within three days', 'Please arrive 10 minutes early to complete the health questionnaire']
+    steps: ['We will confirm your time within one business day', 'Please transfer on the day you book', 'Please arrive 10 minutes early to complete the health questionnaire']
   },
   ja: {
     subject: '【' + CENTER_NAME + '】ご予約を受け付けました',
     hello: 'お世話になっております。',
     body: 'ご予約申込を受け付けました。1営業日以内にご連絡いたします。',
     detail: 'ご予約内容',
-    pay: 'お支払い：台湾銀行（004）口座 013004490011。確定後3日以内にお振込みいただき、下5桁をお控えください。',
-    foot: '変更・キャンセルは予約日の48時間前までにご連絡ください。',
-    labels: { service: 'メニュー', parts: '選択部位', datetime: '日時', duration: '施術時間', price: '料金', map: '地図' },
+    pay: 'お支払い：台湾銀行（004）口座 013004490011。ご予約送信当日にお振込みいただき、下5桁をお控えください。',
+    foot: 'キャンセルは予約日の前日までにご連絡ください。お支払い済みの施術は日程変更が可能ですが、返金はいたしません。本規約の最終的な解釈は当センターに帰属します。',
+    labels: { service: 'メニュー', parts: '選択部位', datetime: '日時', duration: '施術時間', price: '料金', map: '地図', extras: '追加特典', min: '分' },
     next: '今後の流れ',
-    steps: ['1営業日以内に日時のご確認をご連絡いたします', '確定後、3日以内にお振込みをお願いいたします', '当日は問診票ご記入のため10分前にお越しください']
+    steps: ['1営業日以内に日時のご確認をご連絡いたします', 'ご予約送信当日にお振込みをお願いいたします', '当日は問診票ご記入のため10分前にお越しください']
   },
   ko: {
     subject: '[' + CENTER_NAME + '] 예약 신청이 접수되었습니다',
     hello: '안녕하세요,',
     body: '예약 신청을 접수했습니다. 영업일 기준 1일 이내에 연락드리겠습니다.',
     detail: '예약 내용',
-    pay: '결제: 대만은행(004) 계좌 013004490011. 확정 후 3일 이내에 이체해 주시고 뒤 5자리를 보관해 주세요.',
-    foot: '변경 및 취소는 예약일 48시간 전까지 연락해 주세요.',
-    labels: { service: '시술', parts: '선택 부위', datetime: '예약 일시', duration: '시술 시간', price: '금액', map: '지도' },
+    pay: '결제: 대만은행(004) 계좌 013004490011. 예약 신청 당일에 이체해 주시고 뒤 5자리를 보관해 주세요.',
+    foot: '취소는 예약일 하루 전까지 알려 주세요. 결제한 시술은 일정 변경이 가능하며 환불은 되지 않습니다. 본 약관의 최종 해석 권한은 센터에 있습니다.',
+    labels: { service: '시술', parts: '선택 부위', datetime: '예약 일시', duration: '시술 시간', price: '금액', map: '지도', extras: '추가 제공', min: '분' },
     next: '다음 단계',
-    steps: ['영업일 기준 1일 이내에 시간을 확인해 드립니다', '확정 후 3일 이내에 이체해 주세요', '당일 문진표 작성을 위해 10분 전에 도착해 주세요']
+    steps: ['영업일 기준 1일 이내에 시간을 확인해 드립니다', '예약 신청 당일에 이체해 주세요', '당일 문진표 작성을 위해 10분 전에 도착해 주세요']
+  },
+  ar: {
+    subject: '[' + CENTER_NAME + '] تم استلام طلب الحجز',
+    hello: 'مرحباً،',
+    body: 'استلمنا طلب حجزك وسنؤكده خلال يوم عمل واحد.',
+    detail: 'تفاصيل الحجز',
+    pay: 'الدفع: بنك تايوان (004)، حساب رقم 013004490011. يرجى إتمام الحوالة في نفس يوم الحجز والاحتفاظ بآخر خمسة أرقام للمطابقة.',
+    foot: 'للإلغاء، أبلغنا قبل يوم واحد من موعدك على الأقل. يمكن تأجيل الجلسات المدفوعة ولا يوجد استرداد. يحتفظ المركز بحق التفسير النهائي.',
+    labels: { service: 'الخدمة', parts: 'المواضع', datetime: 'التاريخ والوقت', duration: 'المدة', price: 'المبلغ', map: 'الخريطة', extras: 'يشمل أيضاً', min: 'دقيقة' },
+    next: 'الخطوات التالية',
+    steps: ['سنؤكد موعدك خلال يوم عمل واحد', 'يرجى إتمام الحوالة في نفس يوم الحجز', 'يرجى الحضور 10 دقائق مبكراً لتعبئة استبيان الحالة الصحية']
   }
 };
 
@@ -375,7 +394,8 @@ function notifyCustomer_(d) {
   const L = t.labels;
 
   const lang = d.preferredLanguage || 'zh';
-  const sep = (lang === 'zh' || lang === 'ja') ? '、' : ', ';
+  const sep = (lang === 'zh' || lang === 'ja') ? '、'
+            : (lang === 'ar') ? '، ' : ', ';
   const service = d.serviceLabelLocal || d.serviceLabel || '';
   const parts = (d.partsLabelsLocal && d.partsLabelsLocal.length)
               ? d.partsLabelsLocal : (d.partsLabels || []);
@@ -384,8 +404,10 @@ function notifyCustomer_(d) {
     [L.datetime, prettyDateLang_(d.date, lang) + '　' + (d.startTime || '') + '–' + (d.endTime || '')],
     [L.service, esc_(service)],
     [L.parts, parts.map(esc_).join(sep)],
-    [L.duration, (d.durationMinutes || '') + ' min'],
+    [L.duration, (d.durationMinutes || '') + ' ' + (L.min || 'min')],
     [L.price, money_(d.price)],
+    [L.extras, ((d.extrasLabelsLocal && d.extrasLabelsLocal.length)
+                 ? d.extrasLabelsLocal : (d.extrasLabels || [])).map(esc_).join(sep)],
     [L.map, '<a href="' + CENTER_MAP_URL + '" style="color:#1f5f52">' +
             esc_(CENTER_NAME) + '</a>']
   ];
@@ -395,6 +417,7 @@ function notifyCustomer_(d) {
            (i + 1) + '.</td><td style="padding:3px 0;font-size:14px;color:#4a5a56">' + esc_(x) + '</td></tr>';
   }).join('');
 
+  const rtl = lang === 'ar';
   const html = mailShell_(t.subject.replace(/^[【\[][^】\]]*[】\]]\s*/, ''), d.ref || '',
     '<p style="margin:0 0 6px;font-size:15px;color:#17211f">' + esc_(t.hello) + '</p>' +
     '<p style="margin:0 0 20px;font-size:14px;color:#4a5a56;line-height:1.7">' + esc_(t.body) + '</p>' +
@@ -406,7 +429,8 @@ function notifyCustomer_(d) {
       '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(176,137,73,.28);' +
       'font-size:13px;color:#7a5f2c;line-height:1.65">' + esc_(t.pay) + '</div>' +
     '</div>' +
-    '<p style="margin:20px 0 0;font-size:12px;color:#7f8d89;line-height:1.7">' + esc_(t.foot) + '</p>'
+    '<p style="margin:20px 0 0;font-size:12px;color:#7f8d89;line-height:1.7">' + esc_(t.foot) + '</p>',
+    rtl
   );
 
   const text = [
@@ -415,7 +439,7 @@ function notifyCustomer_(d) {
     '  ' + prettyDateLang_(d.date, lang) + '  ' + (d.startTime || '') + '–' + (d.endTime || ''),
     '  ' + service +
       (parts.length ? '（' + parts.join(sep) + '）' : '') +
-      ' / ' + (d.durationMinutes || '') + ' min / ' + money_(d.price),
+      ' / ' + (d.durationMinutes || '') + ' ' + (L.min || 'min') + ' / ' + money_(d.price),
     '  ' + (d.ref || ''), '',
     L.map + '：' + CENTER_MAP_URL, '',
     t.pay, '', t.foot, '', CENTER_NAME

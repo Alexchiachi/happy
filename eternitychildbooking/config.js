@@ -8,10 +8,21 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.8',
+  version: '1.9',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
+
+  /* 聯絡資訊。填了才會顯示在頁面上，留空的項目會自動略過。
+     phone 會做成可直接撥打的連結，line 填官方帳號 ID 或邀請連結。 */
+  contact: {
+    name: '林廣漢',
+    phone: '0985727168',
+    instagram: 'cosmoskhan',       // 只填帳號，不用網址
+    lineQr: 'assets/line-qr.jpg',  // LINE 官方帳號的 QR 圖檔，沒放檔案就不顯示
+    line: '',                      // 若之後拿到 LINE ID 或邀請連結，填這裡
+    address: ''                    // 有需要再填，地圖已經標好位置
+  },
 
   /* 付款資訊 */
   bank: { code: '004', name: 'Bank of Taiwan', account: '013004490011' },
@@ -55,16 +66,24 @@ const CONFIG = {
     parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
             'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
     packages: [
-      { pick: 3, price: 1688, minutes: 40 },
-      { pick: 5, price: 2888, minutes: 60 }
+      { pick: 3,  price: 1688, minutes: 40 },
+      { pick: 5,  price: 2888, minutes: 60 },
+      /* 十項全選的旗艦方案，另含四項加贈項目（見 i18n 的 extra.*）。
+         pick 等於部位總數時，網頁會自動全選並鎖住，客人不需逐項點選。 */
+      { pick: 10, price: 4588, minutes: 90, name: 'signature',
+        extras: ['pulse', 'detail', 'surface', 'lift'] }
     ]
   },
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,
 
-  /* 最早可預約：今天起 N 個月之後；最晚：今天起 M 個月內 */
-  leadMonths: 1,
+  /* 最早可預約：今天起 leadDays 天之後。
+     若要改回「幾個月之後」，把 leadDays 設為 0 並填 leadMonths。 */
+  leadDays: 7,
+  leadMonths: 0,
+
+  /* 最晚可預約：今天起幾個月內 */
   windowMonths: 4,
 
   /* 中心所在時區偏移（台北 UTC+8，無日光節約） */

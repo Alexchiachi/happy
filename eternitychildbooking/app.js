@@ -46,12 +46,23 @@
 
   function applyI18n() {
     const meta = currentLangMeta();
+    const rtl = meta.dir === 'rtl';
     document.documentElement.lang = meta.htmlLang;
+    document.documentElement.dir = meta.dir || 'ltr';
     document.title = t('meta.title');
+
+    // 版面用邏輯屬性寫成，會自動鏡射；但這兩個箭頭字元的方向意義相反，要手動換
+    const prev = $('#calPrev'), next = $('#calNext');
+    if (prev && next) {
+      prev.textContent = rtl ? '\u203A' : '\u2039';
+      next.textContent = rtl ? '\u2039' : '\u203A';
+    }
 
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     const mapNote = document.getElementById('mapNote');
     if (mapNote) mapNote.textContent = t('info.map.blocked');
+    const qrCap = document.getElementById('lineQrCap');
+    if (qrCap) qrCap.textContent = t('info.contact.lineqr');
     $$('#galleryGrid img').forEach(img => {
       img.alt = t('gallery.alt', { n: img.dataset.index });
     });
@@ -89,7 +100,16 @@
   const toMin = hhmm => { const p = hhmm.split(':').map(Number); return p[0] * 60 + p[1]; };
   const toHHMM = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
 
-  function minDate() { return addMonths(startOfToday(), CONFIG.leadMonths); }
+  /* 前置期可以用天數或月數表示；leadDays 有值時優先。 */
+  function minDate() {
+    const base = startOfToday();
+    if (CONFIG.leadDays) {
+      const d = new Date(base);
+      d.setDate(d.getDate() + CONFIG.leadDays);
+      return d;
+    }
+    return addMonths(base, CONFIG.leadMonths || 0);
+  }
   function maxDate() { return addMonths(startOfToday(), CONFIG.windowMonths); }
   function startOfToday() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
 
@@ -107,14 +127,14 @@
 
   function monthTitle(y, m) {
     const meta = currentLangMeta();
-    if (state.lang === 'en') {
-      let name;
+    let name = String(m + 1);
+    // 中日韓的字典直接寫「9 月」，只有需要月份名稱的語言才去問 Intl
+    if (t('month.format').indexOf('{monthName}') !== -1) {
       try {
         name = new Intl.DateTimeFormat(meta.locale, { month: 'long' }).format(new Date(y, m, 1));
-      } catch (e) { name = String(m + 1); }
-      return t('month.format', { y: y, m: m + 1, monthName: name });
+      } catch (e) { /* 退回數字 */ }
     }
-    return t('month.format', { y: y, m: m + 1, monthName: String(m + 1) });
+    return t('month.format', { y: y, m: m + 1, monthName: name });
   }
 
   /* ---------------- availability ---------------- */
@@ -230,9 +250,11 @@
     b.setAttribute('aria-pressed', String(!!opts.selected));
     b.innerHTML = '<div class="opt-title"></div>' +
                   (opts.desc ? '<div class="opt-desc"></div>' : '') +
+                  (opts.extra ? '<div class="opt-extra"></div>' : '') +
                   (opts.price ? '<div class="opt-price"></div>' : '');
     $('.opt-title', b).textContent = opts.title;
     if (opts.desc) $('.opt-desc', b).textContent = opts.desc;
+    if (opts.extra) $('.opt-extra', b).textContent = opts.extra;
     if (opts.price) $('.opt-price', b).textContent = opts.price;
     b.addEventListener('click', opts.onClick);
     return b;
@@ -257,8 +279,22 @@
   }
 
   /* zh/ja list items with a full-width enumeration comma; en/ko use a plain one */
+  /* 中日文用全形冒號，其餘語言用半形加空格。 */
+  function labelSep() {
+    return (state.lang === 'zh' || state.lang === 'ja') ? '：' : ': ';
+  }
+
   function listSep() {
-    return (state.lang === 'zh' || state.lang === 'ja') ? '、' : ', ';
+    if (state.lang === 'zh' || state.lang === 'ja') return '、';
+    if (state.lang === 'ar') return '، ';
+    return ', ';
+  }
+
+  /* 字典裡沒有這個時長時，自行以分鐘數組字，不讓鍵名漏到畫面上。 */
+  function durationLabel(min) {
+    const key = 'duration.' + min;
+    const dict = I18N[state.lang] || I18N.zh;
+    return dict[key] != null ? dict[key] : min + ' ' + t('duration.minutes');
   }
 
   function money(n) {
@@ -284,6 +320,22 @@
   function partsLimit() {
     const p = currentPackage();
     return p ? p.pick : 0;
+  }
+
+  function allParts() {
+    return (CONFIG.pickService && CONFIG.pickService.parts) || [];
+  }
+
+  /** The flagship package covers every area, so it is chosen for the client
+      rather than clicked ten times. */
+  function isAllPartsPackage() {
+    const p = currentPackage();
+    return !!p && p.pick >= allParts().length;
+  }
+
+  function packageExtras() {
+    const p = currentPackage();
+    return (p && p.extras) || [];
   }
 
   function renderServiceOptions() {
@@ -318,17 +370,24 @@
 
     if (isPickService()) {
       label.textContent = t('pkg.title');
+      const total = allParts().length;
       CONFIG.pickService.packages.forEach((p, i) => {
+        const all = p.pick >= total;
         box.appendChild(optionButton({
           title: t('pkg.' + p.pick),
-          desc: t('pkg.pick', { n: p.pick }),
-          price: money(p.price),
+          desc: all ? t('pkg.all') : t('pkg.pick', { n: p.pick }),
+          extra: (p.extras && p.extras.length)
+            ? t('pkg.extras') + labelSep() + p.extras.map(k => t('extra.' + k)).join(listSep())
+            : '',
+          price: money(p.price) + ' · ' + p.minutes + ' ' + t('duration.minutes'),
           selected: state.pkg === i,
           onClick: () => {
             state.pkg = i;
             state.duration = p.minutes;
             state.time = null;                       // slot length changed
-            state.parts = state.parts.slice(0, p.pick);  // a smaller package trims the list
+            state.parts = all
+              ? allParts().slice()                   // every area is included
+              : state.parts.slice(0, p.pick);        // a smaller package trims the list
             applyI18n();
           }
         }));
@@ -339,7 +398,7 @@
     label.textContent = t('duration.title');
     CONFIG.durations.forEach(d => {
       box.appendChild(optionButton({
-        title: t('duration.' + d),
+        title: durationLabel(d),
         price: money(CONFIG.prices[d]),
         selected: state.duration === d,
         onClick: () => {
@@ -357,7 +416,8 @@
     section.hidden = false;
 
     const max = partsLimit();
-    const full = state.parts.length >= max;
+    const locked = isAllPartsPackage();
+    const full = locked || state.parts.length >= max;
     const counter = $('#partsCount');
     counter.textContent = t('parts.count', { n: state.parts.length, max: max });
     counter.classList.toggle('full', full);
@@ -372,8 +432,10 @@
       b.setAttribute('aria-pressed', String(on));
       b.innerHTML = '<span class="box" aria-hidden="true">\u2713</span><span class="txt"></span>';
       $('.txt', b).textContent = t('part.' + key);
-      if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
+      if (locked) { b.disabled = true; b.title = t('pkg.all'); }
+      else if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
       b.addEventListener('click', () => {
+        if (locked) return;
         const i = state.parts.indexOf(key);
         if (i === -1) { if (state.parts.length >= max) return; state.parts.push(key); }
         else state.parts.splice(i, 1);
@@ -612,7 +674,7 @@
       [t('review.service'),  t('service.' + state.service)],
       [t('review.visit'),    t(state.visit === 'first' ? 'visit.first' : 'visit.return')],
       [t('review.datetime'), formatDate(state.date) + '  ' + state.time + ' – ' + endTime()],
-      [t('review.duration'), t('duration.' + state.duration)],
+      [t('review.duration'), durationLabel(state.duration)],
       [t('review.name'),     c.name],
       [t('review.phone'),    c.phone],
       [t('review.email'),    c.email],
@@ -623,6 +685,10 @@
     ];
     if (isPickService()) {
       rows.splice(1, 0, [t('review.parts'), state.parts.map(k => t('part.' + k)).join(listSep())]);
+      const ex = packageExtras();
+      if (ex.length) {
+        rows.splice(2, 0, [t('pkg.extras'), ex.map(k => t('extra.' + k)).join(listSep())]);
+      }
     }
     return rows;
   }
@@ -671,6 +737,9 @@
       parts: isPickService() ? state.parts.slice() : [],
       partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
       // the centre reads Chinese; the client's confirmation uses their own language
+      extras: packageExtras(),
+      extrasLabels: packageExtras().map(k => I18N.zh['extra.' + k]),
+      extrasLabelsLocal: packageExtras().map(k => tIn(lang, 'extra.' + k)),
       serviceLabelLocal: tIn(lang, 'service.' + state.service),
       partsLabelsLocal: isPickService() ? state.parts.map(k => tIn(lang, 'part.' + k)) : [],
       price: currentPrice(),
@@ -698,6 +767,7 @@
         ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
           (state.lang === 'zh' ? '' : ' / ' + p.partsLabels.join('、'))
         : null,
+      p.extras.length ? t('pkg.extras') + ': ' + p.extrasLabels.join('、') : null,
       t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
       t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
       t('review.price')    + ': ' + money(p.price),
@@ -948,6 +1018,57 @@
     });
   }
 
+  /* Only the details that are actually filled in appear; an empty setting
+     leaves no dangling label. */
+  function renderContact() {
+    const box = $('#contactList');
+    if (!box) return;
+    const c = CONFIG.contact || {};
+    const rows = [
+      ['name',      c.name,      ''],
+      ['phone',     c.phone,     c.phone ? 'tel:' + c.phone.replace(/[^\d+]/g, '') : ''],
+      ['instagram', c.instagram ? '@' + c.instagram : '',
+                    c.instagram ? 'https://instagram.com/' + c.instagram : ''],
+      ['line',      c.line,      /^https?:/.test(c.line || '') ? c.line : ''],
+      ['email',     CONFIG.email, CONFIG.email ? 'mailto:' + CONFIG.email : ''],
+      ['address',   c.address,   '']
+    ].filter(r => r[1]);
+
+    box.innerHTML = '';
+    rows.forEach(([key, value, href]) => {
+      const row = document.createElement('div');
+      row.className = 'contact-row';
+      const k = document.createElement('span');
+      k.className = 'ck';
+      k.dataset.i18n = 'info.contact.' + key;
+      k.textContent = t('info.contact.' + key);
+      const v = document.createElement(href ? 'a' : 'span');
+      v.className = 'cv';
+      v.textContent = value;
+      if (href) { v.href = href; if (/^https?:/.test(href)) { v.target = '_blank'; v.rel = 'noopener'; } }
+      row.appendChild(k); row.appendChild(v);
+      box.appendChild(row);
+    });
+
+    // LINE 的 QR 圖：沿用照片那套做法，檔案還沒放上去就整塊不出現
+    if (c.lineQr) {
+      const wrap = document.createElement('div');
+      wrap.className = 'line-qr';
+      wrap.hidden = true;
+      const img = document.createElement('img');
+      img.alt = 'LINE QR';
+      img.addEventListener('load', () => { wrap.hidden = false; });
+      img.addEventListener('error', () => { wrap.remove(); });
+      const cap = document.createElement('span');
+      cap.className = 'qr-cap';
+      cap.id = 'lineQrCap';
+      cap.textContent = t('info.contact.lineqr');
+      wrap.appendChild(img); wrap.appendChild(cap);
+      box.appendChild(wrap);
+      img.src = c.lineQr;
+    }
+  }
+
   /* ---------------- wiring ---------------- */
   function init() {
     state.lang = detectLang();
@@ -996,6 +1117,7 @@
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
 
     renderGallery();
+    renderContact();
 
     // The map is injected rather than hard-coded so the address lives in
     // config.js alone, and so pages that block third-party frames degrade to

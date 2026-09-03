@@ -48,6 +48,7 @@
           "PingFang TC", "Noto Sans TC", "Microsoft JhengHei",
           "Hiragino Sans", "Noto Sans JP",
           "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+          "Geeza Pro", "Noto Sans Arabic", Tahoma,
           sans-serif;
 }
 
@@ -264,6 +265,11 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .opt .opt-title { font-weight: 620; font-size: .98rem; padding-inline-end: 1.7rem; }
 .opt .opt-desc { margin-top: .28rem; font-size: .84rem; color: var(--ink-mute); line-height: 1.5; }
+.opt .opt-extra {
+  margin-top: .45rem; padding-top: .45rem;
+  border-top: 1px dashed var(--line);
+  font-size: .8rem; color: var(--gold); line-height: 1.5;
+}
 .opt .opt-price { margin-top: .5rem; font-size: .92rem; font-weight: 650; color: var(--gold); }
 
 /* ---------- Step 2 : two-column picker ---------- */
@@ -272,6 +278,27 @@ input, select, textarea { font: inherit; color: inherit; }
   .picker { grid-template-columns: 380px 1fr; gap: 2.2rem; align-items: start; }
   .picker .section + .section { margin-top: 0; }
 }
+
+/* ---------- 阿拉伯文（由右至左） ----------
+   版面本身用邏輯屬性寫成，會自動鏡射；這裡只補字元層級的處理。 */
+[dir="rtl"] .logo-sub { letter-spacing: 0; }
+/* 價格與時間是「數字＋符號＋單位」的混排，交給瀏覽器的雙向演算法會前後顛倒。
+   固定成由左至右並隔離，數字才不會被拆開重排。 */
+[dir="rtl"] .price-chip .amount,
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .pay-acct,
+[dir="rtl"] .slot,
+[dir="rtl"] .cal-cell,
+[dir="rtl"] .hours-row .t,
+[dir="rtl"] .ref-code,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .contact-bank .acct { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .hours-row .t { text-align: start; }
+[dir="rtl"] .section-label { letter-spacing: 0; }
 
 /* ---------- Pick-a-part chips ---------- */
 .section-label.labelled {
@@ -399,6 +426,7 @@ input, select, textarea { font: inherit; color: inherit; }
 .field textarea { min-height: 108px; resize: vertical; }
 .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
 .field .note { font-size: .76rem; color: var(--ink-mute); line-height: 1.45; }
+.field .note.surgery { color: var(--gold); font-weight: 550; }
 .field .err { font-size: .78rem; color: var(--danger); display: none; }
 .field.invalid .err { display: block; }
 
@@ -502,6 +530,36 @@ input, select, textarea { font: inherit; color: inherit; }
 .hours-row:last-child { border-bottom: none; }
 .hours-row .d { color: var(--ink-mute); }
 .hours-row .t { font-variant-numeric: tabular-nums; font-weight: 550; }
+
+.contact-list { display: grid; gap: .3rem; }
+.contact-row {
+  display: flex; gap: .8rem; align-items: baseline;
+  font-size: .88rem; padding: .3rem 0;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row .ck { color: var(--ink-mute); min-width: 4.2rem; flex: none; }
+.contact-row .cv { overflow-wrap: anywhere; }
+a.cv { color: var(--jade); text-decoration: none; }
+a.cv:hover { text-decoration: underline; }
+.contact-bank {
+  margin-top: .8rem; padding-top: .7rem; border-top: 1px solid var(--line-soft);
+  font-size: .85rem; color: var(--ink-soft);
+}
+.contact-bank .acct { font-variant-numeric: tabular-nums; letter-spacing: .05em; }
+
+.line-qr {
+  margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--line-soft);
+  display: flex; align-items: center; gap: .9rem;
+}
+.line-qr img {
+  width: 96px; height: 96px; flex: none; border-radius: 10px;
+  border: 1px solid var(--line); background: #fff;
+}
+.line-qr .qr-cap { font-size: .8rem; color: var(--ink-mute); line-height: 1.5; }
+.footer-note .terms {
+  display: block; margin-top: .35rem; color: var(--ink-soft); font-weight: 550;
+}
 
 /* ---------- Footer ---------- */
 .site-footer {
@@ -717,6 +775,7 @@ input, select, textarea { font: inherit; color: inherit; }
             <div class="field full" data-field="notes">
               <label for="fNotes"><span data-i18n="form.notes">身體狀況或備註</span><span class="hint" data-i18n="form.optional">選填</span></label>
               <textarea id="fNotes" data-i18n-ph="form.notes.ph"></textarea>
+              <span class="note surgery" data-i18n="form.notes.hint"></span>
             </div>
           </div>
 
@@ -769,6 +828,9 @@ input, select, textarea { font: inherit; color: inherit; }
             <li data-i18n="rules.3"></li>
             <li data-i18n="rules.4"></li>
             <li data-i18n="rules.5"></li>
+            <li data-i18n="rules.6"></li>
+            <li data-i18n="rules.7"></li>
+            <li data-i18n="rules.8"></li>
           </ol>
         </div>
 
@@ -822,26 +884,28 @@ input, select, textarea { font: inherit; color: inherit; }
       <h3 data-i18n="rules.title">預約須知</h3>
       <ol style="padding-inline-start:1.15rem;font-size:.86rem;color:var(--ink-soft)">
         <li data-i18n="rules.1"></li>
-        <li data-i18n="rules.2"></li>
         <li data-i18n="rules.4"></li>
+        <li data-i18n="rules.5"></li>
+        <li data-i18n="rules.6"></li>
       </ol>
     </div>
     <div class="info-card">
       <h3 data-i18n="footer.contact">聯絡我們</h3>
-      <p style="font-size:.88rem;color:var(--ink-soft)">
-        <a href="mailto:ahanamita88888888@gmail.com" style="color:var(--jade);text-decoration:none">ahanamita88888888@gmail.com</a>
-      </p>
-      <p style="font-size:.86rem;color:var(--ink-soft);margin-top:.6rem">
+      <div class="contact-list" id="contactList"></div>
+      <div class="contact-bank">
         <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span><br>
-        <span style="font-variant-numeric:tabular-nums;letter-spacing:.05em">013004490011</span>
-      </p>
+        <span class="acct">013004490011</span>
+      </div>
     </div>
   </div>
 </section>
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <div class="footer-note" data-i18n="footer.demo"></div>
+    <div class="footer-note">
+      <span data-i18n="footer.demo"></span>
+      <span class="terms" data-i18n="footer.terms"></span>
+    </div>
     <div>© <span id="year"></span> <span data-i18n="brand.name">永恆之子整椎中心</span> · <span data-i18n="footer.rights">版權所有</span> <span class="ver" id="ver"></span></div>
   </div>
 </footer>
@@ -858,10 +922,21 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '1.8',
+  version: '1.9',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
+
+  /* 聯絡資訊。填了才會顯示在頁面上，留空的項目會自動略過。
+     phone 會做成可直接撥打的連結，line 填官方帳號 ID 或邀請連結。 */
+  contact: {
+    name: '林廣漢',
+    phone: '0985727168',
+    instagram: 'cosmoskhan',       // 只填帳號，不用網址
+    lineQr: 'assets/line-qr.jpg',  // LINE 官方帳號的 QR 圖檔，沒放檔案就不顯示
+    line: '',                      // 若之後拿到 LINE ID 或邀請連結，填這裡
+    address: ''                    // 有需要再填，地圖已經標好位置
+  },
 
   /* 付款資訊 */
   bank: { code: '004', name: 'Bank of Taiwan', account: '013004490011' },
@@ -905,16 +980,24 @@ const CONFIG = {
     parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
             'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
     packages: [
-      { pick: 3, price: 1688, minutes: 40 },
-      { pick: 5, price: 2888, minutes: 60 }
+      { pick: 3,  price: 1688, minutes: 40 },
+      { pick: 5,  price: 2888, minutes: 60 },
+      /* 十項全選的旗艦方案，另含四項加贈項目（見 i18n 的 extra.*）。
+         pick 等於部位總數時，網頁會自動全選並鎖住，客人不需逐項點選。 */
+      { pick: 10, price: 4588, minutes: 90, name: 'signature',
+        extras: ['pulse', 'detail', 'surface', 'lift'] }
     ]
   },
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,
 
-  /* 最早可預約：今天起 N 個月之後；最晚：今天起 M 個月內 */
-  leadMonths: 1,
+  /* 最早可預約：今天起 leadDays 天之後。
+     若要改回「幾個月之後」，把 leadDays 設為 0 並填 leadMonths。 */
+  leadDays: 7,
+  leadMonths: 0,
+
+  /* 最晚可預約：今天起幾個月內 */
   windowMonths: 4,
 
   /* 中心所在時區偏移（台北 UTC+8，無日光節約） */
@@ -973,7 +1056,10 @@ const LANGS = [
   { code: 'zh', label: '中文', htmlLang: 'zh-Hant-TW', locale: 'zh-TW' },
   { code: 'en', label: 'EN',   htmlLang: 'en',         locale: 'en-US' },
   { code: 'ja', label: '日本語', htmlLang: 'ja',        locale: 'ja-JP' },
-  { code: 'ko', label: '한국어', htmlLang: 'ko',        locale: 'ko-KR' }
+  { code: 'ko', label: '한국어', htmlLang: 'ko',        locale: 'ko-KR' },
+  /* 阿拉伯文由右至左書寫；日期一律用阿拉伯數字（-u-nu-latn），
+     與時段的 09:00 格式一致，避免同一頁出現兩種數字系統。 */
+  { code: 'ar', label: 'العربية', htmlLang: 'ar',        locale: 'ar-u-nu-latn', dir: 'rtl' }
 ];
 
 const I18N = {
@@ -1034,6 +1120,7 @@ const I18N = {
     'duration.title': '療程時長',
     'duration.40': '40 分鐘',
     'duration.60': '60 分鐘',
+    'duration.90': '90 分鐘',
     'duration.minutes': '分鐘',
 
     'date.title': '選擇日期',
@@ -1066,7 +1153,7 @@ const I18N = {
     'err.last5': '匯款末五碼請填五位數字，或留空',
     'review.last5': '匯款末五碼',
     'form.notes': '身體狀況或備註',
-    'form.notes.ph': '例如：長期肩頸僵硬、下背痛、曾有手術史⋯⋯（非必填）',
+    'form.notes.ph': '例如：長期肩頸僵硬、下背痛⋯⋯（非必填）',
     'form.optional': '選填',
     'form.required': '必填',
     'form.agree': '我已閱讀並同意預約與付款須知',
@@ -1096,16 +1183,35 @@ const I18N = {
     'pay.bank.value': '臺灣銀行（代號 004）',
     'pay.acct': '帳號',
     'pay.qr': '亦可掃描櫃檯 TWQR 條碼付款',
-    'pay.note': '請於預約成立後三日內完成轉帳，並保留後五碼以利核對。未完成付款之預約將自動釋出。',
+    'pay.note': '請於送出預約的當天完成匯款，並保留後五碼以利核對。未完成付款之預約將自動釋出。',
     'pay.copy': '複製帳號',
     'pay.copied': '已複製！',
 
+    'form.notes.hint': '如有開刀部位，請務必在此告知',
+    'pkg.10': '精雕細琢 × 表面功夫',
+    'pkg.all': '十個部位全選',
+    'pkg.extras': '另含加贈項目',
+    'extra.pulse': '量子脈衝',
+    'extra.detail': '精雕細琢',
+    'extra.surface': '表面功夫',
+    'extra.lift': '緊緻拉提',
+    'info.contact.name': '聯絡人',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': '掃描 QR 加入官方 LINE',
+    'info.contact.phone': '電話',
+    'info.contact.line': 'LINE',
+    'info.contact.email': '電子信箱',
+    'info.contact.address': '地址',
+    'footer.terms': '本中心保留最終解釋權',
     'rules.title': '預約須知',
-    'rules.1': '所有預約須為當日起一個月之後的時段。',
+    'rules.1': '所有預約須為當日起七天之後的時段。',
     'rules.2': '週日僅開放上午時段，且限初診預約。',
     'rules.3': '週四營業至 17:00，最後一個時段須於 17:00 前結束。',
-    'rules.4': '如需改期或取消，請於預約日前 48 小時聯繫本中心。',
-    'rules.5': '請提前 10 分鐘抵達，以利填寫健康問卷。',
+    'rules.4': '請於送出預約的當天完成匯款，逾期預約將自動釋出。',
+    'rules.5': '如需取消，最晚須於預約日的前一天告知。',
+    'rules.6': '已付款項可延期使用，不接受退款。',
+    'rules.7': '請提前 10 分鐘抵達，以利填寫健康問卷。',
+    'rules.8': '本中心保留最終解釋權。',
 
     'btn.next': '下一步',
     'btn.back': '上一步',
@@ -1193,6 +1299,7 @@ const I18N = {
     'duration.title': 'Session Length',
     'duration.40': '40 minutes',
     'duration.60': '60 minutes',
+    'duration.90': '90 minutes',
     'duration.minutes': 'min',
 
     'date.title': 'Select a Date',
@@ -1225,7 +1332,7 @@ const I18N = {
     'err.last5': 'Please enter exactly 5 digits, or leave it blank',
     'review.last5': 'Transfer (last 5)',
     'form.notes': 'Condition or Notes',
-    'form.notes.ph': 'e.g. chronic neck stiffness, lower back pain, past surgery… (optional)',
+    'form.notes.ph': 'e.g. chronic neck stiffness, lower back pain… (optional)',
     'form.optional': 'optional',
     'form.required': 'required',
     'form.agree': 'I have read and agree to the booking and payment terms',
@@ -1255,16 +1362,35 @@ const I18N = {
     'pay.bank.value': 'Bank of Taiwan (code 004)',
     'pay.acct': 'Account',
     'pay.qr': 'You may also scan the TWQR code at our front desk',
-    'pay.note': 'Please transfer within three days of booking and keep the last five digits for reconciliation. Unpaid bookings are released automatically.',
+    'pay.note': 'Please transfer on the day you book and keep the last five digits for reconciliation. Unpaid bookings are released automatically.',
     'pay.copy': 'Copy account number',
     'pay.copied': 'Copied!',
 
+    'form.notes.hint': 'If you have had surgery anywhere, please tell us here',
+    'pkg.10': 'Fine Detail × Surface Work',
+    'pkg.all': 'All ten areas included',
+    'pkg.extras': 'Also includes',
+    'extra.pulse': 'Quantum Pulse',
+    'extra.detail': 'Fine Detailing',
+    'extra.surface': 'Surface Work',
+    'extra.lift': 'Firming Lift',
+    'info.contact.name': 'Contact',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'Scan the QR code to add us on LINE',
+    'info.contact.phone': 'Phone',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'Email',
+    'info.contact.address': 'Address',
+    'footer.terms': 'The centre reserves the right of final interpretation',
     'rules.title': 'Booking Terms',
-    'rules.1': 'All appointments must be at least one month from today.',
+    'rules.1': 'All appointments must be at least seven days from today.',
     'rules.2': 'Sundays are morning-only and reserved for first visits.',
     'rules.3': 'Thursday closes at 17:00; the last session must end by then.',
-    'rules.4': 'To reschedule or cancel, contact us at least 48 hours ahead.',
-    'rules.5': 'Please arrive 10 minutes early to complete the health questionnaire.',
+    'rules.4': 'Please complete the bank transfer on the day you book — unpaid slots are released.',
+    'rules.5': 'To cancel, let us know no later than the day before your appointment.',
+    'rules.6': 'Paid sessions may be rescheduled. Refunds are not available.',
+    'rules.7': 'Please arrive 10 minutes early to complete the health questionnaire.',
+    'rules.8': 'The centre reserves the right of final interpretation of these terms.',
 
     'btn.next': 'Next',
     'btn.back': 'Back',
@@ -1352,6 +1478,7 @@ const I18N = {
     'duration.title': '施術時間',
     'duration.40': '40分',
     'duration.60': '60分',
+    'duration.90': '90分',
     'duration.minutes': '分',
 
     'date.title': '日付を選択',
@@ -1384,7 +1511,7 @@ const I18N = {
     'err.last5': '5桁の数字をご入力いただくか、空欄のままにしてください',
     'review.last5': '振込下5桁',
     'form.notes': 'お身体の状態・ご要望',
-    'form.notes.ph': '例：慢性的な首こり、腰痛、手術歴など（任意）',
+    'form.notes.ph': '例：慢性的な首こり、腰痛など（任意）',
     'form.optional': '任意',
     'form.required': '必須',
     'form.agree': '予約・お支払いに関する注意事項に同意します',
@@ -1414,16 +1541,35 @@ const I18N = {
     'pay.bank.value': '台湾銀行（コード 004）',
     'pay.acct': '口座番号',
     'pay.qr': '受付の TWQR コードでのお支払いも可能です',
-    'pay.note': 'ご予約成立後3日以内にお振込みいただき、下5桁を控えてください。未入金の予約は自動的に解除されます。',
+    'pay.note': 'ご予約送信当日にお振込みいただき、下5桁をお控えください。未入金のご予約は自動的に解除されます。',
     'pay.copy': '口座番号をコピー',
     'pay.copied': 'コピーしました！',
 
+    'form.notes.hint': '手術を受けた部位がある場合は必ずご記入ください',
+    'pkg.10': '精雕細琢 × 表面功夫',
+    'pkg.all': '10部位すべて',
+    'pkg.extras': '追加特典',
+    'extra.pulse': '量子パルス',
+    'extra.detail': '仕上げの微調整',
+    'extra.surface': '表面ケア',
+    'extra.lift': 'リフトアップ',
+    'info.contact.name': 'ご担当',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'QR コードから LINE を追加',
+    'info.contact.phone': '電話',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'メール',
+    'info.contact.address': '住所',
+    'footer.terms': '本規約の最終的な解釈は当センターに帰属します',
     'rules.title': 'ご予約の注意事項',
-    'rules.1': 'ご予約は本日から1か月先以降の日時に限ります。',
+    'rules.1': 'ご予約は本日から7日以降の日時に限ります。',
     'rules.2': '日曜日は午前のみ・初診の方限定です。',
     'rules.3': '木曜日は17:00までの営業で、最終枠は17:00までに終了します。',
-    'rules.4': '変更・キャンセルは予約日の48時間前までにご連絡ください。',
-    'rules.5': '問診票ご記入のため、10分前にお越しください。',
+    'rules.4': 'ご予約送信当日にお振込みをお願いいたします。未入金の枠は解除されます。',
+    'rules.5': 'キャンセルは予約日の前日までにご連絡ください。',
+    'rules.6': 'お支払い済みの施術は日程変更が可能ですが、返金はいたしません。',
+    'rules.7': '問診票ご記入のため、10分前にお越しください。',
+    'rules.8': '本規約の最終的な解釈は当センターに帰属します。',
 
     'btn.next': '次へ',
     'btn.back': '戻る',
@@ -1511,6 +1657,7 @@ const I18N = {
     'duration.title': '시술 시간',
     'duration.40': '40분',
     'duration.60': '60분',
+    'duration.90': '90분',
     'duration.minutes': '분',
 
     'date.title': '날짜 선택',
@@ -1543,7 +1690,7 @@ const I18N = {
     'err.last5': '숫자 5자리를 입력하시거나 비워 두세요',
     'review.last5': '이체 뒷 5자리',
     'form.notes': '몸 상태 및 요청 사항',
-    'form.notes.ph': '예: 만성 목·어깨 결림, 허리 통증, 수술 이력 등 (선택)',
+    'form.notes.ph': '예: 만성 목·어깨 결림, 허리 통증 등 (선택)',
     'form.optional': '선택',
     'form.required': '필수',
     'form.agree': '예약 및 결제 안내를 읽고 동의합니다',
@@ -1573,16 +1720,35 @@ const I18N = {
     'pay.bank.value': '대만은행 (코드 004)',
     'pay.acct': '계좌번호',
     'pay.qr': '센터 데스크의 TWQR 코드로도 결제하실 수 있습니다',
-    'pay.note': '예약 확정 후 3일 이내에 이체해 주시고, 뒤 5자리를 보관해 주세요. 미입금 예약은 자동 취소됩니다.',
+    'pay.note': '예약 신청 당일에 이체해 주시고, 뒤 5자리를 보관해 주세요. 미입금 예약은 자동 취소됩니다.',
     'pay.copy': '계좌번호 복사',
     'pay.copied': '복사되었습니다!',
 
+    'form.notes.hint': '수술받은 부위가 있으면 반드시 알려 주세요',
+    'pkg.10': '정밀 마무리 × 표면 관리',
+    'pkg.all': '10가지 부위 전체',
+    'pkg.extras': '추가 제공',
+    'extra.pulse': '퀀텀 펄스',
+    'extra.detail': '정밀 마무리',
+    'extra.surface': '표면 관리',
+    'extra.lift': '탄력 리프팅',
+    'info.contact.name': '담당자',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'QR 코드로 LINE 추가',
+    'info.contact.phone': '전화',
+    'info.contact.line': 'LINE',
+    'info.contact.email': '이메일',
+    'info.contact.address': '주소',
+    'footer.terms': '본 약관의 최종 해석 권한은 센터에 있습니다',
     'rules.title': '예약 안내',
-    'rules.1': '모든 예약은 오늘로부터 한 달 이후 일정만 가능합니다.',
+    'rules.1': '모든 예약은 오늘로부터 7일 이후 일정만 가능합니다.',
     'rules.2': '일요일은 오전에만 운영하며 초진 고객만 예약할 수 있습니다.',
     'rules.3': '목요일은 17:00까지 영업하며 마지막 시술은 17:00 전에 종료됩니다.',
-    'rules.4': '변경 및 취소는 예약일 48시간 전까지 연락해 주세요.',
-    'rules.5': '문진표 작성을 위해 10분 전에 도착해 주세요.',
+    'rules.4': '예약 신청 당일에 이체를 완료해 주세요. 미입금 시간은 자동으로 해제됩니다.',
+    'rules.5': '취소는 예약일 하루 전까지 알려 주세요.',
+    'rules.6': '결제한 시술은 일정 변경이 가능하며 환불은 되지 않습니다.',
+    'rules.7': '문진표 작성을 위해 10분 전에 도착해 주세요.',
+    'rules.8': '본 약관의 최종 해석 권한은 센터에 있습니다.',
 
     'btn.next': '다음',
     'btn.back': '이전',
@@ -1611,6 +1777,175 @@ const I18N = {
     'weekday.4': '목', 'weekday.5': '금', 'weekday.6': '토',
     'month.format': '{y}년 {m}월',
     'am': '오전', 'pm': '오후'
+  },
+
+  ar: {
+    'meta.title': 'مركز إتيرنيتيز تشايلد · الحجز عبر الإنترنت',
+    'brand.name': 'مركز إتيرنيتيز تشايلد',
+    'brand.en': 'Eternity\'s Child Chiropractic',
+    'hero.tagline': 'الحجز الإلكتروني',
+    'hero.desc': 'تقويم العظام الكمي · تنسيق القوام · تصحيح العمود الفقري · المساج والتوينا · تقويم العظام التجميلي',
+    'hero.cta': 'ابدأ الحجز',
+    'hero.notice': 'يجب أن يكون الحجز بعد سبعة أيام من اليوم على الأقل',
+    'step.1': 'الخدمة',
+    'step.2': 'التاريخ والوقت',
+    'step.3': 'بياناتك',
+    'step.4': 'التأكيد',
+    'step.of': 'الخطوة {n} من 4',
+    'visit.title': 'نوع الزيارة',
+    'visit.first': 'زيارة أولى',
+    'visit.first.desc': 'أول مرة لدينا — نخصص وقتاً إضافياً للتقييم',
+    'visit.return': 'زيارة متابعة',
+    'visit.return.desc': 'لديك سجل سابق عندنا',
+    'service.title': 'اختر الخدمة',
+    'service.quantum': 'تقويم العظام الكمي',
+    'service.quantum.desc': 'موازنة الطاقة مع تصحيح الهيكل العظمي لتحرير الشد العميق',
+    'service.sculpt': 'تنسيق القوام',
+    'service.sculpt.desc': 'تحديد الخطوط وتحسين الدورة الدموية لإعادة توازن القوام',
+    'service.spine': 'تصحيح العمود الفقري',
+    'service.spine.desc': 'تعديل العمود الفقري والحوض لتحسين الوضعية وتخفيف الألم',
+    'service.massage': 'المساج والتوينا',
+    'service.massage.desc': 'تدليك المسارات وإرخاء اللفائف العضلية لتخفيف الإجهاد',
+    'service.aesthetic': 'تقويم العظام التجميلي',
+    'service.aesthetic.desc': 'وجه أنحف وخطوط أكثر تناسقاً وقوام أخف — اختر من عشرة مواضع',
+    'pkg.title': 'الباقة',
+    'pkg.3': 'اختر 3',
+    'pkg.5': 'اختر 5',
+    'pkg.pick': 'أي {n} مواضع',
+    'parts.title': 'اختر المواضع',
+    'parts.count': 'تم اختيار {n} من {max}',
+    'parts.more': 'يرجى اختيار {n} موضعاً إضافياً',
+    'parts.full': 'تم اختيار {max} مواضع — أزل واحداً للتبديل',
+    'part.face': 'تناسق الوجه',
+    'part.jaw': 'خط الفك',
+    'part.pelvis': 'تضييق الحوض',
+    'part.hip': 'تنسيق الأرداف',
+    'part.waist': 'خط الخصر',
+    'part.belly': 'شد البطن',
+    'part.shoulder': 'الأكتاف المنحنية',
+    'part.hunch': 'تحدب الظهر',
+    'part.tuina': 'توينا للجسم كامل',
+    'part.detail': 'التنسيق الدقيق',
+    'review.parts': 'المواضع',
+    'err.pkg': 'يرجى اختيار باقة',
+    'duration.title': 'مدة الجلسة',
+    'duration.40': '40 دقيقة',
+    'duration.60': '60 دقيقة',
+    'duration.90': '90 دقيقة',
+    'duration.minutes': 'دقيقة',
+    'date.title': 'اختر التاريخ',
+    'date.hint': 'أقرب تاريخ متاح للحجز هو {date}',
+    'time.title': 'اختر الوقت',
+    'time.pickdate': 'يرجى اختيار التاريخ أولاً',
+    'time.none': 'لا توجد أوقات متاحة في هذا التاريخ — يرجى اختيار يوم آخر',
+    'time.taken': 'محجوز',
+    'time.sunday.only': 'الأحد صباحاً فقط وللزيارات الأولى',
+    'time.sunday.block': 'الأحد مخصص للزيارات الأولى فقط. لزيارات المتابعة يرجى اختيار الاثنين إلى السبت.',
+    'hours.title': 'ساعات العمل',
+    'hours.week': 'الاثنين – السبت',
+    'hours.thu': 'الخميس',
+    'hours.sun': 'الأحد',
+    'hours.sun.value': '09:00 – 12:00 (الزيارات الأولى فقط)',
+    'hours.closed': 'مغلق',
+    'form.title': 'بياناتك',
+    'form.name': 'الاسم الكامل',
+    'form.name.ph': 'اكتب اسمك',
+    'form.phone': 'رقم الهاتف',
+    'form.phone.ph': 'مثال: +966 5 1234 5678',
+    'form.email': 'البريد الإلكتروني',
+    'form.email.ph': 'your@email.com',
+    'form.lang': 'اللغة المفضلة',
+    'form.last5': 'آخر 5 أرقام من الحوالة',
+    'form.last5.ph': 'مثال: 12345',
+    'form.last5.hint': 'املأ هذا الحقل إذا أتممت الحوالة — واتركه فارغاً إن لم تفعل',
+    'err.last5': 'اكتب 5 أرقام بالضبط، أو اترك الحقل فارغاً',
+    'review.last5': 'آخر 5 أرقام',
+    'form.notes': 'حالتك أو ملاحظاتك',
+    'form.notes.ph': 'مثال: تيبس مزمن في الرقبة، ألم أسفل الظهر… (اختياري)',
+    'form.optional': 'اختياري',
+    'form.required': 'مطلوب',
+    'form.agree': 'قرأت شروط الحجز والدفع وأوافق عليها',
+    'err.name': 'يرجى كتابة اسمك',
+    'err.phone': 'يرجى كتابة رقم هاتف صحيح',
+    'err.email': 'يرجى كتابة بريد إلكتروني صحيح',
+    'err.agree': 'يرجى الموافقة على شروط الحجز',
+    'err.service': 'يرجى اختيار خدمة',
+    'err.slot': 'يرجى اختيار التاريخ والوقت',
+    'review.title': 'راجع حجزك',
+    'review.service': 'الخدمة',
+    'review.visit': 'نوع الزيارة',
+    'review.datetime': 'التاريخ والوقت',
+    'review.duration': 'المدة',
+    'review.price': 'المبلغ',
+    'review.name': 'الاسم',
+    'review.phone': 'الهاتف',
+    'review.email': 'البريد',
+    'review.notes': 'ملاحظات',
+    'review.lang': 'اللغة',
+    'review.none': '(لا شيء)',
+    'pay.title': 'الدفع · حوالة بنكية',
+    'pay.bank': 'البنك',
+    'pay.bank.value': 'بنك تايوان (الرمز 004)',
+    'pay.acct': 'رقم الحساب',
+    'pay.qr': 'يمكنك أيضاً استخدام رمز TWQR في المركز',
+    'pay.note': 'يرجى إتمام الحوالة في نفس يوم الحجز، والاحتفاظ بآخر خمسة أرقام للمطابقة. الحجوزات غير المدفوعة تُلغى تلقائياً.',
+    'pay.copy': 'نسخ رقم الحساب',
+    'pay.copied': 'تم النسخ!',
+    'form.notes.hint': 'إذا أجريت عملية جراحية في أي موضع، يرجى إخبارنا هنا',
+    'pkg.10': 'التنسيق الدقيق × العناية السطحية',
+    'pkg.all': 'جميع المواضع العشرة',
+    'pkg.extras': 'يشمل أيضاً',
+    'extra.pulse': 'النبض الكمي',
+    'extra.detail': 'التنسيق الدقيق',
+    'extra.surface': 'العناية السطحية',
+    'extra.lift': 'الشد والتماسك',
+    'info.contact.name': 'المسؤول',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'امسح رمز QR لإضافتنا على LINE',
+    'info.contact.phone': 'الهاتف',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'البريد الإلكتروني',
+    'info.contact.address': 'العنوان',
+    'footer.terms': 'يحتفظ المركز بحق التفسير النهائي',
+    'rules.title': 'شروط الحجز',
+    'rules.1': 'يجب أن يكون كل حجز بعد سبعة أيام من اليوم على الأقل.',
+    'rules.2': 'الأحد صباحاً فقط ومخصص للزيارات الأولى.',
+    'rules.3': 'الخميس يُغلق الساعة 17:00، وآخر جلسة تنتهي قبل ذلك.',
+    'rules.4': 'يرجى إتمام الحوالة في نفس يوم الحجز — الأوقات غير المدفوعة تُعاد للحجز.',
+    'rules.5': 'للإلغاء، أبلغنا قبل يوم واحد من موعدك على الأقل.',
+    'rules.6': 'يمكن تأجيل الجلسات المدفوعة، ولا يوجد استرداد للمبالغ.',
+    'rules.7': 'يرجى الحضور 10 دقائق مبكراً لتعبئة استبيان الحالة الصحية.',
+    'rules.8': 'يحتفظ المركز بحق التفسير النهائي لهذه الشروط.',
+    'btn.next': 'التالي',
+    'btn.back': 'السابق',
+    'btn.submit': 'إرسال الحجز',
+    'btn.newBooking': 'حجز آخر',
+    'btn.mail': 'إرسال بالبريد',
+    'btn.copy': 'نسخ تفاصيل الحجز',
+    'btn.ics': 'إضافة إلى التقويم',
+    'done.title': 'تم إرسال الحجز',
+    'done.desc': 'استلمنا طلبك. سيؤكده المركز خلال يوم عمل واحد، ثم يرجى إتمام الحوالة البنكية.',
+    'done.code': 'رقم المرجع',
+    'done.mailnote': 'إذا لم يفتح تطبيق البريد، استخدم الزر أدناه أو انسخ التفاصيل وأرسلها إلى {email}.',
+    'gallery.title': 'من داخل المركز',
+    'gallery.lead': 'مكان هادئ — نستقبل عميلاً واحداً في كل مرة',
+    'gallery.alt': 'صورة {n} من المركز',
+    'info.location': 'موقعنا',
+    'info.map.open': 'افتح في خرائط Google',
+    'info.map.blocked': 'إذا لم تظهر الخريطة، استخدم الرابط أعلاه',
+    'footer.contact': 'اتصل بنا',
+    'footer.rights': 'جميع الحقوق محفوظة',
+    'footer.demo': 'هذه صفحة طلب الحجز. يُرسل طلبك إلى المركز، ويُثبَّت الموعد النهائي بردّنا عليك.',
+    'weekday.0': 'أحد',
+    'weekday.1': 'إثن',
+    'weekday.2': 'ثلا',
+    'weekday.3': 'أرب',
+    'weekday.4': 'خمي',
+    'weekday.5': 'جمع',
+    'weekday.6': 'سبت',
+    'month.format': '{monthName} {y}',
+    'am': 'صباحاً',
+    'pm': 'مساءً'
   }
 };
 
@@ -1662,12 +1997,23 @@ const I18N = {
 
   function applyI18n() {
     const meta = currentLangMeta();
+    const rtl = meta.dir === 'rtl';
     document.documentElement.lang = meta.htmlLang;
+    document.documentElement.dir = meta.dir || 'ltr';
     document.title = t('meta.title');
+
+    // 版面用邏輯屬性寫成，會自動鏡射；但這兩個箭頭字元的方向意義相反，要手動換
+    const prev = $('#calPrev'), next = $('#calNext');
+    if (prev && next) {
+      prev.textContent = rtl ? '\u203A' : '\u2039';
+      next.textContent = rtl ? '\u2039' : '\u203A';
+    }
 
     $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     const mapNote = document.getElementById('mapNote');
     if (mapNote) mapNote.textContent = t('info.map.blocked');
+    const qrCap = document.getElementById('lineQrCap');
+    if (qrCap) qrCap.textContent = t('info.contact.lineqr');
     $$('#galleryGrid img').forEach(img => {
       img.alt = t('gallery.alt', { n: img.dataset.index });
     });
@@ -1705,7 +2051,16 @@ const I18N = {
   const toMin = hhmm => { const p = hhmm.split(':').map(Number); return p[0] * 60 + p[1]; };
   const toHHMM = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
 
-  function minDate() { return addMonths(startOfToday(), CONFIG.leadMonths); }
+  /* 前置期可以用天數或月數表示；leadDays 有值時優先。 */
+  function minDate() {
+    const base = startOfToday();
+    if (CONFIG.leadDays) {
+      const d = new Date(base);
+      d.setDate(d.getDate() + CONFIG.leadDays);
+      return d;
+    }
+    return addMonths(base, CONFIG.leadMonths || 0);
+  }
   function maxDate() { return addMonths(startOfToday(), CONFIG.windowMonths); }
   function startOfToday() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
 
@@ -1723,14 +2078,14 @@ const I18N = {
 
   function monthTitle(y, m) {
     const meta = currentLangMeta();
-    if (state.lang === 'en') {
-      let name;
+    let name = String(m + 1);
+    // 中日韓的字典直接寫「9 月」，只有需要月份名稱的語言才去問 Intl
+    if (t('month.format').indexOf('{monthName}') !== -1) {
       try {
         name = new Intl.DateTimeFormat(meta.locale, { month: 'long' }).format(new Date(y, m, 1));
-      } catch (e) { name = String(m + 1); }
-      return t('month.format', { y: y, m: m + 1, monthName: name });
+      } catch (e) { /* 退回數字 */ }
     }
-    return t('month.format', { y: y, m: m + 1, monthName: String(m + 1) });
+    return t('month.format', { y: y, m: m + 1, monthName: name });
   }
 
   /* ---------------- availability ---------------- */
@@ -1846,9 +2201,11 @@ const I18N = {
     b.setAttribute('aria-pressed', String(!!opts.selected));
     b.innerHTML = '<div class="opt-title"></div>' +
                   (opts.desc ? '<div class="opt-desc"></div>' : '') +
+                  (opts.extra ? '<div class="opt-extra"></div>' : '') +
                   (opts.price ? '<div class="opt-price"></div>' : '');
     $('.opt-title', b).textContent = opts.title;
     if (opts.desc) $('.opt-desc', b).textContent = opts.desc;
+    if (opts.extra) $('.opt-extra', b).textContent = opts.extra;
     if (opts.price) $('.opt-price', b).textContent = opts.price;
     b.addEventListener('click', opts.onClick);
     return b;
@@ -1873,8 +2230,22 @@ const I18N = {
   }
 
   /* zh/ja list items with a full-width enumeration comma; en/ko use a plain one */
+  /* 中日文用全形冒號，其餘語言用半形加空格。 */
+  function labelSep() {
+    return (state.lang === 'zh' || state.lang === 'ja') ? '：' : ': ';
+  }
+
   function listSep() {
-    return (state.lang === 'zh' || state.lang === 'ja') ? '、' : ', ';
+    if (state.lang === 'zh' || state.lang === 'ja') return '、';
+    if (state.lang === 'ar') return '، ';
+    return ', ';
+  }
+
+  /* 字典裡沒有這個時長時，自行以分鐘數組字，不讓鍵名漏到畫面上。 */
+  function durationLabel(min) {
+    const key = 'duration.' + min;
+    const dict = I18N[state.lang] || I18N.zh;
+    return dict[key] != null ? dict[key] : min + ' ' + t('duration.minutes');
   }
 
   function money(n) {
@@ -1900,6 +2271,22 @@ const I18N = {
   function partsLimit() {
     const p = currentPackage();
     return p ? p.pick : 0;
+  }
+
+  function allParts() {
+    return (CONFIG.pickService && CONFIG.pickService.parts) || [];
+  }
+
+  /** The flagship package covers every area, so it is chosen for the client
+      rather than clicked ten times. */
+  function isAllPartsPackage() {
+    const p = currentPackage();
+    return !!p && p.pick >= allParts().length;
+  }
+
+  function packageExtras() {
+    const p = currentPackage();
+    return (p && p.extras) || [];
   }
 
   function renderServiceOptions() {
@@ -1934,17 +2321,24 @@ const I18N = {
 
     if (isPickService()) {
       label.textContent = t('pkg.title');
+      const total = allParts().length;
       CONFIG.pickService.packages.forEach((p, i) => {
+        const all = p.pick >= total;
         box.appendChild(optionButton({
           title: t('pkg.' + p.pick),
-          desc: t('pkg.pick', { n: p.pick }),
-          price: money(p.price),
+          desc: all ? t('pkg.all') : t('pkg.pick', { n: p.pick }),
+          extra: (p.extras && p.extras.length)
+            ? t('pkg.extras') + labelSep() + p.extras.map(k => t('extra.' + k)).join(listSep())
+            : '',
+          price: money(p.price) + ' · ' + p.minutes + ' ' + t('duration.minutes'),
           selected: state.pkg === i,
           onClick: () => {
             state.pkg = i;
             state.duration = p.minutes;
             state.time = null;                       // slot length changed
-            state.parts = state.parts.slice(0, p.pick);  // a smaller package trims the list
+            state.parts = all
+              ? allParts().slice()                   // every area is included
+              : state.parts.slice(0, p.pick);        // a smaller package trims the list
             applyI18n();
           }
         }));
@@ -1955,7 +2349,7 @@ const I18N = {
     label.textContent = t('duration.title');
     CONFIG.durations.forEach(d => {
       box.appendChild(optionButton({
-        title: t('duration.' + d),
+        title: durationLabel(d),
         price: money(CONFIG.prices[d]),
         selected: state.duration === d,
         onClick: () => {
@@ -1973,7 +2367,8 @@ const I18N = {
     section.hidden = false;
 
     const max = partsLimit();
-    const full = state.parts.length >= max;
+    const locked = isAllPartsPackage();
+    const full = locked || state.parts.length >= max;
     const counter = $('#partsCount');
     counter.textContent = t('parts.count', { n: state.parts.length, max: max });
     counter.classList.toggle('full', full);
@@ -1988,8 +2383,10 @@ const I18N = {
       b.setAttribute('aria-pressed', String(on));
       b.innerHTML = '<span class="box" aria-hidden="true">\u2713</span><span class="txt"></span>';
       $('.txt', b).textContent = t('part.' + key);
-      if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
+      if (locked) { b.disabled = true; b.title = t('pkg.all'); }
+      else if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
       b.addEventListener('click', () => {
+        if (locked) return;
         const i = state.parts.indexOf(key);
         if (i === -1) { if (state.parts.length >= max) return; state.parts.push(key); }
         else state.parts.splice(i, 1);
@@ -2228,7 +2625,7 @@ const I18N = {
       [t('review.service'),  t('service.' + state.service)],
       [t('review.visit'),    t(state.visit === 'first' ? 'visit.first' : 'visit.return')],
       [t('review.datetime'), formatDate(state.date) + '  ' + state.time + ' – ' + endTime()],
-      [t('review.duration'), t('duration.' + state.duration)],
+      [t('review.duration'), durationLabel(state.duration)],
       [t('review.name'),     c.name],
       [t('review.phone'),    c.phone],
       [t('review.email'),    c.email],
@@ -2239,6 +2636,10 @@ const I18N = {
     ];
     if (isPickService()) {
       rows.splice(1, 0, [t('review.parts'), state.parts.map(k => t('part.' + k)).join(listSep())]);
+      const ex = packageExtras();
+      if (ex.length) {
+        rows.splice(2, 0, [t('pkg.extras'), ex.map(k => t('extra.' + k)).join(listSep())]);
+      }
     }
     return rows;
   }
@@ -2287,6 +2688,9 @@ const I18N = {
       parts: isPickService() ? state.parts.slice() : [],
       partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
       // the centre reads Chinese; the client's confirmation uses their own language
+      extras: packageExtras(),
+      extrasLabels: packageExtras().map(k => I18N.zh['extra.' + k]),
+      extrasLabelsLocal: packageExtras().map(k => tIn(lang, 'extra.' + k)),
       serviceLabelLocal: tIn(lang, 'service.' + state.service),
       partsLabelsLocal: isPickService() ? state.parts.map(k => tIn(lang, 'part.' + k)) : [],
       price: currentPrice(),
@@ -2314,6 +2718,7 @@ const I18N = {
         ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
           (state.lang === 'zh' ? '' : ' / ' + p.partsLabels.join('、'))
         : null,
+      p.extras.length ? t('pkg.extras') + ': ' + p.extrasLabels.join('、') : null,
       t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
       t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
       t('review.price')    + ': ' + money(p.price),
@@ -2564,6 +2969,57 @@ const I18N = {
     });
   }
 
+  /* Only the details that are actually filled in appear; an empty setting
+     leaves no dangling label. */
+  function renderContact() {
+    const box = $('#contactList');
+    if (!box) return;
+    const c = CONFIG.contact || {};
+    const rows = [
+      ['name',      c.name,      ''],
+      ['phone',     c.phone,     c.phone ? 'tel:' + c.phone.replace(/[^\d+]/g, '') : ''],
+      ['instagram', c.instagram ? '@' + c.instagram : '',
+                    c.instagram ? 'https://instagram.com/' + c.instagram : ''],
+      ['line',      c.line,      /^https?:/.test(c.line || '') ? c.line : ''],
+      ['email',     CONFIG.email, CONFIG.email ? 'mailto:' + CONFIG.email : ''],
+      ['address',   c.address,   '']
+    ].filter(r => r[1]);
+
+    box.innerHTML = '';
+    rows.forEach(([key, value, href]) => {
+      const row = document.createElement('div');
+      row.className = 'contact-row';
+      const k = document.createElement('span');
+      k.className = 'ck';
+      k.dataset.i18n = 'info.contact.' + key;
+      k.textContent = t('info.contact.' + key);
+      const v = document.createElement(href ? 'a' : 'span');
+      v.className = 'cv';
+      v.textContent = value;
+      if (href) { v.href = href; if (/^https?:/.test(href)) { v.target = '_blank'; v.rel = 'noopener'; } }
+      row.appendChild(k); row.appendChild(v);
+      box.appendChild(row);
+    });
+
+    // LINE 的 QR 圖：沿用照片那套做法，檔案還沒放上去就整塊不出現
+    if (c.lineQr) {
+      const wrap = document.createElement('div');
+      wrap.className = 'line-qr';
+      wrap.hidden = true;
+      const img = document.createElement('img');
+      img.alt = 'LINE QR';
+      img.addEventListener('load', () => { wrap.hidden = false; });
+      img.addEventListener('error', () => { wrap.remove(); });
+      const cap = document.createElement('span');
+      cap.className = 'qr-cap';
+      cap.id = 'lineQrCap';
+      cap.textContent = t('info.contact.lineqr');
+      wrap.appendChild(img); wrap.appendChild(cap);
+      box.appendChild(wrap);
+      img.src = c.lineQr;
+    }
+  }
+
   /* ---------------- wiring ---------------- */
   function init() {
     state.lang = detectLang();
@@ -2612,6 +3068,7 @@ const I18N = {
     $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
 
     renderGallery();
+    renderContact();
 
     // The map is injected rather than hard-coded so the address lives in
     // config.js alone, and so pages that block third-party frames degrade to
