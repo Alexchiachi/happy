@@ -28,6 +28,7 @@
           "PingFang TC", "Noto Sans TC", "Microsoft JhengHei",
           "Hiragino Sans", "Noto Sans JP",
           "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+          "Geeza Pro", "Noto Sans Arabic", Tahoma,
           sans-serif;
 }
 
@@ -244,6 +245,11 @@ input, select, textarea { font: inherit; color: inherit; }
 }
 .opt .opt-title { font-weight: 620; font-size: .98rem; padding-inline-end: 1.7rem; }
 .opt .opt-desc { margin-top: .28rem; font-size: .84rem; color: var(--ink-mute); line-height: 1.5; }
+.opt .opt-extra {
+  margin-top: .45rem; padding-top: .45rem;
+  border-top: 1px dashed var(--line);
+  font-size: .8rem; color: var(--gold); line-height: 1.5;
+}
 .opt .opt-price { margin-top: .5rem; font-size: .92rem; font-weight: 650; color: var(--gold); }
 
 /* ---------- Step 2 : two-column picker ---------- */
@@ -252,6 +258,27 @@ input, select, textarea { font: inherit; color: inherit; }
   .picker { grid-template-columns: 380px 1fr; gap: 2.2rem; align-items: start; }
   .picker .section + .section { margin-top: 0; }
 }
+
+/* ---------- 阿拉伯文（由右至左） ----------
+   版面本身用邏輯屬性寫成，會自動鏡射；這裡只補字元層級的處理。 */
+[dir="rtl"] .logo-sub { letter-spacing: 0; }
+/* 價格與時間是「數字＋符號＋單位」的混排，交給瀏覽器的雙向演算法會前後顛倒。
+   固定成由左至右並隔離，數字才不會被拆開重排。 */
+[dir="rtl"] .price-chip .amount,
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .pay-acct,
+[dir="rtl"] .slot,
+[dir="rtl"] .cal-cell,
+[dir="rtl"] .hours-row .t,
+[dir="rtl"] .ref-code,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .contact-bank .acct { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .hours-row .t { text-align: start; }
+[dir="rtl"] .section-label { letter-spacing: 0; }
 
 /* ---------- Pick-a-part chips ---------- */
 .section-label.labelled {
@@ -379,6 +406,7 @@ input, select, textarea { font: inherit; color: inherit; }
 .field textarea { min-height: 108px; resize: vertical; }
 .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
 .field .note { font-size: .76rem; color: var(--ink-mute); line-height: 1.45; }
+.field .note.surgery { color: var(--gold); font-weight: 550; }
 .field .err { font-size: .78rem; color: var(--danger); display: none; }
 .field.invalid .err { display: block; }
 
@@ -482,6 +510,36 @@ input, select, textarea { font: inherit; color: inherit; }
 .hours-row:last-child { border-bottom: none; }
 .hours-row .d { color: var(--ink-mute); }
 .hours-row .t { font-variant-numeric: tabular-nums; font-weight: 550; }
+
+.contact-list { display: grid; gap: .3rem; }
+.contact-row {
+  display: flex; gap: .8rem; align-items: baseline;
+  font-size: .88rem; padding: .3rem 0;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row .ck { color: var(--ink-mute); min-width: 4.2rem; flex: none; }
+.contact-row .cv { overflow-wrap: anywhere; }
+a.cv { color: var(--jade); text-decoration: none; }
+a.cv:hover { text-decoration: underline; }
+.contact-bank {
+  margin-top: .8rem; padding-top: .7rem; border-top: 1px solid var(--line-soft);
+  font-size: .85rem; color: var(--ink-soft);
+}
+.contact-bank .acct { font-variant-numeric: tabular-nums; letter-spacing: .05em; }
+
+.line-qr {
+  margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--line-soft);
+  display: flex; align-items: center; gap: .9rem;
+}
+.line-qr img {
+  width: 96px; height: 96px; flex: none; border-radius: 10px;
+  border: 1px solid var(--line); background: #fff;
+}
+.line-qr .qr-cap { font-size: .8rem; color: var(--ink-mute); line-height: 1.5; }
+.footer-note .terms {
+  display: block; margin-top: .35rem; color: var(--ink-soft); font-weight: 550;
+}
 
 /* ---------- Footer ---------- */
 .site-footer {

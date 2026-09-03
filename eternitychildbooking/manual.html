@@ -313,7 +313,7 @@
       這本手冊教你怎麼照顧線上預約網站。不用會寫程式，照著步驟做就好。
       看不懂的字，最後一段有解釋。
     </p>
-    <div class="stamp">目前網站版本 <b>v1.8</b></div>
+    <div class="stamp">目前網站版本 <b>v1.9</b></div>
   </header>
 
   <div class="layout">
@@ -364,14 +364,23 @@
           <p>因為出問題時，你要先判斷是「哪一個」壞掉。網頁沒更新、小幫手沒反應、預約本沒進資料——是三件不同的事，修法也不一樣。第五段的表格會幫你分辨。</p>
         </div>
 
+        <div class="note">
+          <span class="head">目前支援五種語言</span>
+          <p>
+            中文、英文、日文、韓文、阿拉伯文。網頁會自動判斷客人手機的語言，
+            客人也可以自己按右上角切換。阿拉伯文是由右往左讀的，整個版面會自動鏡射，
+            這是正常的，不是壞掉。
+          </p>
+        </div>
+
         <h3>網頁還會自己做兩件事</h3>
         <p>
           第一，它會去問預約本「哪些時段已經有人約了」，然後把那些時段變成灰色，客人就點不下去。
           這樣兩個客人不會約到同一個時間。
         </p>
         <p>
-          第二，它會擋住太近的日期。規定是「今天起一個月之後」才能約，所以客人打開時，
-          最近一個月的日期全部是灰的，點不動。
+          第二，它會擋住太近的日期。規定是「今天起七天之後」才能約，所以客人打開時，
+          最近七天的日期全部是灰的，點不動。
         </p>
       </section>
 
@@ -390,7 +399,7 @@
               <tr><td>小幫手</td><td>寄一封通知信給你，標題像 <code>[新預約 ECC-260930-A3F2]</code></td></tr>
               <tr><td>小幫手</td><td>寄一封確認信給客人，用客人選的語言</td></tr>
               <tr><td><b>你</b></td><td>看信、確認時間可以，回信告訴客人</td></tr>
-              <tr><td><b>你</b></td><td>客人轉帳後，在預約本把狀態改成「已確認」</td></tr>
+              <tr><td><b>你</b></td><td>客人當天轉帳後，在預約本把狀態改成「已確認」</td></tr>
             </tbody>
           </table>
         </div>
@@ -471,7 +480,8 @@
               <code>40: 1688</code> 就是 40 分鐘 1688 元。</li>
             <li>選部位算的（醫美整骨）：找 <code>packages</code>，
               <code>pick: 3</code> 是選三項、<code>price</code> 是價錢、
-              <code>minutes</code> 是要佔用幾分鐘的時段。</li>
+              <code>minutes</code> 是要佔用幾分鐘的時段。目前有三個方案：
+              擇三、擇五，以及十項全選的「精雕細琢 × 表面功夫」。</li>
           </ol>
         </div>
 
@@ -517,8 +527,8 @@
           <table>
             <thead><tr><th>檔案</th><th>找什麼</th><th>改成</th></tr></thead>
             <tbody>
-              <tr><td class="num">config.js</td><td><code>version: '1.8'</code></td><td><code>version: '1.9'</code></td></tr>
-              <tr><td class="num">index.html</td><td>四個 <code>?v=1.8</code></td><td>四個 <code>?v=1.9</code></td></tr>
+              <tr><td class="num">config.js</td><td><code>version: '1.9'</code></td><td><code>version: '2.0'</code></td></tr>
+              <tr><td class="num">index.html</td><td>四個 <code>?v=1.9</code></td><td>四個 <code>?v=2.0</code></td></tr>
             </tbody>
           </table>
         </div>
@@ -702,7 +712,11 @@
           </div>
           <div class="fact">
             <div class="k">語言切換</div>
-            <div class="v">網址後加 ?lang=ja（日）、ko（韓）、en（英）</div>
+            <div class="v">網址後加 ?lang=ja（日）、ko（韓）、en（英）、ar（阿拉伯）</div>
+          </div>
+          <div class="fact">
+            <div class="k">聯絡人</div>
+            <div class="v">林廣漢　0985727168<br>Instagram @cosmoskhan</div>
           </div>
         </div>
 
@@ -714,10 +728,14 @@
               <tr><td>週一至週六</td><td class="num">09:00 – 21:00</td></tr>
               <tr><td>週四</td><td class="num">09:00 – 17:00</td></tr>
               <tr><td>週日</td><td class="num">09:00 – 12:00（只有初診可約）</td></tr>
-              <tr><td>可預約範圍</td><td>今天起一個月之後，最多四個月內</td></tr>
+              <tr><td>可預約範圍</td><td>今天起七天之後，最多四個月內</td></tr>
               <tr><td>時段間隔</td><td class="num">30 分鐘</td></tr>
               <tr><td>40 分鐘 / 擇三</td><td class="num">NT$ 1,688</td></tr>
               <tr><td>60 分鐘 / 擇五</td><td class="num">NT$ 2,888</td></tr>
+              <tr><td>90 分鐘 / 十項全選</td><td class="num">NT$ 4,588</td></tr>
+              <tr><td>匯款期限</td><td>送出預約的當天</td></tr>
+              <tr><td>取消期限</td><td>預約日的前一天</td></tr>
+              <tr><td>退款</td><td>可延期，不接受退款</td></tr>
             </tbody>
           </table>
         </div>
@@ -725,15 +743,16 @@
         <h3>預約本的欄位順序</h3>
         <p style="font-size:.92rem;color:var(--ink-soft)">
           送出時間、預約編號、狀態、日期、開始、結束、服務項目、選擇部位、看診類型、
-          分鐘、金額、姓名、電話、Email、語言、匯款末五碼、備註
+          分鐘、金額、姓名、電話、Email、語言、匯款末五碼、備註、加贈項目
         </p>
         <p style="font-size:.9rem;color:var(--ink-mute)">
           這個順序不能動。要看得方便，用 Google 試算表的「隱藏欄」功能，不要刪除或搬移。
+          新欄位一律加在最右邊——插在中間會讓既有的每一列全部錯位。
         </p>
       </section>
 
       <footer class="end">
-        本手冊對應網站版本 v1.8。網站改版後，若操作步驟有變動，請一併更新這份手冊。
+        本手冊對應網站版本 v1.9。網站改版後，若操作步驟有變動，請一併更新這份手冊。
       </footer>
 
     </main>
