@@ -526,6 +526,10 @@ a.cv:hover { text-decoration: underline; }
   margin-top: .8rem; padding-top: .7rem; border-top: 1px solid var(--line-soft);
   font-size: .85rem; color: var(--ink-soft);
 }
+.contact-bank .bank-title {
+  font-size: .78rem; font-weight: 650; letter-spacing: .06em;
+  color: var(--gold); margin-bottom: .3rem;
+}
 .contact-bank .acct { font-variant-numeric: tabular-nums; letter-spacing: .05em; }
 
 .line-qr {
