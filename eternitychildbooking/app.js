@@ -856,9 +856,11 @@
            '&body=' + encodeURIComponent(bookingText());
   }
 
-  function icsContent() {
+  /* 行事曆事件的共用資料，.ics 與 Google 日曆連結都由這裡出發。 */
+  function calendarEvent() {
     const p = bookingPayload();
     const d = fromKey(p.date);
+    // 中心固定在台北（UTC+8，無日光節約），把當地時間換算成 UTC 才不會跑掉
     const toUTC = hhmm => {
       const m = toMin(hhmm) - CONFIG.tzOffsetHours * 60;
       const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0));
@@ -866,18 +868,66 @@
       return dt.getUTCFullYear() + pad(dt.getUTCMonth() + 1) + pad(dt.getUTCDate()) + 'T' +
              pad(dt.getUTCHours()) + pad(dt.getUTCMinutes()) + '00Z';
     };
+    return {
+      payload: p,
+      start: toUTC(p.startTime),
+      end: toUTC(p.endTime),
+      title: t('brand.name') + ' — ' + t('service.' + p.service),
+      details: bookingText(),
+      location: t('brand.name') + (CONFIG.map && CONFIG.map.link ? ' ' + CONFIG.map.link : '')
+    };
+  }
+
+  function icsContent() {
+    const ev = calendarEvent();
     const esc = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+
+    // RFC 5545 規定每行不超過 75 個位元組，超過要折行（續行以空白開頭）。
+    // 不折行時，Outlook 等較嚴格的軟體會讀不到後半段內容。
+    const fold = line => {
+      const bytes = [];
+      let out = '', len = 0;
+      for (const ch of line) {
+        const n = new TextEncoder().encode(ch).length;
+        if (len + n > 73) { out += '\r\n '; len = 1; }
+        out += ch; len += n;
+      }
+      return out;
+    };
+
+    const now = new Date();
+    const stamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' +
+                  pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+
     return [
       'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Eternitys Child Chiropractic//Booking//EN',
+      'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
       'BEGIN:VEVENT',
-      'UID:' + p.ref + '@eternitys-child',
-      'DTSTAMP:' + toUTC('00:00'),
-      'DTSTART:' + toUTC(p.startTime),
-      'DTEND:'   + toUTC(p.endTime),
-      'SUMMARY:' + esc(t('brand.name') + ' — ' + t('service.' + p.service)),
-      'DESCRIPTION:' + esc(bookingText()),
+      'UID:' + ev.payload.ref + '@eternitys-child',
+      'DTSTAMP:' + stamp,                    // 事件建立的時間，不是預約時間
+      'DTSTART:' + ev.start,
+      'DTEND:'   + ev.end,
+      fold('SUMMARY:' + esc(ev.title)),
+      fold('LOCATION:' + esc(ev.location)),
+      fold('DESCRIPTION:' + esc(ev.details)),
+      'BEGIN:VALARM', 'TRIGGER:-PT1440M', 'ACTION:DISPLAY',
+      fold('DESCRIPTION:' + esc(ev.title)), 'END:VALARM',
       'END:VEVENT', 'END:VCALENDAR'
     ].join('\r\n');
+  }
+
+  /* 手機上比 .ics 可靠：只是一個網址，在 LINE、IG 的內建瀏覽器裡也能開。 */
+  function gcalUrl() {
+    const ev = calendarEvent();
+    const q = [
+      'action=TEMPLATE',
+      'text=' + encodeURIComponent(ev.title),
+      'dates=' + ev.start + '%2F' + ev.end,
+      'details=' + encodeURIComponent(ev.details),
+      'location=' + encodeURIComponent(ev.location),
+      'ctz=' + encodeURIComponent(CONFIG.tzName)
+    ].join('&');
+    return 'https://calendar.google.com/calendar/render?' + q;
   }
 
   function download(name, text, mime) {
@@ -961,6 +1011,8 @@
 
   function renderDone() {
     $('#refCode').textContent = state.ref;
+    const g = $('#gcalBtn');
+    if (g) g.href = gcalUrl();
     $('#mailNote').textContent = t('done.mailnote', { email: CONFIG.email });
   }
 

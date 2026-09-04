@@ -857,7 +857,8 @@ a.cv:hover { text-decoration: underline; }
           <div class="actions">
             <button class="btn btn-primary" id="mailBtn" data-i18n="btn.mail">以電子郵件寄出</button>
             <button class="btn btn-ghost" id="copyBtn" data-i18n="btn.copy">複製預約明細</button>
-            <button class="btn btn-ghost" id="icsBtn" data-i18n="btn.ics">加入行事曆</button>
+            <a class="btn btn-ghost" id="gcalBtn" href="#" target="_blank" rel="noopener" data-i18n="btn.gcal">加入 Google 日曆</a>
+            <button class="btn btn-ghost" id="icsBtn" data-i18n="btn.ics">下載行事曆檔（.ics）</button>
           </div>
           <div class="actions" style="padding-top:0">
             <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.newBooking">再預約一筆</button>
@@ -926,7 +927,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '2.0',
+  version: '2.1',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -1223,8 +1224,9 @@ const I18N = {
     'btn.newBooking': '再預約一筆',
     'btn.mail': '以電子郵件寄出',
     'btn.copy': '複製預約明細',
-    'btn.ics': '加入行事曆',
+    'btn.ics': '下載行事曆檔（.ics）',
 
+    'btn.gcal': '加入 Google 日曆',
     'done.title': '預約已送出',
     'done.desc': '我們已收到您的預約申請。中心將於一個工作天內與您確認，確認完成後請依付款資訊完成轉帳。',
     'done.code': '預約編號',
@@ -1402,8 +1404,9 @@ const I18N = {
     'btn.newBooking': 'Make Another Booking',
     'btn.mail': 'Send by Email',
     'btn.copy': 'Copy Booking Details',
-    'btn.ics': 'Add to Calendar',
+    'btn.ics': 'Download .ics file',
 
+    'btn.gcal': 'Add to Google Calendar',
     'done.title': 'Booking Submitted',
     'done.desc': 'We have received your request. Our centre will confirm within one business day; please complete the bank transfer once confirmed.',
     'done.code': 'Reference',
@@ -1581,8 +1584,9 @@ const I18N = {
     'btn.newBooking': '続けて予約する',
     'btn.mail': 'メールで送信',
     'btn.copy': '予約内容をコピー',
-    'btn.ics': 'カレンダーに追加',
+    'btn.ics': '.ics ファイルをダウンロード',
 
+    'btn.gcal': 'Google カレンダーに追加',
     'done.title': 'ご予約を送信しました',
     'done.desc': 'ご予約申込を受け付けました。1営業日以内にセンターよりご連絡いたします。確認後、お振込みをお願いいたします。',
     'done.code': '予約番号',
@@ -1760,8 +1764,9 @@ const I18N = {
     'btn.newBooking': '새 예약 하기',
     'btn.mail': '이메일로 보내기',
     'btn.copy': '예약 내용 복사',
-    'btn.ics': '캘린더에 추가',
+    'btn.ics': '.ics 파일 다운로드',
 
+    'btn.gcal': 'Google 캘린더에 추가',
     'done.title': '예약이 접수되었습니다',
     'done.desc': '예약 신청을 받았습니다. 영업일 기준 1일 이내에 센터에서 확인 연락을 드리며, 확정 후 계좌 이체를 진행해 주세요.',
     'done.code': '예약 번호',
@@ -1926,7 +1931,8 @@ const I18N = {
     'btn.newBooking': 'حجز آخر',
     'btn.mail': 'إرسال بالبريد',
     'btn.copy': 'نسخ تفاصيل الحجز',
-    'btn.ics': 'إضافة إلى التقويم',
+    'btn.ics': 'تنزيل ملف .ics',
+    'btn.gcal': 'إضافة إلى تقويم Google',
     'done.title': 'تم إرسال الحجز',
     'done.desc': 'استلمنا طلبك. سيؤكده المركز خلال يوم عمل واحد، ثم يرجى إتمام الحوالة البنكية.',
     'done.code': 'رقم المرجع',
@@ -2811,9 +2817,11 @@ const I18N = {
            '&body=' + encodeURIComponent(bookingText());
   }
 
-  function icsContent() {
+  /* 行事曆事件的共用資料，.ics 與 Google 日曆連結都由這裡出發。 */
+  function calendarEvent() {
     const p = bookingPayload();
     const d = fromKey(p.date);
+    // 中心固定在台北（UTC+8，無日光節約），把當地時間換算成 UTC 才不會跑掉
     const toUTC = hhmm => {
       const m = toMin(hhmm) - CONFIG.tzOffsetHours * 60;
       const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0));
@@ -2821,18 +2829,66 @@ const I18N = {
       return dt.getUTCFullYear() + pad(dt.getUTCMonth() + 1) + pad(dt.getUTCDate()) + 'T' +
              pad(dt.getUTCHours()) + pad(dt.getUTCMinutes()) + '00Z';
     };
+    return {
+      payload: p,
+      start: toUTC(p.startTime),
+      end: toUTC(p.endTime),
+      title: t('brand.name') + ' — ' + t('service.' + p.service),
+      details: bookingText(),
+      location: t('brand.name') + (CONFIG.map && CONFIG.map.link ? ' ' + CONFIG.map.link : '')
+    };
+  }
+
+  function icsContent() {
+    const ev = calendarEvent();
     const esc = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+
+    // RFC 5545 規定每行不超過 75 個位元組，超過要折行（續行以空白開頭）。
+    // 不折行時，Outlook 等較嚴格的軟體會讀不到後半段內容。
+    const fold = line => {
+      const bytes = [];
+      let out = '', len = 0;
+      for (const ch of line) {
+        const n = new TextEncoder().encode(ch).length;
+        if (len + n > 73) { out += '\r\n '; len = 1; }
+        out += ch; len += n;
+      }
+      return out;
+    };
+
+    const now = new Date();
+    const stamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' +
+                  pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+
     return [
       'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Eternitys Child Chiropractic//Booking//EN',
+      'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
       'BEGIN:VEVENT',
-      'UID:' + p.ref + '@eternitys-child',
-      'DTSTAMP:' + toUTC('00:00'),
-      'DTSTART:' + toUTC(p.startTime),
-      'DTEND:'   + toUTC(p.endTime),
-      'SUMMARY:' + esc(t('brand.name') + ' — ' + t('service.' + p.service)),
-      'DESCRIPTION:' + esc(bookingText()),
+      'UID:' + ev.payload.ref + '@eternitys-child',
+      'DTSTAMP:' + stamp,                    // 事件建立的時間，不是預約時間
+      'DTSTART:' + ev.start,
+      'DTEND:'   + ev.end,
+      fold('SUMMARY:' + esc(ev.title)),
+      fold('LOCATION:' + esc(ev.location)),
+      fold('DESCRIPTION:' + esc(ev.details)),
+      'BEGIN:VALARM', 'TRIGGER:-PT1440M', 'ACTION:DISPLAY',
+      fold('DESCRIPTION:' + esc(ev.title)), 'END:VALARM',
       'END:VEVENT', 'END:VCALENDAR'
     ].join('\r\n');
+  }
+
+  /* 手機上比 .ics 可靠：只是一個網址，在 LINE、IG 的內建瀏覽器裡也能開。 */
+  function gcalUrl() {
+    const ev = calendarEvent();
+    const q = [
+      'action=TEMPLATE',
+      'text=' + encodeURIComponent(ev.title),
+      'dates=' + ev.start + '%2F' + ev.end,
+      'details=' + encodeURIComponent(ev.details),
+      'location=' + encodeURIComponent(ev.location),
+      'ctz=' + encodeURIComponent(CONFIG.tzName)
+    ].join('&');
+    return 'https://calendar.google.com/calendar/render?' + q;
   }
 
   function download(name, text, mime) {
@@ -2916,6 +2972,8 @@ const I18N = {
 
   function renderDone() {
     $('#refCode').textContent = state.ref;
+    const g = $('#gcalBtn');
+    if (g) g.href = gcalUrl();
     $('#mailNote').textContent = t('done.mailnote', { email: CONFIG.email });
   }
 
