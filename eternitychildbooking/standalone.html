@@ -546,6 +546,10 @@ a.cv:hover { text-decoration: underline; }
   margin-top: .8rem; padding-top: .7rem; border-top: 1px solid var(--line-soft);
   font-size: .85rem; color: var(--ink-soft);
 }
+.contact-bank .bank-title {
+  font-size: .78rem; font-weight: 650; letter-spacing: .06em;
+  color: var(--gold); margin-bottom: .3rem;
+}
 .contact-bank .acct { font-variant-numeric: tabular-nums; letter-spacing: .05em; }
 
 .line-qr {
@@ -898,6 +902,7 @@ a.cv:hover { text-decoration: underline; }
       <h3 data-i18n="footer.contact">聯絡我們</h3>
       <div class="contact-list" id="contactList"></div>
       <div class="contact-bank">
+        <div class="bank-title" data-i18n="info.bank.title">匯款資訊</div>
         <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span><br>
         <span class="acct">013004490011</span>
       </div>
@@ -927,7 +932,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '2.1',
+  version: '2.2',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -1203,6 +1208,7 @@ const I18N = {
     'info.contact.name': '聯絡人',
     'info.contact.instagram': 'Instagram',
     'info.contact.lineqr': '掃描 QR 加入官方 LINE',
+    'info.bank.title': '匯款資訊',
     'info.contact.phone': '電話',
     'info.contact.line': 'LINE',
     'info.contact.email': '電子信箱',
@@ -1383,6 +1389,7 @@ const I18N = {
     'info.contact.name': 'Contact',
     'info.contact.instagram': 'Instagram',
     'info.contact.lineqr': 'Scan the QR code to add us on LINE',
+    'info.bank.title': 'Bank Transfer Details',
     'info.contact.phone': 'Phone',
     'info.contact.line': 'LINE',
     'info.contact.email': 'Email',
@@ -1563,6 +1570,7 @@ const I18N = {
     'info.contact.name': 'ご担当',
     'info.contact.instagram': 'Instagram',
     'info.contact.lineqr': 'QR コードから LINE を追加',
+    'info.bank.title': 'お振込先',
     'info.contact.phone': '電話',
     'info.contact.line': 'LINE',
     'info.contact.email': 'メール',
@@ -1743,6 +1751,7 @@ const I18N = {
     'info.contact.name': '담당자',
     'info.contact.instagram': 'Instagram',
     'info.contact.lineqr': 'QR 코드로 LINE 추가',
+    'info.bank.title': '이체 정보',
     'info.contact.phone': '전화',
     'info.contact.line': 'LINE',
     'info.contact.email': '이메일',
@@ -1911,6 +1920,7 @@ const I18N = {
     'info.contact.name': 'المسؤول',
     'info.contact.instagram': 'Instagram',
     'info.contact.lineqr': 'امسح رمز QR لإضافتنا على LINE',
+    'info.bank.title': 'معلومات التحويل',
     'info.contact.phone': 'الهاتف',
     'info.contact.line': 'LINE',
     'info.contact.email': 'البريد الإلكتروني',
