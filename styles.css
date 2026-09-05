@@ -828,3 +828,46 @@ a.article-card h3 { transition: color var(--dur) var(--ease); }
 a.article-card:hover h3 { color: var(--tea); }
 a.article-card .img-placeholder { transition: transform var(--dur) var(--ease); }
 a.article-card:hover .img-placeholder { transform: translateY(-4px); }
+
+/* ------------------------------------------------------------
+   文章內的對照區塊（例：天然香 vs 化學香）
+   窄螢幕上下堆疊，寬螢幕左標右文對齊成兩欄
+   ------------------------------------------------------------ */
+.article-body .compare {
+  margin-top: var(--s-2);
+  border-top: 1px solid var(--line);
+}
+.article-body .compare dt {
+  font-family: var(--font-han);
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  padding-top: var(--s-2);
+}
+.article-body .compare dt.nat  { color: var(--moss); }
+.article-body .compare dt.chem { color: var(--seal); }
+.article-body .compare dd {
+  margin: 6px 0 0;
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.98rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+@media (min-width: 720px) {
+  .article-body .compare {
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    column-gap: var(--s-3);
+  }
+  .article-body .compare dd { margin: 0; padding-top: var(--s-2); }
+}
+
+/* 文末的來源／編按，比內文再退一階 */
+.article-body .editor-note {
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  line-height: 1.9;
+  color: var(--mist);
+}
