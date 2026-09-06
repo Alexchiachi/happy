@@ -656,6 +656,8 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .img-placeholder.v4 { --ang: 165deg; --w1x: 52%; --w1y: 14%; --w2x: 42%; --w2y: 88%; }
 .img-placeholder.v5 { --ang:  95deg; --w1x: 84%; --w1y: 56%; --w2x: 16%; --w2y: 44%; }
 .img-placeholder.v6 { --ang: 300deg; --w1x: 34%; --w1y: 62%; --w2x: 72%; --w2y: 14%; }
+.img-placeholder.v7 { --ang:  60deg; --w1x: 66%; --w1y: 78%; --w2x: 30%; --w2y: 20%; }
+.img-placeholder.v8 { --ang: 240deg; --w1x: 22%; --w1y: 40%; --w2x: 76%; --w2y: 66%; }
 .img-placeholder span {
   position: absolute; bottom: var(--s-2); right: var(--s-2);
   font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.3em;
