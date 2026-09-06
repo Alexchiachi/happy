@@ -5,10 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>幸福誌 · 大道至簡</title>
   <meta name="description" content="生活提案、產地故事、選物筆記、二地對話。">
+
+  <link rel="canonical" href="https://alexchiachi.github.io/happy/journal.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="大道至簡 · Dao is simple">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:url" content="https://alexchiachi.github.io/happy/journal.html">
+  <meta property="og:title" content="幸福誌 · 大道至簡">
+  <meta property="og:description" content="生活提案、產地故事、選物筆記、二地對話。">
+  <meta property="og:image" content="https://alexchiachi.github.io/happy/images/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="大道至簡 · 做幸福的事，讓幸福變成有價值的事">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="幸福誌 · 大道至簡">
+  <meta name="twitter:description" content="生活提案、產地故事、選物筆記、二地對話。">
+  <meta name="twitter:image" content="https://alexchiachi.github.io/happy/images/og-default.png">
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1ae51f9d">
+  <link rel="stylesheet" href="styles.css?v=9a4c8457">
 </head>
 <body>
 
@@ -34,16 +54,6 @@
     </div>
   </section>
 
-  <!-- Filters -->
-  <section class="container">
-    <nav class="filters reveal">
-      <a href="#" class="filter active">全部</a>
-      <a href="#" class="filter">生活提案</a>
-      <a href="#" class="filter">產地故事</a>
-      <a href="#" class="filter">選物筆記</a>
-      <a href="#" class="filter">二地對話</a>
-    </nav>
-  </section>
 
   <!-- Featured Article -->
   <section class="container">
@@ -73,7 +83,15 @@
 
   <!-- Article List -->
   <section class="container">
-    <h2 class="h-section reveal" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);">最近的文章</h2>
+    <h2 class="h-section reveal" style="margin-bottom: 1rem;">最近的文章</h2>
+      <nav class="filters reveal">
+        <button type="button" class="filter active" data-cat="全部">全部</button>
+        <button type="button" class="filter" data-cat="生活提案">生活提案</button>
+        <button type="button" class="filter" data-cat="產地故事">產地故事</button>
+        <button type="button" class="filter" data-cat="選物筆記">選物筆記</button>
+        <button type="button" class="filter" data-cat="二地對話">二地對話</button>
+      </nav>
+      <p class="filter-status" role="status" aria-live="polite"></p>
     <div class="article-list">
       <!-- ══════════════════════════════════════════════════════════════
            新增文章：把下面這塊複製一份，貼到這個位置（最新的放最上面），
@@ -298,10 +316,6 @@
       </article>
     </div>
   </section>
-
-  <section class="section-tight" style="text-align:center;">
-    <a href="#" class="svc-cta">看更多文章 →</a>
-  </section>
 </main>
 
 <footer class="footer">
@@ -312,9 +326,9 @@
         <div class="footer-brand-en">Dao is simple</div>
         <p class="footer-brand-desc">做幸福的事，讓幸福變成有價值的事。雲南與台灣的好物與生活提案，由簡家旗主理。</p>
       </div>
-      <div><h4>選物</h4><ul><li><a href="yunnan.html">雲南選物</a></li><li><a href="taiwan.html">台灣選物</a></li></ul></div>
-      <div><h4>內容</h4><ul><li><a href="journal.html">幸福誌</a></li><li><a href="about.html">關於</a></li></ul></div>
-      <div><h4>連繫</h4><ul><li><a href="services.html">服務體驗</a></li><li><a href="connect.html">寫信給我們</a></li></ul></div>
+      <div><h2>選物</h2><ul><li><a href="yunnan.html">雲南選物</a></li><li><a href="taiwan.html">台灣選物</a></li></ul></div>
+      <div><h2>內容</h2><ul><li><a href="journal.html">幸福誌</a></li><li><a href="about.html">關於</a></li></ul></div>
+      <div><h2>連繫</h2><ul><li><a href="services.html">服務體驗</a></li><li><a href="connect.html">寫信給我們</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2026 大道至簡 · Dao is simple　·　<a href="privacy.html">隱私權政策</a></p>
@@ -323,6 +337,6 @@
   </div>
 </footer>
 
-<script src="scripts.js?v=a66b8e99"></script>
+<script src="scripts.js?v=0ff0642e"></script>
 </body>
 </html>

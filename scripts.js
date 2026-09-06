@@ -75,15 +75,47 @@
     }
   });
 
-  // --- Filters (journal) — purely visual, marks active ---
+  // --- 幸福誌分類篩選 ---
+  // 分類寫在每張卡片的 .meta 裡（例如「產地故事 · 2026.08」），
+  // 從那裡取第一段當分類，不需要另外維護一份對照表。
   const filters = document.querySelectorAll('.filter');
-  filters.forEach((f) => {
-    f.addEventListener('click', (e) => {
-      e.preventDefault();
-      filters.forEach((x) => x.classList.remove('active'));
-      f.classList.add('active');
+  const cards = document.querySelectorAll('.article-list > .article-card');
+  if (filters.length && cards.length) {
+    const catOf = (card) => {
+      const meta = card.querySelector('.meta');
+      return meta ? meta.textContent.split('·')[0].trim() : '';
+    };
+    const status = document.querySelector('.filter-status');
+
+    filters.forEach((f) => {
+      f.addEventListener('click', () => {
+        filters.forEach((x) => {
+          x.classList.remove('active');
+          x.setAttribute('aria-pressed', 'false');
+        });
+        f.classList.add('active');
+        f.setAttribute('aria-pressed', 'true');
+
+        const want = f.dataset.cat;
+        let shown = 0;
+        cards.forEach((c) => {
+          const hit = want === '全部' || catOf(c) === want;
+          c.hidden = !hit;
+          if (hit) shown++;
+        });
+        if (status) {
+          status.textContent = want === '全部'
+            ? shown + ' 篇文章'
+            : want + '：' + shown + ' 篇';
+        }
+      });
     });
-  });
+
+    // 初始狀態的篇數
+    const status0 = document.querySelector('.filter-status');
+    if (status0) status0.textContent = cards.length + ' 篇文章';
+    filters.forEach((x) => x.setAttribute('aria-pressed', String(x.classList.contains('active'))));
+  }
 
   // --- Letter form → Google 試算表 ---
   // 部署 docs/google-sheet-form.gs 之後，把拿到的 /exec 網址貼進 FORM_ENDPOINT。

@@ -373,7 +373,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   margin-top: var(--s-5);
 }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--s-4); margin-bottom: var(--s-5); }
-.footer h4 { font-family: var(--font-han); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--ink); margin-bottom: var(--s-3); font-weight: 500; }
+.footer h2 { font-family: var(--font-han); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--ink); margin-bottom: var(--s-3); font-weight: 500; }
 .footer ul { list-style: none; }
 .footer ul li { margin-bottom: 8px; }
 .footer ul a { font-size: 0.92rem; color: var(--ink-soft); transition: color 400ms; }
@@ -433,7 +433,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .product .img-placeholder { aspect-ratio: 4/5; margin-bottom: var(--s-2); }
 .product .cat { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: 6px; }
 .product .cat.moss { color: var(--moss); }
-.product h4 { font-family: var(--font-han); font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 6px; }
+.product h3 { font-family: var(--font-han); font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 6px; }
 .product .origin { font-size: 0.85rem; color: var(--mist); margin-bottom: var(--s-2); font-family: var(--font-display); font-style: italic; }
 .product .price { font-family: var(--font-display); font-size: 1rem; color: var(--ink); letter-spacing: 0.05em; }
 @media (max-width: 760px) { .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); } }
@@ -441,7 +441,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* Sub-themes (yunnan/taiwan large characters) */
 .themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
 .theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur) var(--ease); }
-.theme:hover { background: var(--paper-deep); }
+/* 主題列目前沒有對應的分類頁，是展示不是導覽，所以不做 hover 變化 */
 .theme-han { font-family: var(--font-han); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; letter-spacing: 0.05em; color: var(--ink); }
 .theme-en { font-family: var(--font-display); font-style: italic; color: var(--mist); font-size: 0.85rem; margin-top: 4px; letter-spacing: 0.1em; }
 @media (max-width: 760px) { .themes { grid-template-columns: 1fr 1fr; } }
@@ -546,7 +546,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto var(--s-3);
 }
-.contact-card h3 { font-family: var(--font-han); letter-spacing: 0.15em; margin-bottom: var(--s-2); font-size: 1.1rem; font-weight: 400; }
+.contact-card h2 { font-family: var(--font-han); letter-spacing: 0.15em; margin-bottom: var(--s-2); font-size: 1.1rem; font-weight: 400; }
 .contact-card .value { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); margin-bottom: var(--s-2); letter-spacing: 0.05em; overflow-wrap: anywhere; }
 /* 中文的值：CJK 字身填滿字框，用 1.25rem 會比旁邊的西文值明顯大一號，
    改用中文字體並略縮，三張卡看起來才等重 */
@@ -979,4 +979,25 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   font-size: 0.85rem;
   line-height: 1.9;
   color: var(--mist);
+}
+
+/* 分類篩選的篇數提示 */
+.filter-status {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--mist);
+  margin-top: calc(var(--s-2) * -0.5);
+}
+
+/* a.article-card 設了 display:block，優先權高過瀏覽器預設的 [hidden]{display:none}，
+   會讓 JS 設的 hidden 失效。這裡補回來，篩選才真的藏得掉。 */
+.article-card[hidden] { display: none; }
+
+/* 頁尾連結原本只有 16px 高，手機上不好點（WCAG 2.2 建議觸控目標至少 24px）。
+   加上下內距把可點區域撐到 24px，視覺位置幾乎不變。 */
+.footer-grid a,
+.footer-bottom a {
+  display: inline-block;
+  padding: 4px 0;
 }
