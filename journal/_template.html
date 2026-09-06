@@ -33,24 +33,29 @@
 <main>
   <article class="container narrow">
 
-    <header class="article-hero reveal">
-      <!-- ③改這裡：分類 · 年月。分類請用：生活提案／產地故事／選物筆記／二地對話 -->
-      <div class="meta">產地故事 · 2026.05</div>
+    <!-- ③首圖：標題壓在色塊正中央。
+         色塊三選一：tea（雲南・茶褐）／moss（台灣・苔綠）／dark（墨黑）
+         再加一個構圖變化 v2–v6（不加就是預設），同色系的文章請用不同的變化，
+         而且要跟 journal.html 上那張卡片用同一組。
+         有照片的話：圖放進 images/，然後在同一個 div 加上
+         style="--img: url('../images/你的檔名.jpg');" 就會蓋在色塊上。 -->
+    <div class="img-placeholder tea article-cover cover-title reveal v2">
+      <div class="cover-inner">
+        <!-- ④改這裡：分類 · 年月。分類請用：生活提案／產地故事／選物筆記／二地對話 -->
+        <div class="meta">產地故事 · 2026.05</div>
+        <!-- ⑤改這裡：大標。不要加 <br>，讓它自己斷行才會置中對稱 -->
+        <h1>文章標題寫在這裡</h1>
+      </div>
+      <span>JOURNAL</span>
+    </div>
 
-      <!-- ④改這裡：大標 -->
-      <h1>文章標題寫在這裡</h1>
-
-      <!-- ⑤改這裡：開場摘要，兩三句，比內文大一點 -->
+    <header class="article-hero after-cover reveal">
+      <!-- ⑥改這裡：開場摘要，兩三句，比內文大一點 -->
       <p class="lede">這裡放開場的摘要。兩三句話，讓人願意讀下去。</p>
 
-      <!-- ⑥改這裡：作者與閱讀時間 -->
+      <!-- ⑦改這裡：作者與閱讀時間 -->
       <div class="byline">文 · 簡家旗 &nbsp;|&nbsp; 約 6 分鐘</div>
     </header>
-
-    <!-- ⑦首圖。沒有照片就留著色塊，換 tea / moss / dark 三種色調。
-         有照片的話：先把圖放進 images/ 資料夾，然後改成
-         <div class="img-placeholder article-cover reveal" style="--img: url('../images/你的檔名.jpg');"></div> -->
-    <div class="img-placeholder tea article-cover reveal"><span>JOURNAL</span></div>
 
     <!-- ⑧從這裡開始寫內文 ============================== -->
     <div class="article-body">

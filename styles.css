@@ -743,6 +743,65 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   margin-bottom: var(--s-5);
 }
 
+/* --- 標題壓在封面上 --- */
+.article-cover.cover-title {
+  /* 用 min-height 而不是固定比例：標題長的時候版面要能長高，
+     固定比例會被 overflow:hidden 裁掉字 */
+  aspect-ratio: auto;
+  min-height: clamp(260px, 32vw, 400px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: clamp(1.75rem, 6vw, 4rem);
+}
+/* 壓字用的暗罩。中央濃、邊緣淡，底下的漸層還看得見。
+   淺色系（tea）明度高，沒有這層字會糊在背景裡；之後換上真實照片一樣需要。 */
+.article-cover.cover-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+              rgba(42, 37, 32, 0.46) 0%,
+              rgba(42, 37, 32, 0.26) 62%,
+              rgba(42, 37, 32, 0.15) 100%);
+}
+.article-cover.cover-title .cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+}
+.article-cover.cover-title .meta {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(250, 246, 239, 0.72);
+  margin-bottom: var(--s-3);
+}
+.article-cover.cover-title h1 {
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--font-han);
+  font-size: clamp(1.7rem, 4.6vw, 3rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  text-shadow: 0 1px 20px rgba(42, 37, 32, 0.4);
+  text-wrap: balance;
+  /* em 是相對 h1 自己的字級，約等於一行 14 個中文字 */
+  max-width: 14em;
+  margin-inline: auto;
+}
+/* 角落的小標籤要浮在暗罩之上，否則會被蓋掉 */
+.article-cover.cover-title span { z-index: 1; }
+
+/* 標題移到封面之後，下面這塊只剩前言與作者，上緣留白要收掉 */
+.article-hero.after-cover {
+  padding-top: 0;
+  margin-bottom: var(--s-5);
+}
+.article-hero.after-cover .lede { margin-bottom: var(--s-3); }
+
 /* --- 內文 --- */
 .article-body { font-size: 1.05rem; line-height: 2.05; color: var(--ink); }
 .article-body > * + * { margin-top: var(--s-3); }
