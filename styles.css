@@ -779,19 +779,25 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   margin-bottom: var(--s-3);
 }
 .article-cover.cover-title h1 {
-  margin: 0;
+  margin: 0 auto;
   color: var(--paper);
   font-family: var(--font-han);
-  font-size: clamp(1.7rem, 4.6vw, 3rem);
   font-weight: 300;
   letter-spacing: 0.08em;
-  line-height: 1.55;
+  line-height: 1.5;
   text-shadow: 0 1px 20px rgba(42, 37, 32, 0.4);
   text-wrap: balance;
-  /* em 是相對 h1 自己的字級，約等於一行 14 個中文字 */
-  max-width: 14em;
-  margin-inline: auto;
+  max-width: 15em;
+  /* 預設；實際字級由下面依標題長度分級的 .t-* 決定 */
+  font-size: clamp(1.7rem, 4.6vw, 2.9rem);
 }
+
+/* 標題一律排成最多兩行，所以字級跟著標題長度走：
+   短標放大，長標縮小。分級由 docs/ADD_JOURNAL_POST.md 說明。 */
+.article-cover.cover-title h1.t-xl { font-size: clamp(2.0rem, 6.0vw, 3.9rem); }  /* ≤12 字 */
+.article-cover.cover-title h1.t-lg { font-size: clamp(1.85rem, 5.2vw, 3.3rem); } /* 13–17 字 */
+.article-cover.cover-title h1.t-md { font-size: clamp(1.65rem, 4.5vw, 2.8rem); } /* 18–21 字 */
+.article-cover.cover-title h1.t-sm { font-size: clamp(1.4rem, 3.7vw, 2.3rem); }  /* 22 字以上 */
 /* 角落的小標籤要浮在暗罩之上，否則會被蓋掉 */
 .article-cover.cover-title span { z-index: 1; }
 
