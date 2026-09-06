@@ -43,6 +43,10 @@ def main() -> int:
         # 這些目錄不是網站頁面
         if any(p in html.parts for p in ("book", "epubqa", "whitepaper", "node_modules")):
             continue
+        # 子專案有自己的 styles.css / scripts.js（例如 eternitychildbooking/），
+        # 它們的版本號跟主站無關，不能用主站的雜湊蓋掉
+        if html.parent != ROOT and any((html.parent / name).exists() for name in ASSETS):
+            continue
         src = html.read_text(encoding="utf-8")
         out = src
         for name, ver in versions.items():
