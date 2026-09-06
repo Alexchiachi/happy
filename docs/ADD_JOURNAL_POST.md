@@ -162,6 +162,20 @@ python3 -m http.server 8080
 
 ---
 
+## 改過 CSS 或 JS 之後
+
+`styles.css` 和 `scripts.js` 的引用網址後面帶著內容雜湊（`styles.css?v=c88e1ba5`）。
+只改 HTML 不用管它；但**只要動到 CSS 或 JS，推上去之前一定要跑**：
+
+```bash
+python3 tools/bump_assets.py
+```
+
+它會重算雜湊並更新所有 HTML 的引用。
+
+不跑會怎樣：舊訪客（尤其手機）拿到的是「新的 HTML ＋ 快取住的舊 CSS」，
+新樣式沒有對應規則，版面會壞掉——而且他們不會知道要清快取。
+
 ## 步驟六：上線
 
 ```bash
