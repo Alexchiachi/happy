@@ -130,12 +130,19 @@
 
 ```html
 <a href="journal/2026-05-你的檔名.html" class="article-card reveal">
-  <div class="img-placeholder moss"><span>TAIWAN</span></div>
-  <div class="meta">產地故事 · 2026.05</div>
-  <h3>文章標題</h3>
+  <div class="img-placeholder moss has-title">
+    <div class="cover-inner">
+      <div class="meta">產地故事 · 2026.05</div>
+      <h3>文章標題</h3>
+    </div>
+    <span>TAIWAN</span>
+  </div>
   <p>兩三句摘要，跟文章開頭的 lede 可以一樣。</p>
 </a>
 ```
+
+`has-title` 是「標題壓在色塊上」，不要拿掉。色塊後面可再加構圖變化 `v2`–`v6`，
+要跟內頁封面用同一組。
 
 注意外層是 `<a>` 不是 `<article>` —— 這樣整張卡片都可以點。
 

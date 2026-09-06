@@ -743,20 +743,17 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   margin-bottom: var(--s-5);
 }
 
-/* --- 標題壓在封面上 --- */
-.article-cover.cover-title {
-  /* 用 min-height 而不是固定比例：標題長的時候版面要能長高，
-     固定比例會被 overflow:hidden 裁掉字 */
-  aspect-ratio: auto;
-  min-height: clamp(260px, 32vw, 400px);
+/* --- 標題壓在色塊上 ---
+   文章內頁封面（.cover-title）、列表卡片與精選區（.has-title）共用這套機制：
+   內容置中、加一層暗罩保證可讀性。字級各自在下面調。 */
+.img-placeholder.cover-title,
+.img-placeholder.has-title {
   display: grid;
   place-items: center;
   text-align: center;
-  padding: clamp(1.75rem, 6vw, 4rem);
 }
-/* 壓字用的暗罩。中央濃、邊緣淡，底下的漸層還看得見。
-   淺色系（tea）明度高，沒有這層字會糊在背景裡；之後換上真實照片一樣需要。 */
-.article-cover.cover-title::after {
+.img-placeholder.cover-title::after,
+.img-placeholder.has-title::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -765,20 +762,22 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
               rgba(42, 37, 32, 0.26) 62%,
               rgba(42, 37, 32, 0.15) 100%);
 }
-.article-cover.cover-title .cover-inner {
+.img-placeholder.cover-title .cover-inner,
+.img-placeholder.has-title .cover-inner {
   position: relative;
   z-index: 1;
   max-width: 100%;
 }
-.article-cover.cover-title .meta {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(250, 246, 239, 0.72);
-  margin-bottom: var(--s-3);
-}
-.article-cover.cover-title h1 {
+/* 角落小標籤要浮在暗罩之上 */
+.img-placeholder.cover-title > span,
+.img-placeholder.has-title > span { z-index: 1; }
+
+.img-placeholder.cover-title .meta,
+.img-placeholder.has-title .meta { color: rgba(250, 246, 239, 0.72); }
+
+.img-placeholder.cover-title h1,
+.img-placeholder.has-title h2,
+.img-placeholder.has-title h3 {
   margin: 0 auto;
   color: var(--paper);
   font-family: var(--font-han);
@@ -787,6 +786,40 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   line-height: 1.5;
   text-shadow: 0 1px 20px rgba(42, 37, 32, 0.4);
   text-wrap: balance;
+}
+
+/* 列表卡片：色塊小，字級跟著縮 */
+.article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
+.article-card .img-placeholder.has-title .meta { margin-bottom: var(--s-2); }
+.article-card .img-placeholder.has-title h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  max-width: 15em;
+}
+
+/* 精選區：色塊大，字級接近內頁封面 */
+.article-feature .img-placeholder.has-title { padding: clamp(1.5rem, 4vw, 2.5rem); }
+.article-feature .img-placeholder.has-title .meta { margin-bottom: var(--s-3); }
+.article-feature .img-placeholder.has-title h2 {
+  font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  max-width: 13em;
+}
+
+/* --- 文章內頁封面 --- */
+.article-cover.cover-title {
+  /* 用 min-height 而不是固定比例：標題長的時候版面要能長高，
+     固定比例會被 overflow:hidden 裁掉字 */
+  aspect-ratio: auto;
+  min-height: clamp(260px, 32vw, 400px);
+  padding: clamp(1.75rem, 6vw, 4rem);
+}
+.article-cover.cover-title .meta {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: var(--s-3);
+}
+.article-cover.cover-title h1 {
   max-width: 15em;
   /* 預設；實際字級由下面依標題長度分級的 .t-* 決定 */
   font-size: clamp(1.7rem, 4.6vw, 2.9rem);
@@ -798,8 +831,6 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
 .article-cover.cover-title h1.t-lg { font-size: clamp(1.85rem, 5.2vw, 3.3rem); } /* 13–17 字 */
 .article-cover.cover-title h1.t-md { font-size: clamp(1.65rem, 4.5vw, 2.8rem); } /* 18–21 字 */
 .article-cover.cover-title h1.t-sm { font-size: clamp(1.4rem, 3.7vw, 2.3rem); }  /* 22 字以上 */
-/* 角落的小標籤要浮在暗罩之上，否則會被蓋掉 */
-.article-cover.cover-title span { z-index: 1; }
 
 /* 標題移到封面之後，下面這塊只剩前言與作者，上緣留白要收掉 */
 .article-hero.after-cover {
