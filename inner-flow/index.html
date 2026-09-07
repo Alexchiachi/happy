@@ -32,19 +32,28 @@
 {"@context":"https://schema.org","@type":"WebApplication","name":"內耗狀態自我評估與自洽引導工具","alternateName":"Inner Flow Assessment","url":"https://alexchiachi.github.io/happy/inner-flow/","applicationCategory":"LifestyleApplication","operatingSystem":"Any","inLanguage":"zh-Hant","description":"融合耗散結構理論與身心自洽心法的 2 分鐘檢測：量化你的內耗熵值，辨識能量原型，重構內在秩序。","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
 
-<!-- ===== 分析工具掛載點 =====
-     頁面已內建漏斗事件（見下方 track()），支援 GA4（gtag）、Plausible 與 GTM（dataLayer）。
-     擇一在此貼上官方程式碼即可開始收數據，不需改動其他地方：
+<!-- ===== 分析工具：Plausible =====
+     選 Plausible 而不是 GA4，理由是隱私權政策：那一頁寫著本站不使用 cookie。
+     GA4 會種 _ga／_gid，掛上去就得補同意橫幅、重寫政策；
+     Plausible 無 cookie、不收個人資料、不做跨站追蹤，政策只要加一段說明。
 
-     GA4：
-     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
-     gtag('js',new Date());gtag('config','G-XXXXXXX');</script>
+     它用網域辨識網站，不需要任何金鑰或 ID，所以這段可以直接進版控。
+     要停用就把這兩行刪掉——頁面其他地方完全不依賴它。
 
-     Plausible：
-     <script defer data-domain="你的網域" src="https://plausible.io/js/script.js"></script>
-     <script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
--->
+     第二支 <script> 是官方的佇列墊片：下方 track() 直接呼叫 window.plausible()，
+     在主腳本載入完成前先把事件排進 q，載完再一次送出，開頭幾個事件才不會掉。
+
+     注意：Plausible 預設會把不認得的查詢字串從網址中拿掉，
+     所以分享連結的 ?r=答案碼 不會出現在報表的網址欄位。
+     那條路徑改看 result_shared_view 事件，資訊沒有少。 -->
+<script defer data-domain="alexchiachi.github.io" src="https://plausible.io/js/script.js"></script>
+<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
+
+<!-- 想換成 GA4 或 GTM 的話，下方 track() 三種都支援，把上面兩行換成官方程式碼即可：
+     GA4：<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+          <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+          gtag('js',new Date());gtag('config','G-XXXXXXX');</script>
+     換過去之前記得先改隱私權政策的 cookie 段落。 -->
 
 <!-- ===== 外部依賴 =====
      樣式與雷達圖都不再依賴外部程式庫：
@@ -1240,13 +1249,13 @@
       if (name.length < 1) {
         say('請留下你的稱呼。', 'error');
         nameInput.focus();
-        track('lead_submitted', { status: 'invalid_name' });
+        track('lead_validation_failed', { field: 'name' });
         return;
       }
       if (!validEmail.test(email)) {
         say('請輸入有效的 Email 位址。', 'error');
         emailInput.focus();
-        track('lead_submitted', { status: 'invalid_email' });
+        track('lead_validation_failed', { field: 'email' });
         return;
       }
 
@@ -1256,8 +1265,9 @@
       say('已開始下載，祝你這七天過得安靜一些。', 'ok');
       form.reset();
 
+      // 只有真的送出去才算一筆。驗證失敗是 lead_validation_failed，兩個分開，
+      // 否則「留資數」會把打錯字的人重複算進去，轉換率永遠是虛的。
       track('lead_submitted', {
-        status: 'ok',
         archetype: lastResult ? lastResult.archetype : 'unknown',
         entropy: lastResult ? lastResult.entropy : null,
       });
@@ -1300,7 +1310,9 @@
     var btn = $('gumroadBtn');
     btn.addEventListener('click', function (e) {
       track('checkout_click', {
-        price: 3.99, currency: 'USD',
+        // GA4 只認 value + currency 這一組才會算成金額；price 留著讓
+        // Plausible 與 GTM 也讀得到同一個數字。
+        value: 3.99, price: 3.99, currency: 'USD',
         archetype: lastResult ? lastResult.archetype : 'unknown',
       });
 
