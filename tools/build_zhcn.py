@@ -43,8 +43,9 @@ SKIP_FILES = {"inner-flow.html"}
 # 所以路徑都要多退一層，否則會去找 zh-cn/ 底下不存在的檔案。
 SHARED = ("styles.css", "scripts.js", "images/", "inner-flow/", "inner-flow.html")
 
-# 不歸本站管、但仍要出現在 sitemap 裡的獨立專案入口
-EXTRA_URLS = ("inner-flow",)
+# 同一個網域上、但不屬於本站的獨立專案。各自有自己的 sitemap，
+# 由 robots.txt 一起指出去——搜尋引擎照樣找得到，收錄卻是分開的。
+SIBLINGS = ("inner-flow",)
 
 # 有些內容不是「換字」而是「本來就該不一樣」——最典型的是幣別與報價。
 # key 是頁面路徑，value 是一串（繁體原文 → 簡體版要顯示的字）。
@@ -101,11 +102,8 @@ def sitemap(rels):
             out.append('    <xhtml:link rel="alternate" hreflang="zh-Hans" href="%szh-cn/%s"/>' % (BASE, rel))
             out.append('    <xhtml:link rel="alternate" hreflang="x-default" href="%s%s"/>' % (BASE, rel))
             out.append("  </url>")
-    # 獨立專案自己管內容，這裡只留一筆入口讓它繼續被收錄。
-    # 轉址殼（SKIP_FILES）刻意不列——它是 noindex。
-    for name in EXTRA_URLS:
-        if (ROOT / name / "index.html").exists():
-            out.append("  <url>\n    <loc>%s%s/</loc>\n  </url>" % (BASE, name))
+    # 獨立專案不列在這裡，它們有自己的 sitemap。
+    # 轉址殼（SKIP_FILES）也不列——它是 noindex。
     out.append("</urlset>")
     return "\n".join(out) + "\n"
 
@@ -184,8 +182,14 @@ def main():
         n_cn += 1
 
     (ROOT / "sitemap.xml").write_text(sitemap(rels), encoding="utf-8")
-    (ROOT / "robots.txt").write_text(
-        "User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n" % BASE, encoding="utf-8")
+
+    # robots.txt 只有網域根目錄那一份，所有專案共用，
+    # 所以在這裡把各自的 sitemap 都列出來。
+    lines = ["User-agent: *", "Allow: /", "", "Sitemap: %ssitemap.xml" % BASE]
+    for name in SIBLINGS:
+        if (ROOT / name / "sitemap.xml").exists():
+            lines.append("Sitemap: %s%s/sitemap.xml" % (BASE, name))
+    (ROOT / "robots.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     print("繁體版更新（加上 hreflang 與語言切換）：%d 頁" % n_zh)
     print("簡體版產生 zh-cn/：%d 頁" % n_cn)

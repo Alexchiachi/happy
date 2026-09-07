@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://alexchiachi.github.io/happy/sitemap.xml
+Sitemap: https://alexchiachi.github.io/happy/inner-flow/sitemap.xml
