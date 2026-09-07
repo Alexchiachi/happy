@@ -391,11 +391,18 @@
 
         <!--
           留資即下載：送出後直接開始下載 PDF，不經過寄信。
-          data-endpoint 填入你的收件端點（Google Apps Script、Formspree、自架 API 皆可），
-          表單會以 JSON POST 送出 { name, email, type, entropy, code, submittedAt }。
-          留白時不會記錄任何資料，僅提供下載——正式上線前務必填上。
+          data-endpoint 目前指向 inner-flow/docs/inner-flow-lead-form.gs 部署出來的
+          Google Apps Script 網頁應用程式，表單會以 JSON POST 送出
+          { name, email, type, entropy, code, submittedAt }，寫進試算表的「名單」分頁。
+
+          要換端點（Formspree、自架 API 皆可）只要改這一個屬性。
+          留白時不記錄任何資料，但下載照常——使用者那一端的交換已經完成，
+          不該因為我們的後端而落空。
+
+          改動 .gs 之後記得重新「部署 → 管理部署作業 → 編輯 → 版本選新版本」，
+          否則線上跑的還是舊的那一支。
         -->
-        <form id="leadForm" data-endpoint="" novalidate class="space-y-4">
+        <form id="leadForm" data-endpoint="https://script.google.com/macros/s/AKfycbwXCH1xRvwKitUQkglC6pSxeesUzLQ0hs9zDWn3pbxVa7G9PXNrSyQhWmD64SX_zHrecA/exec" novalidate class="space-y-4">
           <input
             id="nameInput" type="text" required autocomplete="name" placeholder="你的稱呼" aria-label="你的稱呼"
             class="w-full bg-transparent border-b border-ink/20 py-3 text-sm tracking-loose placeholder-ink/30 transition-colors" />
