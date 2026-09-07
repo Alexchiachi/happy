@@ -36,6 +36,17 @@ SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
 # 這些頁面不做簡體版：inner-flow 是獨立的檢測工具，有自己的版型與 i18n
 SKIP_FILES = {"inner-flow.html"}
 
+# 有些內容不是「換字」而是「本來就該不一樣」——最典型的是幣別與報價。
+# key 是頁面路徑，value 是一串（繁體原文 → 簡體版要顯示的字）。
+# 在 OpenCC 轉換之前套用，所以左邊寫繁體版檔案裡的原文。
+# 找不到就直接中止：報價漏掉不會有人發現，但改錯價是真的會出事。
+OVERRIDES = {
+    "services.html": [
+        ("NT$ 500,000 起", "RMB 150,000 起"),   # 預約訂製四項
+        ("NT$ 50,000 起", "RMB 15,000 起"),     # 幸福諮詢顧問
+    ],
+}
+
 
 def pages():
     for p in sorted(ROOT.rglob("*.html")):
@@ -148,6 +159,13 @@ def main():
         # 連結要指回根目錄那一份，否則在 zh-cn/ 底下會 404。
         for skip in SKIP_FILES:
             cn = cn.replace('href="%s"' % skip, 'href="../%s%s"' % (up, skip))
+
+        # 語系專屬的內容差異（幣別、報價）
+        for old, new in OVERRIDES.get(rel, []):
+            if old not in cn:
+                sys.exit("OVERRIDES 對不上：%s 裡找不到「%s」。\n"
+                         "繁體版改過之後，tools/build_zhcn.py 的 OVERRIDES 也要跟著改。" % (rel, old))
+            cn = cn.replace(old, new)
 
         # 轉換文字。OpenCC 只動中日韓字元，class 名稱、網址、檔名都是 ASCII，不受影響。
         cn = CC.convert(cn)
