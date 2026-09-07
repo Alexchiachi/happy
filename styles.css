@@ -501,7 +501,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    Service chapters (alternating)
    ============================================================ */
 .svc-chapter { padding: var(--s-6) 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); align-items: center; }
-.svc-chapter:nth-child(even) .svc-img { order: 2; }
+/* 原本用 :nth-child(even) 讓章節左右交錯，但每個 .svc-chapter 都是自己 section
+   的唯一子元素，永遠是 nth-child(1)，所以從來沒生效過。改用明確的 .flip。 */
+.svc-chapter.flip .svc-img { order: 2; }
 .svc-chapter .img-placeholder { aspect-ratio: 4/3; }
 .svc-chapter .num { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.4em; color: var(--tea); margin-bottom: var(--s-2); }
 .svc-chapter h2 { font-family: var(--font-han); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 300; letter-spacing: 0.05em; margin-bottom: var(--s-3); }
@@ -523,7 +525,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   transition: all 400ms var(--ease);
 }
 .svc-cta:hover { background: var(--tea); color: var(--paper); }
-@media (max-width: 760px) { .svc-chapter { grid-template-columns: 1fr; } .svc-chapter:nth-child(even) .svc-img { order: 0; } }
+@media (max-width: 760px) { .svc-chapter { grid-template-columns: 1fr; } .svc-chapter.flip .svc-img { order: 0; } }
 
 /* ============================================================
    Connect page — cards & form
@@ -1002,4 +1004,18 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
 .footer-bottom a {
   display: inline-block;
   padding: 4px 0;
+}
+
+/* 服務章節的封面：標題壓在色塊上，字級比文章封面小一階 */
+.svc-chapter .img-placeholder.has-title { padding: clamp(1.25rem, 3.5vw, 2rem); }
+.svc-chapter .img-placeholder.has-title .meta {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  margin-bottom: var(--s-2);
+}
+.svc-chapter .img-placeholder.has-title h2 {
+  font-size: clamp(1.45rem, 2.9vw, 2.1rem);
+  margin-bottom: 0;
+  max-width: 12em;
 }
