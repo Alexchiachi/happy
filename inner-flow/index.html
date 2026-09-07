@@ -386,14 +386,16 @@
         </h4>
         <p class="text-sm text-ink/60 leading-loose tracking-loose mb-8 flex-grow">
           11 頁 PDF，每天一則 3 分鐘練習：從邊界重設、心智清空到做功對齊。
-          留下姓名與 Email，立即下載，不寄送電子報。
+          留下姓名與 Email，立即下載，並寄一封確認信給你。不寄電子報。
         </p>
 
         <!--
           留資即下載：送出後直接開始下載 PDF，不經過寄信。
           data-endpoint 目前指向 inner-flow/docs/inner-flow-lead-form.gs 部署出來的
           Google Apps Script 網頁應用程式，表單會以 JSON POST 送出
-          { name, email, type, entropy, code, submittedAt }，寫進試算表的「名單」分頁。
+          { name, email, type, band, entropy, dimensions, bottleneck, key, code, submittedAt }。
+          試算表只存前七欄那一組；band／dimensions／bottleneck／key 是給信件排版用的，
+          反正六位答案碼就能還原出全部，不必重複存一份。
 
           要換端點（Formspree、自架 API 皆可）只要改這一個屬性。
           留白時不記錄任何資料，但下載照常——使用者那一端的交換已經完成，
@@ -420,8 +422,8 @@
           沒有自動開始？點此下載
         </a>
         <p class="mt-5 text-[11px] leading-loose tracking-loose text-ink/60">
-          我們會保留你的姓名、Email，以及這一次的測驗結果（能量原型、熵值與答案碼），
-          不會寄送電子報，也不會提供給第三方。
+          我們會保留你的姓名、Email，以及這一次的測驗結果（能量原型、熵值與答案碼）。
+          只寄一封確認信給你，之後不會再有其他信件，也不會把資料提供給第三方。
           詳見 <a href="../privacy.html" class="link-underline hover:text-clay transition-colors">隱私權政策</a>。
         </p>
       </div>
@@ -988,6 +990,8 @@
       dimensions: s.pct, bottleneck: s.bottleneck, code: shareCode(),
       // 供 WordPress 解鎖頁使用：提示詞需要維度全名，而不是內部代號
       bottleneckName: s.bottleneck ? DIMENSIONS[s.bottleneck].name : '無明顯瓶頸',
+      // 供留資信件使用：確認信會把這一句放在結果摘要的最後
+      key: archetype.key,
     };
 
     // 存進 localStorage，讓購買後的解鎖頁（WordPress 外掛）能接上這份結果。
@@ -1196,7 +1200,11 @@
           name: name,
           email: email,
           type: lastResult ? lastResult.archetype : '',
+          band: lastResult ? lastResult.band : '',
           entropy: lastResult ? lastResult.entropy : null,
+          dimensions: lastResult ? lastResult.dimensions : null,
+          bottleneck: lastResult ? lastResult.bottleneckName : '',
+          key: lastResult ? lastResult.key : '',
           code: lastResult ? lastResult.code : '',
           submittedAt: new Date().toISOString(),
         }),
