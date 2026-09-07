@@ -149,14 +149,40 @@
 
   /* --- 列印（＝一鍵輸出高畫質診斷 PDF）：只留診斷本體，向量輸出 --- */
   @media print {
-    @page { size: A4; margin: 18mm 16mm; }
+    @page { size: A4; margin: 14mm 16mm; }
     html, body { background: #fff !important; }
     #hero, #quiz, #conversion, #aiStudio, .no-print { display: none !important; }
     #result { display: block !important; padding: 0 !important; }
     .fade-in { opacity: 1 !important; transform: none !important; }
     .print-only { display: block !important; }
-    #forceField { max-width: 132mm; margin: 0 auto; }
+    #forceField { max-width: 76mm; margin: 0 auto; }
     section, blockquote, .avoid-break { break-inside: avoid; }
+
+    /* 螢幕上的大留白是節奏，印在 A4 上就變成把洞察擠到第二頁，
+       然後第二頁四分之三空著——一份要留存的文件不該長這樣。
+       間距整體收掉一半以上，力場圖也縮小，讓整份剛好落在一頁。 */
+    #result .mb-20 { margin-bottom: 4mm !important; }
+    #result .mb-14 { margin-bottom: 4mm !important; }
+    #result .mb-10 { margin-bottom: 3mm !important; }
+    #result .mb-8  { margin-bottom: 3mm !important; }
+    #result .mb-5  { margin-bottom: 2mm !important; }
+    #result .mt-16 { margin-top: 5mm !important; }
+    #result .mt-10 { margin-top: 3mm !important; }
+    #result .mt-8  { margin-top: 3mm !important; }
+    #result .mt-6  { margin-top: 2mm !important; }
+    #result .mt-3  { margin-top: 1.5mm !important; }
+    #result .py-20, #result .sm\:py-28 { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+    /* 六行的正文置中，在 A4 的欄寬下兩邊都不齊，很難讀。列印時改左對齊，
+       行距也從 2.2 收到 1.9——螢幕上的呼吸感，在紙上會變成翻頁。 */
+    #insightText { text-align: left; line-height: 1.85 !important; font-size: 13.5px !important; }
+    /* 洞察那一段是整份文件的重點，寧可壓字級也要跟前面留在同一頁——
+       翻頁會把「診斷」和「這代表什麼」拆成兩件事。
+       欄寬放寬到 168mm（每行約 45 個中文字，還在舒服的範圍），
+       不放到滿版：那會變成一行五十幾字，容易跳行。 */
+    #result blockquote { max-width: 168mm; }
+    #typeTitle { font-size: 22px !important; }
+    #entropyValue { font-size: 40px !important; }
   }
   .print-only { display: none; }
 </style>
@@ -245,6 +271,20 @@
 <section id="result" class="hidden px-6 py-20 sm:py-28">
   <div class="max-w-3xl mx-auto">
 
+    <!-- 列印與 PDF 專用抬頭，螢幕上不出現。
+         存下來的檔案要能自己說明它是什麼、什麼時候輸出的、怎麼回到互動版。
+         只靠檔名不夠——檔名會被改，而且列印出來就沒有了。 -->
+    <div class="print-only" style="margin-bottom:9mm;">
+      <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#5F6E60;">
+        Inner Flow Assessment
+      </p>
+      <p style="font-size:12px;letter-spacing:.1em;color:#2A2723;margin-top:2.5mm;">
+        內耗狀態自我評估與自洽引導工具
+      </p>
+      <p id="printMeta" style="font-size:10px;letter-spacing:.08em;color:#726F6B;margin-top:2.5mm;"></p>
+      <div style="height:1px;background:#DDD7CB;margin-top:5mm;"></div>
+    </div>
+
     <!-- 由分享連結進入時顯示（?r=______） -->
     <div id="sharedBanner" class="hidden text-center mb-14 border border-sage/35 bg-sage/[0.06] px-6 py-5 no-print">
       <p class="text-xs tracking-loose text-ink/60 leading-loose">
@@ -295,8 +335,9 @@
     </div>
 
     <!-- 列印版頁尾：只在輸出 PDF 時出現 -->
+    <!-- 抬頭已經寫了工具全名，這裡只留免責聲明，不重複 -->
     <p class="print-only text-center text-[10px] tracking-loose text-ink/60 mt-16">
-      Inner Flow Assessment · 內耗狀態自我評估與自洽引導工具 · 本報告為自我覺察用途，不構成醫療或心理診斷建議
+      本報告為自我覺察用途，不構成醫療或心理診斷建議。
     </p>
 
     <!-- 3-4 匯出與分享 -->
@@ -829,6 +870,14 @@
     return result.entropy >= 50 ? BOTTLENECK_HINT.balancedLow : BOTTLENECK_HINT.balanced;
   }
 
+  // 輸出日期用「輸出於」而不是「測驗於」：由分享連結進來的人按列印，
+  // 拿到的是他開啟的日期，不是對方當初作答的日期，寫成測驗日期會是錯的。
+  function todayStamp() {
+    var d = new Date();
+    var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+    return d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate());
+  }
+
   function matchArchetype(entropy) {
     for (var i = 0; i < ARCHETYPES.length; i++) {
       if (entropy >= ARCHETYPES[i].min && entropy <= ARCHETYPES[i].max) return ARCHETYPES[i];
@@ -1021,6 +1070,9 @@
         '</div>';
     }).join('');
     $('bottleneckNote').textContent = bottleneckHint(lastResult);
+    $('printMeta').textContent =
+      '輸出於 ' + todayStamp() + '　·　答案碼 ' + lastResult.code +
+      '　·　alexchiachi.github.io/happy/inner-flow/';
 
     // 分享模式：改寫措辭，並提供「我也要測一次」
     isShared = shared;
@@ -1079,19 +1131,23 @@
       '  body { margin:0; background:#F7F5F0; color:#2A2723; line-height:2; letter-spacing:.05em;\n' +
       '         font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }\n' +
       '  main { max-width:640px; margin:0 auto; padding:72px 24px 96px; text-align:center; }\n' +
-      '  .eyebrow { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#7A8B7B; }\n' +
+      '  .eyebrow { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#5F6E60; }\n' +
       '  h1 { font-family:"Noto Serif TC",serif; font-weight:300; font-size:26px; line-height:1.7;\n' +
-      '       letter-spacing:.08em; color:#A67C52; margin:28px 0 32px; }\n' +
+      '       letter-spacing:.08em; color:#8C6743; margin:28px 0 32px; }\n' +
       '  .score { font-family:"Noto Serif TC",serif; font-size:56px; font-weight:300; line-height:1; }\n' +
-      '  .unit { font-size:11px; letter-spacing:.12em; color:rgba(42,39,35,.45); }\n' +
-      '  .rule { width:64px; height:1px; background:rgba(42,39,35,.2); margin:56px auto; }\n' +
+      // 顏色一律寫成實色：這份檔案是給人留著的，半透明疊出來的灰
+      // 在不同的檢視器裡不一定一致，而且原本的 .32／.45 只有 1.9:1 與 2.6:1。
+      '  .unit { font-size:11px; letter-spacing:.12em; color:#726F6B; }\n' +
+      '  .rule { width:64px; height:1px; background:#DDD7CB; margin:56px auto; }\n' +
       '  .dims { display:flex; justify-content:center; gap:40px; margin-top:24px; }\n' +
       '  .dims b { display:block; font-family:"Noto Serif TC",serif; font-weight:300; font-size:24px; }\n' +
-      '  .dims span { font-size:11px; letter-spacing:.12em; color:rgba(42,39,35,.45); }\n' +
+      '  .dims span { font-size:11px; letter-spacing:.12em; color:#726F6B; }\n' +
       '  .insight { font-family:"Noto Serif TC",serif; font-size:16px; line-height:2.2; letter-spacing:.08em;\n' +
-      '             color:rgba(42,39,35,.85); text-align:left; }\n' +
-      '  .key { font-size:12px; letter-spacing:.12em; color:rgba(42,39,35,.5); margin-top:32px; }\n' +
-      '  footer { margin-top:72px; font-size:10px; letter-spacing:.12em; color:rgba(42,39,35,.32); line-height:2; }\n' +
+      '             color:#494642; text-align:left; }\n' +
+      '  .key { font-size:12px; letter-spacing:.12em; color:#5D5B56; margin-top:32px; }\n' +
+      '  footer { margin-top:64px; font-size:10px; letter-spacing:.12em; color:#726F6B; line-height:2; }\n' +
+      '  footer a { color:#5F6E60; }\n' +
+      '  .stamp { font-size:10px; letter-spacing:.1em; color:#726F6B; margin-top:14px; }\n' +
       '  svg { width:100%; height:auto; max-width:420px; }\n' +
       '</style>\n</head>\n<body>\n<main>\n' +
       '  <p class="eyebrow">Inner Flow Assessment · ' + lastResult.band + '</p>\n' +
@@ -1106,8 +1162,10 @@
       '  <div class="rule"></div>\n' +
       '  <p class="insight">' + $('insightText').textContent + '</p>\n' +
       '  <p class="key">' + $('insightKey').textContent + '</p>\n' +
+      '  <p class="stamp">輸出於 ' + todayStamp() + '　·　答案碼 ' + lastResult.code + '</p>\n' +
       '  <footer>' + bottleneckHint(lastResult) + '<br />\n' +
-      '  本報告為自我覺察用途，不構成醫療或心理診斷建議。</footer>\n' +
+      '  本報告為自我覺察用途，不構成醫療或心理診斷建議。<br />\n' +
+      '  <a href="' + shareUrl() + '">回到互動版，或用同一個答案碼再看一次</a></footer>\n' +
       '</main>\n</body>\n</html>\n';
 
     var blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
