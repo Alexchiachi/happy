@@ -9,6 +9,26 @@
 (function () {
   'use strict';
 
+  // --- 介面文字的語言對照 ---
+  // 簡體版（zh-cn/）與繁體版共用這一支 scripts.js，所以會顯示給使用者看的
+  // 幾句話要跟著 <html lang> 走，否則簡體頁面會跳出繁體訊息。
+  const LANG = (document.documentElement.lang || '').startsWith('zh-Hans') ? 'cn' : 'tw';
+  const T = (key) => ({
+    formMissing:  { tw: '請填寫稱呼、電子郵件與信件內容。',
+                    cn: '请填写称呼、电子邮件与信件内容。' },
+    formNoBackend:{ tw: '線上表單尚未啟用，請改寄 ',  cn: '在线表单尚未启用，请改寄 ' },
+    formNoBackend2:{tw: '，我們一樣會回覆您。',      cn: '，我们一样会回复您。' },
+    formSending:  { tw: '寄送中…',                 cn: '发送中…' },
+    formSent:     { tw: '已寄出 · 謝謝您',          cn: '已发送 · 谢谢您' },
+    formOk:       { tw: '收到了，我們會在三個工作日內回覆。',
+                    cn: '收到了，我们会在三个工作日内回复。' },
+    formFail:     { tw: '寄送沒有成功，請改寄 ',      cn: '发送没有成功，请改寄 ' },
+    formFail2:    { tw: '，或稍後再試一次。',        cn: '，或稍后再试一次。' },
+    countAll:     { tw: ' 篇文章',                 cn: ' 篇文章' },
+    countOne:     { tw: ' 篇',                    cn: ' 篇' },
+  }[key][LANG]);
+
+
   // --- 圖片載不到時的替代標記 ---
   // 帶 data-fallback-mark 的 <img> 若 404，換成圓形字標（與其他卡片同一套樣式），
   // 讓版面在「圖還沒上傳」時看起來仍然是完整的，而不是破圖或「待補」字樣。
@@ -105,15 +125,15 @@
         });
         if (status) {
           status.textContent = want === '全部'
-            ? shown + ' 篇文章'
-            : want + '：' + shown + ' 篇';
+            ? shown + T('countAll')
+            : want + '：' + shown + T('countOne');
         }
       });
     });
 
     // 初始狀態的篇數
     const status0 = document.querySelector('.filter-status');
-    if (status0) status0.textContent = cards.length + ' 篇文章';
+    if (status0) status0.textContent = cards.length + T('countAll');
     filters.forEach((x) => x.setAttribute('aria-pressed', String(x.classList.contains('active'))));
   }
 
@@ -143,18 +163,18 @@
         .find((k) => !String(data.get(k) || '').trim());
 
       if (missing) {
-        say('請填寫稱呼、電子郵件與信件內容。', 'err');
+        say(T('formMissing'), 'err');
         const field = letterForm.querySelector('[name="' + missing + '"]');
         if (field) field.focus();
         return;
       }
 
       if (!FORM_ENDPOINT) {
-        say('線上表單尚未啟用，請改寄 ' + FALLBACK_EMAIL + '，我們一樣會回覆您。', 'err');
+        say(T('formNoBackend') + FALLBACK_EMAIL + T('formNoBackend2'), 'err');
         return;
       }
 
-      if (btn) { btn.disabled = true; btn.textContent = '寄送中…'; }
+      if (btn) { btn.disabled = true; btn.textContent = T('formSending'); }
       say('');
 
       // 用 FormData 送出（multipart），瀏覽器不會發 CORS 預檢請求，
@@ -164,12 +184,12 @@
         .then((out) => {
           if (!out || !out.ok) throw new Error((out && out.error) || 'failed');
           letterForm.reset();
-          if (btn) btn.textContent = '已寄出 · 謝謝您';
-          say('收到了，我們會在三個工作日內回覆。', 'ok');
+          if (btn) btn.textContent = T('formSent');
+          say(T('formOk'), 'ok');
         })
         .catch(() => {
           if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
-          say('寄送沒有成功，請改寄 ' + FALLBACK_EMAIL + '，或稍後再試一次。', 'err');
+          say(T('formFail') + FALLBACK_EMAIL + T('formFail2'), 'err');
         });
     });
   }

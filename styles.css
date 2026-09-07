@@ -1019,3 +1019,12 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   margin-bottom: 0;
   max-width: 12em;
 }
+
+/* 語言切換：放在導覽列最後，比其他項目再淡一階，不搶主導覽 */
+.nav-menu .lang-switch a {
+  font-family: var(--font-han);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: var(--tea);
+}
+.nav-menu .lang-switch a:hover { color: var(--ink); }
