@@ -30,11 +30,21 @@ OUT = ROOT / "zh-cn"
 BASE = "https://alexchiachi.github.io/happy/"
 CC = OpenCC("tw2sp")
 
+# 同一個 repo 裡的其他獨立專案，各自有版型與 i18n，不歸這支腳本管。
+# inner-flow（內耗熵值檢測）自己就有一套五語系切換。
 SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
-             "eternitychildbooking", "docs", "tools", "tests", "images", "google")
+             "eternitychildbooking", "inner-flow", "docs", "tools", "tests",
+             "images", "google")
 
-# 這些頁面不做簡體版：inner-flow 是獨立的檢測工具，有自己的版型與 i18n
+# 舊網址的轉址殼，不做簡體版
 SKIP_FILES = {"inner-flow.html"}
+
+# 這些東西只有根目錄那一份，兩種語系共用。簡體頁在 zh-cn/ 底下，
+# 所以路徑都要多退一層，否則會去找 zh-cn/ 底下不存在的檔案。
+SHARED = ("styles.css", "scripts.js", "images/", "inner-flow/", "inner-flow.html")
+
+# 不歸本站管、但仍要出現在 sitemap 裡的獨立專案入口
+EXTRA_URLS = ("inner-flow",)
 
 # 有些內容不是「換字」而是「本來就該不一樣」——最典型的是幣別與報價。
 # key 是頁面路徑，value 是一串（繁體原文 → 簡體版要顯示的字）。
@@ -91,10 +101,11 @@ def sitemap(rels):
             out.append('    <xhtml:link rel="alternate" hreflang="zh-Hans" href="%szh-cn/%s"/>' % (BASE, rel))
             out.append('    <xhtml:link rel="alternate" hreflang="x-default" href="%s%s"/>' % (BASE, rel))
             out.append("  </url>")
-    # 沒有簡體版的頁面，單獨列一筆
-    for name in sorted(SKIP_FILES):
-        if (ROOT / name).exists():
-            out.append("  <url>\n    <loc>%s%s</loc>\n  </url>" % (BASE, name))
+    # 獨立專案自己管內容，這裡只留一筆入口讓它繼續被收錄。
+    # 轉址殼（SKIP_FILES）刻意不列——它是 noindex。
+    for name in EXTRA_URLS:
+        if (ROOT / name / "index.html").exists():
+            out.append("  <url>\n    <loc>%s%s/</loc>\n  </url>" % (BASE, name))
     out.append("</urlset>")
     return "\n".join(out) + "\n"
 
@@ -139,8 +150,9 @@ def main():
         # hreflang（與繁體版同一組）
         cn = cn.replace('<link rel="canonical"',
                         alternates(rel).lstrip("\n") + '\n  <link rel="canonical"', 1)
-        # 靜態資源共用根目錄那一份，所以路徑要多退一層
-        cn = re.sub(r'(href|src)="((?:\.\./)*)(styles\.css|scripts\.js|images/)',
+        # 共用資源與獨立專案都在根目錄，路徑要多退一層
+        shared_re = "|".join(re.escape(s) for s in SHARED)
+        cn = re.sub(r'(href|src)="((?:\.\./)*)(%s)' % shared_re,
                     lambda m: '%s="../%s%s' % (m.group(1), m.group(2), m.group(3)), cn)
         # 內嵌樣式裡的 url(images/…)（--img 首圖）也要一起退一層
         cn = re.sub(r'url\((["\']?)((?:\.\./)*)images/',
@@ -154,11 +166,6 @@ def main():
                         lambda m: m.group(1) + "  "
                         + lang_switch_li("../" + up + rel, "繁體", "zh-Hant")
                         + m.group(1) + "</ul>", cn, count=1)
-
-        # 沒有簡體版的頁面（inner-flow 自己有一套五語系切換），
-        # 連結要指回根目錄那一份，否則在 zh-cn/ 底下會 404。
-        for skip in SKIP_FILES:
-            cn = cn.replace('href="%s"' % skip, 'href="../%s%s"' % (up, skip))
 
         # 語系專屬的內容差異（幣別、報價）
         for old, new in OVERRIDES.get(rel, []):

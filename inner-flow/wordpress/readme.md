@@ -40,7 +40,7 @@
 4. 到「設定 → Inner Flow」選擇報告頁，並填入四段語音導引的網址。
 5. 打開 `https://你的網域/wp-json/inner-flow/v1/health` 確認金鑰與商品 ID 都顯示已設定。
 
-測驗頁（`inner-flow.html`）可以用「自訂 HTML」區塊嵌入，或維持在 GitHub Pages。
+測驗頁（`index.html`）可以用「自訂 HTML」區塊嵌入，或維持在 GitHub Pages。
 它會把測驗結果寫進 `localStorage`，解鎖頁再讀出來——所以使用者去 Gumroad 結帳再回來，
 結果還在。
 

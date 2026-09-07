@@ -1,6 +1,6 @@
 # Inner Flow API
 
-`inner-flow.html` 的 AI 生成後端：依使用者的三維度分數，生成《自洽躍遷破局手冊》
+`index.html` 的 AI 生成後端：依使用者的三維度分數，生成《自洽躍遷破局手冊》
 與身心復位冥想語音。前端只跟這裡說話，Gemini 金鑰永遠留在伺服器端。
 
 ## 快速開始
@@ -12,7 +12,7 @@ npm install
 npm run dev                 # http://localhost:8787
 ```
 
-接著把 `inner-flow.html` 裡的 `API_BASE` 指向這個位址：
+接著把 `index.html` 裡的 `API_BASE` 指向這個位址：
 
 ```js
 var API_BASE = 'http://localhost:8787';

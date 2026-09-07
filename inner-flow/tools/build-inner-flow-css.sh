@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# 重新編譯 inner-flow.html 內嵌的 Tailwind CSS。
+# 重新編譯 inner-flow/index.html 內嵌的 Tailwind CSS。
 #
-# 只要改動了 inner-flow.html 裡的 Tailwind class（或下方的主題設定），
+# 只要改動了 inner-flow/index.html 裡的 Tailwind class（或下方的主題設定），
 # 就跑一次這支腳本，它會重新掃描檔案、編譯出最小化的 CSS，
 # 並寫回 <style id="tailwind-build"> 區塊。需要 Node.js（npx）。
 #
-#   ./tools/build-inner-flow-css.sh
+#   ./inner-flow/tools/build-inner-flow-css.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PAGE="$ROOT/inner-flow.html"
+PAGE="$ROOT/index.html"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 

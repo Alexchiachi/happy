@@ -1,7 +1,7 @@
 /**
  * 內耗檢測 — 免費指南留資接收器
  * ================================================================
- * 把 inner-flow.html 的「下載 PDF 指南」表單送出的資料寫進 Google 試算表。
+ * 把 index.html 的「下載 PDF 指南」表單送出的資料寫進 Google 試算表。
  * 使用者按下按鈕的當下就開始下載，這支腳本只負責留下名單。
  *
  * 和 google-sheet-form.gs 是兩個不同的端點：欄位不同、要進的表也不同，
@@ -28,7 +28,7 @@
  * 6. 複製它給你的網址，長得像：
  *      https://script.google.com/macros/s/AKfycb.../exec
  *
- * 7. 把那串網址填進 inner-flow.html 的表單屬性：
+ * 7. 把那串網址填進 index.html 的表單屬性：
  *      <form id="leadForm" data-endpoint="貼在這裡" ...>
  *    在那之前，使用者仍然拿得到 PDF，只是不會留下任何資料。
  *

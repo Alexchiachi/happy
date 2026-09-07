@@ -1,7 +1,7 @@
 /**
- * 由 tools/guide/7day-guide.html 產生 downloads/inner-flow-7day-guide.pdf。
+ * 由 inner-flow/guide/7day-guide.html 產生 inner-flow/downloads/inner-flow-7day-guide.pdf。
  *
- *   node tools/build-guide-pdf.js
+ *   node inner-flow/tools/build-guide-pdf.js
  *
  * 需要 Node.js、playwright 與 curl。若環境已預裝 Chromium，
  * 可用 CHROMIUM_PATH 指定執行檔路徑。
@@ -17,8 +17,8 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 
-const SRC  = path.join(__dirname, 'guide', '7day-guide.html');
-const TMP  = path.join(__dirname, 'guide', '.7day-guide.build.html');
+const SRC  = path.join(__dirname, '..', 'guide', '7day-guide.html');
+const TMP  = path.join(__dirname, '..', 'guide', '.7day-guide.build.html');
 const OUT  = path.join(__dirname, '..', 'downloads', 'inner-flow-7day-guide.pdf');
 const UA   = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
