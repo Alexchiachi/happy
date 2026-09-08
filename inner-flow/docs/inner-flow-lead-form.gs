@@ -76,10 +76,6 @@ const GUIDE_FILES = {
   '心智流動度': 'inner-flow-7day-guide-flow.pdf',
   '有效做功能力': 'inner-flow-7day-guide-work.pdf',
 };
-
-function guideUrl(bottleneck) {
-  return SITE + 'downloads/' + (GUIDE_FILES[bottleneck] || 'inner-flow-7day-guide.pdf');
-}
 const PRIVACY_URL = 'https://alexchiachi.github.io/happy/privacy.html';
 
 /* ================================================================
@@ -637,6 +633,11 @@ function readPayload(e) {
     }
   }
   return (e && e.parameter) || {};
+}
+
+/** 依瓶頸維度挑指南。對不上（含未完成測驗）時給預設版。 */
+function guideUrl(bottleneck) {
+  return SITE + 'downloads/' + (GUIDE_FILES[bottleneck] || 'inner-flow-7day-guide.pdf');
 }
 
 function isEmail(s) {
