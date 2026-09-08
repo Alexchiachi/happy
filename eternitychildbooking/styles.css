@@ -510,6 +510,8 @@ input, select, textarea { font: inherit; color: inherit; }
 .hours-row:last-child { border-bottom: none; }
 .hours-row .d { color: var(--ink-mute); }
 .hours-row .t { font-variant-numeric: tabular-nums; font-weight: 550; }
+.hours-row.rest { color: var(--gold); }
+.hours-row.rest .d { color: var(--gold); }
 
 .contact-list { display: grid; gap: .3rem; }
 .contact-row {
