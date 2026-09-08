@@ -530,6 +530,8 @@ input, select, textarea { font: inherit; color: inherit; }
 .hours-row:last-child { border-bottom: none; }
 .hours-row .d { color: var(--ink-mute); }
 .hours-row .t { font-variant-numeric: tabular-nums; font-weight: 550; }
+.hours-row.rest { color: var(--gold); }
+.hours-row.rest .d { color: var(--gold); }
 
 .contact-list { display: grid; gap: .3rem; }
 .contact-row {
@@ -888,6 +890,7 @@ a.cv:hover { text-decoration: underline; }
       <div class="hours-row"><span class="d" data-i18n="hours.week">週一至週六</span><span class="t">09:00 – 21:00</span></div>
       <div class="hours-row"><span class="d" data-i18n="hours.thu">週四</span><span class="t">09:00 – 17:00</span></div>
       <div class="hours-row"><span class="d" data-i18n="hours.sun">週日</span><span class="t" data-i18n="hours.sun.value">09:00 – 12:00（僅初診）</span></div>
+      <div class="hours-row rest"><span class="d" data-i18n="hours.break">休息時間</span><span class="t">12:00 – 14:00</span></div>
     </div>
     <div class="info-card">
       <h3 data-i18n="rules.title">預約須知</h3>
@@ -932,7 +935,7 @@ const CONFIG = {
   /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
      ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
        否則瀏覽器會繼續沿用快取裡的舊檔案。 */
-  version: '2.2',
+  version: '2.3',
 
   /* 中心收件信箱：預約明細會寄到這裡 */
   email: 'ahanamita88888888@gmail.com',
@@ -998,6 +1001,11 @@ const CONFIG = {
         extras: ['pulse', 'detail', 'surface', 'lift'] }
     ]
   },
+
+  /* 每日休息時間，這幾段不開放預約。療程若會跨進休息時間也不能預約，
+     例如休息 12:00–14:00 時，11:30 開始的 40 分鐘療程（做到 12:10）會被擋掉。
+     某一天要不同的休息時間，在下方 hours 的那一天加上自己的 breaks 即可。 */
+  breaks: [['12:00', '14:00']],
 
   /* 時段起始間隔（分鐘） */
   slotStep: 30,
@@ -1145,6 +1153,7 @@ const I18N = {
     'hours.title': '營業時間',
     'hours.week': '週一至週六',
     'hours.thu': '週四',
+    'hours.break': '休息時間',
     'hours.sun': '週日',
     'hours.sun.value': '09:00 – 12:00（僅初診）',
     'hours.closed': '休息',
@@ -1326,6 +1335,7 @@ const I18N = {
     'hours.title': 'Opening Hours',
     'hours.week': 'Mon – Sat',
     'hours.thu': 'Thursday',
+    'hours.break': 'Break',
     'hours.sun': 'Sunday',
     'hours.sun.value': '09:00 – 12:00 (first visits only)',
     'hours.closed': 'Closed',
@@ -1507,6 +1517,7 @@ const I18N = {
     'hours.title': '営業時間',
     'hours.week': '月曜〜土曜',
     'hours.thu': '木曜',
+    'hours.break': '休憩時間',
     'hours.sun': '日曜',
     'hours.sun.value': '09:00 – 12:00（初診のみ）',
     'hours.closed': '休業',
@@ -1688,6 +1699,7 @@ const I18N = {
     'hours.title': '영업 시간',
     'hours.week': '월요일 – 토요일',
     'hours.thu': '목요일',
+    'hours.break': '휴식 시간',
     'hours.sun': '일요일',
     'hours.sun.value': '09:00 – 12:00 (초진 전용)',
     'hours.closed': '휴무',
@@ -1862,6 +1874,7 @@ const I18N = {
     'hours.title': 'ساعات العمل',
     'hours.week': 'الاثنين – السبت',
     'hours.thu': 'الخميس',
+    'hours.break': 'فترة الراحة',
     'hours.sun': 'الأحد',
     'hours.sun.value': '09:00 – 12:00 (الزيارات الأولى فقط)',
     'hours.closed': 'مغلق',
@@ -2165,14 +2178,24 @@ const I18N = {
       .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
+  /** 該日的休息時間，單位為分鐘。當日自訂的優先於全域設定。 */
+  function breaksFor(dateKey) {
+    const rule = dayRule(dateKey);
+    const list = (rule && rule.breaks) || CONFIG.breaks || [];
+    return list.map(b => [toMin(b[0]), toMin(b[1])]);
+  }
+
   function slotsFor(dateKey) {
     const rule = dayRule(dateKey);
     if (!rule || dateBlockReason(dateKey)) return [];
     const open = toMin(rule.open), close = toMin(rule.close);
     const dur = state.duration;
     const taken = takenIntervals(dateKey);
+    const rest = breaksFor(dateKey);
     const out = [];
     for (let s = open; s + dur <= close; s += CONFIG.slotStep) {
+      // 療程整段都不能碰到休息時間，跨進去的起始點直接不列出
+      if (rest.some(b => s < b[1] && (s + dur) > b[0])) continue;
       const busy = taken.some(iv => s < iv[1] && (s + dur) > iv[0]);
       out.push({ start: s, label: toHHMM(s), disabled: busy });
     }

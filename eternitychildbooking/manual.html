@@ -313,7 +313,7 @@
       這本手冊教你怎麼照顧線上預約網站。不用會寫程式，照著步驟做就好。
       看不懂的字，最後一段有解釋。
     </p>
-    <div class="stamp">目前網站版本 <b>v2.2</b></div>
+    <div class="stamp">目前網站版本 <b>v2.3</b></div>
   </header>
 
   <div class="layout">
@@ -459,6 +459,8 @@
           <ol>
             <li>找到要改的那一天。</li>
             <li><code>open</code> 是開門時間，<code>close</code> 是關門時間。</li>
+            <li>中午休息時間在 <code>breaks</code> 那一行，目前是 <code>[['12:00', '14:00']]</code>。
+              某一天要不一樣，就在那一天自己加一行 <code>breaks</code>。</li>
             <li>照原本的格式改，例如把 <code>'21:00'</code> 改成 <code>'20:00'</code>。</li>
           </ol>
           <div class="warn" style="margin-top:.9rem">
@@ -527,8 +529,8 @@
           <table>
             <thead><tr><th>檔案</th><th>找什麼</th><th>改成</th></tr></thead>
             <tbody>
-              <tr><td class="num">config.js</td><td><code>version: '2.2'</code></td><td><code>version: '2.3'</code></td></tr>
-              <tr><td class="num">index.html</td><td>四個 <code>?v=2.2</code></td><td>四個 <code>?v=2.3</code></td></tr>
+              <tr><td class="num">config.js</td><td><code>version: '2.3'</code></td><td><code>version: '2.4'</code></td></tr>
+              <tr><td class="num">index.html</td><td>四個 <code>?v=2.3</code></td><td>四個 <code>?v=2.4</code></td></tr>
             </tbody>
           </table>
         </div>
@@ -728,6 +730,7 @@
               <tr><td>週一至週六</td><td class="num">09:00 – 21:00</td></tr>
               <tr><td>週四</td><td class="num">09:00 – 17:00</td></tr>
               <tr><td>週日</td><td class="num">09:00 – 12:00（只有初診可約）</td></tr>
+              <tr><td>休息時間</td><td class="num">12:00 – 14:00（每天，不開放預約）</td></tr>
               <tr><td>可預約範圍</td><td>今天起七天之後，最多四個月內</td></tr>
               <tr><td>時段間隔</td><td class="num">30 分鐘</td></tr>
               <tr><td>40 分鐘 / 擇三</td><td class="num">NT$ 1,688</td></tr>
@@ -752,7 +755,7 @@
       </section>
 
       <footer class="end">
-        本手冊對應網站版本 v2.2。網站改版後，若操作步驟有變動，請一併更新這份手冊。
+        本手冊對應網站版本 v2.3。網站改版後，若操作步驟有變動，請一併更新這份手冊。
       </footer>
 
     </main>

@@ -194,14 +194,24 @@
       .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
   }
 
+  /** 該日的休息時間，單位為分鐘。當日自訂的優先於全域設定。 */
+  function breaksFor(dateKey) {
+    const rule = dayRule(dateKey);
+    const list = (rule && rule.breaks) || CONFIG.breaks || [];
+    return list.map(b => [toMin(b[0]), toMin(b[1])]);
+  }
+
   function slotsFor(dateKey) {
     const rule = dayRule(dateKey);
     if (!rule || dateBlockReason(dateKey)) return [];
     const open = toMin(rule.open), close = toMin(rule.close);
     const dur = state.duration;
     const taken = takenIntervals(dateKey);
+    const rest = breaksFor(dateKey);
     const out = [];
     for (let s = open; s + dur <= close; s += CONFIG.slotStep) {
+      // 療程整段都不能碰到休息時間，跨進去的起始點直接不列出
+      if (rest.some(b => s < b[1] && (s + dur) > b[0])) continue;
       const busy = taken.some(iv => s < iv[1] && (s + dur) > iv[0]);
       out.push({ start: s, label: toHHMM(s), disabled: busy });
     }
