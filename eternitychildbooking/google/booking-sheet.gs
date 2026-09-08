@@ -6,6 +6,7 @@
  *   1. 在試算表新增一列（含狀態欄，可直接當後台管理）
  *   2. 寄一封通知信到中心信箱（可直接按「回覆」回信給客人）
  *   3. 依客人選的語言，自動回一封確認信給客人
+ *   4. 在中心的 Google 日曆上建立一個活動（取消時會自動移除）
  *
  * 部署步驟見同資料夾的 README.md。
  */
@@ -22,14 +23,36 @@ const SPREADSHEET_ID = '';
 /* 中心位置：會附在客人的確認信裡，方便當天找路。 */
 const CENTER_MAP_URL = 'https://maps.google.com/?cid=12726538179269329750';
 
+/* 狀態欄的選項。含「取消」二字的狀態＝該時段釋出，其餘視為佔用。
+   要新增狀態就加在這裡，含「取消」的請放最後一個。 */
+const STATUS_OPTIONS = ['待確認', '已確認', '已完成', '已取消'];
+const STATUS_COL = 3;          // 「狀態」是第 3 欄（C 欄）
+const STATUS_ROWS = 2000;      // 下拉選單套用到第幾列
+
 const HEADERS = [
   '送出時間', '預約編號', '狀態', '日期', '開始', '結束',
   '服務項目', '選擇部位', '看診類型', '分鐘', '金額',
   '姓名', '電話', 'Email', '語言', '匯款末五碼', '備註',
   /* 新欄位一律往後加。插在中間會讓試算表裡既有的列全部錯位，
      因為表頭只在工作表為空時才會寫入。 */
-  '加贈項目'
+  '加贈項目',
+  '行事曆ID'
 ];
+
+/* ---------- Google 日曆 ---------- */
+
+/* 預約成立後，自動在行事曆上開一個活動；狀態改成「已取消」時自動移除。
+   活動會建在「執行這支程式的帳號」的行事曆上，也就是部署時登入的那個帳號
+   （CENTER_EMAIL）。想把預約分到另一本日曆，就把名稱填進 CALENDAR_NAME，
+   程式第一次執行時會自動幫你建立。 */
+const CALENDAR_ENABLED = true;
+const CALENDAR_NAME = '';                 // 留空＝主要行事曆；也可填 '永恆之子預約'
+const CALENDAR_INVITE_CUSTOMER = false;   // true＝把客人加成邀請對象（會寄邀請信給客人）
+const TIMEZONE = 'Asia/Taipei';           // 預約時間的時區，跟預約頁一致
+const CAL_COL = HEADERS.indexOf('行事曆ID') + 1;   // 「行事曆ID」是第 19 欄（S 欄）
+
+/* 活動標題前面的小圖示，一眼看出這筆處理到哪。 */
+const STATUS_ICON = { '待確認': '⏳', '已確認': '✅', '已完成': '☑️', '已取消': '✖️' };
 
 /* ---------- 收單 ---------- */
 
@@ -73,6 +96,19 @@ function doPost(e) {
       (d.extrasLabels || []).join('、')
     ]);
 
+    // 讓新增的這一列也能用下拉選單改狀態
+    try {
+      sheet.getRange(sheet.getLastRow(), STATUS_COL).setDataValidation(
+        SpreadsheetApp.newDataValidation()
+          .requireValueInList(STATUS_OPTIONS, true).setAllowInvalid(false).build());
+    } catch (e) { Logger.log('狀態選單設定失敗：' + e); }
+
+    // 寫進行事曆。失敗不影響預約本身，只留在執行記錄裡。
+    try {
+      const ev = createEvent_(d, '待確認');
+      if (ev) sheet.getRange(sheet.getLastRow(), CAL_COL).setValue(ev.getId());
+    } catch (e) { Logger.log('行事曆建立失敗：' + e); }
+
     notifyCentre_(d);
     notifyCustomer_(d);
     return json_({ ok: true, ref: d.ref || '' });
@@ -111,6 +147,10 @@ function testWrite() {
   const out = doPost({ postData: { contents: JSON.stringify(demo) } });
   Logger.log('執行結果：' + out.getContent());
   Logger.log('試算表：' + getSpreadsheet_().getUrl());
+  Logger.log('提示：第一次使用請到試算表的「預約管理」選單各執行一次' +
+             '「重新設定狀態選單與顏色」與「開啟行事曆自動同步」。');
+  Logger.log('這筆測試也會出現在行事曆上，確認過後把試算表那一列的狀態改成' +
+             '「已取消」，活動就會自動消失。');
 }
 
 /**
@@ -187,12 +227,326 @@ function getSheet_() {
   const ss = getSpreadsheet_();
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
+  // 欄位數不夠（例如工作表被裁過）就補足，不然讀寫最後幾欄會出錯。
+  const missing = HEADERS.length - sheet.getMaxColumns();
+  if (missing > 0) sheet.insertColumnsAfter(sheet.getMaxColumns(), missing);
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(HEADERS);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
     sheet.setFrozenRows(1);
+  } else {
+    // 之後版本新增的欄位（例如「行事曆ID」）補上標題，既有資料不會被動到。
+    const head = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+    for (let i = 0; i < HEADERS.length; i++) {
+      if (!String(head[i] || '').trim()) {
+        sheet.getRange(1, i + 1).setValue(HEADERS[i]).setFontWeight('bold');
+      }
+    }
   }
   return sheet;
+}
+
+/**
+ * 幫「狀態」欄裝上下拉選單與顏色標示。
+ * 手動打字容易打錯（例如「取消」打成「取銷」），時段就解不開；
+ * 改成選單之後就不會有這個問題。可重複執行，不會累積重複設定。
+ */
+function setupStatusColumn() {
+  const sheet = getSheet_();
+  const range = sheet.getRange(2, STATUS_COL, STATUS_ROWS, 1);
+
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(STATUS_OPTIONS, true)
+    .setAllowInvalid(false)
+    .setHelpText('請從選單選擇。選「已取消」後，該時段會重新開放預約。')
+    .build();
+  range.setDataValidation(rule);
+
+  // 一眼看出哪些要處理、哪些已經取消
+  const cancelled = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=REGEXMATCH($C2&"", "取消")')
+    .setBackground('#f3f3f3').setFontColor('#9aa0a6')
+    .setRanges([sheet.getRange(2, 1, STATUS_ROWS, HEADERS.length)]).build();
+  const pending = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=$C2="待確認"')
+    .setBackground('#fdf3e2')
+    .setRanges([sheet.getRange(2, 1, STATUS_ROWS, HEADERS.length)]).build();
+  sheet.setConditionalFormatRules([cancelled, pending]);
+
+  return sheet;
+}
+
+/* ---------- 試算表上的操作選單 ---------- */
+
+/** 開啟試算表時，在功能表列加上「預約管理」。 */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('預約管理')
+    .addItem('把選取的預約標為「已取消」', 'markCancelled')
+    .addItem('把選取的預約標為「已確認」', 'markConfirmed')
+    .addSeparator()
+    .addItem('重新設定狀態選單與顏色', 'setupStatusColumn')
+    .addItem('查看目前已佔用的時段', 'showTakenSlots')
+    .addSeparator()
+    .addItem('開啟行事曆自動同步', 'installTriggers')
+    .addItem('把現有預約補建到行事曆', 'syncAllCalendar')
+    .addToUi();
+}
+
+function markCancelled()  { setStatusOnSelection_('已取消'); }
+function markConfirmed()  { setStatusOnSelection_('已確認'); }
+
+/** 把游標所在（或選取範圍內）每一列的狀態改成指定值。 */
+function setStatusOnSelection_(status) {
+  const ui = SpreadsheetApp.getUi();
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  if (sheet.getName() !== SHEET_NAME) {
+    ui.alert('請先切到「' + SHEET_NAME + '」這個分頁再操作。');
+    return;
+  }
+  const sel = sheet.getActiveRange();
+  if (!sel) { ui.alert('請先點一下要修改的那一列。'); return; }
+
+  const first = Math.max(sel.getRow(), 2);            // 不動標題列
+  const last  = sel.getRow() + sel.getNumRows() - 1;
+  if (last < 2) { ui.alert('請先點一下要修改的那一列。'); return; }
+
+  const names = [];
+  for (let r = first; r <= last; r++) {
+    sheet.getRange(r, STATUS_COL).setValue(status);
+    names.push(sheet.getRange(r, 12).getValue() || ('第 ' + r + ' 列'));   // 姓名在第 12 欄
+    try { syncRowCalendar_(sheet, r); } catch (e) { Logger.log('行事曆同步失敗：' + e); }
+  }
+  const note = status.indexOf('取消') !== -1
+    ? '\n\n這些時段已重新開放預約（客人的頁面約 30 秒後、或重新整理即可看到），' +
+      '行事曆上的活動也已經移除。'
+    : '\n\n行事曆上的活動已同步更新。';
+  ui.alert('已將 ' + names.length + ' 筆改為「' + status + '」：\n' + names.join('、') + note);
+}
+
+/** 用對話框列出目前被佔用的時段，方便快速確認。 */
+function showTakenSlots() {
+  const taken = takenSlots_();
+  const dates = Object.keys(taken).sort();
+  if (!dates.length) {
+    SpreadsheetApp.getUi().alert('目前沒有任何已成立的預約。');
+    return;
+  }
+  const lines = dates.map(function (d) {
+    const times = taken[d]
+      .sort(function (a, b) { return a[0] - b[0]; })
+      .map(function (iv) { return minLabel_(iv[0]) + '–' + minLabel_(iv[1]); })
+      .join('、');
+    return prettyDate_(d) + '　' + times;
+  });
+  SpreadsheetApp.getUi().alert('目前已佔用的時段\n\n' + lines.join('\n'));
+}
+
+function minLabel_(m) {
+  return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + (m % 60)).slice(-2);
+}
+
+/* ---------- 行事曆 ---------- */
+
+/**
+ * 取得要寫入的行事曆。
+ * CALENDAR_NAME 留空就用這個帳號的主要行事曆；有填名稱就找同名的，找不到就自動建一本。
+ */
+function getBookingCalendar_() {
+  if (!CALENDAR_ENABLED) return null;
+  if (!CALENDAR_NAME) return CalendarApp.getDefaultCalendar();
+  const found = CalendarApp.getCalendarsByName(CALENDAR_NAME);
+  if (found && found.length) return found[0];
+  const cal = CalendarApp.createCalendar(CALENDAR_NAME);
+  cal.setTimeZone(TIMEZONE);
+  cal.setColor(CalendarApp.Color.GREEN);
+  return cal;
+}
+
+/** 'YYYY-MM-DD' + 'HH:MM' → 真正的時間點（固定用台北時間解讀，不受指令碼時區影響）。 */
+function toDateTime_(dateStr, timeStr) {
+  if (!dateStr || !timeStr) return null;
+  const dt = Utilities.parseDate(dateStr + ' ' + timeStr, TIMEZONE, 'yyyy-MM-dd HH:mm');
+  return isNaN(dt.getTime()) ? null : dt;
+}
+
+function join_(v) {
+  return Array.isArray(v) ? v.filter(String).join('、') : String(v || '');
+}
+
+function eventTitle_(status, b) {
+  const icon = STATUS_ICON[status] || '';
+  const service = b.serviceLabel || b.service || '預約';
+  return (icon ? icon + ' ' : '') + (b.name || '客人') + '　' + service +
+         (b.durationMinutes ? '（' + b.durationMinutes + ' 分）' : '');
+}
+
+/** 行事曆活動的說明欄：把當天要知道的事一次寫齊，手機上點開就看得到。 */
+function eventDescription_(b, status) {
+  return [
+    '預約編號：' + (b.ref || ''),
+    '狀態：' + (status || '待確認'),
+    '',
+    '服務項目：' + (b.serviceLabel || b.service || ''),
+    join_(b.partsLabels) ? '選擇部位：' + join_(b.partsLabels) : null,
+    join_(b.extrasLabels) ? '加贈項目：' + join_(b.extrasLabels) : null,
+    '看診類型：' + (b.visit === 'first' || b.visit === '初診' ? '初診' : '回診'),
+    '費用：' + money_(b.price),
+    '',
+    '姓名：' + (b.name || ''),
+    '電話：' + (b.phone || ''),
+    'Email：' + (b.email || ''),
+    '溝通語言：' + (LANG_NAME[b.preferredLanguage] || b.preferredLanguage || ''),
+    '匯款末五碼：' + (b.transferLast5 || '（尚未填寫）'),
+    '備註：' + (b.notes || '—'),
+    '',
+    '※ 這個活動由預約系統自動建立。要取消請到試算表把狀態改成「已取消」，',
+    '　 活動會自動移除，該時段也會重新開放預約。'
+  ].filter(function (l) { return l !== null; }).join('\n');
+}
+
+/** 依一筆預約資料建立行事曆活動，回傳建立好的活動（沒開啟或資料不全時回傳 null）。 */
+function createEvent_(b, status) {
+  const cal = getBookingCalendar_();
+  if (!cal) return null;
+  const start = toDateTime_(b.date, b.startTime);
+  const end   = toDateTime_(b.date, b.endTime);
+  if (!start || !end || end <= start) {
+    Logger.log('行事曆略過：時間看不懂（' + b.date + ' ' + b.startTime + '–' + b.endTime + '）');
+    return null;
+  }
+  const options = {
+    description: eventDescription_(b, status),
+    location: CENTER_NAME
+  };
+  if (CALENDAR_INVITE_CUSTOMER && b.email) {
+    options.guests = b.email;
+    options.sendInvites = true;
+  }
+  const ev = cal.createEvent(eventTitle_(status || '待確認', b), start, end, options);
+  try { ev.addPopupReminder(60); } catch (e) { Logger.log('提醒設定失敗：' + e); }
+  return ev;
+}
+
+/** 把試算表的一列轉成跟預約頁送來的資料同樣的形狀。 */
+function rowToBooking_(sheet, row) {
+  const v = sheet.getRange(row, 1, 1, HEADERS.length).getValues()[0];
+  const tz = Session.getScriptTimeZone();
+  const startMin = toMinutes_(v[4], tz);
+  const endMin   = toMinutes_(v[5], tz);
+  return {
+    ref: String(v[1] || ''),
+    status: String(v[2] || ''),
+    date: fmtDate_(v[3], tz),
+    startTime: startMin === null ? '' : minLabel_(startMin),
+    endTime: endMin === null ? '' : minLabel_(endMin),
+    serviceLabel: String(v[6] || ''),
+    partsLabels: String(v[7] || ''),
+    visit: String(v[8] || ''),
+    durationMinutes: v[9] || '',
+    price: v[10] || '',
+    name: String(v[11] || ''),
+    phone: String(v[12] || ''),
+    email: String(v[13] || ''),
+    preferredLanguage: String(v[14] || ''),
+    transferLast5: String(v[15] || ''),
+    notes: String(v[16] || ''),
+    extrasLabels: String(v[17] || ''),
+    eventId: String(v[18] || '')
+  };
+}
+
+/**
+ * 讓某一列的行事曆活動跟試算表一致：
+ *   狀態含「取消」→ 移除活動；其他狀態 → 沒有就建立、有就更新標題與說明。
+ */
+function syncRowCalendar_(sheet, row) {
+  if (!CALENDAR_ENABLED) return;
+  const b = rowToBooking_(sheet, row);
+  if (!b.date) return;                       // 空白列
+  const cal = getBookingCalendar_();
+  if (!cal) return;
+
+  let ev = null;
+  if (b.eventId) {
+    try { ev = cal.getEventById(b.eventId); } catch (e) { ev = null; }
+  }
+
+  if (b.status.indexOf('取消') !== -1) {
+    if (ev) { try { ev.deleteEvent(); } catch (e) { Logger.log('刪除活動失敗：' + e); } }
+    sheet.getRange(row, CAL_COL).setValue('');
+    return;
+  }
+
+  if (!ev) {
+    const created = createEvent_(b, b.status || '待確認');
+    sheet.getRange(row, CAL_COL).setValue(created ? created.getId() : '');
+    return;
+  }
+
+  ev.setTitle(eventTitle_(b.status || '待確認', b));
+  ev.setDescription(eventDescription_(b, b.status));
+  const start = toDateTime_(b.date, b.startTime);
+  const end   = toDateTime_(b.date, b.endTime);
+  if (start && end && end > start &&
+      (ev.getStartTime().getTime() !== start.getTime() ||
+       ev.getEndTime().getTime() !== end.getTime())) {
+    ev.setTime(start, end);                  // 有人在試算表改了日期或時間
+  }
+}
+
+/**
+ * 在試算表改動「狀態」欄時自動同步行事曆。
+ * 這是「可安裝的觸發器」，要先執行一次選單的「開啟行事曆自動同步」才會生效
+ * （內建的簡易 onEdit 沒有存取行事曆的權限，所以不能用）。
+ */
+function onStatusEdit(e) {
+  if (!e || !e.range) return;
+  const sheet = e.range.getSheet();
+  if (sheet.getName() !== SHEET_NAME) return;
+  const col = e.range.getColumn();
+  const numCols = e.range.getNumColumns();
+  if (col > STATUS_COL || col + numCols - 1 < STATUS_COL) return;   // 沒動到狀態欄
+  const first = Math.max(e.range.getRow(), 2);
+  const last  = e.range.getRow() + e.range.getNumRows() - 1;
+  for (let r = first; r <= last; r++) {
+    try { syncRowCalendar_(sheet, r); } catch (err) { Logger.log('自動同步失敗：' + err); }
+  }
+}
+
+/** 建立上面那個觸發器。重複執行不會累積，會先把舊的清掉。 */
+function installTriggers() {
+  const ss = getSpreadsheet_();
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'onStatusEdit') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('onStatusEdit').forSpreadsheet(ss).onEdit().create();
+  try {
+    SpreadsheetApp.getUi().alert(
+      '行事曆自動同步已開啟。\n\n' +
+      '之後在「狀態」欄改成「已取消」，行事曆上的活動會自動消失；' +
+      '改回其他狀態則會重新建立。');
+  } catch (e) { Logger.log('已建立 onStatusEdit 觸發器'); }
+}
+
+/** 把試算表裡「今天以後、未取消、還沒有行事曆ID」的預約補建到行事曆。 */
+function syncAllCalendar() {
+  const sheet = getSheet_();
+  const ui = SpreadsheetApp.getUi();
+  const last = sheet.getLastRow();
+  if (last < 2) { ui.alert('目前沒有任何預約。'); return; }
+
+  const today = Utilities.formatDate(new Date(), TIMEZONE, 'yyyy-MM-dd');
+  let done = 0, skipped = 0;
+  for (let r = 2; r <= last; r++) {
+    const b = rowToBooking_(sheet, r);
+    if (!b.date) continue;
+    if (b.date < today) { skipped++; continue; }        // 過去的預約不補
+    try { syncRowCalendar_(sheet, r); done++; }
+    catch (e) { Logger.log('第 ' + r + ' 列同步失敗：' + e); }
+  }
+  ui.alert('行事曆同步完成。\n\n已處理 ' + done + ' 筆（今天以後的預約）' +
+           (skipped ? '，略過 ' + skipped + ' 筆過去的預約。' : '。'));
 }
 
 function notifyCentre_(d) {
