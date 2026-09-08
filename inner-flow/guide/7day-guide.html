@@ -75,7 +75,7 @@
   }
   .day-title { font-size: 20pt; line-height: 1.6; margin-top: 4mm; }
   .block { margin-top: 11mm; }
-  .block .label {
+  .block .label, .write .label {
     font-size: 8.5pt; letter-spacing: .28em; color: var(--sage);
     display: block; margin-bottom: 4mm;
   }
@@ -85,6 +85,43 @@
   .page.day { display: flex; flex-direction: column; }
   .page.day .reminder { margin-top: auto; margin-bottom: 12mm; }
   .reminder p { font-family: "Noto Serif TC", serif; font-size: 12pt; line-height: 1.95; color: var(--clay); }
+
+  /* --- 每日頁的書寫區 ---
+     每一天都叫讀者「寫成一句話」「寫下三個摩擦」，卻沒有地方可以寫，
+     版面中間也因此空了三分之一。把那塊空白變成真的可以下筆的地方。 */
+  .write { margin-top: 10mm; }
+  .write .line { border-bottom: .35pt solid rgba(42,39,35,.18); margin-top: 9.5mm; }
+
+  /* --- 七天地圖 ---
+     十一頁的文件沒有任何一頁看得到整週的形狀。
+     這一頁把三個階段的弧線攤開：守住 → 讓它流動 → 讓它變成東西。 */
+  .map .phase { margin-top: 10mm; border-left: .6pt solid rgba(166,124,82,.35); padding-left: 7mm; }
+  .map .phase-name { font-size: 8.5pt; letter-spacing: .28em; color: var(--sage); text-transform: uppercase; }
+  .map .phase-note { font-size: 9.5pt; color: rgba(42,39,35,.55); margin-top: 2mm; letter-spacing: .05em; }
+  .map .row { display: flex; align-items: baseline; gap: 5mm; margin-top: 6mm; }
+  .map .row .n {
+    font-family: "Noto Serif TC", serif; font-weight: 200; font-size: 15pt;
+    color: rgba(166,124,82,.75); min-width: 9mm;
+  }
+  .map .row .t { font-family: "Noto Serif TC", serif; font-size: 12pt; letter-spacing: .06em; }
+  .map .row .d { font-size: 9.5pt; color: rgba(42,39,35,.55); letter-spacing: .04em; }
+
+  /* --- 七天追蹤表 ---
+     整份指南唯一一頁是「拿去用」的，不是拿來讀的。
+     欄線刻意細，讓寫上去的字比表格本身重。 */
+  .log table { width: 100%; border-collapse: collapse; margin-top: 9mm; }
+  .log th {
+    font-size: 8pt; letter-spacing: .2em; color: var(--sage); font-weight: 400;
+    text-align: left; text-transform: uppercase;
+    padding-bottom: 3mm; border-bottom: .5pt solid rgba(42,39,35,.28);
+  }
+  .log td { border-bottom: .35pt solid rgba(42,39,35,.16); height: 17mm; vertical-align: bottom; padding-bottom: 2mm; }
+  .log td.n { font-family: "Noto Serif TC", serif; font-size: 13pt; color: rgba(166,124,82,.75); width: 16mm; }
+  .log td.dim-of { font-size: 8.5pt; color: rgba(42,39,35,.45); letter-spacing: .04em; width: 26mm; }
+  .log td.tick { width: 14mm; text-align: center; color: rgba(42,39,35,.22); font-size: 13pt; }
+  .log tbody tr:last-child td { border-bottom: none; }
+  .log .after { margin-top: 11mm; border-top: .35pt solid rgba(42,39,35,.16); padding-top: 7mm; }
+  .log .after p { font-family: "Noto Serif TC", serif; font-size: 11.5pt; line-height: 1.95; color: var(--clay); }
 
   /* --- 結尾頁 --- */
   .closing .box { margin-top: 12mm; border: .4pt solid rgba(122,139,123,.45); padding: 9mm; background: rgba(122,139,123,.06); }
@@ -155,6 +192,47 @@
   <div class="folio"><span>7 天能量自洽復位指南</span><span>03</span></div>
 </section>
 
+<!-- ============ 七天地圖 ============ -->
+<section class="page map">
+  <div class="head">
+    <div class="eyebrow">The Seven Days</div>
+    <h2>這七天會走的路</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p>順序不是隨意排的。先把牆立起來，能量才留得住；留得住，才有東西可以流動；
+     流得動，才談得上把它變成看得見的成果。跳著做也可以，但照順序走比較省力。</p>
+
+  <div class="phase">
+    <div class="phase-name">Day 1–2 · 邊界防禦力</div>
+    <div class="phase-note">先止漏。這一項不修，後面兩項補多少都會漏回去。</div>
+    <div class="row"><span class="n">01</span><span class="t">命名你的滲漏點</span><span class="d">只觀察，不修正</span></div>
+    <div class="row"><span class="n">02</span><span class="t">在刺激與回應之間，留一道縫</span><span class="d">練習不立刻回應</span></div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-name">Day 3–4 · 心智流動度</div>
+    <div class="phase-note">讓舊的先走完。通道塞著，新的能量進來也只是堆積。</div>
+    <div class="row"><span class="n">03</span><span class="t">清空：心智不是儲藏室</span><span class="d">把待辦移出腦袋</span></div>
+    <div class="row"><span class="n">04</span><span class="t">完成即釋放：停止重演</span><span class="d">為一件事寫下結論</span></div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-name">Day 5–6 · 有效做功能力</div>
+    <div class="phase-note">讓能量變成看得見的東西。守得住、流得動，只差這一步。</div>
+    <div class="row"><span class="n">05</span><span class="t">一日一事</span><span class="d">只挑一件，做完就算數</span></div>
+    <div class="row"><span class="n">06</span><span class="t">移除一個摩擦</span><span class="d">修掉一個每天都在耗的小卡點</span></div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-name">Day 7 · 整合</div>
+    <div class="phase-note">把偶然發生過的好狀態，變成可以重複的結構。</div>
+    <div class="row"><span class="n">07</span><span class="t">從偶然的好狀態，到可重複的結構</span><span class="d">回看這六天</span></div>
+  </div>
+
+  <div class="folio"><span>7 天能量自洽復位指南</span><span>04</span></div>
+</section>
+
 <!-- ============ Day 1 ============ -->
 <section class="page day">
   <div class="eyebrow">Day One · 邊界防禦力</div>
@@ -171,11 +249,20 @@
     <p>睡前，把這三個瞬間各寫成一句話。不加解釋，不想解決方案，不評價自己。寫完就闔上。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>能量的流失多半不在大事，<br />而在那些你以為「順手就好」的瞬間。</p>
   </div>
 
-  <div class="folio"><span>Day 1 · 命名你的滲漏點</span><span>04</span></div>
+  <div class="folio"><span>Day 1 · 命名你的滲漏點</span><span>05</span></div>
 </section>
 
 <!-- ============ Day 2 ============ -->
@@ -194,11 +281,20 @@
     <p>等待的那三十分鐘裡，觀察焦躁如何升起，又如何自己落下。睡前寫一句：今天最難等的那一則是什麼？為什麼是它？</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>邊界不是拒絕，<br />是把回應的節奏拿回自己手上。</p>
   </div>
 
-  <div class="folio"><span>Day 2 · 留一道縫</span><span>05</span></div>
+  <div class="folio"><span>Day 2 · 留一道縫</span><span>06</span></div>
 </section>
 
 <!-- ============ Day 3 ============ -->
@@ -217,11 +313,20 @@
     <p>睡前三分鐘，把腦中所有未完的事倒在一張紙上。不分輕重、不排順序、不寫解法，能想到什麼寫什麼。時間到就停筆闔上，不重讀。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>清單通常比你想像的短。<br />讓你疲憊的是它懸浮著，不是它很長。</p>
   </div>
 
-  <div class="folio"><span>Day 3 · 清空</span><span>06</span></div>
+  <div class="folio"><span>Day 3 · 清空</span><span>07</span></div>
 </section>
 
 <!-- ============ Day 4 ============ -->
@@ -240,11 +345,20 @@
     <p>為它寫下一句結論，句型是：「這件事讓我知道了……」。寫完就收起來。之後每當它又在腦中開始重演，回到那句結論，然後把注意力交給眼前的事。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>反覆推演不會改變過去，<br />只會讓過去持續向你收費。</p>
   </div>
 
-  <div class="folio"><span>Day 4 · 完成即釋放</span><span>07</span></div>
+  <div class="folio"><span>Day 4 · 完成即釋放</span><span>08</span></div>
 </section>
 
 <!-- ============ Day 5 ============ -->
@@ -263,11 +377,20 @@
     <p>睡前寫下今天做成的那一件事，以及完成它花了多久。連續記錄幾天，你會看見自己真實的產能節奏，而不是想像中的。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>忙碌與做功是兩件事。<br />只有後者會累積成你能指認的東西。</p>
   </div>
 
-  <div class="folio"><span>Day 5 · 一日一事</span><span>08</span></div>
+  <div class="folio"><span>Day 5 · 一日一事</span><span>09</span></div>
 </section>
 
 <!-- ============ Day 6 ============ -->
@@ -286,11 +409,20 @@
     <p>今天就把它永久解決：建一個捷徑、寫一份範本、直接把話講清楚、或乾脆停掉那件事。三分鐘做不完的，就先做三分鐘。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>不必重建整個系統，<br />只要讓它少漏一個地方。</p>
   </div>
 
-  <div class="folio"><span>Day 6 · 移除一個摩擦</span><span>09</span></div>
+  <div class="folio"><span>Day 6 · 移除一個摩擦</span><span>10</span></div>
 </section>
 
 <!-- ============ Day 7 ============ -->
@@ -309,11 +441,20 @@
     <p>挑出兩個對你最有效的練習，各給它一個固定的時間點——例如「每週日晚上清空」、「每天早上先做一件事」。寫下來，貼在你會看見的地方。只挑兩個，多了就撐不住。</p>
   </div>
 
+  <div class="write">
+    <span class="label">寫下來</span>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
   <div class="reminder">
     <p>秩序不是靠意志維持的，<br />是靠結構自動運轉的。</p>
   </div>
 
-  <div class="folio"><span>Day 7 · 建立你的週期</span><span>10</span></div>
+  <div class="folio"><span>Day 7 · 建立你的週期</span><span>11</span></div>
 </section>
 
 <!-- ============ 第八天 ============ -->
@@ -333,9 +474,44 @@
     <p>完整的破局報告會依你的能量類型，拆解耗散發生的具體路徑、給出四階段的復位路線圖與十二個情境腳本，並附語音導引。你可以在測驗結果頁找到它——但先把這七天做完，再決定要不要往下走。</p>
   </div>
 
-  <p style="margin-top:14mm" class="muted" style="font-size:9pt">本指南為自我覺察用途，不構成醫療或心理診斷建議。若你的狀態已明顯影響睡眠、飲食或日常功能，請尋求專業協助。</p>
+  <p class="muted" style="margin-top:14mm;font-size:9pt">本指南為自我覺察用途，不構成醫療或心理診斷建議。若你的狀態已明顯影響睡眠、飲食或日常功能，請尋求專業協助。</p>
 
-  <div class="folio"><span>Inner Flow Assessment</span><span>11</span></div>
+  <div class="folio"><span>Inner Flow Assessment</span><span>12</span></div>
+</section>
+
+<!-- ============ 七天追蹤表 ============ -->
+<section class="page log">
+  <div class="head">
+    <div class="eyebrow">Your Seven Days</div>
+    <h2>把這一頁印出來</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p>七天結束後，這一頁比任何一段文字都有用——它會告訴你哪一天你其實沒有做，
+     以及在你以為毫無進展的那幾天，實際上發生了什麼。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th><th>日期</th><th style="text-align:center">做了</th><th>今天最耗能的一刻</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="n">01</td><td class="dim-of">邊界防禦力</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">02</td><td class="dim-of">邊界防禦力</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">03</td><td class="dim-of">心智流動度</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">04</td><td class="dim-of">心智流動度</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">05</td><td class="dim-of">有效做功能力</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">06</td><td class="dim-of">有效做功能力</td><td class="tick">○</td><td></td></tr>
+      <tr><td class="n">07</td><td class="dim-of">整合</td><td class="tick">○</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="after">
+    <p>七天之後回去重測一次。<br />要看的不是熵值降了幾分，是哪一個維度先動了。</p>
+  </div>
+
+  <div class="folio"><span>Inner Flow Assessment</span><span>13</span></div>
 </section>
 
 </body>
