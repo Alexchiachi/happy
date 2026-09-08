@@ -10,8 +10,8 @@
 | 路徑 | 是什麼 |
 |---|---|
 | `index.html` | 檢測頁本體。Tailwind 已預先編譯內嵌，單檔即可運作 |
-| `guide/7day-guide.html` | 《七日指南》PDF 的排版原稿 |
-| `downloads/inner-flow-7day-guide.pdf` | 上面那份的成品，頁面直接提供下載 |
+| `guide/7day-guide.html` | 《七日指南》PDF 的排版原稿，四個版本共用這一份 |
+| `downloads/*.pdf` | 上面那份的成品，四份：依瓶頸維度給對應的一份 |
 | `images/` | 這支工具專用的 favicon 與 OG 圖 |
 | `server/` | AI 生成後端（TypeScript）。依三維度分數生成《自洽躍遷破局手冊》 |
 | `wordpress/` | WordPress 外掛版本，含 Gumroad 授權碼驗證與報告生成 |
@@ -26,7 +26,7 @@
 ./inner-flow/tools/build-inner-flow-css.sh
 ```
 
-**改了七日指南的內容** —— 重新產生 PDF：
+**改了七日指南的內容** —— 重新產生四份 PDF：
 
 ```bash
 node inner-flow/tools/build-guide-pdf.js
@@ -34,6 +34,23 @@ node inner-flow/tools/build-guide-pdf.js
 
 （這支腳本會把中文字體子集內嵌進 PDF。不這樣做的話，Chromium 列印時會靜靜地
 退回系統預設字型，整份中文排版走樣。）
+
+指南依測驗算出的**瓶頸維度**分成四份，差別只有封面一行與「你的起點」整頁，
+七天的內容四份共用——改一句話要改四個地方的話，遲早會不同步。
+版本由 `<html data-variant>` 切換，樣式表負責隱藏其餘三頁。
+
+| 瓶頸 | 檔名 | 佔全部作答組合 |
+|---|---|---|
+| 邊界防禦力 | `…-boundary.pdf` | 37.0% |
+| 心智流動度 | `…-flow.pdf` | 30.8% |
+| 有效做功能力 | `…-work.pdf` | 24.6% |
+| 無明顯瓶頸（預設） | `inner-flow-7day-guide.pdf` | 7.7% |
+
+沒有依「能量原型」切，是因為原型講的是嚴重程度、不是該做什麼，
+而且分佈很偏——光是次生擾動型就佔 46.8%，近一半的人會拿到同一份。
+瓶頸維度則剛好對上指南本來的骨架（Day 1–2 邊界、3–4 流動、5–6 做功）。
+
+預設版的檔名維持不帶後綴，舊網址因此仍然指得到東西。
 
 **接後端** —— 見 `server/README.md`，部署完把網址填進 `index.html` 的 `API_BASE`。
 

@@ -75,7 +75,7 @@
   }
   .day-title { font-size: 20pt; line-height: 1.6; margin-top: 4mm; }
   .block { margin-top: 11mm; }
-  .block .label, .write .label {
+  .page .label {
     font-size: 8.5pt; letter-spacing: .28em; color: var(--sage);
     display: block; margin-bottom: 4mm;
   }
@@ -85,6 +85,30 @@
   .page.day { display: flex; flex-direction: column; }
   .page.day .reminder { margin-top: auto; margin-bottom: 12mm; }
   .reminder p { font-family: "Noto Serif TC", serif; font-size: 12pt; line-height: 1.95; color: var(--clay); }
+
+  /* --- 四個版本 ---
+     四份 PDF 共用這一份原始碼，建置時由 <html data-variant> 決定留下哪一頁。
+     只有封面那一行與「你的起點」整頁會變，七天的內容四份共用：
+     改一句話要改四個地方的話，遲早會不同步。 */
+  .variant { display: none !important; }
+  html[data-variant="boundary"] .v-boundary,
+  html[data-variant="flow"]     .v-flow,
+  html[data-variant="work"]     .v-work,
+  html[data-variant="balanced"] .v-balanced { display: block !important; }
+  .cover .for { margin-top: 8mm; font-size: 10pt; letter-spacing: .2em; color: var(--clay); }
+
+  /* --- 你的起點 --- */
+  .start .lede { font-family: "Noto Serif TC", serif; font-size: 13pt; line-height: 1.95;
+                 color: var(--clay); margin-bottom: 9mm; }
+  .start .box { margin-top: 11mm; border: .4pt solid rgba(166,124,82,.32);
+                background: rgba(166,124,82,.06); padding: 8mm; }
+  .start .box p { font-size: 10pt; }
+  .start .box .route { font-family: "Noto Serif TC", serif; font-size: 12.5pt;
+                       letter-spacing: .1em; color: var(--clay); margin-top: 4mm; }
+  .start .warn { margin-top: 11mm; border-top: .35pt solid rgba(42,39,35,.16); padding-top: 7mm; }
+  .start .warn p { font-size: 10pt; }
+  .page.start { display: flex; flex-direction: column; }
+  .start .reminder { margin-top: auto; margin-bottom: 12mm; }
 
   /* --- 每日頁的書寫區 ---
      每一天都叫讀者「寫成一句話」「寫下三個摩擦」，卻沒有地方可以寫，
@@ -140,6 +164,10 @@
   <div class="eyebrow">Inner Flow Assessment</div>
   <h1>7 天<span>能量自洽</span>復位指南</h1>
   <p class="sub">每天一則 3 分鐘練習<br />從邊界重設、心智清空，到做功對齊</p>
+  <p class="for variant v-boundary">給邊界正在滲漏的你</p>
+  <p class="for variant v-flow">給心智停不下來的你</p>
+  <p class="for variant v-work">給能量卡在最後一哩的你</p>
+  <p class="for variant v-balanced">給三項都還穩、想走得更遠的你</p>
   <div class="foot">內耗狀態自我評估與自洽引導工具 · 隨測驗附贈</div>
 </section>
 
@@ -233,6 +261,128 @@
   <div class="folio"><span>7 天能量自洽復位指南</span><span>04</span></div>
 </section>
 
+<!-- ============ 你的起點（四個版本，建置時擇一） ============ -->
+<section class="page start variant v-boundary">
+  <div class="head">
+    <div class="eyebrow">Your Starting Point</div>
+    <h2>你的起點</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p class="lede">給邊界正在滲漏的你，<br />這七天真正的功課在前兩天。</p>
+
+  <p>三個維度裡，邊界是最上游的。這一項不修，後面兩項補多少都會漏回去——你可以把情緒代謝得很好、把事情做得很有效率，但只要牆是破的，那些餘裕最後還是流向別人。</p>
+  <p style="margin-top:6mm">所以 Day 3 到 Day 6 照做，它們會讓你看見能量流去了哪裡；但你真正要留下紀錄的是前兩天。第七天回來的時候，先翻 Day 1 與 Day 2 那兩頁。</p>
+
+  <div class="box">
+    <span class="label">只做得動三天的話</span>
+    <p>七天都做完當然最好，但真的排不出來的話，這三天的順序保留了完整的因果：</p>
+    <p class="route">Day 1 → Day 2 → Day 7</p>
+  </div>
+
+  <div class="warn">
+    <span class="label">會卡在哪裡</span>
+    <p>最容易放棄的是 Day 2。它要你不立刻回應——你會發現不回應的那幾分鐘裡，身體比腦袋還吵。那不是你做錯了，那是牆正在立起來的感覺。</p>
+  </div>
+
+  <div class="reminder">
+    <p>先立牆，再談流動。</p>
+  </div>
+
+  <div class="folio"><span>你的起點 · 邊界防禦力</span><span>05</span></div>
+</section>
+
+<section class="page start variant v-flow">
+  <div class="head">
+    <div class="eyebrow">Your Starting Point</div>
+    <h2>你的起點</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p class="lede">給心智停不下來的你，<br />這七天真正的功課在中間兩天。</p>
+
+  <p>你的牆大致是完整的，能量進得得來。卡住的是通道：舊的情緒還佔著位置，新的進來也只能堆積。這不是想太多，是代謝延遲——情緒沒有被走完，就只能一直排隊。</p>
+  <p style="margin-top:6mm">前兩天照做，它們會讓你看見哪些事根本不該進來。但你真正的功課在第三、第四天：先把腦袋清空，再為一件已經結束的事寫下結論。</p>
+
+  <div class="box">
+    <span class="label">只做得動三天的話</span>
+    <p>七天都做完當然最好，但真的排不出來的話，這三天的順序保留了完整的因果：</p>
+    <p class="route">Day 3 → Day 4 → Day 7</p>
+  </div>
+
+  <div class="warn">
+    <span class="label">會卡在哪裡</span>
+    <p>最容易放棄的是 Day 4。你會寫下結論，然後三小時後又想起同一件事。那很正常——重演的次數會減少，但不會歸零。減少就已經是它在動了。</p>
+  </div>
+
+  <div class="reminder">
+    <p>你需要的不是想通，<br />是讓它走完。</p>
+  </div>
+
+  <div class="folio"><span>你的起點 · 心智流動度</span><span>05</span></div>
+</section>
+
+<section class="page start variant v-work">
+  <div class="head">
+    <div class="eyebrow">Your Starting Point</div>
+    <h2>你的起點</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p class="lede">給能量卡在最後一哩的你，<br />這七天真正的功課在第五、第六天。</p>
+
+  <p>能量守得住，也流得動，只差最後一段：從想到做。全有全無的標準讓每一次啟動都像一場審判，於是準備變成一種安全的拖延。</p>
+  <p style="margin-top:6mm">但秩序不是想出來的，是做出來之後才浮現的。前四天照做，它們會清出空間；你真正的功課是讓一件事先醜著存在，然後修掉一個每天都在耗你的小卡點。</p>
+
+  <div class="box">
+    <span class="label">只做得動三天的話</span>
+    <p>七天都做完當然最好，但真的排不出來的話，這三天的順序保留了完整的因果：</p>
+    <p class="route">Day 5 → Day 6 → Day 7</p>
+  </div>
+
+  <div class="warn">
+    <span class="label">會卡在哪裡</span>
+    <p>最容易放棄的是 Day 5。它要你只挑一件事，而你會想挑三件——因為只挑一件感覺太少。挑一件。少，就是那一天的重點。</p>
+  </div>
+
+  <div class="reminder">
+    <p>讓它先醜著存在。</p>
+  </div>
+
+  <div class="folio"><span>你的起點 · 有效做功能力</span><span>05</span></div>
+</section>
+
+<section class="page start variant v-balanced">
+  <div class="head">
+    <div class="eyebrow">Your Starting Point</div>
+    <h2>你的起點</h2>
+    <div class="rule"></div>
+  </div>
+
+  <p class="lede">你沒有明顯的瓶頸。<br />這七天的意義不是補短。</p>
+
+  <p>三個維度大致均衡，沒有哪一項特別拖累你。這在測驗裡不常見。</p>
+  <p style="margin-top:6mm">但耗散結構的核心不是穩定，是流動——一個過於平衡的系統會停止演化，因為它不再需要重組自己。所以這七天對你來說不是修補，是把餘裕投出去。</p>
+  <p style="margin-top:6mm">七天照順序走完，每一天都值得做。要注意的不是「我做到了嗎」，而是「哪一天讓我最不自在」。那一天指向的維度，就是你下一階段的邊緣。</p>
+
+  <div class="box">
+    <span class="label">只做得動三天的話</span>
+    <p>七天都做完當然最好，但真的排不出來的話，這三天的順序保留了完整的因果：</p>
+    <p class="route">Day 1 → Day 4 → Day 7</p>
+  </div>
+
+  <div class="warn">
+    <span class="label">會卡在哪裡</span>
+    <p>你這一型最容易發生的不是放棄，是敷衍——因為每一天都做得到，所以每一天都做得很淺。挑一天認真做到底，比七天都做過一遍有用。</p>
+  </div>
+
+  <div class="reminder">
+    <p>把餘裕投向<br />一件你還沒有把握的事。</p>
+  </div>
+
+  <div class="folio"><span>你的起點 · 沒有明顯瓶頸</span><span>05</span></div>
+</section>
+
 <!-- ============ Day 1 ============ -->
 <section class="page day">
   <div class="eyebrow">Day One · 邊界防禦力</div>
@@ -262,7 +412,7 @@
     <p>能量的流失多半不在大事，<br />而在那些你以為「順手就好」的瞬間。</p>
   </div>
 
-  <div class="folio"><span>Day 1 · 命名你的滲漏點</span><span>05</span></div>
+  <div class="folio"><span>Day 1 · 命名你的滲漏點</span><span>06</span></div>
 </section>
 
 <!-- ============ Day 2 ============ -->
@@ -294,7 +444,7 @@
     <p>邊界不是拒絕，<br />是把回應的節奏拿回自己手上。</p>
   </div>
 
-  <div class="folio"><span>Day 2 · 留一道縫</span><span>06</span></div>
+  <div class="folio"><span>Day 2 · 留一道縫</span><span>07</span></div>
 </section>
 
 <!-- ============ Day 3 ============ -->
@@ -326,7 +476,7 @@
     <p>清單通常比你想像的短。<br />讓你疲憊的是它懸浮著，不是它很長。</p>
   </div>
 
-  <div class="folio"><span>Day 3 · 清空</span><span>07</span></div>
+  <div class="folio"><span>Day 3 · 清空</span><span>08</span></div>
 </section>
 
 <!-- ============ Day 4 ============ -->
@@ -358,7 +508,7 @@
     <p>反覆推演不會改變過去，<br />只會讓過去持續向你收費。</p>
   </div>
 
-  <div class="folio"><span>Day 4 · 完成即釋放</span><span>08</span></div>
+  <div class="folio"><span>Day 4 · 完成即釋放</span><span>09</span></div>
 </section>
 
 <!-- ============ Day 5 ============ -->
@@ -390,7 +540,7 @@
     <p>忙碌與做功是兩件事。<br />只有後者會累積成你能指認的東西。</p>
   </div>
 
-  <div class="folio"><span>Day 5 · 一日一事</span><span>09</span></div>
+  <div class="folio"><span>Day 5 · 一日一事</span><span>10</span></div>
 </section>
 
 <!-- ============ Day 6 ============ -->
@@ -422,7 +572,7 @@
     <p>不必重建整個系統，<br />只要讓它少漏一個地方。</p>
   </div>
 
-  <div class="folio"><span>Day 6 · 移除一個摩擦</span><span>10</span></div>
+  <div class="folio"><span>Day 6 · 移除一個摩擦</span><span>11</span></div>
 </section>
 
 <!-- ============ Day 7 ============ -->
@@ -454,7 +604,7 @@
     <p>秩序不是靠意志維持的，<br />是靠結構自動運轉的。</p>
   </div>
 
-  <div class="folio"><span>Day 7 · 建立你的週期</span><span>11</span></div>
+  <div class="folio"><span>Day 7 · 建立你的週期</span><span>12</span></div>
 </section>
 
 <!-- ============ 第八天 ============ -->
@@ -476,7 +626,7 @@
 
   <p class="muted" style="margin-top:14mm;font-size:9pt">本指南為自我覺察用途，不構成醫療或心理診斷建議。若你的狀態已明顯影響睡眠、飲食或日常功能，請尋求專業協助。</p>
 
-  <div class="folio"><span>Inner Flow Assessment</span><span>12</span></div>
+  <div class="folio"><span>Inner Flow Assessment</span><span>13</span></div>
 </section>
 
 <!-- ============ 七天追蹤表 ============ -->
@@ -511,7 +661,7 @@
     <p>七天之後回去重測一次。<br />要看的不是熵值降了幾分，是哪一個維度先動了。</p>
   </div>
 
-  <div class="folio"><span>Inner Flow Assessment</span><span>13</span></div>
+  <div class="folio"><span>Inner Flow Assessment</span><span>14</span></div>
 </section>
 
 </body>

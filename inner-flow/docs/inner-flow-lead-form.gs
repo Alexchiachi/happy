@@ -69,7 +69,17 @@ const SHEET_NAME = '名單';
 
 /** 網站位址，信裡的連結都由這裡組出來。 */
 const SITE = 'https://alexchiachi.github.io/happy/inner-flow/';
-const GUIDE_URL = SITE + 'downloads/inner-flow-7day-guide.pdf';
+// 指南有四份，依瓶頸維度給對應的那一份。這裡的鍵是維度全名，
+// 因為前端送過來的 bottleneck 已經轉成中文了（見 index.html 的 bottleneckName）。
+const GUIDE_FILES = {
+  '邊界防禦力': 'inner-flow-7day-guide-boundary.pdf',
+  '心智流動度': 'inner-flow-7day-guide-flow.pdf',
+  '有效做功能力': 'inner-flow-7day-guide-work.pdf',
+};
+
+function guideUrl(bottleneck) {
+  return SITE + 'downloads/' + (GUIDE_FILES[bottleneck] || 'inner-flow-7day-guide.pdf');
+}
 const PRIVACY_URL = 'https://alexchiachi.github.io/happy/privacy.html';
 
 /* ================================================================
@@ -520,7 +530,7 @@ function confirmHtml(v) {
     '不必一次讀完，一天一則就好——它本來就是設計成慢慢走的。', 'left');
 
   inner += gap(38);
-  inner += button(GUIDE_URL, '下載指南 PDF');
+  inner += button(guideUrl(v.bottleneck), '下載指南 PDF');
   inner += gap(14);
   inner += footNote('連結長期有效，收在信箱裡隨時可以回來拿。');
 
@@ -581,7 +591,7 @@ function confirmText(v) {
     '13 頁，每天一則三分鐘的練習：從邊界重設、心智清空，到做功對齊。',
     '不必一次讀完，一天一則就好。',
     '',
-    '下載指南：' + GUIDE_URL,
+    '下載指南：' + guideUrl(v.bottleneck),
     ''
   ];
 

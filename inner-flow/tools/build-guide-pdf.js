@@ -1,5 +1,9 @@
 /**
- * 由 inner-flow/guide/7day-guide.html 產生 inner-flow/downloads/inner-flow-7day-guide.pdf。
+ * 由 inner-flow/guide/7day-guide.html 產生四份 inner-flow/downloads/*.pdf。
+ *
+ * 四份的差別只有封面那一行與「你的起點」整頁，七天的內容完全共用——
+ * 依測驗算出的瓶頸維度決定給哪一份（見 index.html 的 guidePath()）。
+ * 版本由 <html data-variant> 切換，樣式表負責隱藏其餘三頁。
  *
  *   node inner-flow/tools/build-guide-pdf.js
  *
@@ -19,7 +23,16 @@ const { chromium } = require('playwright');
 
 const SRC  = path.join(__dirname, '..', 'guide', '7day-guide.html');
 const TMP  = path.join(__dirname, '..', 'guide', '.7day-guide.build.html');
-const OUT  = path.join(__dirname, '..', 'downloads', 'inner-flow-7day-guide.pdf');
+const OUTDIR = path.join(__dirname, '..', 'downloads');
+
+// key 要與 index.html 的 DIMENSIONS 代號一致；balanced 是沒有明顯瓶頸時的預設版，
+// 檔名不帶後綴，這樣舊網址（…/inner-flow-7day-guide.pdf）仍然指得到東西。
+const VARIANTS = [
+  { key: 'balanced', file: 'inner-flow-7day-guide.pdf' },
+  { key: 'boundary', file: 'inner-flow-7day-guide-boundary.pdf' },
+  { key: 'flow',     file: 'inner-flow-7day-guide-flow.pdf' },
+  { key: 'work',     file: 'inner-flow-7day-guide-work.pdf' },
+];
 const UA   = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 // 與 7day-guide.html 的 CSS 對應
@@ -51,42 +64,55 @@ function buildFontCss(chars) {
   );
   const page = await browser.newPage();
 
-  // 第一趟：載入原始檔，取出實際用到的字元
+  // 第一趟：載入原始檔，取出實際用到的字元。
+  // 這裡刻意取「四個版本的全部文字」——四份共用同一組字體子集，
+  // 分開取會多下載三次，而且每份都要各自驗證，划不來。
   await page.goto('file://' + SRC, { waitUntil: 'domcontentloaded' });
-  const used = await page.evaluate(() => Array.from(new Set(document.body.innerText)).join(''));
+  const used = await page.evaluate(() => {
+    document.querySelectorAll('.variant').forEach((n) => { n.style.setProperty('display', 'block', 'important'); });
+    return Array.from(new Set(document.body.innerText)).join('');
+  });
   const chars = used.replace(/\s/g, '') + ' ';
   console.log('文件用到 ' + chars.length + ' 個不重複字元，向 Google Fonts 取子集……');
 
   // 第二趟：改用內嵌字體的版本列印
-  const html = fs.readFileSync(SRC, 'utf8')
+  const base = fs.readFileSync(SRC, 'utf8')
     .replace(/<link rel="preconnect"[^>]*>\s*/g, '')
     .replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>\s*/g, '')
     .replace('</head>', '<style>' + buildFontCss(chars) + '</style>\n</head>');
-  fs.writeFileSync(TMP, html);
 
   try {
-    await page.goto('file://' + TMP, { waitUntil: 'load' });
-    await page.waitForFunction(
-      (specs) => document.fonts.status === 'loaded' && specs.every((s) => document.fonts.check(s)),
-      ['300 30pt "Noto Serif TC"', '400 11pt "Noto Sans TC"'],
-      { timeout: 30000 }
-    );
-    await page.pdf({
-      path: OUT,
-      format: 'A4',
-      printBackground: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
-    });
+    for (const variant of VARIANTS) {
+      fs.writeFileSync(TMP, base.replace('<html lang="zh-Hant">',
+        '<html lang="zh-Hant" data-variant="' + variant.key + '">'));
+
+      await page.goto('file://' + TMP, { waitUntil: 'load' });
+      await page.waitForFunction(
+        (specs) => document.fonts.status === 'loaded' && specs.every((s) => document.fonts.check(s)),
+        ['300 30pt "Noto Serif TC"', '400 11pt "Noto Sans TC"'],
+        { timeout: 30000 }
+      );
+      await page.pdf({
+        path: path.join(OUTDIR, variant.file),
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      });
+      console.log('  ' + variant.file);
+    }
   } finally {
     fs.unlinkSync(TMP);
     await browser.close();
   }
 
-  // 驗證輸出：確認 PDF 真的用了思源字體，而不是退回系統預設字型
+  // 驗證輸出：確認每一份 PDF 都真的用了思源字體，而不是退回系統預設字型
   // （Chromium 會把子集字體改名為 AAAAAA+，因此比對 FontName／FontFamily）
-  const bytes = fs.readFileSync(OUT, 'latin1');
-  if (!/\/Font(Name|Family)\s*[(\/][^)\s]*Noto/.test(bytes)) {
-    throw new Error('PDF 未嵌入 Noto 字體，請確認建置環境能連上 fonts.gstatic.com');
+  for (const variant of VARIANTS) {
+    const bytes = fs.readFileSync(path.join(OUTDIR, variant.file), 'latin1');
+    if (!/\/Font(Name|Family)\s*[(\/][^)\s]*Noto/.test(bytes)) {
+      throw new Error(variant.file + ' 未嵌入 Noto 字體，請確認建置環境能連上 fonts.gstatic.com');
+    }
   }
-  console.log('已輸出 ' + OUT + '（' + Math.round(fs.statSync(OUT).size / 1024) + ' KB）');
+  const total = VARIANTS.reduce((sum, v) => sum + fs.statSync(path.join(OUTDIR, v.file)).size, 0);
+  console.log('已輸出 ' + VARIANTS.length + ' 份（共 ' + Math.round(total / 1024) + ' KB）');
 })();

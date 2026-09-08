@@ -524,7 +524,19 @@
   // 例：var API_BASE = 'https://inner-flow-api.onrender.com';
   var API_BASE = '';
 
-  var GUIDE_PATH = 'downloads/inner-flow-7day-guide.pdf';
+  // 指南有四份，只差封面一行與「你的起點」整頁，七天的內容共用。
+  // 依測驗算出的瓶頸維度給對應的那一份；沒有明顯瓶頸（或還沒作答）時給預設版。
+  // 預設版的檔名不帶後綴，舊網址因此仍然指得到東西。
+  var GUIDE_DIR = 'downloads/';
+  var GUIDE_FILES = {
+    boundary: 'inner-flow-7day-guide-boundary.pdf',
+    flow:     'inner-flow-7day-guide-flow.pdf',
+    work:     'inner-flow-7day-guide-work.pdf',
+  };
+
+  function guideFile() {
+    return (lastResult && GUIDE_FILES[lastResult.bottleneck]) || 'inner-flow-7day-guide.pdf';
+  }
 
   /* ============================================================
    * 1. 評估模型
@@ -1189,10 +1201,13 @@
    *     使用者已經完成他那一端的交換，不該因為我們的後端而落空。
    * ========================================================== */
   function startGuideDownload() {
-    if (!GUIDE_PATH) return;                   // 沒有檔案時（例如預覽環境）不做事
+    var file = guideFile();
     var a = document.createElement('a');
-    a.href = GUIDE_PATH;
-    a.download = 'inner-flow-7day-guide.pdf';
+    a.href = GUIDE_DIR + file;
+    a.download = file;
+    // 手動下載的備用連結也要指到同一份，否則自動下載失敗的人會拿到通用版
+    $('guideLink').setAttribute('href', GUIDE_DIR + file);
+    $('guideLink').setAttribute('download', file);
     // 少數瀏覽器（或以 file:// 開啟時）不接受 download 屬性而改為開啟檔案，
     // 指定新分頁可確保使用者不會被帶離結果頁。
     a.target = '_blank';
@@ -1200,7 +1215,10 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    track('guide_downloaded', { archetype: lastResult ? lastResult.archetype : 'unknown' });
+    track('guide_downloaded', {
+      archetype: lastResult ? lastResult.archetype : 'unknown',
+      variant: lastResult && lastResult.bottleneck ? lastResult.bottleneck : 'balanced',
+    });
   }
 
   function initLeadForm() {
