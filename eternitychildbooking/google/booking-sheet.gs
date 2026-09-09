@@ -6,7 +6,8 @@
  *   1. 在試算表新增一列（含狀態欄，可直接當後台管理）
  *   2. 寄一封通知信到中心信箱（可直接按「回覆」回信給客人）
  *   3. 依客人選的語言，自動回一封確認信給客人
- *   4. 在中心的 Google 日曆上建立一個活動（取消時會自動移除）
+ *   4.（選用，預設關閉）在中心的 Google 日曆上建立活動，取消時自動移除
+ *      —— 開啟方式見下方 CALENDAR_ENABLED 的說明
  *
  * 部署步驟見同資料夾的 README.md。
  */
@@ -41,12 +42,21 @@ const HEADERS = [
 
 /* ---------- Google 日曆 ---------- */
 
-/* 預約成立後，自動在行事曆上開一個活動；狀態改成「已取消」時自動移除。
-   活動會建在「執行這支程式的帳號」的行事曆上，也就是部署時登入的那個帳號
-   （CENTER_EMAIL）。想把預約分到另一本日曆，就把名稱填進 CALENDAR_NAME，
-   程式第一次執行時會自動幫你建立。 */
-const CALENDAR_ENABLED = true;
-const CALENDAR_NAME = '';                 // 留空＝主要行事曆；也可填 '永恆之子預約'
+/* 預設【關閉】。開啟後，預約成立會自動在行事曆上開一個活動，
+   狀態改成「已取消」時活動自動移除。
+
+   為什麼預設關閉：活動會建在「執行這支程式的那個帳號」的行事曆上。
+   如果這支程式是網頁維護者的帳號部署的，開啟後預約會跑到維護者的私人行事曆，
+   而不是中心的行事曆——那不是我們要的。
+
+   要開啟的話，請中心的帳號先把行事曆分享給執行這支程式的帳號：
+     中心帳號 → Google 日曆 → 該行事曆的「設定和共用」→ 與特定使用者共用
+     → 加入執行這支程式的帳號 → 權限選「變更活動」
+   然後把中心的行事曆 ID（通常就是中心的 email）填進 CALENDAR_ID，
+   並把 CALENDAR_ENABLED 改成 true。 */
+const CALENDAR_ENABLED = false;
+const CALENDAR_ID = '';                   // 例如 'ahanamita88888888@gmail.com'（要先被分享）
+const CALENDAR_NAME = '';                 // 兩個都留空＝執行帳號的主要行事曆
 const CALENDAR_INVITE_CUSTOMER = false;   // true＝把客人加成邀請對象（會寄邀請信給客人）
 const TIMEZONE = 'Asia/Taipei';           // 預約時間的時區，跟預約頁一致
 const CAL_COL = HEADERS.indexOf('行事曆ID') + 1;   // 「行事曆ID」是第 19 欄（S 欄）
@@ -147,10 +157,12 @@ function testWrite() {
   const out = doPost({ postData: { contents: JSON.stringify(demo) } });
   Logger.log('執行結果：' + out.getContent());
   Logger.log('試算表：' + getSpreadsheet_().getUrl());
-  Logger.log('提示：第一次使用請到試算表的「預約管理」選單各執行一次' +
-             '「重新設定狀態選單與顏色」與「開啟行事曆自動同步」。');
-  Logger.log('這筆測試也會出現在行事曆上，確認過後把試算表那一列的狀態改成' +
-             '「已取消」，活動就會自動消失。');
+  Logger.log('提示：第一次使用請到試算表的「預約管理」選單執行一次' +
+             '「重新設定狀態選單與顏色」，狀態欄才會變成下拉選單。');
+  if (CALENDAR_ENABLED) {
+    Logger.log('這筆測試也會出現在行事曆上，確認過後把試算表那一列的狀態改成' +
+               '「已取消」，活動就會自動消失。');
+  }
 }
 
 /**
@@ -280,17 +292,20 @@ function setupStatusColumn() {
 
 /** 開啟試算表時，在功能表列加上「預約管理」。 */
 function onOpen() {
-  SpreadsheetApp.getUi()
+  const menu = SpreadsheetApp.getUi()
     .createMenu('預約管理')
     .addItem('把選取的預約標為「已取消」', 'markCancelled')
     .addItem('把選取的預約標為「已確認」', 'markConfirmed')
     .addSeparator()
     .addItem('重新設定狀態選單與顏色', 'setupStatusColumn')
-    .addItem('查看目前已佔用的時段', 'showTakenSlots')
-    .addSeparator()
-    .addItem('開啟行事曆自動同步', 'installTriggers')
-    .addItem('把現有預約補建到行事曆', 'syncAllCalendar')
-    .addToUi();
+    .addItem('查看目前已佔用的時段', 'showTakenSlots');
+  // 行事曆功能沒開啟時就不顯示，免得誤點。開啟方式見程式上方 CALENDAR_ENABLED 的說明。
+  if (CALENDAR_ENABLED) {
+    menu.addSeparator()
+        .addItem('開啟行事曆自動同步', 'installTriggers')
+        .addItem('把現有預約補建到行事曆', 'syncAllCalendar');
+  }
+  menu.addToUi();
 }
 
 function markCancelled()  { setStatusOnSelection_('已取消'); }
@@ -317,10 +332,10 @@ function setStatusOnSelection_(status) {
     names.push(sheet.getRange(r, 12).getValue() || ('第 ' + r + ' 列'));   // 姓名在第 12 欄
     try { syncRowCalendar_(sheet, r); } catch (e) { Logger.log('行事曆同步失敗：' + e); }
   }
+  const cal = CALENDAR_ENABLED ? '，行事曆上的活動也已經移除' : '';
   const note = status.indexOf('取消') !== -1
-    ? '\n\n這些時段已重新開放預約（客人的頁面約 30 秒後、或重新整理即可看到），' +
-      '行事曆上的活動也已經移除。'
-    : '\n\n行事曆上的活動已同步更新。';
+    ? '\n\n這些時段已重新開放預約（客人的頁面約 30 秒後、或重新整理即可看到）' + cal + '。'
+    : '';
   ui.alert('已將 ' + names.length + ' 筆改為「' + status + '」：\n' + names.join('、') + note);
 }
 
@@ -354,6 +369,14 @@ function minLabel_(m) {
  */
 function getBookingCalendar_() {
   if (!CALENDAR_ENABLED) return null;
+  if (CALENDAR_ID) {
+    const shared = CalendarApp.getCalendarById(CALENDAR_ID);
+    if (!shared) {
+      throw new Error('找不到行事曆 ' + CALENDAR_ID +
+        '。請確認對方已經把行事曆分享給執行這支程式的帳號，權限要選「變更活動」。');
+    }
+    return shared;
+  }
   if (!CALENDAR_NAME) return CalendarApp.getDefaultCalendar();
   const found = CalendarApp.getCalendarsByName(CALENDAR_NAME);
   if (found && found.length) return found[0];
@@ -516,6 +539,7 @@ function onStatusEdit(e) {
 
 /** 建立上面那個觸發器。重複執行不會累積，會先把舊的清掉。 */
 function installTriggers() {
+  if (!CALENDAR_ENABLED) { calendarOffAlert_(); return; }
   const ss = getSpreadsheet_();
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === 'onStatusEdit') ScriptApp.deleteTrigger(t);
@@ -529,8 +553,17 @@ function installTriggers() {
   } catch (e) { Logger.log('已建立 onStatusEdit 觸發器'); }
 }
 
+function calendarOffAlert_() {
+  SpreadsheetApp.getUi().alert(
+    '行事曆功能目前是關閉的。\n\n' +
+    '要開啟：請中心的帳號把行事曆分享給執行這支程式的帳號（權限選「變更活動」），' +
+    '再到 Apps Script 把最上面的 CALENDAR_ENABLED 改成 true、' +
+    'CALENDAR_ID 填中心的行事曆 ID，存檔後重新部署。');
+}
+
 /** 把試算表裡「今天以後、未取消、還沒有行事曆ID」的預約補建到行事曆。 */
 function syncAllCalendar() {
+  if (!CALENDAR_ENABLED) { calendarOffAlert_(); return; }
   const sheet = getSheet_();
   const ui = SpreadsheetApp.getUi();
   const last = sheet.getLastRow();
