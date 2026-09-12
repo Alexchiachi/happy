@@ -933,6 +933,10 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
   font-size: 0.85rem;
   letter-spacing: 0.25em;
   color: var(--seal);
+  /* 這裡的 .seal 是文章結尾的小落款，不是整段的結尾印章；
+     不清掉的話會吃到 .seal 那組給整個區塊用的上下留白，
+     整個頁尾被撐到 380px 高。 */
+  padding: 0;
 }
 
 /* --- 讓 journal.html 的卡片可以整張點擊 --- */
@@ -1028,3 +1032,70 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   color: var(--tea);
 }
 .nav-menu .lang-switch a:hover { color: var(--ink); }
+
+/* ============================================================
+   Next step — 讀完之後的下一步
+   ------------------------------------------------------------
+   選物頁、關於頁、文章頁原本讀到底就沒有出口了：導覽列和頁尾
+   每頁都有，等於沒有出口。這一塊是「讀到這裡的人，接下來想做
+   什麼」的答案，所以每頁的字不一樣，按鈕也不一樣。
+   語氣要安靜——是邀請，不是推銷。
+   ============================================================ */
+.next-step {
+  text-align: center;
+  padding: var(--s-6) 0 var(--s-5);
+  border-top: 1px solid var(--line);
+}
+.next-step .eyebrow { margin-bottom: var(--s-2); }
+.next-step p {
+  font-family: var(--font-han);
+  font-weight: 200;
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  line-height: 1.9;
+  color: var(--ink-soft);
+  max-width: 30em;
+  margin: 0 auto var(--s-4);
+}
+.next-step-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+/* 第二個選項退一階，避免兩顆按鈕互相搶 */
+.next-step-actions .svc-cta.quiet {
+  color: var(--mist);
+  border-color: var(--line);
+}
+.next-step-actions .svc-cta.quiet:hover {
+  background: transparent;
+  color: var(--tea);
+  border-color: var(--tea);
+}
+
+/* 文章結尾：原本只有「← 回幸福誌」，是往回走的。
+   中間補一個往前走的去處，依文章主題決定指向哪裡。 */
+.article-foot .article-next {
+  flex: 1 1 100%;
+  order: -1;
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+.article-foot .article-next a {
+  color: var(--tea);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+}
+.article-foot .article-next a:hover { border-bottom-color: var(--tea); }
+.article-foot .svc-cta { margin-top: 0; }
+
+/* 導覽列是 fixed 的，錨點直接跳過去標題會被蓋住，要留出高度 */
+.svc-chapter { scroll-margin-top: 96px; }
+
+/* 系統層級關掉動態效果的人，就別再平滑捲動與淡入了 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .reveal.in { transition: none; opacity: 1; transform: none; }
+}
