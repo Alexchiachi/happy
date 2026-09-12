@@ -1099,3 +1099,34 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   html { scroll-behavior: auto; }
   .reveal, .reveal.in { transition: none; opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   商品卡 → 詢問
+   ------------------------------------------------------------
+   卡片本身就是連結，沒有 JS 也能點到連繫頁；有 JS 的話
+   scripts.js 會把商品名（讀自卡片自己的 h3）接在網址後面，
+   連繫頁再把它填進「想聊的事情」。
+   商品名刻意不寫死在 href 裡——改 h3 就好，不必兩邊同步。
+   ============================================================ */
+a.product { display: block; color: inherit; }
+a.product .img-placeholder { transition: transform var(--dur) var(--ease); }
+a.product:hover .img-placeholder { transform: scale(1.02); }
+a.product:hover h3 { color: var(--tea); }
+
+.product .ask {
+  display: inline-block;
+  margin-top: var(--s-2);
+  font-family: var(--font-han);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--mist);
+  transition: color var(--dur) var(--ease);
+}
+a.product:hover .ask { color: var(--tea); }
+
+/* 鍵盤操作看得見焦點 */
+a.product:focus-visible { outline: 2px solid var(--tea); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  a.product:hover .img-placeholder { transform: none; }
+}

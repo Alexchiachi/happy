@@ -137,6 +137,35 @@
     filters.forEach((x) => x.setAttribute('aria-pressed', String(x.classList.contains('active'))));
   }
 
+  // --- 商品卡帶著商品名去寫信 ---
+  // 卡片在 HTML 裡就是 <a href="connect.html">，沒有 JS 也點得到連繫頁。
+  // 這裡只是把商品名接上去；名字讀自卡片自己的 h3，所以改了 h3 連結就跟著變，
+  // 不需要在 href 裡再維護一份（兩份遲早會不同步）。
+  document.querySelectorAll('a.product').forEach((card) => {
+    const h3 = card.querySelector('h3');
+    const name = h3 ? h3.textContent.trim() : '';
+    if (!name) return;
+    const base = card.getAttribute('href').split('?')[0];
+    card.setAttribute('href', base + '?item=' + encodeURIComponent(name));
+  });
+
+  // 連繫頁：把帶過來的商品名填進「想聊的事情」，省得訪客再打一次
+  const itemParam = new URLSearchParams(location.search).get('item');
+  if (itemParam) {
+    const subject = document.getElementById('subject');
+    if (subject) {
+      // 只當成文字填進 value，不碰 innerHTML；長度設上限，避免網址被塞奇怪的東西
+      subject.value = itemParam.slice(0, 100);
+      const msg = document.getElementById('message');
+      if (msg) {
+        // 捲到表單並把游標放在第一個要填的欄位，讓人看見已經填好一半
+        const name = document.getElementById('name');
+        (name || subject).focus({ preventScroll: true });
+        subject.closest('form').scrollIntoView({ block: 'center' });
+      }
+    }
+  }
+
   // --- Letter form → Google 試算表 ---
   // 部署 docs/google-sheet-form.gs 之後，把拿到的 /exec 網址貼進 FORM_ENDPOINT。
   // 留空時表單「不會」假裝寄出，而是請訪客改用 Email —— 寧可麻煩，也不要讓來信憑空消失。
