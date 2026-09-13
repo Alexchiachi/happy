@@ -28,9 +28,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --paper-deep:   #F2EBDF;
   --ink:          #2A2520;
   --ink-soft:     #4A423A;
-  --tea:          #8B6F47;   /* Yunnan accent */
-  --moss:         #5C7A5A;   /* Taiwan accent */
-  --mist:         #9A938A;
+  --tea:          #82663F;   /* Yunnan accent，對 paper 4.97:1 */
+  --moss:         #547050;   /* Taiwan accent，對 paper 5.12:1 */
+  --mist:         #736C63;   /* 對 paper 4.81:1；原本 #9A938A 只有 2.82，讀不到 */
   --line:         #D9D1C2;
   --seal:         #A8543A;   /* Vermilion seal accent */
 
@@ -1130,3 +1130,18 @@ a.product:focus-visible { outline: 2px solid var(--tea); outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
   a.product:hover .img-placeholder { transform: none; }
 }
+
+/* 表單底下的一句話：訪客填了姓名與信箱，總得讓他知道這些字去了哪裡，
+   以及從哪裡讀完整的政策。刻意放在按鈕之後——不擋著人寫信。 */
+.letter-form .form-note {
+  margin-top: var(--s-2);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+.letter-form .form-note a {
+  color: var(--tea);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1px;
+}
+.letter-form .form-note a:hover { border-bottom-color: var(--tea); }

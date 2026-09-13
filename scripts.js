@@ -86,11 +86,16 @@
   }
 
   // --- FAQ accordion ---
+  // aria-expanded 要跟著開合走，否則用螢幕閱讀器的人不知道這一題是開還是關。
+  // 在這裡設初始值而不是寫死在 HTML 裡，是因為沒有 JS 時手風琴根本不會收合，
+  // 那時候標成 false 反而是錯的。
   document.querySelectorAll('.faq-item').forEach((item) => {
     const q = item.querySelector('.faq-q');
     if (q) {
+      q.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
       q.addEventListener('click', () => {
-        item.classList.toggle('open');
+        const open = item.classList.toggle('open');
+        q.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
   });
