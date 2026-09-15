@@ -71,12 +71,18 @@
   const reveals = document.querySelectorAll('.reveal');
   if (reveals.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry, idx) => {
-        if (entry.isIntersecting) {
-          // small stagger for groups
-          setTimeout(() => entry.target.classList.add('in'), idx * 80);
-          io.unobserve(entry.target);
-        }
+      // 只數「這一批真的進場的」，而且照垂直位置排序。
+      // 原本直接用 entries 的索引，但那一批裡混著沒進場的元素，數量又隨捲動
+      // 速度而變，所以同一個版面每次捲的節奏都不一樣；單獨進場時 idx 是 0，
+      // 根本沒有 stagger。
+      const arriving = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      arriving.forEach((entry, idx) => {
+        // 階數設上限：一次進來十個，最後一個不該等 0.7 秒才出現。
+        setTimeout(() => entry.target.classList.add('in'), Math.min(idx, 4) * 80);
+        io.unobserve(entry.target);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach((el) => io.observe(el));
