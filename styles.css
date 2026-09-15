@@ -171,18 +171,29 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
     flex-direction: column; gap: var(--s-2); padding: var(--s-3) var(--gutter);
     background: var(--paper); border-bottom: 1px solid var(--line); }
   .nav-menu.open { display: flex; }
-  .nav-toggle { display: block; font-size: 1.2rem; color: var(--ink); }
+  /* 「≡」本身只有 11×36，手指點不到。padding 把命中區撐到 45×44，
+     再用等量負 margin 抵銷，所以字元停在原來的位置，只有命中區變大。 */
+  .nav-toggle {
+    display: block; font-size: 1.2rem; color: var(--ink);
+    padding: 4px 17px;
+    margin: -4px -17px;
+  }
 }
 
 /* ============================================================
    Hero
    ============================================================ */
 .hero {
+  /* svh 是「網址列展開時」的高度，捲動時不會跟著跳；不支援的瀏覽器退回 vh。
+     高度原本寫在各頁的 inline style 裡，改成修飾類別才有辦法一起補 svh。 */
   min-height: 100vh;
+  min-height: 100svh;
   padding-top: 120px;
   display: flex; flex-direction: column; justify-content: center;
   position: relative;
 }
+.hero.mid   { min-height: 80vh; min-height: 80svh; }
+.hero.short { min-height: 70vh; min-height: 70svh; }
 .hero .container { width: 100%; }
 .hero-eyebrow { margin-bottom: var(--s-3); }
 .hero-title {
@@ -204,7 +215,10 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   letter-spacing: 0.02em;
 }
 .hero-meta {
-  display: flex; gap: var(--s-5);
+  /* 詞與詞之間 = flex gap + ::after 的 margin，兩邊共用同一個值。
+     桌機仍是 4rem（與改版前一致），窄螢幕才縮，390px 下三個詞排得下。 */
+  --meta-gap: clamp(1.25rem, 8vw, 4rem);
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--meta-gap);
   font-family: var(--font-display);
   font-size: 0.8rem;
   letter-spacing: 0.3em;
@@ -212,7 +226,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   color: var(--mist);
 }
 .hero-meta span:not(:last-child)::after {
-  content: "·"; margin-left: var(--s-5); color: var(--line);
+  content: "·"; margin-left: var(--meta-gap); color: var(--line);
 }
 .hero-scroll {
   position: absolute; bottom: var(--s-4); left: 50%; transform: translateX(-50%);
