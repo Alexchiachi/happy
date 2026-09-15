@@ -2,10 +2,10 @@
   "version": 1,
   "skills": {
     "apple-design": {
-      "source": "karak/karak-claude-plugin",
+      "source": "emilkowalski/skills",
       "sourceType": "github",
       "skillPath": "skills/apple-design/SKILL.md",
-      "computedHash": "3884c20e3ada001c387a39312cec0b4cafe468432057793164391aeca9be6e43"
+      "computedHash": "0190417d092a0df447b000154e39733ea6d97efad6d3bec8a6ce3845aeb88914"
     }
   }
 }
