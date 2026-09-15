@@ -684,7 +684,16 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .img-placeholder span {
   position: absolute; bottom: var(--s-2); right: var(--s-2);
   font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.3em;
-  color: rgba(250, 246, 239, 0.7); text-transform: uppercase;
+  color: rgba(250, 246, 239, 0.92); text-transform: uppercase;
+  /* 色塊是漸層，而且角度會被 .v2–.v8 換掉，所以浮水印底下到底是深是淺
+     並不固定。淡陰影讓字在中間調上也描得出邊，不必為每個角度調一次。 */
+  text-shadow: 0 1px 3px rgba(42, 37, 32, 0.45);
+}
+/* 預設色塊（paper-deep → line）整條都是淺的，近白的字會整個消失：
+   實測 #D9D1C2 上的對比只有 1.2:1。這一種要反過來用墨色。 */
+.img-placeholder:not(.tea):not(.moss):not(.dark) span {
+  color: rgba(42, 37, 32, 0.62);   /* 對 #D9D1C2 為 3.7:1，原本是 1.2:1 */
+  text-shadow: none;
 }
 
 /* ============================================================
@@ -1129,14 +1138,19 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
    連繫頁再把它填進「想聊的事情」。
    商品名刻意不寫死在 href 裡——改 h3 就好，不必兩邊同步。
    ============================================================ */
-a.product { display: block; color: inherit; }
+/* 商品名有的一行有的兩行，如果不撐開，同一列卡片的「寫信詢問 →」會差
+   二十幾個 pixel。用 flex 讓它一律貼在卡片底部（見下方 .ask 的 margin-top）。 */
+a.product { display: flex; flex-direction: column; color: inherit; }
 a.product .img-placeholder { transition: transform var(--dur-ui) ease-out; }
 a.product:hover .img-placeholder { transform: scale(1.02); }
 a.product:hover h3 { color: var(--tea); }
 
 .product .ask {
   display: inline-block;
-  margin-top: var(--s-2);
+  /* auto 把它推到卡片底部，與同列對齊；padding 保住最小間距，
+     因為最高的那張卡沒有剩餘空間，auto 會算成 0。 */
+  margin-top: auto;
+  padding-top: var(--s-2);
   font-family: var(--font-han);
   font-size: 0.8rem;
   letter-spacing: 0.15em;
