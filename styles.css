@@ -704,6 +704,15 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   position: relative;
   overflow: hidden;
 }
+/* 真實照片放 <img>，才有 alt 可以被螢幕閱讀器讀到、被圖片搜尋索引。
+   底下的色塊留著當退路：圖 404 時 scripts.js 會把 <img> 移掉，露出色塊，
+   不會出現破圖圖示。 */
+.img-placeholder > img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .img-placeholder::before {
   content: ""; position: absolute; inset: 0;
   background-image: radial-gradient(circle at var(--w1x) var(--w1y), rgba(139, 111, 71, 0.08) 0%, transparent 50%),
