@@ -18,7 +18,7 @@ body {
   overflow-x: hidden;
 }
 img { max-width: 100%; display: block; }
-a { color: inherit; text-decoration: none; transition: color 600ms ease-out; }
+a { color: inherit; text-decoration: none; transition: color var(--dur-ui) ease-out; }
 button { font: inherit; cursor: pointer; border: none; background: none; }
 
 /* --- Design Tokens --- */
@@ -54,9 +54,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --container-narrow: 760px;
   --gutter:       clamp(1.25rem, 5vw, 3rem);
 
-  /* Motion */
+  /* Motion
+     時間分三層，因為三件事的性質不同：
+     --dur        進場／敘事。捲到了才發生，慢一點是氣氛。
+     --dur-chrome 介面狀態切換（導覽列、手風琴）。0.3–0.4 秒是不打斷閱讀的上限。
+     --dur-ui     互動回饋（hover、按下）。超過 0.2 秒，人的感受就不是「優雅」而是「卡住」。
+     原本全站共用 720ms，滑過一個連結要 0.6 秒才換完色，像壞掉。 */
   --ease:         cubic-bezier(0.19, 1, 0.22, 1);
   --dur:          720ms;
+  --dur-chrome:   320ms;
+  --dur-ui:       180ms;
 }
 
 /* --- Type Scale --- */
@@ -64,6 +71,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   font-family: var(--font-display);
   font-size: 0.78rem;
   letter-spacing: 0.4em;
+  /* letter-spacing 會在最後一個字後面也加一格，置中時整行會偏左約 2.4px。
+     負 margin 把那一格從盒寬裡扣掉；靠左對齊的用法不受影響。 */
+  margin-right: -0.4em;
   text-transform: uppercase;
   color: var(--tea);
   font-weight: 500;
@@ -114,13 +124,13 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   padding: var(--s-3) var(--gutter);
   z-index: 100;
   display: flex; justify-content: space-between; align-items: center;
-  transition: background var(--dur) var(--ease), padding var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition: background var(--dur-chrome) var(--ease), padding var(--dur-chrome) var(--ease), border-color var(--dur-chrome) var(--ease);
   border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
-  background: rgba(250, 246, 239, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(250, 246, 239, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   padding: var(--s-2) var(--gutter);
   border-bottom-color: var(--line);
 }
@@ -153,9 +163,12 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   position: absolute; left: 0; right: 0; bottom: -2px;
   height: 1px; background: var(--tea);
   transform: scaleX(0); transform-origin: left;
-  transition: transform var(--dur) var(--ease);
+  transition: transform var(--dur-ui) var(--ease);
 }
-.nav-menu a:hover::after, .nav-menu a.active::after { transform: scaleX(1); }
+.nav-menu a.active::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu a:hover::after { transform: scaleX(1); }
+}
 .nav-menu a.active { color: var(--ink); }
 
 .nav-toggle { display: none; }
@@ -164,18 +177,29 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
     flex-direction: column; gap: var(--s-2); padding: var(--s-3) var(--gutter);
     background: var(--paper); border-bottom: 1px solid var(--line); }
   .nav-menu.open { display: flex; }
-  .nav-toggle { display: block; font-size: 1.2rem; color: var(--ink); }
+  /* 「≡」本身只有 11×36，手指點不到。padding 把命中區撐到 45×44，
+     再用等量負 margin 抵銷，所以字元停在原來的位置，只有命中區變大。 */
+  .nav-toggle {
+    display: block; font-size: 1.2rem; color: var(--ink);
+    padding: 4px 17px;
+    margin: -4px -17px;
+  }
 }
 
 /* ============================================================
    Hero
    ============================================================ */
 .hero {
+  /* svh 是「網址列展開時」的高度，捲動時不會跟著跳；不支援的瀏覽器退回 vh。
+     高度原本寫在各頁的 inline style 裡，改成修飾類別才有辦法一起補 svh。 */
   min-height: 100vh;
+  min-height: 100svh;
   padding-top: 120px;
   display: flex; flex-direction: column; justify-content: center;
   position: relative;
 }
+.hero.mid   { min-height: 80vh; min-height: 80svh; }
+.hero.short { min-height: 70vh; min-height: 70svh; }
 .hero .container { width: 100%; }
 .hero-eyebrow { margin-bottom: var(--s-3); }
 .hero-title {
@@ -197,7 +221,10 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   letter-spacing: 0.02em;
 }
 .hero-meta {
-  display: flex; gap: var(--s-5);
+  /* 詞與詞之間 = flex gap + ::after 的 margin，兩邊共用同一個值。
+     桌機仍是 4rem（與改版前一致），窄螢幕才縮，390px 下三個詞排得下。 */
+  --meta-gap: clamp(1.25rem, 8vw, 4rem);
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--meta-gap);
   font-family: var(--font-display);
   font-size: 0.8rem;
   letter-spacing: 0.3em;
@@ -205,7 +232,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   color: var(--mist);
 }
 .hero-meta span:not(:last-child)::after {
-  content: "·"; margin-left: var(--s-5); color: var(--line);
+  content: "·"; margin-left: var(--meta-gap); color: var(--line);
 }
 .hero-scroll {
   position: absolute; bottom: var(--s-4); left: 50%; transform: translateX(-50%);
@@ -256,10 +283,14 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   padding: var(--s-6) var(--s-4);
   display: flex; flex-direction: column; justify-content: space-between;
   min-height: 480px;
-  transition: background var(--dur) var(--ease);
+  transition: background var(--dur-ui) ease-out;
   position: relative;
 }
-.door:hover { background: var(--paper-deep); }
+/* 以下所有 hover 都關在能力查詢裡：觸控裝置上 :hover 會在點擊後「黏住」，
+   直到使用者點別的地方才消失，看起來像卡在選取狀態。 */
+@media (hover: hover) and (pointer: fine) {
+  .door:hover { background: var(--paper-deep); }
+}
 .door-num {
   font-family: var(--font-display);
   font-size: 0.85rem;
@@ -326,9 +357,11 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   border: 1px solid var(--line);
   padding: var(--s-5) var(--s-4);
   background: var(--paper);
-  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  transition: border-color var(--dur-ui) ease-out, background var(--dur-ui) ease-out;
 }
-.service:hover { border-color: var(--tea); background: var(--paper-deep); }
+@media (hover: hover) and (pointer: fine) {
+  .service:hover { border-color: var(--tea); background: var(--paper-deep); }
+}
 .service-num {
   font-family: var(--font-display);
   font-size: 0.8rem; letter-spacing: 0.3em; color: var(--mist);
@@ -376,8 +409,10 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .footer h2 { font-family: var(--font-han); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--ink); margin-bottom: var(--s-3); font-weight: 500; }
 .footer ul { list-style: none; }
 .footer ul li { margin-bottom: 8px; }
-.footer ul a { font-size: 0.92rem; color: var(--ink-soft); transition: color 400ms; }
-.footer ul a:hover { color: var(--tea); }
+.footer ul a { font-size: 0.92rem; color: var(--ink-soft); transition: color var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  .footer ul a:hover { color: var(--tea); }
+}
 .footer-brand-name { font-family: var(--font-han); font-size: 1.4rem; letter-spacing: 0.15em; margin-bottom: var(--s-2); }
 .footer-brand-en { font-family: var(--font-display); font-style: italic; color: var(--tea); letter-spacing: 0.1em; margin-bottom: var(--s-3); }
 .footer-brand-desc { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.8; max-width: 28em; }
@@ -420,9 +455,11 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   color: var(--ink-soft);
   padding: 6px 14px;
   border: 1px solid transparent;
-  transition: all 400ms;
+  transition: color var(--dur-ui) ease-out, border-color var(--dur-ui) ease-out;
 }
-.filter:hover { color: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  .filter:hover { color: var(--tea); }
+}
 .filter.active { color: var(--tea); border-color: var(--tea); }
 
 /* ============================================================
@@ -440,7 +477,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 
 /* Sub-themes (yunnan/taiwan large characters) */
 .themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
-.theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur) var(--ease); }
+.theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur-ui) ease-out; }
 /* 主題列目前沒有對應的分類頁，是展示不是導覽，所以不做 hover 變化 */
 .theme-han { font-family: var(--font-han); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; letter-spacing: 0.05em; color: var(--ink); }
 .theme-en { font-family: var(--font-display); font-style: italic; color: var(--mist); font-size: 0.85rem; margin-top: 4px; letter-spacing: 0.1em; }
@@ -461,7 +498,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    ============================================================ */
 .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
 .triad-cell { background: var(--paper); padding: var(--s-5) var(--s-4); }
-.triad-cell:hover { background: var(--paper-deep); }
+@media (hover: hover) and (pointer: fine) {
+  .triad-cell:hover { background: var(--paper-deep); }
+}
 .triad-han { font-family: var(--font-han); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 200; line-height: 1; margin-bottom: var(--s-3); color: var(--tea); }
 .triad-cell:nth-child(2) .triad-han { color: var(--seal); }
 .triad-cell:nth-child(3) .triad-han { color: var(--moss); }
@@ -522,9 +561,11 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   border: 1px solid var(--tea);
   padding: 12px 28px;
   margin-top: var(--s-3);
-  transition: all 400ms var(--ease);
+  transition: background var(--dur-ui) ease-out, color var(--dur-ui) ease-out, transform var(--dur-ui) ease-out;
 }
-.svc-cta:hover { background: var(--tea); color: var(--paper); }
+@media (hover: hover) and (pointer: fine) {
+  .svc-cta:hover { background: var(--tea); color: var(--paper); }
+}
 @media (max-width: 760px) { .svc-chapter { grid-template-columns: 1fr; } .svc-chapter.flip .svc-img { order: 0; } }
 
 /* ============================================================
@@ -554,7 +595,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    改用中文字體並略縮，三張卡看起來才等重 */
 .contact-card .value-han { font-family: var(--font-han); font-size: 1.05rem; letter-spacing: 0.12em; }
 .contact-card .value a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
-.contact-card .value a:hover { color: var(--tea); border-bottom-color: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-card .value a:hover { color: var(--tea); border-bottom-color: var(--tea); }
+}
 .contact-card p { font-size: 0.88rem; color: var(--mist); }
 
 /* QR 碼（微信公眾號）。尺寸對齊 icon-mark 的置中節奏，白底留掃描靜區 */
@@ -582,18 +625,24 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   border-bottom: 1px solid var(--line);
   padding: 10px 0;
   color: var(--ink);
-  transition: border-color var(--dur) var(--ease);
+  transition: border-color var(--dur-ui) ease-out;
 }
 .letter-form input:focus, .letter-form textarea:focus { outline: none; border-bottom-color: var(--tea); }
+/* 滑鼠點進來看底線就夠；用鍵盤走到這裡的人需要看得見的框。 */
+.letter-form input:focus-visible, .letter-form textarea:focus-visible {
+  outline: 2px solid var(--tea); outline-offset: 2px;
+}
 .letter-form textarea { min-height: 120px; resize: vertical; }
 .letter-form button[type=submit] {
   font-family: var(--font-han);
   font-size: 0.95rem; letter-spacing: 0.25em;
   color: var(--paper); background: var(--ink);
   padding: 14px 36px; margin-top: var(--s-3);
-  transition: background var(--dur) var(--ease);
+  transition: background var(--dur-ui) ease-out, transform var(--dur-ui) ease-out;
 }
-.letter-form button[type=submit]:hover { background: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  .letter-form button[type=submit]:hover { background: var(--tea); }
+}
 .letter-form button[type=submit]:disabled { opacity: 0.45; cursor: default; background: var(--ink); }
 /* 蜜罐欄位：真人看不到，機器人會填 */
 .letter-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -617,9 +666,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   color: var(--ink);
   display: flex; justify-content: space-between; align-items: center;
 }
-.faq-q::after { content: "+"; color: var(--tea); font-size: 1.4rem; transition: transform var(--dur) var(--ease); }
+.faq-q::after { content: "+"; color: var(--tea); font-size: 1.4rem; transition: transform var(--dur-chrome) var(--ease); }
 .faq-item.open .faq-q::after { content: "−"; }
-.faq-a { max-height: 0; overflow: hidden; transition: max-height var(--dur) var(--ease), padding var(--dur) var(--ease); color: var(--ink-soft); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height var(--dur-chrome) var(--ease), padding var(--dur-chrome) var(--ease); color: var(--ink-soft); }
 .faq-item.open .faq-a { max-height: 400px; padding: 0 0 var(--s-3); }
 
 /* ============================================================
@@ -663,7 +712,16 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 .img-placeholder span {
   position: absolute; bottom: var(--s-2); right: var(--s-2);
   font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.3em;
-  color: rgba(250, 246, 239, 0.7); text-transform: uppercase;
+  color: rgba(250, 246, 239, 0.92); text-transform: uppercase;
+  /* 色塊是漸層，而且角度會被 .v2–.v8 換掉，所以浮水印底下到底是深是淺
+     並不固定。淡陰影讓字在中間調上也描得出邊，不必為每個角度調一次。 */
+  text-shadow: 0 1px 3px rgba(42, 37, 32, 0.45);
+}
+/* 預設色塊（paper-deep → line）整條都是淺的，近白的字會整個消失：
+   實測 #D9D1C2 上的對比只有 1.2:1。這一種要反過來用墨色。 */
+.img-placeholder:not(.tea):not(.moss):not(.dark) span {
+  color: rgba(42, 37, 32, 0.62);   /* 對 #D9D1C2 為 3.7:1，原本是 1.2:1 */
+  text-shadow: none;
 }
 
 /* ============================================================
@@ -675,6 +733,11 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .reveal.in { opacity: 1; transform: translateY(0); }
+/* 關掉 JavaScript 時，.reveal 會永遠停在 opacity:0，整頁是空白的。
+   這一條讓內容照常顯示，不必在十六個 HTML 檔裡各塞一段 <noscript>。 */
+@media (scripting: none) {
+  .reveal, .reveal.in { opacity: 1; transform: none; }
+}
 
 /* ============================================================
    Page wrapper for non-home pages
@@ -941,10 +1004,14 @@ main { padding-top: 88px; } /* room for fixed nav on inner pages */
 
 /* --- 讓 journal.html 的卡片可以整張點擊 --- */
 a.article-card { display: block; color: inherit; }
-a.article-card h3 { transition: color var(--dur) var(--ease); }
-a.article-card:hover h3 { color: var(--tea); }
-a.article-card .img-placeholder { transition: transform var(--dur) var(--ease); }
-a.article-card:hover .img-placeholder { transform: translateY(-4px); }
+a.article-card h3 { transition: color var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.article-card:hover h3 { color: var(--tea); }
+}
+a.article-card .img-placeholder { transition: transform var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.article-card:hover .img-placeholder { transform: translateY(-4px); }
+}
 
 /* ------------------------------------------------------------
    文章內的對照區塊（例：天然香 vs 化學香）
@@ -1031,7 +1098,9 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   letter-spacing: 0.12em;
   color: var(--tea);
 }
-.nav-menu .lang-switch a:hover { color: var(--ink); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu .lang-switch a:hover { color: var(--ink); }
+}
 
 /* ============================================================
    Next step — 讀完之後的下一步
@@ -1067,10 +1136,12 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   color: var(--mist);
   border-color: var(--line);
 }
-.next-step-actions .svc-cta.quiet:hover {
-  background: transparent;
-  color: var(--tea);
-  border-color: var(--tea);
+@media (hover: hover) and (pointer: fine) {
+  .next-step-actions .svc-cta.quiet:hover {
+    background: transparent;
+    color: var(--tea);
+    border-color: var(--tea);
+  }
 }
 
 /* 文章結尾：原本只有「← 回幸福誌」，是往回走的。
@@ -1088,7 +1159,9 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
   border-bottom: 1px solid var(--line);
   padding-bottom: 2px;
 }
-.article-foot .article-next a:hover { border-bottom-color: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  .article-foot .article-next a:hover { border-bottom-color: var(--tea); }
+}
 .article-foot .svc-cta { margin-top: 0; }
 
 /* 導覽列是 fixed 的，錨點直接跳過去標題會被蓋住，要留出高度 */
@@ -1108,21 +1181,30 @@ a.article-card:hover .img-placeholder { transform: translateY(-4px); }
    連繫頁再把它填進「想聊的事情」。
    商品名刻意不寫死在 href 裡——改 h3 就好，不必兩邊同步。
    ============================================================ */
-a.product { display: block; color: inherit; }
-a.product .img-placeholder { transition: transform var(--dur) var(--ease); }
-a.product:hover .img-placeholder { transform: scale(1.02); }
-a.product:hover h3 { color: var(--tea); }
+/* 商品名有的一行有的兩行，如果不撐開，同一列卡片的「寫信詢問 →」會差
+   二十幾個 pixel。用 flex 讓它一律貼在卡片底部（見下方 .ask 的 margin-top）。 */
+a.product { display: flex; flex-direction: column; color: inherit; }
+a.product .img-placeholder { transition: transform var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.product:hover .img-placeholder { transform: scale(1.02); }
+  a.product:hover h3 { color: var(--tea); }
+}
 
 .product .ask {
   display: inline-block;
-  margin-top: var(--s-2);
+  /* auto 把它推到卡片底部，與同列對齊；padding 保住最小間距，
+     因為最高的那張卡沒有剩餘空間，auto 會算成 0。 */
+  margin-top: auto;
+  padding-top: var(--s-2);
   font-family: var(--font-han);
   font-size: 0.8rem;
   letter-spacing: 0.15em;
   color: var(--mist);
-  transition: color var(--dur) var(--ease);
+  transition: color var(--dur-ui) ease-out;
 }
-a.product:hover .ask { color: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  a.product:hover .ask { color: var(--tea); }
+}
 
 /* 鍵盤操作看得見焦點 */
 a.product:focus-visible { outline: 2px solid var(--tea); outline-offset: 4px; }
@@ -1144,4 +1226,65 @@ a.product:focus-visible { outline: 2px solid var(--tea); outline-offset: 4px; }
   border-bottom: 1px solid var(--line);
   padding-bottom: 1px;
 }
-.letter-form .form-note a:hover { border-bottom-color: var(--tea); }
+@media (hover: hover) and (pointer: fine) {
+  .letter-form .form-note a:hover { border-bottom-color: var(--tea); }
+}
+
+/* ============================================================
+   按下狀態
+   ------------------------------------------------------------
+   原本全站沒有任何 :active。桌機還有 :hover 撐著，手機上 :hover
+   不存在，所以從手指按下到頁面切換之間，畫面是完全沒有反應的。
+   回饋要發生在「按下」的那一刻，不是放開之後，也不是等頁面換完。
+   時間用 --dur-ui（180ms）：再長就不像是自己按出來的。
+   ============================================================ */
+a.product:active .img-placeholder { transform: scale(0.985); }
+a.product:active h3 { color: var(--tea); }
+a.article-card:active .img-placeholder { transform: scale(0.985); }
+a.article-card:active h3 { color: var(--tea); }
+
+.svc-cta:active,
+.letter-form button[type=submit]:active:not(:disabled) { transform: scale(0.97); }
+
+.nav-toggle:active,
+.nav-menu a:active,
+.footer ul a:active,
+.filter:active { opacity: 0.55; }
+
+.door:active, .service:active, .triad-cell:active { background: var(--paper-deep); }
+
+/* 系統層級關掉動態的人，按下的縮放也一起關掉；顏色與透明度的回饋留著，
+   那不是位移，不會引起前庭不適，而且是「我按到了」唯一的線索。 */
+@media (prefers-reduced-motion: reduce) {
+  a.product:active .img-placeholder,
+  a.article-card:active .img-placeholder,
+  .svc-cta:active,
+  .letter-form button[type=submit]:active:not(:disabled) { transform: none; }
+}
+
+/* ============================================================
+   另外兩個系統偏好
+   ------------------------------------------------------------
+   prefers-reduced-motion 已經在上面處理了。這兩個是它的同伴：
+   有人是暈眩，有人是看不清楚半透明，有人是需要更硬的對比。
+   ============================================================ */
+@media (prefers-reduced-transparency: reduce) {
+  .nav.scrolled {
+    background: var(--paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --mist: #595248;   /* 對 paper 7.0:1（原本 4.81） */
+    --line: #B5AB98;   /* 分隔線要看得出來才有分隔的意思 */
+  }
+  .nav.scrolled {
+    background: var(--paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .img-placeholder span { text-shadow: none; }
+}
