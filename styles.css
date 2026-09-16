@@ -67,6 +67,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --dur:          720ms;
   --dur-chrome:   320ms;
   --dur-ui:       180ms;
+
+  /* 縱向節奏
+     段與段之間只用這三個值。原本的間距是 211/192/221/339/144/0/64——
+     七個缺口七個不同的數字，因為元件自己帶著垂直內距，疊在 section 的
+     內距上面（.products 在 .section-tight 的 64 裡又有 64，.portrait 在
+     .section 的 144 裡又有 96）。現在節奏由 section 持有，元件只負責
+     自己上方的起手距離。 */
+  --flow-s:        4rem;   /*  64px */
+  --flow-m:        8rem;   /* 128px */
+  --flow-l:       12rem;   /* 192px */
 }
 
 /* --- Type Scale --- */
@@ -116,8 +126,8 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* --- Layout helpers --- */
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
 .container.narrow { max-width: var(--container-narrow); }
-.section { padding: var(--s-7) 0; }
-.section-tight { padding: var(--s-5) 0; }
+.section { padding: var(--flow-m) 0; }
+.section-tight { padding: var(--flow-s) 0; }
 
 /* ============================================================
    Navigation
@@ -380,7 +390,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    ============================================================ */
 .seal {
   text-align: center;
-  padding: var(--s-7) 0 var(--s-6);
+  padding: var(--flow-m) 0;
 }
 .seal-mark {
   display: inline-block;
@@ -468,7 +478,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* ============================================================
    Product Cards
    ============================================================ */
-.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--s-5) 0; }
+.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--flow-s) 0 0; }
 .product { background: var(--paper); }
 .product .img-placeholder { aspect-ratio: 4/5; margin-bottom: var(--s-2); }
 .product .cat { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: 6px; }
@@ -479,7 +489,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 @media (max-width: 760px) { .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); } }
 
 /* Sub-themes (yunnan/taiwan large characters) */
-.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--flow-s) 0 0; }
 .theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur-ui) ease-out; }
 /* 主題列目前沒有對應的分類頁，是展示不是導覽，所以不做 hover 變化 */
 .theme-han { font-family: var(--font-han); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; letter-spacing: 0.05em; color: var(--ink); }
@@ -487,7 +497,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 @media (max-width: 760px) { .themes { grid-template-columns: 1fr 1fr; } }
 
 /* Portrait section */
-.portrait { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-5); align-items: center; padding: var(--s-6) 0; border-top: 1px solid var(--line); }
+.portrait { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-5); align-items: center; padding: var(--flow-s) 0 0; border-top: 1px solid var(--line); }
 .portrait .img-placeholder { aspect-ratio: 3/4; }
 .portrait .name { font-family: var(--font-han); font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: var(--s-2); }
 .portrait .role { font-family: var(--font-display); font-style: italic; color: var(--tea); letter-spacing: 0.08em; margin-bottom: var(--s-3); }
@@ -1115,7 +1125,7 @@ a.article-card .img-placeholder { transition: transform var(--dur-ui) ease-out; 
    ============================================================ */
 .next-step {
   text-align: center;
-  padding: var(--s-6) 0 var(--s-5);
+  padding: var(--flow-m) 0 var(--flow-s);
   border-top: 1px solid var(--line);
 }
 .next-step .eyebrow { margin-bottom: var(--s-2); }
