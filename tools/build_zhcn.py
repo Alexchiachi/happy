@@ -36,8 +36,10 @@ SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
              "eternitychildbooking", "inner-flow", "docs", "tools", "tests",
              "images", "google")
 
-# 舊網址的轉址殼，不做簡體版
-SKIP_FILES = {"inner-flow.html"}
+# 舊網址的轉址殼，不做簡體版。
+# 404.html 同理：GitHub Pages 只認根目錄那一份，而且它必須用絕對路徑
+# （會在任意深度的網址上被提供），不能讓這支腳本按相對路徑改寫。
+SKIP_FILES = {"inner-flow.html", "404.html"}
 
 # 這些東西只有根目錄那一份，兩種語系共用。簡體頁在 zh-cn/ 底下，
 # 所以路徑都要多退一層，否則會去找 zh-cn/ 底下不存在的檔案。

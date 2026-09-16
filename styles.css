@@ -765,6 +765,29 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    Page wrapper for non-home pages
    ============================================================ */
 main { padding-top: 88px; } /* room for fixed nav on inner pages */
+main.main-flush { padding-top: 0; } /* 首頁的 hero 滿版起頭，不需要讓位 */
+
+/* 跳到主要內容：平常在畫面外，鍵盤 Tab 到才滑進來。
+   沒有它，用鍵盤的人每進一頁都要先穿過七個導覽連結才碰得到內容。 */
+.skip-link {
+  position: fixed;
+  top: 0; left: var(--gutter);
+  z-index: 200;
+  transform: translateY(-140%);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--tea);
+  padding: 12px 20px;
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  transition: transform var(--dur-ui) ease-out;
+}
+.skip-link:focus { transform: translateY(0); }
+/* <main> 預設不可聚焦，沒有 tabindex="-1" 的話按下 skip link 焦點不會真的
+   移過去，下一次 Tab 又回到導覽列——看起來有用而已。加了之後要把它自己的
+   外框關掉，否則整塊主內容會被框起來。 */
+main:focus { outline: none; }
 .page-hero {
   padding: var(--s-7) 0 var(--s-5);
   text-align: center;
