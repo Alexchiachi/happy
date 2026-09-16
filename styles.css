@@ -802,6 +802,25 @@ button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+
+/* ============================================================
+   斷行與數字
+   ------------------------------------------------------------
+   text-wrap 原本只掛在文章頁的 .article-* 上，其他頁一個都沒有，
+   所以標題可能在最後一行只剩一兩個字，段落可能留下孤字。
+   balance 給短標題（瀏覽器對超過約六行的文字會自動忽略），
+   pretty 給內文，只動最後一行的斷點。
+   ============================================================ */
+h1, h2, h3, h4,
+.h-display, .h-han-display, .h-section, .h-card,
+.hero-tagline, .next-step p, .pull-quote q { text-wrap: balance; }
+
+p, li, blockquote { text-wrap: pretty; }
+
+/* 這裡刻意沒有 .price { font-variant-numeric: tabular-nums }：
+   實測 Cormorant Garamond 沒有 tnum，tabular 與 proportional 產生完全
+   相同的寬度，那行是無作用的宣告。而且價格是靠左對齊在各自的卡片裡，
+   起點本來就齊，數字寬度只影響結尾——這一頁不需要等寬數字。 */
 .page-hero {
   padding: var(--s-7) 0 var(--s-5);
   text-align: center;
