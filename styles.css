@@ -33,6 +33,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --mist:         #736C63;   /* 對 paper 4.81:1；原本 #9A938A 只有 2.82，讀不到 */
   --line:         #D9D1C2;
   --seal:         #A8543A;   /* Vermilion seal accent */
+  /* 整頁的強調色。地區頁用 <body class="region-*"> 換掉，
+     原本這件事寫在每個元素的行內樣式裡，所以會漏。 */
+  --accent:       var(--tea);
 
   /* Typography */
   --font-display: "Cormorant Garamond", "Noto Serif TC", serif;
@@ -75,7 +78,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
      負 margin 把那一格從盒寬裡扣掉；靠左對齊的用法不受影響。 */
   margin-right: -0.4em;
   text-transform: uppercase;
-  color: var(--tea);
+  color: var(--accent);
   font-weight: 500;
 }
 h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
@@ -1288,3 +1291,46 @@ a.article-card:active h3 { color: var(--tea); }
   }
   .img-placeholder span { text-shadow: none; }
 }
+
+/* ============================================================
+   地區頁（雲南／台灣）
+   ------------------------------------------------------------
+   兩頁是同一套模板，差別只有強調色。原本這件事散在 HTML 的行內
+   樣式裡——雲南 3 處、台灣 8 處——結果 taiwan.html 五個 eyebrow
+   只有兩個寫了苔綠，另外三個漏掉，還留著雲南的茶褐。
+   改由 <body class="region-*"> 設定 --accent，漏不掉。
+   ============================================================ */
+body.region-taiwan { --accent: var(--moss); }
+
+/* 地區大字標題：這一頁的主視覺，原本七個屬性全寫在 <h1> 的 style 裡 */
+.region-title {
+  font-family: var(--font-han);
+  font-size: clamp(8rem, 22vw, 18rem);
+  font-weight: 200;
+  letter-spacing: 0.05em;
+  line-height: 0.95;
+  color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+/* 台灣頁的五個主題字跟著強調色走；雲南頁維持墨色 */
+body.region-taiwan .theme-han { color: var(--accent); }
+
+/* 置中的段落標頭。原本同一個元件有 2rem 與 3rem 兩種下邊距，統一成一個值。 */
+.section-head { text-align: center; margin-bottom: var(--s-4); }
+.section-head .h-section { margin-top: var(--s-2); }
+
+/* 帶底線的段落標頭（當季選物）。
+   右邊那個位置是空的——space-between 只有一個子元素時不起作用。
+   保留 flex 是因為這裡本來就規劃了第二個元素（例如「看全部 →」）。 */
+.section-rule {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: var(--s-4); padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.lede-center { text-align: center; }
+
+/* 人像區 */
+.portrait .name { margin-top: var(--s-2); }
+.portrait .note { color: var(--ink-soft); font-size: 0.95rem; margin-top: var(--s-3); }
