@@ -788,6 +788,20 @@ main.main-flush { padding-top: 0; } /* 首頁的 hero 滿版起頭，不需要�
    移過去，下一次 Tab 又回到導覽列——看起來有用而已。加了之後要把它自己的
    外框關掉，否則整塊主內容會被框起來。 */
 main:focus { outline: none; }
+
+/* ============================================================
+   鍵盤焦點
+   ------------------------------------------------------------
+   原本只有商品卡與表單欄位有 :focus-visible，導覽列、CTA、頁尾連結
+   靠瀏覽器預設外框——看得見，但不是這個網站的顏色，而且在米色底上
+   很淡。改成全站一致，並跟著 --accent 走（台灣頁是苔綠）。
+   用 :focus-visible 而不是 :focus，滑鼠點擊不會留下框。
+   ============================================================ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 .page-hero {
   padding: var(--s-7) 0 var(--s-5);
   text-align: center;
