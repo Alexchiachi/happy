@@ -50,9 +50,10 @@ def main() -> int:
         src = html.read_text(encoding="utf-8")
         out = src
         for name, ver in versions.items():
-            # 比對 href/src 裡的檔名，可帶 ../ 前綴，可能已有舊的 ?v=
+            # 比對 href/src 裡的檔名，可帶 ../ 前綴或站台根路徑，可能已有舊的 ?v=
+            # （404.html 必須用 /happy/ 絕對路徑，見該檔的註解）
             out = re.sub(
-                r'((?:href|src)=")((?:\.\./)*)' + re.escape(name) + r'(?:\?v=[0-9a-f]+)?(")',
+                r'((?:href|src)=")((?:\.\./)*|/happy/)' + re.escape(name) + r'(?:\?v=[0-9a-f]+)?(")',
                 lambda m: f'{m.group(1)}{m.group(2)}{name}?v={ver}{m.group(3)}',
                 out,
             )

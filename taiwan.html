@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18cbeacf">
+  <link rel="stylesheet" href="styles.css?v=507a3546">
   <style>
     /* Mirror palette to moss-green for Taiwan */
     .taiwan-mirror .door-cta { color: var(--moss); border-bottom-color: var(--moss); }
@@ -46,7 +46,8 @@
     .taiwan-mirror .nav-menu a::after { background: var(--moss); }
   </style>
 </head>
-<body class="taiwan-mirror">
+<body class="taiwan-mirror region-taiwan">
+<a class="skip-link" href="#main">跳到主要內容</a>
 
 <nav class="nav">
   <a class="nav-brand" href="index.html">大道至簡<small>Dao is simple</small></a>
@@ -62,12 +63,12 @@
   </ul>
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
   <!-- Large Character Hero -->
   <section class="hero mid">
     <div class="container">
-      <div class="eyebrow hero-eyebrow reveal" style="color: var(--moss);">Taiwan · 福爾摩沙</div>
-      <h1 class="reveal" style="font-family: var(--font-han); font-size: clamp(8rem, 22vw, 18rem); font-weight: 200; letter-spacing: 0.05em; line-height: 0.95; color: var(--moss); margin-bottom: 2rem;">台灣</h1>
+      <div class="eyebrow hero-eyebrow reveal">Taiwan · 福爾摩沙</div>
+      <h1 class="region-title reveal">台灣</h1>
       <p class="hero-tagline reveal">海島的清亮，土地的誠實。</p>
       <div class="hero-meta reveal">
         <span>稻米</span>
@@ -80,24 +81,24 @@
   <!-- 5 Sub-themes -->
   <section class="section-tight">
     <div class="container">
-      <header style="text-align:center; margin-bottom: 2rem;">
+      <header class="section-head">
         <div class="eyebrow reveal">Five themes · 五個主題</div>
-        <h2 class="h-section reveal" style="margin-top:1rem;">從田到桌，從手到家</h2>
+        <h2 class="h-section reveal">從田到桌，從手到家</h2>
       </header>
     </div>
     <div class="themes">
-      <div class="theme reveal"><div class="theme-han" style="color: var(--moss);">米</div><div class="theme-en">Rice</div></div>
-      <div class="theme reveal"><div class="theme-han" style="color: var(--moss);">鹽</div><div class="theme-en">Salt</div></div>
-      <div class="theme reveal"><div class="theme-han" style="color: var(--moss);">茶</div><div class="theme-en">Tea</div></div>
-      <div class="theme reveal"><div class="theme-han" style="color: var(--moss);">器</div><div class="theme-en">Craft</div></div>
-      <div class="theme reveal"><div class="theme-han" style="color: var(--moss);">農</div><div class="theme-en">Farm</div></div>
+      <div class="theme reveal"><div class="theme-han">米</div><div class="theme-en">Rice</div></div>
+      <div class="theme reveal"><div class="theme-han">鹽</div><div class="theme-en">Salt</div></div>
+      <div class="theme reveal"><div class="theme-han">茶</div><div class="theme-en">Tea</div></div>
+      <div class="theme reveal"><div class="theme-han">器</div><div class="theme-en">Craft</div></div>
+      <div class="theme reveal"><div class="theme-han">農</div><div class="theme-en">Farm</div></div>
     </div>
   </section>
 
   <!-- Region brief -->
   <section class="section-tight">
     <div class="container narrow">
-      <p class="lede reveal" style="text-align:center;">
+      <p class="lede lede-center reveal">
         台灣是一座島，但島上有山、有海、有田。從花蓮的稻、台南的鹽、坪林的茶，到南投的木工、苗栗的窯。我們從在地職人手中選回每一件能說土地故事的物。
       </p>
     </div>
@@ -106,7 +107,7 @@
   <!-- Product Cards -->
   <section class="section-tight" id="rice">
     <div class="container">
-      <header style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);">
+      <header class="section-rule">
         <h2 class="h-section reveal">當季選物</h2>
       </header>
       <div class="products">
@@ -173,20 +174,20 @@
   <!-- Farm-to-table story -->
   <section class="section">
     <div class="container">
-      <header style="text-align:center; margin-bottom: 3rem;">
+      <header class="section-head">
         <div class="eyebrow reveal">Farm to table · 稻田裡的餐桌</div>
-        <h2 class="h-section reveal" style="margin-top:1rem;">從一張餐桌開始的選物</h2>
+        <h2 class="h-section reveal">從一張餐桌開始的選物</h2>
       </header>
       <div class="portrait reveal">
         <div class="img-placeholder moss"><span>FIELD</span></div>
         <div>
-          <div class="eyebrow" style="color: var(--moss);">Yilan · 宜蘭三星</div>
-          <h3 class="name" style="margin-top: 1rem;">江漢錡 先生</h3>
+          <div class="eyebrow">Yilan · 宜蘭三星</div>
+          <h3 class="name">江漢錡 先生</h3>
           <p class="role moss">三星有機米農 · 稻田裡的餐桌十四年合作夥伴</p>
           <blockquote class="moss">
             一開始把餐桌擺進田裡，我覺得這些城裡人來鬧的。後來年復一年地來，我才明白他們是真的想看一下這碗米從哪裡來。看過了，米的價值就回來了。
           </blockquote>
-          <p style="color: var(--ink-soft); font-size: 0.95rem; margin-top: 1.5rem;">2012 年「稻田裡的餐桌計畫」第一場就在江先生的有機田中舉辦。十四年來，這片田從一個產地，變成了一個故事的起點，也是台灣選物的初心。</p>
+          <p class="note">2012 年「稻田裡的餐桌計畫」第一場就在江先生的有機田中舉辦。十四年來，這片田從一個產地，變成了一個故事的起點，也是台灣選物的初心。</p>
         </div>
       </div>
     </div>
@@ -233,6 +234,6 @@
   </div>
 </footer>
 
-<script src="scripts.js?v=9e71c51b"></script>
+<script src="scripts.js?v=533f5aa4"></script>
 </body>
 </html>

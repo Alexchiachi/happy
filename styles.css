@@ -33,6 +33,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --mist:         #736C63;   /* 對 paper 4.81:1；原本 #9A938A 只有 2.82，讀不到 */
   --line:         #D9D1C2;
   --seal:         #A8543A;   /* Vermilion seal accent */
+  /* 整頁的強調色。地區頁用 <body class="region-*"> 換掉，
+     原本這件事寫在每個元素的行內樣式裡，所以會漏。 */
+  --accent:       var(--tea);
 
   /* Typography */
   --font-display: "Cormorant Garamond", "Noto Serif TC", serif;
@@ -64,6 +67,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --dur:          720ms;
   --dur-chrome:   320ms;
   --dur-ui:       180ms;
+
+  /* 縱向節奏
+     段與段之間只用這三個值。原本的間距是 211/192/221/339/144/0/64——
+     七個缺口七個不同的數字，因為元件自己帶著垂直內距，疊在 section 的
+     內距上面（.products 在 .section-tight 的 64 裡又有 64，.portrait 在
+     .section 的 144 裡又有 96）。現在節奏由 section 持有，元件只負責
+     自己上方的起手距離。 */
+  --flow-s:        4rem;   /*  64px */
+  --flow-m:        8rem;   /* 128px */
+  --flow-l:       12rem;   /* 192px */
 }
 
 /* --- Type Scale --- */
@@ -75,7 +88,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
      負 margin 把那一格從盒寬裡扣掉；靠左對齊的用法不受影響。 */
   margin-right: -0.4em;
   text-transform: uppercase;
-  color: var(--tea);
+  color: var(--accent);
   font-weight: 500;
 }
 h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
@@ -113,8 +126,8 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* --- Layout helpers --- */
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
 .container.narrow { max-width: var(--container-narrow); }
-.section { padding: var(--s-7) 0; }
-.section-tight { padding: var(--s-5) 0; }
+.section { padding: var(--flow-m) 0; }
+.section-tight { padding: var(--flow-s) 0; }
 
 /* ============================================================
    Navigation
@@ -377,7 +390,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    ============================================================ */
 .seal {
   text-align: center;
-  padding: var(--s-7) 0 var(--s-6);
+  padding: var(--flow-m) 0;
 }
 .seal-mark {
   display: inline-block;
@@ -465,7 +478,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* ============================================================
    Product Cards
    ============================================================ */
-.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--s-5) 0; }
+.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--flow-s) 0 0; }
 .product { background: var(--paper); }
 .product .img-placeholder { aspect-ratio: 4/5; margin-bottom: var(--s-2); }
 .product .cat { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: 6px; }
@@ -476,7 +489,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 @media (max-width: 760px) { .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); } }
 
 /* Sub-themes (yunnan/taiwan large characters) */
-.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--flow-s) 0 0; }
 .theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur-ui) ease-out; }
 /* 主題列目前沒有對應的分類頁，是展示不是導覽，所以不做 hover 變化 */
 .theme-han { font-family: var(--font-han); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; letter-spacing: 0.05em; color: var(--ink); }
@@ -484,7 +497,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 @media (max-width: 760px) { .themes { grid-template-columns: 1fr 1fr; } }
 
 /* Portrait section */
-.portrait { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-5); align-items: center; padding: var(--s-6) 0; border-top: 1px solid var(--line); }
+.portrait { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-5); align-items: center; padding: var(--flow-s) 0 0; border-top: 1px solid var(--line); }
 .portrait .img-placeholder { aspect-ratio: 3/4; }
 .portrait .name { font-family: var(--font-han); font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: var(--s-2); }
 .portrait .role { font-family: var(--font-display); font-style: italic; color: var(--tea); letter-spacing: 0.08em; margin-bottom: var(--s-3); }
@@ -691,6 +704,15 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   position: relative;
   overflow: hidden;
 }
+/* 真實照片放 <img>，才有 alt 可以被螢幕閱讀器讀到、被圖片搜尋索引。
+   底下的色塊留著當退路：圖 404 時 scripts.js 會把 <img> 移掉，露出色塊，
+   不會出現破圖圖示。 */
+.img-placeholder > img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .img-placeholder::before {
   content: ""; position: absolute; inset: 0;
   background-image: radial-gradient(circle at var(--w1x) var(--w1y), rgba(139, 111, 71, 0.08) 0%, transparent 50%),
@@ -743,6 +765,62 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
    Page wrapper for non-home pages
    ============================================================ */
 main { padding-top: 88px; } /* room for fixed nav on inner pages */
+main.main-flush { padding-top: 0; } /* 首頁的 hero 滿版起頭，不需要讓位 */
+
+/* 跳到主要內容：平常在畫面外，鍵盤 Tab 到才滑進來。
+   沒有它，用鍵盤的人每進一頁都要先穿過七個導覽連結才碰得到內容。 */
+.skip-link {
+  position: fixed;
+  top: 0; left: var(--gutter);
+  z-index: 200;
+  transform: translateY(-140%);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--tea);
+  padding: 12px 20px;
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  transition: transform var(--dur-ui) ease-out;
+}
+.skip-link:focus { transform: translateY(0); }
+/* <main> 預設不可聚焦，沒有 tabindex="-1" 的話按下 skip link 焦點不會真的
+   移過去，下一次 Tab 又回到導覽列——看起來有用而已。加了之後要把它自己的
+   外框關掉，否則整塊主內容會被框起來。 */
+main:focus { outline: none; }
+
+/* ============================================================
+   鍵盤焦點
+   ------------------------------------------------------------
+   原本只有商品卡與表單欄位有 :focus-visible，導覽列、CTA、頁尾連結
+   靠瀏覽器預設外框——看得見，但不是這個網站的顏色，而且在米色底上
+   很淡。改成全站一致，並跟著 --accent 走（台灣頁是苔綠）。
+   用 :focus-visible 而不是 :focus，滑鼠點擊不會留下框。
+   ============================================================ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   斷行與數字
+   ------------------------------------------------------------
+   text-wrap 原本只掛在文章頁的 .article-* 上，其他頁一個都沒有，
+   所以標題可能在最後一行只剩一兩個字，段落可能留下孤字。
+   balance 給短標題（瀏覽器對超過約六行的文字會自動忽略），
+   pretty 給內文，只動最後一行的斷點。
+   ============================================================ */
+h1, h2, h3, h4,
+.h-display, .h-han-display, .h-section, .h-card,
+.hero-tagline, .next-step p, .pull-quote q { text-wrap: balance; }
+
+p, li, blockquote { text-wrap: pretty; }
+
+/* 這裡刻意沒有 .price { font-variant-numeric: tabular-nums }：
+   實測 Cormorant Garamond 沒有 tnum，tabular 與 proportional 產生完全
+   相同的寬度，那行是無作用的宣告。而且價格是靠左對齊在各自的卡片裡，
+   起點本來就齊，數字寬度只影響結尾——這一頁不需要等寬數字。 */
 .page-hero {
   padding: var(--s-7) 0 var(--s-5);
   text-align: center;
@@ -1112,7 +1190,7 @@ a.article-card .img-placeholder { transition: transform var(--dur-ui) ease-out; 
    ============================================================ */
 .next-step {
   text-align: center;
-  padding: var(--s-6) 0 var(--s-5);
+  padding: var(--flow-m) 0 var(--flow-s);
   border-top: 1px solid var(--line);
 }
 .next-step .eyebrow { margin-bottom: var(--s-2); }
@@ -1288,3 +1366,46 @@ a.article-card:active h3 { color: var(--tea); }
   }
   .img-placeholder span { text-shadow: none; }
 }
+
+/* ============================================================
+   地區頁（雲南／台灣）
+   ------------------------------------------------------------
+   兩頁是同一套模板，差別只有強調色。原本這件事散在 HTML 的行內
+   樣式裡——雲南 3 處、台灣 8 處——結果 taiwan.html 五個 eyebrow
+   只有兩個寫了苔綠，另外三個漏掉，還留著雲南的茶褐。
+   改由 <body class="region-*"> 設定 --accent，漏不掉。
+   ============================================================ */
+body.region-taiwan { --accent: var(--moss); }
+
+/* 地區大字標題：這一頁的主視覺，原本七個屬性全寫在 <h1> 的 style 裡 */
+.region-title {
+  font-family: var(--font-han);
+  font-size: clamp(8rem, 22vw, 18rem);
+  font-weight: 200;
+  letter-spacing: 0.05em;
+  line-height: 0.95;
+  color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+/* 台灣頁的五個主題字跟著強調色走；雲南頁維持墨色 */
+body.region-taiwan .theme-han { color: var(--accent); }
+
+/* 置中的段落標頭。原本同一個元件有 2rem 與 3rem 兩種下邊距，統一成一個值。 */
+.section-head { text-align: center; margin-bottom: var(--s-4); }
+.section-head .h-section { margin-top: var(--s-2); }
+
+/* 帶底線的段落標頭（當季選物）。
+   右邊那個位置是空的——space-between 只有一個子元素時不起作用。
+   保留 flex 是因為這裡本來就規劃了第二個元素（例如「看全部 →」）。 */
+.section-rule {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: var(--s-4); padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.lede-center { text-align: center; }
+
+/* 人像區 */
+.portrait .name { margin-top: var(--s-2); }
+.portrait .note { color: var(--ink-soft); font-size: 0.95rem; margin-top: var(--s-3); }

@@ -30,9 +30,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18cbeacf">
+  <link rel="stylesheet" href="styles.css?v=507a3546">
 </head>
 <body>
+<a class="skip-link" href="#main">跳到主要內容</a>
 
 <nav class="nav">
   <a class="nav-brand" href="index.html">大道至簡<small>Dao is simple</small></a>
@@ -48,7 +49,7 @@
   </ul>
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
   <section class="page-hero">
     <div class="container narrow">
       <div class="eyebrow reveal">About · 關於</div>
@@ -130,7 +131,10 @@
   <section class="section">
     <div class="container">
       <div class="portrait reveal">
-        <div class="img-placeholder tea" style="--img:url(images/founder-jianchiachi.jpg)"></div>
+        <div class="img-placeholder tea">
+          <img src="images/founder-jianchiachi.jpg" width="1060" height="1484" loading="lazy" decoding="async"
+               alt="簡家旗，大道至簡與幸福果食共同創辦人">
+        </div>
         <div>
           <div class="eyebrow">Founder · 主理人</div>
           <h3 class="name" style="margin-top: 1rem;">簡家旗</h3>
@@ -176,6 +180,6 @@
   </div>
 </footer>
 
-<script src="scripts.js?v=9e71c51b"></script>
+<script src="scripts.js?v=533f5aa4"></script>
 </body>
 </html>

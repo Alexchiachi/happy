@@ -30,9 +30,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=18cbeacf">
+  <link rel="stylesheet" href="../styles.css?v=507a3546">
 </head>
-<body>
+<body class="region-yunnan">
+<a class="skip-link" href="#main">跳到主要内容</a>
 
 <nav class="nav">
   <a class="nav-brand" href="index.html">大道至简<small>Dao is simple</small></a>
@@ -48,12 +49,12 @@
   </ul>
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
   <!-- Large Character Hero -->
   <section class="hero mid">
     <div class="container">
-      <div class="eyebrow hero-eyebrow reveal" style="color: var(--tea);">Yunnan · 彩云之南</div>
-      <h1 class="reveal" style="font-family: var(--font-han); font-size: clamp(8rem, 22vw, 18rem); font-weight: 200; letter-spacing: 0.05em; line-height: 0.95; color: var(--tea); margin-bottom: 2rem;">云南</h1>
+      <div class="eyebrow hero-eyebrow reveal">Yunnan · 彩云之南</div>
+      <h1 class="region-title reveal">云南</h1>
       <p class="hero-tagline reveal">山有多高，茶就有多高。雾有多厚，故事就有多厚。</p>
       <div class="hero-meta reveal">
         <span>普洱</span>
@@ -66,9 +67,9 @@
   <!-- 5 Sub-themes -->
   <section class="section-tight">
     <div class="container">
-      <header style="text-align:center; margin-bottom: 2rem;">
+      <header class="section-head">
         <div class="eyebrow reveal">Five themes · 五个主题</div>
-        <h2 class="h-section reveal" style="margin-top:1rem;">从山到杯，从手到家</h2>
+        <h2 class="h-section reveal">从山到杯，从手到家</h2>
       </header>
     </div>
     <div class="themes">
@@ -83,7 +84,7 @@
   <!-- Region brief -->
   <section class="section-tight">
     <div class="container narrow">
-      <p class="lede reveal" style="text-align:center;">
+      <p class="lede lede-center reveal">
         云南是中国西南最厚的一块地。海拔从 76 公尺爬到 6740 公尺，气候从热带到寒带，民族二十六个。茶马古道从这里出发，普洱茶在这里被发酵。我们从中精选每一件能承载这份厚度的物。
       </p>
     </div>
@@ -92,12 +93,15 @@
   <!-- Product Cards -->
   <section class="section-tight" id="tea">
     <div class="container">
-      <header style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);">
+      <header class="section-rule">
         <h2 class="h-section reveal">当季选物</h2>
       </header>
       <div class="products">
         <a class="product reveal" href="connect.html">
-          <div class="img-placeholder tea" style="--img:url(../images/yunnan-puer-gift-bag.jpg)"></div>
+          <div class="img-placeholder tea">
+            <img src="../images/yunnan-puer-gift-bag.jpg" width="573" height="716" loading="lazy" decoding="async"
+                 alt="四颗棉纸包的迷你普洱茶饼，分别标着景迈山、南糯山、小冰岛、困鹿山，旁边是一只印着「山」字的米色棉布袋，底下散着茶叶，背景是云南山林的晨雾">
+          </div>
           <div class="cat">茶 · TEA</div>
           <h3>四大山头 mini 七子饼礼袋</h3>
           <p class="origin">景迈山 · 南糯山 · 小冰岛 · 困鹿山</p>
@@ -159,20 +163,20 @@
   <!-- People Portrait -->
   <section class="section">
     <div class="container">
-      <header style="text-align:center; margin-bottom: 3rem;">
+      <header class="section-head">
         <div class="eyebrow reveal">The maker · 做事的人</div>
-        <h2 class="h-section reveal" style="margin-top:1rem;">物的背后是人</h2>
+        <h2 class="h-section reveal">物的背后是人</h2>
       </header>
       <div class="portrait reveal">
         <div class="img-placeholder tea"><span>MAKER</span></div>
         <div>
           <div class="eyebrow">Yunnan · 大理</div>
-          <h3 class="name" style="margin-top: 1rem;">段普明 先生</h3>
+          <h3 class="name">段普明 先生</h3>
           <p class="role">下关老段家 第三代茶人</p>
           <blockquote>
             爷爷从十六岁开始做茶，父亲接手了三十年，到我这代已经七十三年。茶仓里那股气息，是时间的味道，不是我能教出来的，是时间自己长出来的。
           </blockquote>
-          <p style="color: var(--ink-soft); font-size: 0.95rem; margin-top: 1.5rem;">下关老段家茶仓位于苍山西麓，海拔 2200 公尺，常年湿度恒定。三十年来只做两件事：选料、等待。</p>
+          <p class="note">下关老段家茶仓位于苍山西麓，海拔 2200 公尺，常年湿度恒定。三十年来只做两件事：选料、等待。</p>
         </div>
       </div>
     </div>
@@ -219,6 +223,6 @@
   </div>
 </footer>
 
-<script src="../scripts.js?v=9e71c51b"></script>
+<script src="../scripts.js?v=533f5aa4"></script>
 </body>
 </html>

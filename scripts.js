@@ -46,6 +46,15 @@
     else img.addEventListener('error', swap, { once: true });
   });
 
+  // --- 真實照片載不到時，露出底下的色塊 ---
+  // 色塊在 CSS 背景層，照片是上面的 <img>。圖 404 時把 <img> 移掉，
+  // 色塊就會露出來，不會變成破圖圖示——跟上面的 icon-mark 是同一個道理。
+  document.querySelectorAll('.img-placeholder > img').forEach((img) => {
+    const drop = () => img.remove();
+    if (img.complete && img.naturalWidth === 0) drop();
+    else img.addEventListener('error', drop, { once: true });
+  });
+
   // --- Nav scroll state ---
   const nav = document.querySelector('.nav');
   if (nav) {
