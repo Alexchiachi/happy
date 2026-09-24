@@ -203,21 +203,28 @@
     };
     msg.textContent = '送出中…';
     btn.disabled = true;
-    fetch(ORDER_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    // 20 秒沒回應就放棄，免得按鈕一直卡在送出中
+    var ctrl = 'AbortController' in window ? new AbortController() : null;
+    var timer = ctrl && setTimeout(function () { ctrl.abort(); }, 20000);
+    fetch(ORDER_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
       .then(function (r) { return r.json().catch(function () { return { ok: false, code: 'http_' + r.status }; }); })
       .then(function (out) {
         if (!out.ok) {
           var text = ERRORS[out.code];
           if (out.code === 'invalid' && out.fields) text = '請確認：' + out.fields.map(function (f) { return FIELD_LABEL[f] || f; }).join('、');
           if (out.code === 'season_closed' && out.item) text = '「' + out.item + '」' + ERRORS.season_closed.replace('本檔', '所屬的本檔');
-          throw new Error(text || '沒有送出成功（' + out.code + '），請稍後再試，或寫信給我們。');
+          var e = new Error(text || '沒有送出成功（' + out.code + '），請稍後再試，或寫信給我們。');
+          e.shown = true;
+          throw e;
         }
         showDone(out, fd.get('pay'));
       })
       .catch(function (err) {
-        msg.textContent = err && err.message && err.message !== 'Failed to fetch' ? err.message : '網路不穩，沒有送出。請再按一次「送出訂單」。';
+        // 瀏覽器的連線錯誤（Chrome「Failed to fetch」、Safari「Load failed」、逾時）一律換成中文說明
+        msg.textContent = err && err.shown ? err.message
+          : '沒有連上訂單系統，這張訂單還沒有送出。請稍後再按一次「送出訂單」；一直失敗的話，請寫信或用 LINE 告訴我們。';
       })
-      .then(function () { btn.disabled = false; });
+      .then(function () { clearTimeout(timer); btn.disabled = false; });
   });
 
   function showDone(out, pay) {
