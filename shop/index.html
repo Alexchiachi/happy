@@ -40,10 +40,10 @@
       </div>
       <aside class="season-card" aria-labelledby="season-title">
         <p class="season-kicker">本檔預購</p>
-        <h2 id="season-title" class="season-name">冬藏 · 年節</h2>
+        <h2 id="season-title" class="season-name" data-season-name>冬藏・年節</h2>
         <dl class="season-dates">
           <div><dt>收單至</dt><dd data-deadline-text>2027 年 1 月 15 日</dd></div>
-          <div><dt>出貨</dt><dd>1 月 25 日前寄出</dd></div>
+          <div><dt>出貨</dt><dd data-ship-text>1 月 25 日前寄出</dd></div>
         </dl>
         <p class="countdown" data-countdown aria-live="polite"></p>
         <a class="btn btn-ghost" href="#season">看本檔五樣 ↓</a>
@@ -54,10 +54,10 @@
   <!-- 二、規則一眼看完 -->
   <section class="rules" aria-label="訂購須知">
     <div class="wrap rules-grid">
-      <div class="rule"><span class="rule-han">運</span><p><b>滿 NT$2,000 免運</b><br>未滿：宅配 80、超商 60、南投市／草屯面交免運</p></div>
-      <div class="rule"><span class="rule-han">付</span><p><b>LINE Pay 或匯款</b><br>送出訂單後，頁面與確認信會附上付款資訊</p></div>
+      <div class="rule"><span class="rule-han">運</span><p><b>滿 <span data-free>NT$2,000</span> 免運</b><br>未滿：宅配 <span data-fee-home>80</span>、超商 <span data-fee-cvs>80</span>，南投市／草屯面交免運</p></div>
+      <div class="rule"><span class="rule-han">付</span><p><b>LINE Pay 或匯款</b><br>送出訂單後，頁面與確認信會附上付款資訊與訂單編號</p></div>
       <div class="rule"><span class="rule-han">寄</span><p><b>常備好物 3–5 天出貨</b><br>預購品依本檔出貨日寄出</p></div>
-      <div class="rule"><span class="rule-han">合</span><p><b>同檔多次下單自動合併</b><br>同一支電話，金額合計計算免運</p></div>
+      <div class="rule"><span class="rule-han">合</span><p><b>同檔多次下單可合併寄送</b><br>同一支電話加訂，我們會合併出貨並調整運費</p></div>
     </div>
   </section>
 
@@ -66,7 +66,7 @@
     <div class="wrap">
       <header class="shelf-head">
         <p class="eyebrow">Seasonal · 節令預購</p>
-        <h2>冬藏 · 年節</h2>
+        <h2 data-season-name>冬藏・年節</h2>
         <p class="shelf-note">限期收單，截止後統一向產地叫貨。適合年節送禮，也適合冬天自己留著。</p>
       </header>
       <div class="grid" data-shelf="season"></div>
@@ -136,6 +136,9 @@
         </fieldset>
         <p class="hint">送出後會直接顯示收款資訊。匯款的朋友，付完回信告訴我們末五碼即可。</p>
 
+        <!-- 擋機器人：真人看不到這一欄 -->
+        <label class="hp" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label>
+
         <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="送禮需要附卡片、指定到貨時段……"></textarea></label>
 
         <button class="btn btn-solid" type="submit">送出訂單</button>
@@ -149,12 +152,12 @@
     <div class="wrap done-card">
       <span class="done-seal" aria-hidden="true">謝</span>
       <h2>訂單收到了</h2>
-      <p>訂單編號 <b data-order-no></b>，合計 <b data-order-total></b>。確認信已寄到你的信箱。</p>
+      <p>訂單編號 <b data-order-no></b>，合計 <b data-order-total></b>。<br>確認信已寄到你的信箱，付款資訊也在信裡。</p>
       <div class="pay-box">
-        <div><h3>LINE Pay</h3><div class="qr" aria-label="LINE Pay 收款碼">收款碼</div></div>
-        <div><h3>匯款</h3><p>銀行代碼與帳號<br><span class="muted">（待提供）</span></p><p>付款後回信告知末五碼</p></div>
+        <div data-pay-box="linepay"><h3>LINE Pay</h3><img class="qr" data-pay-qr alt="LINE Pay 收款碼" hidden><p data-pay-linepay></p><p class="muted small">付款後回覆確認信告訴我們即可。</p></div>
+        <div data-pay-box="bank"><h3>匯款</h3><p data-pay-bank></p><p class="muted small">匯款後回覆確認信，告訴我們帳號末五碼。</p></div>
       </div>
-      <p class="muted small">設計稿：目前按「送出訂單」只會顯示這個畫面，不會真的建立訂單。</p>
+      <p class="muted small">收到款項後依出貨時程寄出。有任何問題，直接回覆確認信就好。</p>
     </div>
   </section>
 

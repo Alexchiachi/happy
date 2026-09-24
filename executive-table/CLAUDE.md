@@ -8,10 +8,11 @@
 簡家旗的一人公司「幸福餐桌」的課程銷售頁＋極簡後台。
 靜態 HTML 放在 GitHub（`alexchiachi/happy` 的 `executive-table/`），由 Cloudflare Workers 從 GitHub 自動部署；
 表單、寄信、照片、管理頁全部在同一支 Worker 裡，沒有其他服務。
-這支 Worker 也負責收**大道至簡品牌站**（倉庫根目錄的 `connect.html`，GitHub Pages）的「連繫」來信。
+這支 Worker 也負責收**大道至簡品牌站**（倉庫根目錄的 `connect.html`，GitHub Pages）的「連繫」來信，
+以及品牌站**雲南好物選購頁**（`shop/`）的訂單。
 
 - 正式網址：https://executive-table.jianchiachi.workers.dev/ （簡體：`/zh-cn/`，管理頁：`/admin`）
-- 舊網址仍在：https://alexchiachi.github.io/happy/executive-table/ （GitHub Pages，整個倉庫都會發布，表單一樣送到 Worker）
+- 舊網址仍在：https://alexchiachi.github.io/happy/executive-table/ （GitHub Pages 白名單發布，表單一樣送到 Worker）
 - 內容來源：Claude Docs 文件「幸福餐桌｜高階主管三階段課程提案」（doc id `149f1b93-aa2e-4995-b4c3-f859411bee82`）。
   網頁改用字時，使用者常會要求原始文件也同步改。
 
@@ -61,6 +62,11 @@
 12. **品牌站連繫表單搬進同一支 Worker**：取代 Google Apps Script。新增 `/api/letter`、D1 `letters` 表、
     管理頁「大道至簡來信」分頁；通知寄 dadaoissimple@gmail.com，並寄繁／簡收信確認給對方。
     （預約系統 `eternitychildbooking/` 是替別人做的，使用者決定**不**搬。）
+13. **倉庫拆成公開／私人**（2026-09-24）：`happy` 以全新歷史重建、只放對外網頁；書稿、白皮書、內部文件與舊歷史在私人的
+    `happychiachi`（見根目錄 `CLAUDE.md`）。GitHub Pages 改白名單發布。Cloudflare 自動部署改接新的 `happy`。
+14. **雲南好物訂單**：`/api/order`、D1 `orders` 表、管理頁「雲南訂單」分頁。商品與運費在 `shop/products.json`，
+    Worker 直接 import 這份 JSON 重算金額（客人只送商品 id／規格／數量）。新訂單通知寄給 jianchiachi@gmail.com 與
+    renachien1@gmail.com（`SHOP_NOTIFY_EMAIL`），客人收到訂單確認＋付款資訊。付款仍是 LINE Pay／匯款＋後台手動改狀態。
 
 思考原則（一人公司）：**少一個服務就少一個會壞、要付費、要記密碼的地方**。
 資料、照片、寄信、登入都收在一支 Worker＋一個 D1；所有秘密只放在 Cloudflare 後台；使用者只需要會用 `/admin`。
@@ -73,10 +79,11 @@
             └─ run_worker_first：/api/*、/admin、/admin/*、/photos/* → executive-table/worker/index.js
                  ├─ POST /api/inquiry     存 D1 inquiries → Gmail SMTP 寄 2 封 HTML 信（通知主理人、確認給預約者）
                  ├─ POST /api/letter      大道至簡品牌站來信 → D1 letters → 通知 dadaoissimple@gmail.com＋收信確認
+                 ├─ POST /api/order       雲南好物訂單 → 依 shop/products.json 重算 → D1 orders → 通知 SHOP_NOTIFY_EMAIL＋訂單確認
                  ├─ GET  /api/photos      公開照片清單；GET /photos/<id>-<ver>.<ext> 照片本身
-                 ├─ GET  /admin           管理頁（分頁：幸福餐桌預約／大道至簡來信／幻燈片照片）
+                 ├─ GET  /admin           管理頁（分頁：幸福餐桌預約／大道至簡來信／雲南訂單／幻燈片照片）
                  └─ /api/admin/*          管理 API（Basic Auth；照片寫入另檢查同源）
-            D1：executive-table-inquiries（表 inquiries、letters、photos，程式自動建表）
+            D1：executive-table-inquiries（表 inquiries、letters、orders、photos，程式自動建表）
 ```
 
 | 檔案 | 內容 |
@@ -85,18 +92,20 @@
 | `zh-cn/index.html` | `python3 executive-table/build_zh_cn.py` 產生（OpenCC tw2s＋手動詞彙修正），**不要手改** |
 | `worker/index.js` | 路由、表單驗證、限流（10 分鐘 5 次，IP 只存雜湊）、CORS、管理登入、CSV |
 | `worker/letters.js` | 品牌站來信：收信、兩封信的模板（繁／簡）、管理 API、CSV |
+| `worker/orders.js` | 雲南好物訂單：`import` 根目錄 `shop/products.json` 重算金額、截止日檢查、同檔同電話標記、信件模板、管理 API、CSV |
 | `worker/mail.js`、`worker/util.js` | 共用：寄信（Gmail 優先，選用 Resend；可指定另一組 Gmail）、IP 雜湊、時間格式、JSON 回應 |
 | `worker/smtp.js` | `cloudflare:sockets` 連 `smtp.gmail.com:465`，AUTH PLAIN、RFC 2047、dot-stuffing |
 | `worker/emails.js` | 兩封信的 HTML／純文字模板（署名、頁尾在這裡） |
 | `worker/photos.js` | 照片 D1 存取、magic bytes 檢查、快取 |
-| `worker/admin.js` | 管理頁 HTML（分頁：預約／幻燈片照片） |
+| `worker/admin.js` | 管理頁 HTML（分頁：預約／來信／雲南訂單／幻燈片照片） |
 | `worker/access.js` | 選用的 Cloudflare Access JWT 驗證 |
 | `_headers`、`404.html`、`robots.txt`、`sitemap.xml` | 快取與安全標頭、錯誤頁、SEO |
 | `set_site_url.py` | 換正式網址（全站絕對網址＋重建簡體版） |
 
 Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：`NOTIFY_EMAIL`、`GMAIL_APP_PASSWORD`、`ADMIN_PASSWORD`。
 選用：`RESEND_API_KEY`、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`、`LETTER_GMAIL_APP_PASSWORD`（讓來信相關的信改由 dadaoissimple@gmail.com 寄出）。
-`wrangler.jsonc` vars：`MAIL_FROM_NAME`、`MAIL_FROM`、`ALLOWED_ORIGINS`、`LETTER_NOTIFY_EMAIL`、`LETTER_FROM_NAME`、`BRAND_SITE_URL`。`wrangler.jsonc` 有 `keep_vars: true`。
+`wrangler.jsonc` vars：`MAIL_FROM_NAME`、`MAIL_FROM`、`ALLOWED_ORIGINS`、`LETTER_NOTIFY_EMAIL`、`LETTER_FROM_NAME`、`BRAND_SITE_URL`、
+`SHOP_NOTIFY_EMAIL`（逗號分隔，每個信箱各寄一封）、`SHOP_FROM_NAME`。`wrangler.jsonc` 有 `keep_vars: true`。
 
 ## 6. 改東西的固定流程
 
@@ -108,7 +117,9 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
 4. 驗證：
    - 版面／互動：Playwright（Chromium 在 `/opt/pw-browsers/chromium`，`NODE_PATH=$(npm root -g)`）。
      攔截 `**/*`，把頁面掛在假 https 網域上提供本機檔案，並假造 `/api/photos` 等回應；需要計時的用 `page.clock`。
-   - Worker：`npx wrangler dev`（本機 D1）；寄信可在本機起一個假 SMTP 伺服器測。
+   - Worker：`npx wrangler dev --local --var SMTP_HOST:127.0.0.1 --var SMTP_PORT:2525 --var SMTP_SECURE:off --var GMAIL_APP_PASSWORD:x --var NOTIFY_EMAIL:x@example.com --var ADMIN_PASSWORD:<12字以上>`，
+     本機起一個假 SMTP 伺服器（asyncio 寫幾十行即可）接信；`--persist-to` 指到暫存目錄，測完刪掉 `.wrangler/`。
+     `npx wrangler deploy --dry-run --outdir <暫存>` 可確認打包（含 `shop/products.json`）成功。
    - 容器連不到 `workers.dev`，正式站請使用者實測。
 5. commit（訊息用繁體中文，加 session 要求的署名行）→ push → 用 GitHub MCP 開 PR → squash 合併
    → 把分支重設到新的 `origin/main`。使用者習慣直接合併，Cloudflare 合併後一兩分鐘自動上線（PR 也會有預覽網址）。

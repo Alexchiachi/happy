@@ -238,7 +238,13 @@ p { margin: 0; }
 .pay-box { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; margin-top: .5rem; text-align: left; }
 .pay-box > div { border: 1px solid var(--line); background: var(--card); padding: 1.2rem; }
 .pay-box h3 { font-size: 1rem; letter-spacing: .15em; margin-bottom: .6rem; }
-.qr { width: 120px; height: 120px; border: 1px dashed var(--line); display: grid; place-items: center; color: var(--mist); font-size: .8rem; }
+.pay-box > div.chosen { border-color: var(--ink); }
+.pay-box p { font-size: .92rem; white-space: pre-line; }
+.qr { width: 160px; height: auto; margin-bottom: .6rem; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.v-closed { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
+.load-err { color: var(--seal); padding: 1rem 0; }
+.order-form .btn-solid:disabled { opacity: .6; cursor: progress; }
 
 /* ---------- 頁尾 ---------- */
 .foot { border-top: 1px solid var(--line); padding: 2.5rem 0 3rem; font-size: .88rem; color: var(--ink-soft); }
