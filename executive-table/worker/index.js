@@ -11,6 +11,7 @@
  *   GET  /api/admin/export.csv   匯出 CSV（Excel 可直接開）
  *   GET  /api/photos、/photos/*  幻燈片照片（管理頁上傳；見 photos.js）
  *   POST /api/letter             大道至簡品牌站「連繫」表單（見 letters.js）
+ *   POST /api/order              雲南好物選購頁（品牌站 shop/）的訂單（見 orders.js）
  *
  * 需要的設定（Cloudflare 專案 → Settings → Variables and Secrets）：
  *   NOTIFY_EMAIL         Secret，你的 Gmail：新預約通知寄到這裡，也是寄件人
@@ -26,6 +27,7 @@ import { verifyAccess } from './access.js';
 import { sendMail } from './mail.js';
 import { json, hashIp, formatTaipei } from './util.js';
 import { handleLetter, handleAdminLetters, LETTER_STATUSES } from './letters.js';
+import { handleOrder, handleAdminOrders, ORDER_STATUSES } from './orders.js';
 import { listPublic, servePhoto, handleAdminPhotos } from './photos.js';
 import { adminPage, adminSetupPage } from './admin.js';
 
@@ -48,6 +50,11 @@ export default {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
         if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
         return cors(request, env, await handleLetter(request, env, ctx, url));
+      }
+      if (path === '/api/order') {
+        if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
+        if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
+        return cors(request, env, await handleOrder(request, env, ctx, url));
       }
       if (path === '/api/photos') {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
@@ -170,10 +177,13 @@ async function handleAdmin(request, env, url, path) {
   if (who.error) return json({ ok: false, code: 'unauthorized' }, 401);
 
   await ensureSchema(env);
-  if (path === '/admin' || path === '/admin/') return html(adminPage(who.email, STATUSES, PLAN_LABEL, LETTER_STATUSES));
+  if (path === '/admin' || path === '/admin/') return html(adminPage(who.email, STATUSES, PLAN_LABEL, LETTER_STATUSES, ORDER_STATUSES));
 
   const letterRes = await handleAdminLetters(request, env, url, path);
   if (letterRes) return letterRes;
+
+  const orderRes = await handleAdminOrders(request, env, url, path);
+  if (orderRes) return orderRes;
 
   const photoRes = await handleAdminPhotos(request, env, url, path);
   if (photoRes) return photoRes;

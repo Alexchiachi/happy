@@ -1,0 +1,358 @@
+{
+  "_說明": "雲南好物的商品與檔期設定。網頁（shop.js）和 Worker（executive-table/worker/orders.js）共用這一份：金額由 Worker 依這裡重算。商品 id 與規格 key 上線後不要改，舊訂單會對不上；要下架改 active:false。",
+  "season": {
+    "name": "冬藏・年節",
+    "deadline": "2027-01-15T23:59:59+08:00",
+    "deadlineText": "2027 年 1 月 15 日",
+    "ship": "1 月 25 日前寄出"
+  },
+  "shipping": {
+    "free": 2000,
+    "home": 80,
+    "cvs": 80,
+    "meet": 0
+  },
+  "payment": {
+    "bank": "（匯款帳號待提供）",
+    "linepay": "（LINE Pay 收款資訊待提供）",
+    "linepayImage": ""
+  },
+  "products": [
+    {
+      "active": true,
+      "id": "rose-cake",
+      "shelf": "season",
+      "featured": true,
+      "badge": "上一檔賣最好",
+      "cat": "餅 · Pastry",
+      "han": "餅",
+      "tone": "seal",
+      "name": "玫瑰花餅禮盒",
+      "intro": "雲南人過節一定要有的那一口，酥皮裡包著滿滿的玫瑰花醬。",
+      "story": "兩款禮盒同價：「暴美」是經典玫瑰花餅配玫瑰花松仁餅，一次吃兩種口感；「暴富」是 12 枚經典玫瑰花餅，名字討喜，最適合送長輩。",
+      "specs": [
+        [
+          "內容",
+          "暴美：花餅＋松仁餅各 6 枚／暴富：花餅 12 枚"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "mei",
+          "label": "暴美 · 花餅＋松仁餅各 6 枚",
+          "price": 650,
+          "unit": "盒"
+        },
+        {
+          "key": "fu",
+          "label": "暴富 · 經典花餅 12 枚",
+          "price": 650,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "nougat",
+      "shelf": "season",
+      "badge": "回購第二名",
+      "cat": "甜 · Sweets",
+      "han": "糖",
+      "tone": "sugar",
+      "name": "玫瑰花生牛軋糖",
+      "intro": "花生的香、玫瑰的甜，一盒剛好分給一桌人。",
+      "story": "年節桌上擺一盒，客人來了隨手就能招待。價格輕，適合搭配禮盒一起寄，也是湊免運的好選擇。",
+      "specs": [
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一盒",
+          "price": 250,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "brown-sugar",
+      "shelf": "season",
+      "cat": "甜 · Sweets",
+      "han": "暖",
+      "tone": "sugar",
+      "name": "雲南紅糖三味",
+      "intro": "冬天的早晨，一匙化在熱水裡。",
+      "story": "玫瑰、紅棗、薑汁三種口味，都是冬天會想喝一杯的味道。三盒一起買，一天換一種。",
+      "specs": [
+        [
+          "規格",
+          "玫瑰 225g／紅棗 230g／薑汁 270g"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "rose",
+          "label": "玫瑰紅糖 225g",
+          "price": 400,
+          "unit": "盒"
+        },
+        {
+          "key": "date",
+          "label": "紅棗紅糖 230g",
+          "price": 400,
+          "unit": "盒"
+        },
+        {
+          "key": "ginger",
+          "label": "薑汁紅糖 270g",
+          "price": 400,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "porcini-sauce",
+      "shelf": "season",
+      "cat": "菌 · Mushroom",
+      "han": "醬",
+      "tone": "moss",
+      "name": "牛肝菌拌醬禮盒",
+      "intro": "拌麵、拌飯、炒一盤青菜，年菜桌上的隱藏主角。",
+      "story": "一組三罐。A 組偏香辣，B 組偏椒麻，兩組都有蔥油牛肝菌和牛肝菌白醬。",
+      "specs": [
+        [
+          "A 組",
+          "香辣＋蔥油＋白醬"
+        ],
+        [
+          "B 組",
+          "椒麻＋蔥油＋白醬"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "a",
+          "label": "A 組 · 香辣",
+          "price": 880,
+          "unit": "組"
+        },
+        {
+          "key": "b",
+          "label": "B 組 · 椒麻",
+          "price": 880,
+          "unit": "組"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "morel-gift",
+      "shelf": "season",
+      "badge": "一盒即免運",
+      "cat": "菌 · Mushroom",
+      "han": "菌",
+      "tone": "moss",
+      "name": "羊肚菌禮盒",
+      "intro": "菌中的珍品，一盒就是一份體面的年禮。",
+      "story": "乾燥羊肚菌，泡發後燉湯、清炒都好。禮盒裝，適合送給懂吃的朋友。",
+      "specs": [
+        [
+          "規格",
+          "160g"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "160g 禮盒",
+          "price": 2480,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "rose-tea",
+      "shelf": "always",
+      "featured": true,
+      "badge": "兩檔都有人回購",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "img": "images/rose-tea.jpg",
+      "imgAlt": "兩罐透明罐裝的墨紅玫瑰乾燥花瓣，貼著手寫「墨紅玫瑰」的米色標籤",
+      "name": "墨紅玫瑰花茶",
+      "intro": "花瓣大、顏色深，沖開是一杯溫柔的暗紅。",
+      "story": "乾燥的墨紅玫瑰花瓣，熱水沖泡就能喝，也可以加進紅茶或紅糖水裡。放在辦公桌上，下午三點的那杯茶就有了。",
+      "specs": [
+        [
+          "規格",
+          "20g／罐"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 20g",
+          "price": 400,
+          "unit": "罐"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "puer-minis",
+      "shelf": "always",
+      "cat": "茶 · Tea",
+      "han": "茶",
+      "tone": "tea",
+      "img": "../images/yunnan-puer-gift-bag.jpg",
+      "imgAlt": "四顆棉紙包的迷你普洱茶餅，分別標著景邁山、南糯山、小冰島、困鹿山，旁邊是印著「山」字的米色棉布袋",
+      "name": "四大山頭 mini 七子餅禮袋",
+      "intro": "四座名山各一餅，一次喝懂普洱的山頭味。",
+      "story": "景邁山、南糯山、小冰島、困鹿山，一袋四餅。適合剛開始喝普洱、想比較不同山頭的朋友，也適合送禮。",
+      "specs": [
+        [
+          "規格",
+          "49g × 4 餅"
+        ],
+        [
+          "山頭",
+          "景邁山 · 南糯山 · 小冰島 · 困鹿山"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-yunnan-puer-basics.html",
+        "text": "讀：普洱入門"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一袋四餅",
+          "price": 1250,
+          "unit": "袋"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "mushroom-soup",
+      "shelf": "always",
+      "cat": "菌 · Mushroom",
+      "han": "湯",
+      "tone": "moss",
+      "name": "雲南野生菌湯包",
+      "intro": "一包燉一鍋湯，把雨季的山林味留在冬天。",
+      "story": "雲南野生菌配好的湯包，燉雞湯、排骨湯都適合。常喝的朋友喜歡一次帶幾包，所以有四包組。",
+      "specs": [
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "one",
+          "label": "單包",
+          "price": 500,
+          "unit": "包"
+        },
+        {
+          "key": "four",
+          "label": "四包組（省 200）",
+          "price": 1800,
+          "unit": "組"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "morel-daily",
+      "shelf": "always",
+      "cat": "菌 · Mushroom",
+      "han": "菌",
+      "tone": "moss",
+      "name": "羊肚菌日常包",
+      "intro": "不是禮盒，是自己家裡燉湯、炒菜用的份量。",
+      "story": "和禮盒同樣的乾燥羊肚菌，改用簡單的袋裝，價格更輕。",
+      "specs": [
+        [
+          "規格",
+          "100g／包"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一包 100g",
+          "price": 780,
+          "unit": "包"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "tibetan-incense",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "name": "香格里拉藏香",
+      "intro": "從煨桑的柏枝煙開始，一縷帶得走的高原。",
+      "story": "藏香的源頭是煨桑時燒的柏枝。長支適合靜坐、讀書時慢慢點；短支份量輕，適合剛開始用香的朋友。",
+      "specs": [
+        [
+          "產地",
+          "雲南迪慶 · 香格里拉"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-shangrila-tibetan-incense.html",
+        "text": "讀：香格里拉藏香"
+      },
+      "variants": [
+        {
+          "key": "long",
+          "label": "長支",
+          "price": 350,
+          "unit": "盒"
+        },
+        {
+          "key": "short",
+          "label": "短支",
+          "price": 200,
+          "unit": "盒"
+        }
+      ]
+    }
+  ]
+}

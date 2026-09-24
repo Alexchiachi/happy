@@ -1,5 +1,5 @@
 /**
- * 管理頁：幸福餐桌預約清單、大道至簡來信（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
+ * 管理頁：幸福餐桌預約清單、大道至簡來信、雲南好物訂單（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
  * 只有輸入管理頁密碼、或通過 Cloudflare Access 登入的人看得到（見 index.js adminIdentity）。
  */
 
@@ -53,13 +53,21 @@ const STYLE = `
   .hint a { color: var(--moss); }
   .badge { display: inline-block; min-width: 1.3em; margin-left: .35em; padding: 0 .4em; border-radius: 999px; background: var(--seal); color: var(--paper); font-size: .72rem; line-height: 1.5; text-align: center; vertical-align: .1em; }
   .badge:empty { display: none; }
+  .lines { margin: .3rem 0; padding: 0; list-style: none; font-size: .92rem; }
+  .lines li { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--line); padding: .2rem 0; }
+  .lines li:last-child { border-bottom: 0; }
+  .sum { font-size: .92rem; color: var(--soft); }
+  .sum b { color: var(--ink); font-size: 1.05rem; }
+  .flag { color: var(--seal); font-size: .88rem; }
+  select.status[data-v="待付款"] { border-color: var(--seal); color: var(--seal); }
+  select.status[data-v="取消"] { color: var(--mist); }
 `;
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-export function adminPage(email, statuses, planLabels, letterStatuses) {
+export function adminPage(email, statuses, planLabels, letterStatuses, orderStatuses) {
   return `<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -76,6 +84,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses) {
   <div class="tabs" role="tablist">
     <button type="button" role="tab" id="tabBtnInq" aria-selected="true" data-tab="inq">幸福餐桌預約</button>
     <button type="button" role="tab" id="tabBtnLet" aria-selected="false" data-tab="let">大道至簡來信<span class="badge" id="letBadge"></span></button>
+    <button type="button" role="tab" id="tabBtnOrd" aria-selected="false" data-tab="ord">雲南訂單<span class="badge" id="ordBadge"></span></button>
     <button type="button" role="tab" id="tabBtnPh" aria-selected="false" data-tab="ph">幻燈片照片</button>
   </div>
   <section id="tab-inq">
@@ -102,6 +111,19 @@ export function adminPage(email, statuses, planLabels, letterStatuses) {
   <div id="lList"><p class="empty">載入中…</p></div>
   <p class="hint">來信來自大道至簡品牌站的「連繫」頁。每封信都會寄通知到大道至簡信箱，並寄一封收信確認給對方；回覆後把狀態改成「已回覆」。</p>
   </section>
+  <section id="tab-ord" hidden>
+  <div class="bar">
+    <div class="filters">
+      <select id="oStatus" aria-label="依狀態篩選"><option value="">全部狀態</option>${orderStatuses.map(s => `<option>${esc(s)}</option>`).join('')}</select>
+      <input id="oText" type="search" placeholder="搜尋訂單編號、姓名、電話、商品" aria-label="搜尋訂單">
+    </div>
+    <a class="btn" href="/api/admin/orders.csv">匯出 CSV</a>
+  </div>
+  <div class="count" id="oCount"></div>
+  <div id="oList"><p class="empty">載入中…</p></div>
+  <p class="hint">訂單來自大道至簡品牌站的雲南好物選購頁（shop/）。每張訂單都會寄通知給你們，並寄訂單確認與付款資訊給客人。
+  收到款項改「已付款」，寄出後改「已出貨」。金額由系統依商品表重算；同一支電話在同一檔重複下單會標出來，方便合併寄送。</p>
+  </section>
   <section id="tab-ph" hidden>
     <label class="drop" id="drop" for="files">把照片拖到這裡，或<b>點這裡選擇照片</b>（可一次選多張）
       <input type="file" id="files" accept="image/*" multiple hidden>
@@ -115,6 +137,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses) {
 <script>
 const STATUSES = ${JSON.stringify(statuses)};
 const LSTATUSES = ${JSON.stringify(letterStatuses)};
+const OSTATUSES = ${JSON.stringify(orderStatuses)};
 const PLAN = ${JSON.stringify(planLabels)};
 let rows = [];
 const $ = s => document.querySelector(s);
@@ -179,10 +202,10 @@ async function save(r, sel) {
 }
 
 /* ---------------- 分頁 ---------------- */
-const HASH = { inq: '#', let: '#letters', ph: '#photos' };
+const HASH = { inq: '#', let: '#letters', ord: '#orders', ph: '#photos' };
 function showTab(t) {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
-  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ph').hidden = t !== 'ph';
+  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-ph').hidden = t !== 'ph';
   history.replaceState(null, '', HASH[t]);
   if (t === 'ph' && !photosLoaded) loadPhotos();
 }
@@ -247,6 +270,76 @@ async function saveLetter(r, sel) {
 $('#lStatus').addEventListener('change', renderLetters);
 $('#lText').addEventListener('input', renderLetters);
 document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+
+/* ---------------- 雲南訂單 ---------------- */
+let orders = [], DELIVERY = {}, PAY = {};
+const money = n => 'NT$' + Number(n).toLocaleString('en-US');
+async function loadOrders() {
+  try {
+    const res = await fetch('/api/admin/orders', { cache: 'no-store' });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.code);
+    orders = out.orders; DELIVERY = out.delivery; PAY = out.pay; renderOrders();
+  } catch (e) {
+    $('#oList').innerHTML = ''; $('#oList').append(el('p', 'err', '讀不到訂單（' + e.message + '）。重新整理頁面再試一次。'));
+  }
+}
+function itemsOf(r) { try { return JSON.parse(r.items); } catch (e) { return []; } }
+function renderOrders() {
+  const st = $('#oStatus').value, q = $('#oText').value.trim().toLowerCase();
+  const shown = orders.filter(r => (!st || r.status === st) &&
+    (!q || [r.order_no, r.name, r.phone, r.email, r.items].join(' ').toLowerCase().includes(q)));
+  const unpaid = orders.filter(r => r.status === '待付款').length;
+  $('#ordBadge').textContent = unpaid ? String(unpaid) : '';
+  const open = orders.filter(r => r.status !== '取消');
+  $('#oCount').textContent = '共 ' + orders.length + ' 張，顯示 ' + shown.length + ' 張' + (unpaid ? '，' + unpaid + ' 張待付款' : '')
+    + '・未取消合計 ' + money(open.reduce((a, r) => a + r.total, 0));
+  const list = $('#oList'); list.innerHTML = '';
+  if (!shown.length) { list.append(el('p', 'empty', orders.length ? '沒有符合條件的訂單。' : '目前還沒有訂單。')); return; }
+  for (const r of shown) {
+    const item = el('div', 'item');
+    const top = el('div', 'top');
+    const name = el('div', 'name', r.order_no || ('#' + r.id)); name.append(el('small', '', r.name));
+    const sel = el('select', 'status'); sel.setAttribute('aria-label', (r.order_no || r.id) + ' 的狀態');
+    for (const s of OSTATUSES) { const o = el('option', '', s); if (s === r.status) o.selected = true; sel.append(o); }
+    sel.dataset.v = r.status;
+    sel.addEventListener('change', () => saveOrder(r, sel));
+    top.append(name, sel);
+    const meta = el('div', 'meta');
+    meta.append(fmt(r.created_at) + '・' + (r.season || '') + '・' + r.phone + '・');
+    const mail = el('a', '', r.email); mail.href = 'mailto:' + r.email + '?subject=' + encodeURIComponent('你的訂單 ' + (r.order_no || '')); meta.append(mail);
+    if (r.line) meta.append('・LINE ' + r.line);
+    const chips = el('div');
+    chips.append(el('span', 'chip', PAY[r.pay] || r.pay), el('span', 'chip', DELIVERY[r.delivery] || r.delivery));
+    const where = r.delivery === 'home' ? r.address : r.delivery === 'meet' ? '另外約時間地點' : r.store;
+    const ul = el('ul', 'lines');
+    for (const l of itemsOf(r)) { const li = el('li'); li.append(el('span', '', l.name + '（' + l.label + '）× ' + l.qty), el('span', '', money(l.amount))); ul.append(li); }
+    const sum = el('div', 'sum'); sum.append('小計 ' + money(r.subtotal) + '・運費 ' + (r.shipping ? money(r.shipping) : '免運') + '・合計 ');
+    sum.append(el('b', '', money(r.total)));
+    item.append(top, meta, chips, el('div', 'meta', '寄送：' + (where || '')), ul, sum);
+    if (r.same_phone) item.append(el('div', 'flag', '同一支電話本檔已有訂單：' + r.same_phone + '（可合併寄送，運費請手動調整）'));
+    if (r.note) item.append(el('div', 'msg', r.note));
+    const ms = r.mail_status || '';
+    const zh = ms ? ms.replace(/owner/g, '通知信').replace(/guest/g, '確認信').replace(/ sent/g, ' 已寄出')
+      .replace(/ skipped:?/g, ' 未寄出：').replace(/ failed:?/g, ' 失敗：').replace(/; /g, '，') : '寄送中或尚無紀錄';
+    item.append(el('div', 'mail' + (/failed|skipped/.test(ms) ? ' bad' : ''), '寄信：' + zh));
+    list.append(item);
+  }
+}
+async function saveOrder(r, sel) {
+  const prev = r.status; sel.disabled = true;
+  try {
+    const res = await fetch('/api/admin/orders/' + r.id + '/status', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: sel.value })
+    });
+    const out = await res.json(); if (!out.ok) throw new Error(out.code);
+    r.status = sel.value; sel.dataset.v = sel.value; renderOrders();
+  } catch (e) {
+    sel.value = prev; alert('沒有存到（' + e.message + '），請再試一次。');
+  } finally { sel.disabled = false; }
+}
+$('#oStatus').addEventListener('change', renderOrders);
+$('#oText').addEventListener('input', renderOrders);
 
 /* ---------------- 幻燈片照片 ---------------- */
 let photos = [], photosLoaded = false;
@@ -325,11 +418,13 @@ const drop = $('#drop');
 drop.addEventListener('drop', e => uploadFiles(e.dataTransfer.files));
 if (location.hash === '#photos') showTab('ph');
 if (location.hash === '#letters') showTab('let');
+if (location.hash === '#orders') showTab('ord');
 
 ['#fStatus', '#fPlan'].forEach(s => $(s).addEventListener('change', render));
 $('#fText').addEventListener('input', render);
 load();
 loadLetters();
+loadOrders();
 </script>
 </body>
 </html>`;

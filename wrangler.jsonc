@@ -28,7 +28,10 @@
     // 大道至簡品牌站「連繫」表單：通知寄到哪個信箱、寄件人名稱、確認信裡的網站連結（見 worker/letters.js）
     "LETTER_NOTIFY_EMAIL": "dadaoissimple@gmail.com",
     "LETTER_FROM_NAME": "大道至簡 · Dao is simple",
-    "BRAND_SITE_URL": "https://alexchiachi.github.io/happy/"
+    "BRAND_SITE_URL": "https://alexchiachi.github.io/happy/",
+    // 雲南好物選購頁（shop/）訂單：新訂單通知寄到哪些信箱（逗號分隔）、寄件人名稱（見 worker/orders.js）
+    "SHOP_NOTIFY_EMAIL": "jianchiachi@gmail.com,renachien1@gmail.com",
+    "SHOP_FROM_NAME": "大道至簡・雲南好物"
   },
   // 保留在 Cloudflare 後台設定的變數（ACCESS_TEAM_DOMAIN、ACCESS_AUD），部署時不要清掉
   "keep_vars": true,
