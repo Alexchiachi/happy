@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>永恆之子整椎中心 · 線上預約 | Eternity's Child Chiropractic</title>
+<meta name="description" content="永恆之子整椎中心線上預約系統．量子整骨、體雕塑身、整椎正骨、按摩推拿．支援中文／English／日本語／한국어。">
+<meta name="theme-color" content="#1f5f52">
+<!-- 社群分享預覽。網域若變更，這四個網址要一起改 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="永恆之子整椎中心 · 線上預約">
+<meta property="og:description" content="量子整骨、體雕塑身、整椎正骨、按摩推拿、醫美整骨。支援中文／English／日本語／한국어線上預約。">
+<meta property="og:image" content="https://alexchiachi.github.io/happy/eternitychildbooking/assets/photo-1.jpg">
+<meta property="og:url" content="https://alexchiachi.github.io/happy/eternitychildbooking/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231f5f52'/><text y='68' x='50' text-anchor='middle' font-size='56' fill='white' font-family='sans-serif'>永</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   永恆之子整椎中心 · 線上預約系統  |  Eternity's Child Chiropractic
+   ============================================================ */
+
+:root {
+  --ink:        #17211f;
+  --ink-soft:   #4a5a56;
+  --ink-mute:   #7f8d89;
+  --line:       #e2e6e2;
+  --line-soft:  #eef1ee;
+  --bg:         #f7f6f2;
+  --surface:    #ffffff;
+  --surface-2:  #fbfaf7;
+
+  --jade:       #1f5f52;
+  --jade-deep:  #123c34;
+  --jade-soft:  #e8f1ee;
+  --gold:       #b08949;
+  --gold-soft:  #f6efe1;
+  --danger:     #b4453c;
+
+  --radius:     14px;
+  --radius-lg:  22px;
+  --shadow-sm:  0 1px 2px rgba(23, 33, 31, .06), 0 2px 8px rgba(23, 33, 31, .04);
+  --shadow-md:  0 4px 14px rgba(23, 33, 31, .08), 0 14px 40px rgba(23, 33, 31, .06);
+
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "PingFang TC", "Noto Sans TC", "Microsoft JhengHei",
+          "Hiragino Sans", "Noto Sans JP",
+          "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+          "Geeza Pro", "Noto Sans Arabic", Tahoma,
+          sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  letter-spacing: .01em;
+}
+
+img { max-width: 100%; display: block; }
+/* author-level `img { display:block }` outranks the UA rule for [hidden] */
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font: inherit; color: inherit; }
+
+.wrap { width: min(1080px, 100% - 2.5rem); margin-inline: auto; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(247, 246, 242, .88);
+  backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .85rem 0;
+}
+.logo { display: flex; align-items: center; gap: .7rem; min-width: 0; }
+.logo-mark {
+  width: 38px; height: 38px; flex: none; border-radius: 50%;
+  background: linear-gradient(145deg, var(--jade) 0%, var(--jade-deep) 100%);
+  color: #fff; display: grid; place-items: center;
+  font-size: 1.05rem; font-weight: 600; letter-spacing: -.02em;
+}
+.logo-text { min-width: 0; }
+.logo-name {
+  font-size: .98rem; font-weight: 650; line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.logo-sub {
+  font-size: .72rem; color: var(--ink-mute); letter-spacing: .06em;
+  text-transform: uppercase; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+
+.lang-switch {
+  display: flex; gap: .18rem; padding: .2rem;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 999px; box-shadow: var(--shadow-sm);
+}
+.lang-switch button {
+  padding: .34rem .72rem; border-radius: 999px;
+  font-size: .8rem; font-weight: 550; color: var(--ink-soft);
+  transition: background .18s, color .18s;
+  white-space: nowrap;
+}
+.lang-switch button:hover { background: var(--line-soft); }
+.lang-switch button[aria-pressed="true"] { background: var(--jade); color: #fff; }
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 3.4rem 0 2.6rem;
+  background:
+    radial-gradient(1100px 380px at 78% -8%, rgba(176,137,73,.14), transparent 62%),
+    radial-gradient(760px 340px at 8% 0%, rgba(31,95,82,.13), transparent 60%);
+  border-bottom: 1px solid var(--line);
+}
+.hero h1 {
+  font-size: clamp(1.85rem, 4.6vw, 2.9rem);
+  line-height: 1.22; font-weight: 680; letter-spacing: -.015em;
+}
+.hero .eyebrow {
+  display: inline-block; margin-bottom: .9rem;
+  font-size: .74rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--jade); background: var(--jade-soft);
+  padding: .3rem .8rem; border-radius: 999px;
+}
+.hero .lead {
+  margin-top: .85rem; max-width: 46rem;
+  font-size: 1.02rem; color: var(--ink-soft);
+}
+.hero-notice {
+  display: inline-flex; align-items: center; gap: .5rem;
+  margin-top: 1.35rem; padding: .55rem 1rem;
+  background: var(--gold-soft); border: 1px solid rgba(176,137,73,.28);
+  border-radius: 999px; font-size: .86rem; color: #6f5423; font-weight: 550;
+}
+.hero-actions { margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: .8rem; }
+
+.price-strip {
+  margin-top: 2.2rem; display: grid; gap: .7rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  max-width: 620px;
+}
+.price-chip {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .85rem 1.05rem; box-shadow: var(--shadow-sm);
+}
+.price-chip .amount { font-size: 1.32rem; font-weight: 680; color: var(--jade-deep); letter-spacing: -.02em; }
+.price-chip .unit { font-size: .82rem; color: var(--ink-mute); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .78rem 1.5rem; border-radius: 999px; text-decoration: none;
+  font-size: .92rem; font-weight: 600; letter-spacing: .01em;
+  transition: transform .16s, box-shadow .16s, background .16s, color .16s, border-color .16s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--jade); color: #fff; box-shadow: 0 6px 18px rgba(31,95,82,.24); }
+.btn-primary:hover { background: var(--jade-deep); }
+.btn-primary[disabled] { background: #b7c4c0; box-shadow: none; cursor: not-allowed; }
+.btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--jade); color: var(--jade); }
+.btn-sm { padding: .5rem 1rem; font-size: .82rem; }
+
+/* ---------- Gallery ---------- */
+.gallery { padding: 2.6rem 0 .4rem; }
+.gallery-head { margin-bottom: 1.1rem; }
+.gallery-head h2 {
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem); font-weight: 650; letter-spacing: -.01em;
+}
+.gallery-head p { margin-top: .3rem; font-size: .9rem; color: var(--ink-mute); }
+
+.gallery-grid {
+  display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.gallery-grid figure {
+  margin: 0; aspect-ratio: 1 / 1; overflow: hidden;
+  border-radius: var(--radius); border: 1px solid var(--line);
+  background: var(--surface-2); box-shadow: var(--shadow-sm);
+}
+.gallery-grid img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s ease;
+}
+@media (hover: hover) {
+  .gallery-grid figure:hover img { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-grid img { transition: none; }
+  .gallery-grid figure:hover img { transform: none; }
+}
+@media (max-width: 620px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: .55rem; }
+}
+
+/* ---------- Booking shell ---------- */
+.booking { padding: 2.8rem 0 3.4rem; }
+
+.stepper { display: flex; gap: .4rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+.stepper .node {
+  flex: 1 1 130px; display: flex; align-items: center; gap: .6rem;
+  padding: .7rem .85rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--line);
+  font-size: .85rem; color: var(--ink-mute); transition: .2s;
+}
+.stepper .node .dot {
+  width: 24px; height: 24px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; font-size: .76rem; font-weight: 650;
+  background: var(--line-soft); color: var(--ink-mute);
+}
+.stepper .node.active { border-color: var(--jade); color: var(--ink); box-shadow: var(--shadow-sm); }
+.stepper .node.active .dot { background: var(--jade); color: #fff; }
+.stepper .node.done .dot { background: var(--jade-soft); color: var(--jade); }
+.stepper .node.done { color: var(--ink-soft); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+  padding: clamp(1.3rem, 3.4vw, 2.2rem);
+}
+.panel { display: none; }
+.panel.active { display: block; animation: fade .3s ease both; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.section-label {
+  font-size: .74rem; font-weight: 650; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-mute); margin-bottom: .75rem;
+}
+.section + .section { margin-top: 1.9rem; }
+
+/* ---------- Option cards ---------- */
+.options { display: grid; gap: .7rem; }
+.options.cols-2 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.options.cols-4 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+
+.opt {
+  /* Chrome centres a button's content vertically; flex-column overrides that
+     so titles line up across cards with descriptions of differing length */
+  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  position: relative; text-align: start; width: 100%;
+  padding: 1rem 1.1rem; border-radius: var(--radius);
+  border: 1.5px solid var(--line); background: var(--surface-2);
+  transition: border-color .18s, background .18s, box-shadow .18s;
+}
+.opt:hover { border-color: #b9cdc7; background: #fff; }
+.opt[aria-pressed="true"] {
+  border-color: var(--jade); background: #fff; box-shadow: 0 0 0 3px rgba(31,95,82,.09);
+}
+.opt[aria-pressed="true"]::after {
+  content: "✓"; position: absolute; inset-block-start: .85rem; inset-inline-end: .95rem;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--jade); color: #fff;
+  font-size: .68rem; display: grid; place-items: center;
+}
+.opt .opt-title { font-weight: 620; font-size: .98rem; padding-inline-end: 1.7rem; }
+.opt .opt-desc { margin-top: .28rem; font-size: .84rem; color: var(--ink-mute); line-height: 1.5; }
+.opt .opt-extra {
+  margin-top: .45rem; padding-top: .45rem;
+  border-top: 1px dashed var(--line);
+  font-size: .8rem; color: var(--gold); line-height: 1.5;
+}
+.opt .opt-price { margin-top: .5rem; font-size: .92rem; font-weight: 650; color: var(--gold); }
+
+/* ---------- Step 2 : two-column picker ---------- */
+.picker { display: grid; gap: 1.9rem; }
+@media (min-width: 900px) {
+  .picker { grid-template-columns: 380px 1fr; gap: 2.2rem; align-items: start; }
+  .picker .section + .section { margin-top: 0; }
+}
+
+/* ---------- 阿拉伯文（由右至左） ----------
+   版面本身用邏輯屬性寫成，會自動鏡射；這裡只補字元層級的處理。 */
+[dir="rtl"] .logo-sub { letter-spacing: 0; }
+/* 價格與時間是「數字＋符號＋單位」的混排，交給瀏覽器的雙向演算法會前後顛倒。
+   固定成由左至右並隔離，數字才不會被拆開重排。 */
+[dir="rtl"] .price-chip .amount,
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .pay-acct,
+[dir="rtl"] .slot,
+[dir="rtl"] .cal-cell,
+[dir="rtl"] .hours-row .t,
+[dir="rtl"] .ref-code,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .contact-bank .acct { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .price-chip .unit,
+[dir="rtl"] .opt-price,
+[dir="rtl"] .contact-row .cv,
+[dir="rtl"] .hours-row .t { text-align: start; }
+[dir="rtl"] .section-label { letter-spacing: 0; }
+
+/* ---------- Pick-a-part chips ---------- */
+.section-label.labelled {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+}
+.section-label .count {
+  font-size: .78rem; font-weight: 600; letter-spacing: 0;
+  text-transform: none; color: var(--jade);
+  background: var(--jade-soft); padding: .18rem .6rem; border-radius: 999px;
+}
+.section-label .count.full { color: var(--gold); background: var(--gold-soft); }
+
+.parts-grid {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.part {
+  display: flex; align-items: center; gap: .55rem;
+  padding: .6rem .8rem; border-radius: 10px;
+  border: 1.5px solid var(--line); background: var(--surface-2);
+  font-size: .9rem; font-weight: 550; text-align: start;
+  transition: border-color .16s, background .16s, box-shadow .16s, opacity .16s;
+}
+.part .box {
+  width: 18px; height: 18px; flex: none; border-radius: 5px;
+  border: 1.5px solid #c2ccc9; background: #fff;
+  display: grid; place-items: center; font-size: .62rem; color: transparent;
+  transition: .16s;
+}
+.part:hover:not([disabled]) { border-color: #b9cdc7; background: #fff; }
+.part[aria-pressed="true"] {
+  border-color: var(--jade); background: #fff; box-shadow: 0 0 0 3px rgba(31,95,82,.09);
+}
+.part[aria-pressed="true"] .box { background: var(--jade); border-color: var(--jade); color: #fff; }
+.part[disabled] { opacity: .42; cursor: not-allowed; }
+
+/* ---------- Calendar ---------- */
+.cal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .8rem; margin-bottom: .85rem;
+}
+.cal-title { font-weight: 650; font-size: 1rem; }
+.cal-nav { display: flex; gap: .35rem; }
+.cal-nav button {
+  width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; color: var(--ink-soft); transition: .16s;
+}
+.cal-nav button:hover:not([disabled]) { border-color: var(--jade); color: var(--jade); }
+.cal-nav button[disabled] { opacity: .35; cursor: not-allowed; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .3rem; max-width: 420px; }
+.cal-head { max-width: 420px; }
+.cal-dow {
+  text-align: center; font-size: .74rem; font-weight: 600;
+  color: var(--ink-mute); padding: .35rem 0;
+}
+.cal-cell {
+  height: 46px;
+  border-radius: 10px; border: 1px solid transparent;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: .88rem; font-weight: 550; color: var(--ink);
+  background: var(--surface-2); transition: .15s;
+}
+.cal-cell.empty { background: transparent; }
+.cal-cell:not([disabled]):hover { border-color: var(--jade); background: #fff; }
+.cal-cell[disabled] { color: #c3cbc8; background: transparent; cursor: not-allowed; }
+.cal-cell.selected { background: var(--jade); color: #fff; border-color: var(--jade); }
+.cal-cell .tag {
+  font-size: .55rem; line-height: 1; margin-top: .18rem;
+  color: var(--gold); font-weight: 650; letter-spacing: .04em;
+}
+.cal-cell.selected .tag { color: #ffe6b9; }
+.cal-legend {
+  margin-top: .8rem; display: flex; flex-wrap: wrap; gap: 1rem;
+  font-size: .78rem; color: var(--ink-mute);
+}
+.cal-legend span::before {
+  content: ""; display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-inline-end: .4rem; background: var(--gold);
+}
+
+/* ---------- Slots ---------- */
+.slot-grid {
+  display: grid; gap: .5rem;
+  grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+}
+.slot {
+  padding: .6rem .3rem; border-radius: 10px; text-align: center;
+  border: 1.5px solid var(--line); background: var(--surface-2);
+  font-size: .88rem; font-weight: 550; font-variant-numeric: tabular-nums;
+  transition: .15s;
+}
+.slot:hover:not([disabled]) { border-color: var(--jade); background: #fff; }
+.slot[aria-pressed="true"] { background: var(--jade); border-color: var(--jade); color: #fff; }
+.slot[disabled] { opacity: .4; cursor: not-allowed; text-decoration: line-through; }
+.slot-period {
+  grid-column: 1 / -1; margin-top: .5rem;
+  font-size: .74rem; font-weight: 650; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-mute);
+}
+.slot-period:first-child { margin-top: 0; }
+
+.empty-note {
+  padding: 1.4rem; border-radius: var(--radius);
+  background: var(--surface-2); border: 1px dashed var(--line);
+  color: var(--ink-mute); font-size: .9rem; text-align: center;
+}
+
+/* ---------- Form ---------- */
+.field-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.field { display: flex; flex-direction: column; gap: .38rem; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: .86rem; font-weight: 600; }
+.field label .hint { font-weight: 400; color: var(--ink-mute); font-size: .78rem; margin-inline-start: .35rem; }
+.field input, .field select, .field textarea {
+  padding: .72rem .85rem; border-radius: 10px;
+  border: 1.5px solid var(--line); background: var(--surface-2);
+  transition: border-color .16s, background .16s, box-shadow .16s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--jade); background: #fff;
+  box-shadow: 0 0 0 3px rgba(31,95,82,.1);
+}
+.field textarea { min-height: 108px; resize: vertical; }
+.field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
+.field .note { font-size: .76rem; color: var(--ink-mute); line-height: 1.45; }
+.field .note.surgery { color: var(--gold); font-weight: 550; }
+.field .err { font-size: .78rem; color: var(--danger); display: none; }
+.field.invalid .err { display: block; }
+
+.check {
+  display: flex; align-items: flex-start; gap: .6rem;
+  margin-top: 1.2rem; font-size: .88rem; color: var(--ink-soft);
+}
+.check input { width: 18px; height: 18px; margin-top: .18rem; accent-color: var(--jade); flex: none; }
+.check.invalid { color: var(--danger); }
+
+/* ---------- Review / summary ---------- */
+.summary { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.summary-row {
+  display: grid; grid-template-columns: 34% 1fr; gap: 1rem;
+  padding: .78rem 1.05rem; font-size: .9rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row:nth-child(odd) { background: var(--surface-2); }
+.summary-row dt { color: var(--ink-mute); }
+.summary-row dd { font-weight: 570; overflow-wrap: anywhere; }
+.summary-row.total dd { font-size: 1.1rem; font-weight: 680; color: var(--jade-deep); }
+
+.pay-box {
+  margin-top: 1.5rem; padding: 1.2rem;
+  border-radius: var(--radius); border: 1px solid rgba(176,137,73,.32);
+  background: var(--gold-soft);
+}
+.pay-box h3 { font-size: .95rem; font-weight: 650; margin-bottom: .8rem; color: #6f5423; }
+.pay-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; font-size: .92rem; }
+.pay-line + .pay-line { margin-top: .35rem; }
+.pay-line .k { color: #8a6e39; min-width: 4.5rem; font-size: .84rem; }
+.pay-acct {
+  font-variant-numeric: tabular-nums; font-weight: 680; letter-spacing: .06em;
+  font-size: 1.05rem; color: #4a3714;
+}
+.pay-note { margin-top: .9rem; font-size: .82rem; color: #7a5f2c; line-height: 1.6; }
+.pay-qr { margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.pay-qr img { width: 128px; border-radius: 10px; border: 1px solid rgba(176,137,73,.3); background: #fff; }
+
+.rules { margin-top: 1.5rem; }
+.rules h3 { font-size: .95rem; font-weight: 650; margin-bottom: .6rem; }
+.rules ol { padding-inline-start: 1.15rem; color: var(--ink-soft); font-size: .87rem; }
+.rules li { margin-bottom: .35rem; }
+
+.form-error {
+  display: none; margin-top: 1rem; padding: .7rem 1rem;
+  border-radius: 10px; background: #fbeceb; border: 1px solid rgba(180,69,60,.28);
+  color: var(--danger); font-size: .86rem;
+}
+.form-error.show { display: block; }
+
+.actions {
+  display: flex; gap: .7rem; margin-top: 1.8rem;
+  padding-top: 1.4rem; border-top: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+.actions .spacer { flex: 1; }
+
+/* ---------- Success ---------- */
+.done { text-align: center; padding: 1.2rem 0 .4rem; }
+.done .icon {
+  width: 62px; height: 62px; margin: 0 auto 1.1rem; border-radius: 50%;
+  background: var(--jade-soft); color: var(--jade);
+  display: grid; place-items: center; font-size: 1.7rem;
+}
+.done h2 { font-size: 1.45rem; font-weight: 680; }
+.done p { margin-top: .6rem; color: var(--ink-soft); font-size: .93rem; max-width: 34rem; margin-inline: auto; }
+.ref-code {
+  display: inline-block; margin-top: 1.1rem; padding: .55rem 1.15rem;
+  border-radius: 999px; background: var(--surface-2); border: 1px dashed var(--line);
+  font-variant-numeric: tabular-nums; letter-spacing: .1em; font-weight: 650;
+}
+.done .actions { justify-content: center; border-top: none; }
+
+/* ---------- Info section ---------- */
+.info { padding: 0 0 3.4rem; }
+.info-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+/* the map leads the section and takes a row of its own */
+.map-card { grid-column: 1 / -1; }
+
+.map-frame {
+  position: relative; width: 100%; aspect-ratio: 21 / 9;
+  min-height: 220px; border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--line); background: var(--surface-2);
+}
+.map-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map-links { margin-top: .7rem; font-size: .86rem; }
+.map-links a { color: var(--jade); font-weight: 550; text-decoration: none; }
+.map-links a:hover { text-decoration: underline; }
+.map-note { margin-top: .3rem; font-size: .78rem; color: var(--ink-mute); }
+.info-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow-sm);
+}
+.info-card h3 { font-size: .95rem; font-weight: 650; margin-bottom: .75rem; }
+.hours-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-size: .88rem; padding: .32rem 0; border-bottom: 1px dashed var(--line-soft);
+}
+.hours-row:last-child { border-bottom: none; }
+.hours-row .d { color: var(--ink-mute); }
+.hours-row .t { font-variant-numeric: tabular-nums; font-weight: 550; }
+.hours-row.rest { color: var(--gold); }
+.hours-row.rest .d { color: var(--gold); }
+
+.contact-list { display: grid; gap: .3rem; }
+.contact-row {
+  display: flex; gap: .8rem; align-items: baseline;
+  font-size: .88rem; padding: .3rem 0;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row .ck { color: var(--ink-mute); min-width: 4.2rem; flex: none; }
+.contact-row .cv { overflow-wrap: anywhere; }
+a.cv { color: var(--jade); text-decoration: none; }
+a.cv:hover { text-decoration: underline; }
+.contact-bank {
+  margin-top: .8rem; padding-top: .7rem; border-top: 1px solid var(--line-soft);
+  font-size: .85rem; color: var(--ink-soft);
+}
+.contact-bank .bank-title {
+  font-size: .78rem; font-weight: 650; letter-spacing: .06em;
+  color: var(--gold); margin-bottom: .3rem;
+}
+.contact-bank .acct { font-variant-numeric: tabular-nums; letter-spacing: .05em; }
+
+.line-qr {
+  margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--line-soft);
+  display: flex; align-items: center; gap: .9rem;
+}
+.line-qr img {
+  width: 96px; height: 96px; flex: none; border-radius: 10px;
+  border: 1px solid var(--line); background: #fff;
+}
+.line-qr .qr-cap { font-size: .8rem; color: var(--ink-mute); line-height: 1.5; }
+.footer-note .terms {
+  display: block; margin-top: .35rem; color: var(--ink-soft); font-weight: 550;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line); background: var(--surface);
+  padding: 1.8rem 0; font-size: .82rem; color: var(--ink-mute);
+}
+.footer-inner { display: flex; flex-wrap: wrap; gap: .8rem 2rem; justify-content: space-between; }
+.site-footer a { color: var(--jade); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+.footer-note { max-width: 44rem; line-height: 1.6; }
+.ver { opacity: .5; font-variant-numeric: tabular-nums; margin-inline-start: .3rem; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; inset-inline: 0; bottom: 1.6rem; margin-inline: auto;
+  width: max-content; max-width: calc(100% - 2rem);
+  padding: .7rem 1.25rem; border-radius: 999px;
+  background: var(--jade-deep); color: #fff; font-size: .87rem;
+  box-shadow: var(--shadow-md); opacity: 0; transform: translateY(12px);
+  transition: opacity .22s, transform .22s; pointer-events: none; z-index: 90;
+}
+.toast.show { opacity: 1; transform: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (max-width: 620px) {
+  .wrap { width: calc(100% - 1.6rem); }
+  .map-frame { aspect-ratio: 4 / 3; }
+  .logo-mark { width: 32px; height: 32px; font-size: .92rem; }
+  .logo-name { font-size: .88rem; }
+  .logo-sub { display: none; }
+  .lang-switch button { padding: .3rem .55rem; font-size: .76rem; }
+  .stepper .node { flex-basis: calc(50% - .4rem); }
+  .summary-row { grid-template-columns: 1fr; gap: .15rem; }
+  .actions .btn { flex: 1 1 100%; }
+  .actions .spacer { display: none; }
+}
+
+@media print {
+  .site-header, .hero-actions, .stepper, .actions, .lang-switch, .toast { display: none !important; }
+  body { background: #fff; }
+  .card { box-shadow: none; border-color: #ccc; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">永</div>
+      <div class="logo-text">
+        <div class="logo-name" data-i18n="brand.name">永恆之子整椎中心</div>
+        <div class="logo-sub" data-i18n="brand.en">Eternity's Child Chiropractic</div>
+      </div>
+    </div>
+    <nav class="lang-switch" id="langSwitch" aria-label="Language"></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.tagline">全球化線上預約系統</span>
+    <h1 data-i18n="brand.name">永恆之子整椎中心</h1>
+    <p class="lead" data-i18n="hero.desc">量子整骨 · 體雕塑身 · 整椎正骨 · 按摩推拿 · 醫美整骨</p>
+    <div class="hero-notice">
+      <span aria-hidden="true">🗓</span><span data-i18n="hero.notice">預約時間須為七天之後</span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#booking" data-i18n="hero.cta">開始預約</a>
+      <a class="btn btn-ghost" href="#info" data-i18n="hours.title">營業時間</a>
+    </div>
+    <div class="price-strip">
+      <div class="price-chip">
+        <div class="amount">NT$ 1,688</div>
+        <div class="unit"><span data-i18n="duration.40">40 分鐘</span> · <span data-i18n="pkg.3">擇三</span></div>
+      </div>
+      <div class="price-chip">
+        <div class="amount">NT$ 2,888</div>
+        <div class="unit"><span data-i18n="duration.60">60 分鐘</span> · <span data-i18n="pkg.5">擇五</span></div>
+      </div>
+      <div class="price-chip">
+        <div class="amount">NT$ 4,588</div>
+        <div class="unit"><span data-i18n="duration.90">90 分鐘</span> · <span data-i18n="pkg.all">十個部位全選</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery" hidden>
+  <div class="wrap">
+    <div class="gallery-head">
+      <h2 data-i18n="gallery.title">中心實景</h2>
+      <p data-i18n="gallery.lead">安靜、單純，一次只服務一位客人</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<main class="booking" id="booking">
+  <div class="wrap">
+
+    <ol class="stepper" id="stepper">
+      <li class="node" data-step="1"><span class="dot">1</span><span data-i18n="step.1">選擇項目</span></li>
+      <li class="node" data-step="2"><span class="dot">2</span><span data-i18n="step.2">選擇時間</span></li>
+      <li class="node" data-step="3"><span class="dot">3</span><span data-i18n="step.3">填寫資料</span></li>
+      <li class="node" data-step="4"><span class="dot">4</span><span data-i18n="step.4">確認送出</span></li>
+    </ol>
+
+    <div class="card">
+
+      <!-- ===== Step 1 : service ===== -->
+      <section class="panel active" id="panel-1" aria-labelledby="s1">
+        <h2 class="sr-only" id="s1" data-i18n="step.1">選擇項目</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="visit.title">看診類型</div>
+          <div class="options cols-2" id="visitOptions"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label" data-i18n="service.title">服務項目</div>
+          <div class="options cols-4" id="serviceOptions"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label" id="durationLabel" data-i18n="duration.title">療程時長</div>
+          <div class="options cols-2" id="durationOptions"></div>
+        </div>
+
+        <div class="section" id="partsSection" hidden>
+          <div class="section-label labelled">
+            <span data-i18n="parts.title">選擇部位</span>
+            <span class="count" id="partsCount"></span>
+          </div>
+          <div class="parts-grid" id="partsOptions"></div>
+        </div>
+
+        <div class="form-error" id="err1"></div>
+        <div class="actions">
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="2" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 2 : date & time ===== -->
+      <section class="panel" id="panel-2" aria-labelledby="s2">
+        <h2 class="sr-only" id="s2" data-i18n="step.2">選擇時間</h2>
+
+        <div class="picker">
+        <div class="section">
+          <div class="section-label" data-i18n="date.title">選擇日期</div>
+          <div class="cal-head">
+            <div class="cal-title" id="calTitle"></div>
+            <div class="cal-nav">
+              <button type="button" id="calPrev" aria-label="Previous month">‹</button>
+              <button type="button" id="calNext" aria-label="Next month">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span id="calLegendSun" data-i18n="time.sunday.only">週日僅開放上午時段，且限初診預約</span>
+          </div>
+          <p class="cal-legend" id="calHint" style="color:var(--ink-mute)"></p>
+        </div>
+
+        <div class="section">
+          <div class="section-label" data-i18n="time.title">選擇時段</div>
+          <div id="slotArea"></div>
+        </div>
+        </div>
+
+        <div class="form-error" id="err2"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="1" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="3" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 3 : details ===== -->
+      <section class="panel" id="panel-3" aria-labelledby="s3">
+        <h2 class="sr-only" id="s3" data-i18n="form.title">預約人資料</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="form.title">預約人資料</div>
+          <div class="field-grid">
+            <div class="field" data-field="name">
+              <label for="fName"><span data-i18n="form.name">姓名</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fName" type="text" autocomplete="name" data-i18n-ph="form.name.ph">
+              <span class="err" data-i18n="err.name"></span>
+            </div>
+            <div class="field" data-field="phone">
+              <label for="fPhone"><span data-i18n="form.phone">聯絡電話</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fPhone" type="tel" autocomplete="tel" inputmode="tel" data-i18n-ph="form.phone.ph">
+              <span class="err" data-i18n="err.phone"></span>
+            </div>
+            <div class="field" data-field="email">
+              <label for="fEmail"><span data-i18n="form.email">電子信箱</span><span class="hint" data-i18n="form.required">必填</span></label>
+              <input id="fEmail" type="email" autocomplete="email" data-i18n-ph="form.email.ph">
+              <span class="err" data-i18n="err.email"></span>
+            </div>
+            <div class="field" data-field="lang">
+              <label for="fLang" data-i18n="form.lang">希望的溝通語言</label>
+              <select id="fLang"></select>
+            </div>
+            <div class="field" data-field="last5">
+              <label for="fLast5"><span data-i18n="form.last5">匯款末五碼</span><span class="hint" data-i18n="form.optional">選填</span></label>
+              <input id="fLast5" type="text" inputmode="numeric" maxlength="5" autocomplete="off" data-i18n-ph="form.last5.ph">
+              <span class="note" data-i18n="form.last5.hint"></span>
+              <span class="err" data-i18n="err.last5"></span>
+            </div>
+            <div class="field full" data-field="notes">
+              <label for="fNotes"><span data-i18n="form.notes">身體狀況或備註</span><span class="hint" data-i18n="form.optional">選填</span></label>
+              <textarea id="fNotes" data-i18n-ph="form.notes.ph"></textarea>
+              <span class="note surgery" data-i18n="form.notes.hint"></span>
+            </div>
+          </div>
+
+          <label class="check" id="agreeWrap">
+            <input type="checkbox" id="fAgree">
+            <span data-i18n="form.agree">我已閱讀並同意預約與付款須知</span>
+          </label>
+        </div>
+
+        <div class="form-error" id="err3"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="2" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" data-next="4" data-i18n="btn.next">下一步</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 4 : review ===== -->
+      <section class="panel" id="panel-4" aria-labelledby="s4">
+        <h2 class="sr-only" id="s4" data-i18n="review.title">確認您的預約</h2>
+
+        <div class="section">
+          <div class="section-label" data-i18n="review.title">確認您的預約</div>
+          <dl class="summary" id="summary"></dl>
+        </div>
+
+        <div class="pay-box">
+          <h3 data-i18n="pay.title">付款方式 · 銀行轉帳</h3>
+          <div class="pay-line">
+            <span class="k" data-i18n="pay.bank">銀行</span>
+            <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span>
+          </div>
+          <div class="pay-line">
+            <span class="k" data-i18n="pay.acct">帳號</span>
+            <span class="pay-acct" id="acctNo">013004490011</span>
+            <button class="btn btn-ghost btn-sm" id="copyAcct" data-i18n="pay.copy">複製帳號</button>
+          </div>
+          <div class="pay-qr">
+            <img alt="TWQR" id="qrImg" hidden>
+            <span style="font-size:.84rem;color:#7a5f2c" data-i18n="pay.qr">亦可掃描櫃檯 TWQR 條碼付款</span>
+          </div>
+          <p class="pay-note" data-i18n="pay.note"></p>
+        </div>
+
+        <div class="rules">
+          <h3 data-i18n="rules.title">預約須知</h3>
+          <ol>
+            <li data-i18n="rules.1"></li>
+            <li data-i18n="rules.2"></li>
+            <li data-i18n="rules.3"></li>
+            <li data-i18n="rules.4"></li>
+            <li data-i18n="rules.5"></li>
+            <li data-i18n="rules.6"></li>
+            <li data-i18n="rules.7"></li>
+            <li data-i18n="rules.8"></li>
+          </ol>
+        </div>
+
+        <div class="form-error" id="err4"></div>
+        <div class="actions">
+          <button class="btn btn-ghost" data-back="3" data-i18n="btn.back">上一步</button>
+          <span class="spacer"></span>
+          <button class="btn btn-primary" id="submitBtn" data-i18n="btn.submit">送出預約</button>
+        </div>
+      </section>
+
+      <!-- ===== Step 5 : done ===== -->
+      <section class="panel" id="panel-5" aria-labelledby="s5">
+        <div class="done">
+          <div class="icon" aria-hidden="true">✓</div>
+          <h2 id="s5" data-i18n="done.title">預約已送出</h2>
+          <p data-i18n="done.desc"></p>
+          <div><span class="ref-code" id="refCode"></span></div>
+          <p style="font-size:.84rem" id="mailNote"></p>
+          <div class="actions">
+            <button class="btn btn-primary" id="mailBtn" data-i18n="btn.mail">以電子郵件寄出</button>
+            <button class="btn btn-ghost" id="copyBtn" data-i18n="btn.copy">複製預約明細</button>
+            <a class="btn btn-ghost" id="gcalBtn" href="#" target="_blank" rel="noopener" data-i18n="btn.gcal">加入 Google 日曆</a>
+            <button class="btn btn-ghost" id="icsBtn" data-i18n="btn.ics">下載行事曆檔（.ics）</button>
+          </div>
+          <div class="actions" style="padding-top:0">
+            <button class="btn btn-ghost" id="restartBtn" data-i18n="btn.newBooking">再預約一筆</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<section class="info" id="info">
+  <div class="wrap info-grid">
+    <div class="info-card map-card">
+      <h3 data-i18n="info.location">中心位置</h3>
+      <div class="map-frame" id="mapFrame"></div>
+      <p class="map-links">
+        <a id="mapLink" href="#" target="_blank" rel="noopener" data-i18n="info.map.open">在 Google 地圖開啟</a>
+      </p>
+    </div>
+    <div class="info-card">
+      <h3 data-i18n="hours.title">營業時間</h3>
+      <div class="hours-row"><span class="d" data-i18n="hours.week">週一至週六</span><span class="t">09:00 – 21:00</span></div>
+      <div class="hours-row"><span class="d" data-i18n="hours.thu">週四</span><span class="t">09:00 – 17:00</span></div>
+      <div class="hours-row"><span class="d" data-i18n="hours.sun">週日</span><span class="t" data-i18n="hours.sun.value">09:00 – 12:00（僅初診）</span></div>
+      <div class="hours-row rest"><span class="d" data-i18n="hours.break">休息時間</span><span class="t">12:00 – 14:00</span></div>
+    </div>
+    <div class="info-card">
+      <h3 data-i18n="rules.title">預約須知</h3>
+      <ol style="padding-inline-start:1.15rem;font-size:.86rem;color:var(--ink-soft)">
+        <li data-i18n="rules.1"></li>
+        <li data-i18n="rules.4"></li>
+        <li data-i18n="rules.5"></li>
+        <li data-i18n="rules.6"></li>
+      </ol>
+    </div>
+    <div class="info-card">
+      <h3 data-i18n="footer.contact">聯絡我們</h3>
+      <div class="contact-list" id="contactList"></div>
+      <div class="contact-bank">
+        <div class="bank-title" data-i18n="info.bank.title">匯款資訊</div>
+        <span data-i18n="pay.bank.value">臺灣銀行（代號 004）</span><br>
+        <span class="acct">013004490011</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-note">
+      <span data-i18n="footer.demo"></span>
+      <span class="terms" data-i18n="footer.terms"></span>
+    </div>
+    <div>© <span id="year"></span> <span data-i18n="brand.name">永恆之子整椎中心</span> · <span data-i18n="footer.rights">版權所有</span> <span class="ver" id="ver"></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ============================================================
+   永恆之子整椎中心 · 預約系統設定檔
+   Eternity's Child Chiropractic — booking configuration
+   修改本檔即可調整營業時間、價格與收件方式，無須動到程式。
+   ============================================================ */
+
+const CONFIG = {
+  /* 版本標記：會顯示在頁尾右下角，用來確認線上跑的是不是最新版。
+     ★ 改版時，這裡和 index.html 裡四個 ?v= 要一起改成同一個數字，
+       否則瀏覽器會繼續沿用快取裡的舊檔案。 */
+  version: '2.3',
+
+  /* 中心收件信箱：預約明細會寄到這裡 */
+  email: 'ahanamita88888888@gmail.com',
+
+  /* 聯絡資訊。填了才會顯示在頁面上，留空的項目會自動略過。
+     phone 會做成可直接撥打的連結，line 填官方帳號 ID 或邀請連結。 */
+  contact: {
+    name: '林廣漢',
+    phone: '0985727168',
+    instagram: 'cosmoskhan',       // 只填帳號，不用網址
+    lineQr: 'assets/line-qr.jpg',  // LINE 官方帳號的 QR 圖檔，沒放檔案就不顯示
+    line: '',                      // 若之後拿到 LINE ID 或邀請連結，填這裡
+    address: ''                    // 有需要再填，地圖已經標好位置
+  },
+
+  /* 付款資訊 */
+  bank: { code: '004', name: 'Bank of Taiwan', account: '013004490011' },
+
+  /* 選填：TWQR 收款條碼圖檔（放進 assets/ 後填入檔名，例如 'assets/twqr.jpg'） */
+  qrImage: '',
+
+  /* 中心實景照片。把檔案放進 assets/ 並用這些檔名即可自動顯示；
+     還沒放上去的照片會自動略過，四張都沒有時整個區塊會隱藏，不會留白。
+     第一張同時用於社群分享的預覽圖（見 index.html 的 og:image）。 */
+  photos: [
+    'assets/photo-1.jpg',
+    'assets/photo-2.jpg',
+    'assets/photo-3.jpg',
+    'assets/photo-4.jpg'
+  ],
+
+  /* 中心位置。embed 是 Google 地圖「嵌入地圖」給的網址（iframe 的 src），
+     link 是點「在 Google 地圖開啟」時要去的網址。
+     換地點時到 Google 地圖 → 分享 → 嵌入地圖，複製新的網址貼進來即可。 */
+  map: {
+    embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.9809356376345!2d120.68283367539682!3d23.961114278527212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346931e48b0bf07b%3A0xb09dbf0bc3cb8356!2z5rC45oGG5LmL5a2Q5pW05qSO5Lit5b-D!5e0!3m2!1szh-TW!2s!4v1788172605408!5m2!1szh-TW!2s',
+    link: 'https://maps.google.com/?cid=12726538179269329750'
+  },
+
+  /* 幣別與價格（依療程分鐘數） */
+  currency: 'NT$',
+  prices: { 40: 1688, 60: 2888 },
+
+  /* 服務項目 key 對應 i18n 字典 */
+  services: ['quantum', 'sculpt', 'spine', 'massage', 'aesthetic'],
+
+  /* 療程長度（分鐘） */
+  durations: [40, 60],
+
+  /* 「醫美整骨」是選部位計價，不是選時長：
+     客人從 parts 的十個部位中挑三項或五項，價格看挑幾項。
+     minutes 決定要佔用多長的時段，可依實際施作時間調整。 */
+  pickService: {
+    key: 'aesthetic',
+    parts: ['face', 'jaw', 'pelvis', 'hip', 'waist',
+            'belly', 'shoulder', 'hunch', 'tuina', 'detail'],
+    packages: [
+      { pick: 3,  price: 1688, minutes: 40 },
+      { pick: 5,  price: 2888, minutes: 60 },
+      /* 十項全選的旗艦方案，另含四項加贈項目（見 i18n 的 extra.*）。
+         pick 等於部位總數時，網頁會自動全選並鎖住，客人不需逐項點選。 */
+      { pick: 10, price: 4588, minutes: 90, name: 'signature',
+        extras: ['pulse', 'detail', 'surface', 'lift'] }
+    ]
+  },
+
+  /* 每日休息時間，這幾段不開放預約。療程若會跨進休息時間也不能預約，
+     例如休息 12:00–14:00 時，11:30 開始的 40 分鐘療程（做到 12:10）會被擋掉。
+     某一天要不同的休息時間，在下方 hours 的那一天加上自己的 breaks 即可。 */
+  breaks: [['12:00', '14:00']],
+
+  /* 時段起始間隔（分鐘） */
+  slotStep: 30,
+
+  /* 最早可預約：今天起 leadDays 天之後。
+     若要改回「幾個月之後」，把 leadDays 設為 0 並填 leadMonths。 */
+  leadDays: 7,
+  leadMonths: 0,
+
+  /* 最晚可預約：今天起幾個月內 */
+  windowMonths: 4,
+
+  /* 中心所在時區偏移（台北 UTC+8，無日光節約） */
+  tzOffsetHours: 8,
+  tzName: 'Asia/Taipei',
+
+  /* 營業時間：0=週日 … 6=週六，時間為 24 小時制分鐘數起訖 */
+  hours: {
+    0: { open: '09:00', close: '12:00', firstVisitOnly: true },  // 週日：上午、限初診
+    1: { open: '09:00', close: '21:00' },
+    2: { open: '09:00', close: '21:00' },
+    3: { open: '09:00', close: '21:00' },
+    4: { open: '09:00', close: '17:00' },                        // 週四提早打烊
+    5: { open: '09:00', close: '21:00' },
+    6: { open: '09:00', close: '21:00' }
+  },
+
+  /* 公休日（YYYY-MM-DD），可自行增列國定假日 */
+  closedDates: [],
+
+  /* 收單網址：送出時會把預約資料 POST 過去。
+     留空的話會退回「開啟客人的信箱程式」，客人得自己再按一次寄出，容易漏單。
+
+     目前使用 Google 試算表收單（google/booking-sheet.gs）：
+     預約會寫進試算表、寄通知信給中心，並依客人語言回一封確認信。
+     同一個網址也提供 ?action=slots，讓日曆讀回已成立的時段來防止撞單。
+     換一份試算表時，把新的 /exec 網址換掉即可，做法見 google/README.md。 */
+  endpoint: 'https://script.google.com/macros/s/AKfycbx40cgxLzV90wDEpfT6ro4i4uyTgqJQhWZAmY5zxg5vmA1kMeQgDo9m-OW_xDxJBhPl/exec',
+
+  /* 其他選擇：
+       WordPress 自架 → '/eternitychildbooking/booking-submit.php'
+       不想開試算表 → 'https://formsubmit.co/ajax/ahanamita88888888@gmail.com'
+                      （免註冊，第一次送出後要點信中的啟用連結） */
+
+  /* 送出方式。留空會自動判斷，一般不用改：
+       'form'  用隱藏的表單送出（不受 CORS 與網頁安全政策影響，Google 試算表用這個）
+       'fetch' 用背景請求送出，可以讀到後端的回應（自架 PHP 用這個）
+     自動判斷：網址是 script.google.com 就用 form，其餘用 fetch。 */
+  endpointMode: '',
+
+  /* 用 fetch 送出時的 Content-Type，留空自動判斷。 */
+  endpointContentType: '',
+
+  /* 選填：要一併送出的額外欄位（第三方服務的設定或金鑰）。
+     Google 試算表版不需要；FormSubmit 用底線開頭的欄位，Web3Forms 用 access_key。 */
+  endpointFields: {}
+};
+
+/* ============================================================
+   永恆之子整椎中心 · 線上預約系統
+   Eternity's Child Chiropractic — Online Booking
+   Multilingual dictionary: zh-Hant / en / ja / ko
+   ============================================================ */
+
+const LANGS = [
+  { code: 'zh', label: '中文', htmlLang: 'zh-Hant-TW', locale: 'zh-TW' },
+  { code: 'en', label: 'EN',   htmlLang: 'en',         locale: 'en-US' },
+  { code: 'ja', label: '日本語', htmlLang: 'ja',        locale: 'ja-JP' },
+  { code: 'ko', label: '한국어', htmlLang: 'ko',        locale: 'ko-KR' },
+  /* 阿拉伯文由右至左書寫；日期一律用阿拉伯數字（-u-nu-latn），
+     與時段的 09:00 格式一致，避免同一頁出現兩種數字系統。 */
+  { code: 'ar', label: 'العربية', htmlLang: 'ar',        locale: 'ar-u-nu-latn', dir: 'rtl' }
+];
+
+const I18N = {
+  zh: {
+    'meta.title': '永恆之子整椎中心 · 線上預約',
+    'brand.name': '永恆之子整椎中心',
+    'brand.en': "Eternity's Child Chiropractic",
+    'hero.tagline': '全球化線上預約系統',
+    'hero.desc': '量子整骨 · 體雕塑身 · 整椎正骨 · 按摩推拿 · 醫美整骨',
+    'hero.cta': '開始預約',
+    'hero.notice': '預約時間須為七天之後',
+
+    'step.1': '選擇項目',
+    'step.2': '選擇時間',
+    'step.3': '填寫資料',
+    'step.4': '確認送出',
+    'step.of': '步驟 {n} / 4',
+
+    'visit.title': '看診類型',
+    'visit.first': '初診',
+    'visit.first.desc': '第一次到本中心，需預留評估時間',
+    'visit.return': '回診',
+    'visit.return.desc': '已有就診紀錄',
+
+    'service.title': '服務項目',
+    'service.quantum': '量子整骨',
+    'service.quantum.desc': '能量調頻與骨架校正，深層釋放身體張力',
+    'service.sculpt': '體雕塑身',
+    'service.sculpt.desc': '線條雕塑與循環引導，重塑體態比例',
+    'service.spine': '整椎正骨',
+    'service.spine.desc': '脊椎與骨盆矯正，改善姿勢與痠痛',
+    'service.massage': '按摩推拿',
+    'service.massage.desc': '經絡推拿與筋膜放鬆，舒緩肌肉疲勞',
+
+    'service.aesthetic': '醫美整骨',
+    'service.aesthetic.desc': '小臉、緊實曲線、輕盈體態，十個部位任選',
+    'pkg.title': '方案',
+    'pkg.3': '擇三',
+    'pkg.5': '擇五',
+    'pkg.pick': '任選 {n} 個部位',
+    'parts.title': '選擇部位',
+    'parts.count': '已選 {n} / {max}',
+    'parts.more': '請再選 {n} 個部位',
+    'parts.full': '已選滿 {max} 項，要換請先取消其他項目',
+    'part.face': '大小臉',
+    'part.jaw': '下顎線',
+    'part.pelvis': '縮骨盆',
+    'part.hip': '臀部調整',
+    'part.waist': '腰線明顯',
+    'part.belly': '腹部平坦',
+    'part.shoulder': '肩膀內扣',
+    'part.hunch': '駝背消厚',
+    'part.tuina': '全身推拿',
+    'part.detail': '精雕細琢',
+    'review.parts': '選擇部位',
+    'err.pkg': '請選擇方案',
+
+    'duration.title': '療程時長',
+    'duration.40': '40 分鐘',
+    'duration.60': '60 分鐘',
+    'duration.90': '90 分鐘',
+    'duration.minutes': '分鐘',
+
+    'date.title': '選擇日期',
+    'date.hint': '依規定，最早可預約日為 {date}',
+    'time.title': '選擇時段',
+    'time.pickdate': '請先選擇日期',
+    'time.none': '此日期已無可預約時段，請選擇其他日期',
+    'time.taken': '已被預約',
+    'time.sunday.only': '週日僅開放上午時段，且限初診預約',
+    'time.sunday.block': '週日僅供初診預約，回診請改選週一至週六',
+
+    'hours.title': '營業時間',
+    'hours.week': '週一至週六',
+    'hours.thu': '週四',
+    'hours.break': '休息時間',
+    'hours.sun': '週日',
+    'hours.sun.value': '09:00 – 12:00（僅初診）',
+    'hours.closed': '休息',
+
+    'form.title': '預約人資料',
+    'form.name': '姓名',
+    'form.name.ph': '請輸入您的姓名',
+    'form.phone': '聯絡電話',
+    'form.phone.ph': '例：0912-345-678 / +886 912 345 678',
+    'form.email': '電子信箱',
+    'form.email.ph': 'your@email.com',
+    'form.lang': '希望的溝通語言',
+    'form.last5': '匯款末五碼',
+    'form.last5.ph': '例：12345',
+    'form.last5.hint': '已完成轉帳再填，尚未轉帳可留空',
+    'err.last5': '匯款末五碼請填五位數字，或留空',
+    'review.last5': '匯款末五碼',
+    'form.notes': '身體狀況或備註',
+    'form.notes.ph': '例如：長期肩頸僵硬、下背痛⋯⋯（非必填）',
+    'form.optional': '選填',
+    'form.required': '必填',
+    'form.agree': '我已閱讀並同意預約與付款須知',
+
+    'err.name': '請填寫姓名',
+    'err.phone': '請填寫有效的聯絡電話',
+    'err.email': '請填寫有效的電子信箱',
+    'err.agree': '請先勾選同意預約須知',
+    'err.service': '請選擇服務項目',
+    'err.slot': '請選擇日期與時段',
+
+    'review.title': '確認您的預約',
+    'review.service': '服務項目',
+    'review.visit': '看診類型',
+    'review.datetime': '預約時間',
+    'review.duration': '療程時長',
+    'review.price': '費用',
+    'review.name': '姓名',
+    'review.phone': '電話',
+    'review.email': '信箱',
+    'review.notes': '備註',
+    'review.lang': '溝通語言',
+    'review.none': '（未填）',
+
+    'pay.title': '付款方式 · 銀行轉帳',
+    'pay.bank': '銀行',
+    'pay.bank.value': '臺灣銀行（代號 004）',
+    'pay.acct': '帳號',
+    'pay.qr': '亦可掃描櫃檯 TWQR 條碼付款',
+    'pay.note': '請於送出預約的當天完成匯款，並保留後五碼以利核對。未完成付款之預約將自動釋出。',
+    'pay.copy': '複製帳號',
+    'pay.copied': '已複製！',
+
+    'form.notes.hint': '如有開刀部位，請務必在此告知',
+    'pkg.10': '精雕細琢 × 表面功夫',
+    'pkg.all': '十個部位全選',
+    'pkg.extras': '另含加贈項目',
+    'extra.pulse': '量子脈衝',
+    'extra.detail': '精雕細琢',
+    'extra.surface': '表面功夫',
+    'extra.lift': '緊緻拉提',
+    'info.contact.name': '聯絡人',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': '掃描 QR 加入官方 LINE',
+    'info.bank.title': '匯款資訊',
+    'info.contact.phone': '電話',
+    'info.contact.line': 'LINE',
+    'info.contact.email': '電子信箱',
+    'info.contact.address': '地址',
+    'footer.terms': '本中心保留最終解釋權',
+    'rules.title': '預約須知',
+    'rules.1': '所有預約須為當日起七天之後的時段。',
+    'rules.2': '週日僅開放上午時段，且限初診預約。',
+    'rules.3': '週四營業至 17:00，最後一個時段須於 17:00 前結束。',
+    'rules.4': '請於送出預約的當天完成匯款，逾期預約將自動釋出。',
+    'rules.5': '如需取消，最晚須於預約日的前一天告知。',
+    'rules.6': '已付款項可延期使用，不接受退款。',
+    'rules.7': '請提前 10 分鐘抵達，以利填寫健康問卷。',
+    'rules.8': '本中心保留最終解釋權。',
+
+    'btn.next': '下一步',
+    'btn.back': '上一步',
+    'btn.submit': '送出預約',
+    'btn.newBooking': '再預約一筆',
+    'btn.mail': '以電子郵件寄出',
+    'btn.copy': '複製預約明細',
+    'btn.ics': '下載行事曆檔（.ics）',
+
+    'btn.gcal': '加入 Google 日曆',
+    'done.title': '預約已送出',
+    'done.desc': '我們已收到您的預約申請。中心將於一個工作天內與您確認，確認完成後請依付款資訊完成轉帳。',
+    'done.code': '預約編號',
+    'done.mailnote': '若未自動開啟郵件程式，請點選下方按鈕，或直接複製明細寄至 {email}。',
+
+    'gallery.title': '中心實景',
+    'gallery.lead': '安靜、單純，一次只服務一位客人',
+    'gallery.alt': '中心實景照片 {n}',
+    'info.location': '中心位置',
+    'info.map.open': '在 Google 地圖開啟',
+    'info.map.blocked': '若地圖沒有顯示，請點上方連結開啟',
+    'footer.contact': '聯絡我們',
+    'footer.rights': '版權所有',
+    'footer.demo': '本頁為前端預約介面；送出後將以電子郵件通知中心，實際時段以中心回覆確認為準。',
+
+    'weekday.0': '日', 'weekday.1': '一', 'weekday.2': '二', 'weekday.3': '三',
+    'weekday.4': '四', 'weekday.5': '五', 'weekday.6': '六',
+    'month.format': '{y} 年 {m} 月',
+    'am': '上午', 'pm': '下午'
+  },
+
+  en: {
+    'meta.title': "Eternity's Child Chiropractic · Online Booking",
+    'brand.name': "Eternity's Child Chiropractic",
+    'brand.en': '永恆之子整椎中心',
+    'hero.tagline': 'Global Online Booking',
+    'hero.desc': 'Quantum Bone Alignment · Body Sculpting · Spinal Correction · Massage & Tui Na · Aesthetic Bone Sculpting',
+    'hero.cta': 'Book an Appointment',
+    'hero.notice': 'Appointments must be made at least seven days in advance',
+
+    'step.1': 'Service',
+    'step.2': 'Date & Time',
+    'step.3': 'Your Details',
+    'step.4': 'Confirm',
+    'step.of': 'Step {n} of 4',
+
+    'visit.title': 'Visit Type',
+    'visit.first': 'First Visit',
+    'visit.first.desc': 'New to our centre — extra time is reserved for assessment',
+    'visit.return': 'Returning',
+    'visit.return.desc': 'You already have a record with us',
+
+    'service.title': 'Choose a Service',
+    'service.quantum': 'Quantum Bone Alignment',
+    'service.quantum.desc': 'Energy tuning with skeletal alignment to release deep tension',
+    'service.sculpt': 'Body Sculpting',
+    'service.sculpt.desc': 'Contour shaping and circulation work to rebalance your figure',
+    'service.spine': 'Spinal Correction',
+    'service.spine.desc': 'Spine and pelvis adjustment for posture and pain relief',
+    'service.massage': 'Massage & Tui Na',
+    'service.massage.desc': 'Meridian Tui Na and fascia release for tired muscles',
+
+    'service.aesthetic': 'Aesthetic Bone Sculpting',
+    'service.aesthetic.desc': 'A smaller face, firmer curves, a lighter frame — pick from ten areas',
+    'pkg.title': 'Package',
+    'pkg.3': 'Choose 3',
+    'pkg.5': 'Choose 5',
+    'pkg.pick': 'Any {n} areas',
+    'parts.title': 'Select Areas',
+    'parts.count': '{n} of {max} selected',
+    'parts.more': 'Please choose {n} more area(s)',
+    'parts.full': 'All {max} chosen — deselect one to swap',
+    'part.face': 'Facial symmetry',
+    'part.jaw': 'Jawline',
+    'part.pelvis': 'Pelvis narrowing',
+    'part.hip': 'Hip shaping',
+    'part.waist': 'Waistline',
+    'part.belly': 'Flatter abdomen',
+    'part.shoulder': 'Rounded shoulders',
+    'part.hunch': 'Upper back & posture',
+    'part.tuina': 'Full-body Tui Na',
+    'part.detail': 'Fine detailing',
+    'review.parts': 'Areas',
+    'err.pkg': 'Please choose a package',
+
+    'duration.title': 'Session Length',
+    'duration.40': '40 minutes',
+    'duration.60': '60 minutes',
+    'duration.90': '90 minutes',
+    'duration.minutes': 'min',
+
+    'date.title': 'Select a Date',
+    'date.hint': 'The earliest bookable date is {date}',
+    'time.title': 'Select a Time',
+    'time.pickdate': 'Please choose a date first',
+    'time.none': 'No slots left on this date — please pick another day',
+    'time.taken': 'Booked',
+    'time.sunday.only': 'Sundays are morning-only and reserved for first visits',
+    'time.sunday.block': 'Sundays are for first visits only. Returning clients, please choose Mon–Sat.',
+
+    'hours.title': 'Opening Hours',
+    'hours.week': 'Mon – Sat',
+    'hours.thu': 'Thursday',
+    'hours.break': 'Break',
+    'hours.sun': 'Sunday',
+    'hours.sun.value': '09:00 – 12:00 (first visits only)',
+    'hours.closed': 'Closed',
+
+    'form.title': 'Your Details',
+    'form.name': 'Full Name',
+    'form.name.ph': 'Enter your name',
+    'form.phone': 'Phone',
+    'form.phone.ph': 'e.g. +886 912 345 678',
+    'form.email': 'Email',
+    'form.email.ph': 'your@email.com',
+    'form.lang': 'Preferred Language',
+    'form.last5': 'Last 5 digits of transfer',
+    'form.last5.ph': 'e.g. 12345',
+    'form.last5.hint': 'Only if you have already transferred — otherwise leave blank',
+    'err.last5': 'Please enter exactly 5 digits, or leave it blank',
+    'review.last5': 'Transfer (last 5)',
+    'form.notes': 'Condition or Notes',
+    'form.notes.ph': 'e.g. chronic neck stiffness, lower back pain… (optional)',
+    'form.optional': 'optional',
+    'form.required': 'required',
+    'form.agree': 'I have read and agree to the booking and payment terms',
+
+    'err.name': 'Please enter your name',
+    'err.phone': 'Please enter a valid phone number',
+    'err.email': 'Please enter a valid email address',
+    'err.agree': 'Please agree to the booking terms',
+    'err.service': 'Please choose a service',
+    'err.slot': 'Please choose a date and time',
+
+    'review.title': 'Review Your Booking',
+    'review.service': 'Service',
+    'review.visit': 'Visit Type',
+    'review.datetime': 'Date & Time',
+    'review.duration': 'Length',
+    'review.price': 'Fee',
+    'review.name': 'Name',
+    'review.phone': 'Phone',
+    'review.email': 'Email',
+    'review.notes': 'Notes',
+    'review.lang': 'Language',
+    'review.none': '(none)',
+
+    'pay.title': 'Payment · Bank Transfer',
+    'pay.bank': 'Bank',
+    'pay.bank.value': 'Bank of Taiwan (code 004)',
+    'pay.acct': 'Account',
+    'pay.qr': 'You may also scan the TWQR code at our front desk',
+    'pay.note': 'Please transfer on the day you book and keep the last five digits for reconciliation. Unpaid bookings are released automatically.',
+    'pay.copy': 'Copy account number',
+    'pay.copied': 'Copied!',
+
+    'form.notes.hint': 'If you have had surgery anywhere, please tell us here',
+    'pkg.10': 'Fine Detail × Surface Work',
+    'pkg.all': 'All ten areas included',
+    'pkg.extras': 'Also includes',
+    'extra.pulse': 'Quantum Pulse',
+    'extra.detail': 'Fine Detailing',
+    'extra.surface': 'Surface Work',
+    'extra.lift': 'Firming Lift',
+    'info.contact.name': 'Contact',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'Scan the QR code to add us on LINE',
+    'info.bank.title': 'Bank Transfer Details',
+    'info.contact.phone': 'Phone',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'Email',
+    'info.contact.address': 'Address',
+    'footer.terms': 'The centre reserves the right of final interpretation',
+    'rules.title': 'Booking Terms',
+    'rules.1': 'All appointments must be at least seven days from today.',
+    'rules.2': 'Sundays are morning-only and reserved for first visits.',
+    'rules.3': 'Thursday closes at 17:00; the last session must end by then.',
+    'rules.4': 'Please complete the bank transfer on the day you book — unpaid slots are released.',
+    'rules.5': 'To cancel, let us know no later than the day before your appointment.',
+    'rules.6': 'Paid sessions may be rescheduled. Refunds are not available.',
+    'rules.7': 'Please arrive 10 minutes early to complete the health questionnaire.',
+    'rules.8': 'The centre reserves the right of final interpretation of these terms.',
+
+    'btn.next': 'Next',
+    'btn.back': 'Back',
+    'btn.submit': 'Submit Booking',
+    'btn.newBooking': 'Make Another Booking',
+    'btn.mail': 'Send by Email',
+    'btn.copy': 'Copy Booking Details',
+    'btn.ics': 'Download .ics file',
+
+    'btn.gcal': 'Add to Google Calendar',
+    'done.title': 'Booking Submitted',
+    'done.desc': 'We have received your request. Our centre will confirm within one business day; please complete the bank transfer once confirmed.',
+    'done.code': 'Reference',
+    'done.mailnote': 'If your mail app did not open, use the button below or copy the details and send them to {email}.',
+
+    'gallery.title': 'Inside the Centre',
+    'gallery.lead': 'Quiet and unhurried — one client at a time',
+    'gallery.alt': 'Photo {n} of the centre',
+    'info.location': 'Find Us',
+    'info.map.open': 'Open in Google Maps',
+    'info.map.blocked': 'If the map does not load, use the link above',
+    'footer.contact': 'Contact Us',
+    'footer.rights': 'All rights reserved',
+    'footer.demo': 'This is the front-end booking interface. Your request is emailed to the centre; the final slot is confirmed by our reply.',
+
+    'weekday.0': 'Sun', 'weekday.1': 'Mon', 'weekday.2': 'Tue', 'weekday.3': 'Wed',
+    'weekday.4': 'Thu', 'weekday.5': 'Fri', 'weekday.6': 'Sat',
+    'month.format': '{monthName} {y}',
+    'am': 'AM', 'pm': 'PM'
+  },
+
+  ja: {
+    'meta.title': 'エターニティーズ・チャイルド整体センター · オンライン予約',
+    'brand.name': 'エターニティーズ・チャイルド整体センター',
+    'brand.en': "Eternity's Child Chiropractic",
+    'hero.tagline': 'グローバル・オンライン予約',
+    'hero.desc': '量子整骨 · ボディメイク · 脊椎矯正 · マッサージ推拿 · 美容整骨',
+    'hero.cta': '予約をはじめる',
+    'hero.notice': 'ご予約は7日先以降の日時に限ります',
+
+    'step.1': 'メニュー',
+    'step.2': '日時',
+    'step.3': 'お客様情報',
+    'step.4': '確認',
+    'step.of': 'ステップ {n} / 4',
+
+    'visit.title': '受診区分',
+    'visit.first': '初診',
+    'visit.first.desc': '当センターが初めての方（カウンセリング時間を確保します）',
+    'visit.return': '再診',
+    'visit.return.desc': '既に受診履歴がある方',
+
+    'service.title': 'メニューを選択',
+    'service.quantum': '量子整骨',
+    'service.quantum.desc': 'エネルギー調整と骨格矯正で深部の緊張を解放します',
+    'service.sculpt': 'ボディメイク（体彫塑身）',
+    'service.sculpt.desc': 'ラインを整え巡りを促し、ボディバランスを整えます',
+    'service.spine': '脊椎矯正（整椎正骨）',
+    'service.spine.desc': '背骨と骨盤を矯正し、姿勢と痛みを改善します',
+    'service.massage': 'マッサージ・推拿',
+    'service.massage.desc': '経絡推拿と筋膜リリースで筋肉の疲れを和らげます',
+
+    'service.aesthetic': '美容整骨',
+    'service.aesthetic.desc': '小顔・引き締まったライン・軽やかな体へ。10部位からお選びいただけます',
+    'pkg.title': 'プラン',
+    'pkg.3': '3部位',
+    'pkg.5': '5部位',
+    'pkg.pick': 'お好きな{n}部位',
+    'parts.title': '部位を選択',
+    'parts.count': '{max}部位中 {n}部位を選択',
+    'parts.more': 'あと{n}部位お選びください',
+    'parts.full': '{max}部位を選択済みです。変更するには他の部位を解除してください',
+    'part.face': '顔の左右差',
+    'part.jaw': 'フェイスライン',
+    'part.pelvis': '骨盤の引き締め',
+    'part.hip': 'ヒップ調整',
+    'part.waist': 'くびれ形成',
+    'part.belly': 'お腹の引き締め',
+    'part.shoulder': '巻き肩',
+    'part.hunch': '猫背・背中の厚み',
+    'part.tuina': '全身推拿',
+    'part.detail': '仕上げの微調整',
+    'review.parts': '選択部位',
+    'err.pkg': 'プランをお選びください',
+
+    'duration.title': '施術時間',
+    'duration.40': '40分',
+    'duration.60': '60分',
+    'duration.90': '90分',
+    'duration.minutes': '分',
+
+    'date.title': '日付を選択',
+    'date.hint': '予約可能な最短日は {date} です',
+    'time.title': '時間を選択',
+    'time.pickdate': '先に日付をお選びください',
+    'time.none': 'この日の空き枠はありません。別の日をお選びください',
+    'time.taken': '予約済み',
+    'time.sunday.only': '日曜日は午前のみ・初診の方限定です',
+    'time.sunday.block': '日曜日は初診の方限定です。再診の方は月〜土をお選びください',
+
+    'hours.title': '営業時間',
+    'hours.week': '月曜〜土曜',
+    'hours.thu': '木曜',
+    'hours.break': '休憩時間',
+    'hours.sun': '日曜',
+    'hours.sun.value': '09:00 – 12:00（初診のみ）',
+    'hours.closed': '休業',
+
+    'form.title': 'お客様情報',
+    'form.name': 'お名前',
+    'form.name.ph': 'お名前をご入力ください',
+    'form.phone': '電話番号',
+    'form.phone.ph': '例：+81 90 1234 5678',
+    'form.email': 'メールアドレス',
+    'form.email.ph': 'your@email.com',
+    'form.lang': 'ご希望の対応言語',
+    'form.last5': '振込下5桁',
+    'form.last5.ph': '例：12345',
+    'form.last5.hint': 'お振込み済みの方のみご記入ください（未入金の場合は空欄）',
+    'err.last5': '5桁の数字をご入力いただくか、空欄のままにしてください',
+    'review.last5': '振込下5桁',
+    'form.notes': 'お身体の状態・ご要望',
+    'form.notes.ph': '例：慢性的な首こり、腰痛など（任意）',
+    'form.optional': '任意',
+    'form.required': '必須',
+    'form.agree': '予約・お支払いに関する注意事項に同意します',
+
+    'err.name': 'お名前をご入力ください',
+    'err.phone': '有効な電話番号をご入力ください',
+    'err.email': '有効なメールアドレスをご入力ください',
+    'err.agree': '注意事項への同意が必要です',
+    'err.service': 'メニューをお選びください',
+    'err.slot': '日付と時間をお選びください',
+
+    'review.title': 'ご予約内容の確認',
+    'review.service': 'メニュー',
+    'review.visit': '受診区分',
+    'review.datetime': '日時',
+    'review.duration': '施術時間',
+    'review.price': '料金',
+    'review.name': 'お名前',
+    'review.phone': '電話番号',
+    'review.email': 'メール',
+    'review.notes': '備考',
+    'review.lang': '対応言語',
+    'review.none': '（未記入）',
+
+    'pay.title': 'お支払い · 銀行振込',
+    'pay.bank': '銀行',
+    'pay.bank.value': '台湾銀行（コード 004）',
+    'pay.acct': '口座番号',
+    'pay.qr': '受付の TWQR コードでのお支払いも可能です',
+    'pay.note': 'ご予約送信当日にお振込みいただき、下5桁をお控えください。未入金のご予約は自動的に解除されます。',
+    'pay.copy': '口座番号をコピー',
+    'pay.copied': 'コピーしました！',
+
+    'form.notes.hint': '手術を受けた部位がある場合は必ずご記入ください',
+    'pkg.10': '精雕細琢 × 表面功夫',
+    'pkg.all': '10部位すべて',
+    'pkg.extras': '追加特典',
+    'extra.pulse': '量子パルス',
+    'extra.detail': '仕上げの微調整',
+    'extra.surface': '表面ケア',
+    'extra.lift': 'リフトアップ',
+    'info.contact.name': 'ご担当',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'QR コードから LINE を追加',
+    'info.bank.title': 'お振込先',
+    'info.contact.phone': '電話',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'メール',
+    'info.contact.address': '住所',
+    'footer.terms': '本規約の最終的な解釈は当センターに帰属します',
+    'rules.title': 'ご予約の注意事項',
+    'rules.1': 'ご予約は本日から7日以降の日時に限ります。',
+    'rules.2': '日曜日は午前のみ・初診の方限定です。',
+    'rules.3': '木曜日は17:00までの営業で、最終枠は17:00までに終了します。',
+    'rules.4': 'ご予約送信当日にお振込みをお願いいたします。未入金の枠は解除されます。',
+    'rules.5': 'キャンセルは予約日の前日までにご連絡ください。',
+    'rules.6': 'お支払い済みの施術は日程変更が可能ですが、返金はいたしません。',
+    'rules.7': '問診票ご記入のため、10分前にお越しください。',
+    'rules.8': '本規約の最終的な解釈は当センターに帰属します。',
+
+    'btn.next': '次へ',
+    'btn.back': '戻る',
+    'btn.submit': '予約を送信',
+    'btn.newBooking': '続けて予約する',
+    'btn.mail': 'メールで送信',
+    'btn.copy': '予約内容をコピー',
+    'btn.ics': '.ics ファイルをダウンロード',
+
+    'btn.gcal': 'Google カレンダーに追加',
+    'done.title': 'ご予約を送信しました',
+    'done.desc': 'ご予約申込を受け付けました。1営業日以内にセンターよりご連絡いたします。確認後、お振込みをお願いいたします。',
+    'done.code': '予約番号',
+    'done.mailnote': 'メールソフトが起動しない場合は、下のボタンを押すか、内容をコピーして {email} までお送りください。',
+
+    'gallery.title': 'センターの様子',
+    'gallery.lead': '静かな空間で、お一人ずつ丁寧に',
+    'gallery.alt': 'センターの写真 {n}',
+    'info.location': 'アクセス',
+    'info.map.open': 'Google マップで開く',
+    'info.map.blocked': '地図が表示されない場合は上のリンクをご利用ください',
+    'footer.contact': 'お問い合わせ',
+    'footer.rights': 'All rights reserved',
+    'footer.demo': '本ページは予約フォームです。送信内容はセンターへメールで通知され、実際の枠は返信をもって確定します。',
+
+    'weekday.0': '日', 'weekday.1': '月', 'weekday.2': '火', 'weekday.3': '水',
+    'weekday.4': '木', 'weekday.5': '金', 'weekday.6': '土',
+    'month.format': '{y}年{m}月',
+    'am': '午前', 'pm': '午後'
+  },
+
+  ko: {
+    'meta.title': '이터니티스 차일드 정체 센터 · 온라인 예약',
+    'brand.name': '이터니티스 차일드 정체 센터',
+    'brand.en': "Eternity's Child Chiropractic",
+    'hero.tagline': '글로벌 온라인 예약',
+    'hero.desc': '퀀텀 정골 · 바디 스컬프팅 · 척추 교정 · 마사지 추나 · 미용 정골',
+    'hero.cta': '예약 시작하기',
+    'hero.notice': '예약은 7일 이후 일정만 가능합니다',
+
+    'step.1': '시술 선택',
+    'step.2': '날짜·시간',
+    'step.3': '고객 정보',
+    'step.4': '확인',
+    'step.of': '{n} / 4 단계',
+
+    'visit.title': '진료 구분',
+    'visit.first': '초진',
+    'visit.first.desc': '센터 첫 방문 (상담 시간을 추가로 확보합니다)',
+    'visit.return': '재진',
+    'visit.return.desc': '이미 진료 기록이 있는 경우',
+
+    'service.title': '시술 선택',
+    'service.quantum': '퀀텀 정골',
+    'service.quantum.desc': '에너지 조율과 골격 교정으로 깊은 긴장을 풀어 드립니다',
+    'service.sculpt': '바디 스컬프팅',
+    'service.sculpt.desc': '라인 관리와 순환 유도로 체형 균형을 재구성합니다',
+    'service.spine': '척추 교정',
+    'service.spine.desc': '척추와 골반을 교정하여 자세와 통증을 개선합니다',
+    'service.massage': '마사지·추나',
+    'service.massage.desc': '경락 추나와 근막 이완으로 근육 피로를 풀어 줍니다',
+
+    'service.aesthetic': '미용 정골',
+    'service.aesthetic.desc': '작은 얼굴, 탄탄한 라인, 가벼운 체형 — 10가지 부위 중 선택',
+    'pkg.title': '패키지',
+    'pkg.3': '3가지 선택',
+    'pkg.5': '5가지 선택',
+    'pkg.pick': '원하는 {n}가지 부위',
+    'parts.title': '부위 선택',
+    'parts.count': '{max}가지 중 {n}가지 선택',
+    'parts.more': '{n}가지 더 선택해 주세요',
+    'parts.full': '{max}가지를 모두 선택했습니다. 변경하려면 먼저 해제해 주세요',
+    'part.face': '얼굴 비대칭',
+    'part.jaw': '턱선',
+    'part.pelvis': '골반 축소',
+    'part.hip': '힙 라인 조정',
+    'part.waist': '허리 라인',
+    'part.belly': '복부 평탄화',
+    'part.shoulder': '말린 어깨',
+    'part.hunch': '굽은 등·등살',
+    'part.tuina': '전신 추나',
+    'part.detail': '정밀 마무리',
+    'review.parts': '선택 부위',
+    'err.pkg': '패키지를 선택해 주세요',
+
+    'duration.title': '시술 시간',
+    'duration.40': '40분',
+    'duration.60': '60분',
+    'duration.90': '90분',
+    'duration.minutes': '분',
+
+    'date.title': '날짜 선택',
+    'date.hint': '예약 가능한 가장 빠른 날짜는 {date} 입니다',
+    'time.title': '시간 선택',
+    'time.pickdate': '먼저 날짜를 선택해 주세요',
+    'time.none': '이 날짜는 예약 가능한 시간이 없습니다. 다른 날짜를 선택해 주세요',
+    'time.taken': '예약 완료',
+    'time.sunday.only': '일요일은 오전에만, 초진 고객만 예약할 수 있습니다',
+    'time.sunday.block': '일요일은 초진 전용입니다. 재진 고객은 월~토요일을 선택해 주세요',
+
+    'hours.title': '영업 시간',
+    'hours.week': '월요일 – 토요일',
+    'hours.thu': '목요일',
+    'hours.break': '휴식 시간',
+    'hours.sun': '일요일',
+    'hours.sun.value': '09:00 – 12:00 (초진 전용)',
+    'hours.closed': '휴무',
+
+    'form.title': '고객 정보',
+    'form.name': '성함',
+    'form.name.ph': '성함을 입력해 주세요',
+    'form.phone': '연락처',
+    'form.phone.ph': '예: +82 10 1234 5678',
+    'form.email': '이메일',
+    'form.email.ph': 'your@email.com',
+    'form.lang': '희망 응대 언어',
+    'form.last5': '이체 뒷 5자리',
+    'form.last5.ph': '예: 12345',
+    'form.last5.hint': '이미 이체하신 경우에만 입력해 주세요 (미입금은 공란)',
+    'err.last5': '숫자 5자리를 입력하시거나 비워 두세요',
+    'review.last5': '이체 뒷 5자리',
+    'form.notes': '몸 상태 및 요청 사항',
+    'form.notes.ph': '예: 만성 목·어깨 결림, 허리 통증 등 (선택)',
+    'form.optional': '선택',
+    'form.required': '필수',
+    'form.agree': '예약 및 결제 안내를 읽고 동의합니다',
+
+    'err.name': '성함을 입력해 주세요',
+    'err.phone': '올바른 연락처를 입력해 주세요',
+    'err.email': '올바른 이메일 주소를 입력해 주세요',
+    'err.agree': '예약 안내에 동의해 주세요',
+    'err.service': '시술을 선택해 주세요',
+    'err.slot': '날짜와 시간을 선택해 주세요',
+
+    'review.title': '예약 내용 확인',
+    'review.service': '시술',
+    'review.visit': '진료 구분',
+    'review.datetime': '예약 일시',
+    'review.duration': '시술 시간',
+    'review.price': '금액',
+    'review.name': '성함',
+    'review.phone': '연락처',
+    'review.email': '이메일',
+    'review.notes': '비고',
+    'review.lang': '응대 언어',
+    'review.none': '(없음)',
+
+    'pay.title': '결제 · 계좌 이체',
+    'pay.bank': '은행',
+    'pay.bank.value': '대만은행 (코드 004)',
+    'pay.acct': '계좌번호',
+    'pay.qr': '센터 데스크의 TWQR 코드로도 결제하실 수 있습니다',
+    'pay.note': '예약 신청 당일에 이체해 주시고, 뒤 5자리를 보관해 주세요. 미입금 예약은 자동 취소됩니다.',
+    'pay.copy': '계좌번호 복사',
+    'pay.copied': '복사되었습니다!',
+
+    'form.notes.hint': '수술받은 부위가 있으면 반드시 알려 주세요',
+    'pkg.10': '정밀 마무리 × 표면 관리',
+    'pkg.all': '10가지 부위 전체',
+    'pkg.extras': '추가 제공',
+    'extra.pulse': '퀀텀 펄스',
+    'extra.detail': '정밀 마무리',
+    'extra.surface': '표면 관리',
+    'extra.lift': '탄력 리프팅',
+    'info.contact.name': '담당자',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'QR 코드로 LINE 추가',
+    'info.bank.title': '이체 정보',
+    'info.contact.phone': '전화',
+    'info.contact.line': 'LINE',
+    'info.contact.email': '이메일',
+    'info.contact.address': '주소',
+    'footer.terms': '본 약관의 최종 해석 권한은 센터에 있습니다',
+    'rules.title': '예약 안내',
+    'rules.1': '모든 예약은 오늘로부터 7일 이후 일정만 가능합니다.',
+    'rules.2': '일요일은 오전에만 운영하며 초진 고객만 예약할 수 있습니다.',
+    'rules.3': '목요일은 17:00까지 영업하며 마지막 시술은 17:00 전에 종료됩니다.',
+    'rules.4': '예약 신청 당일에 이체를 완료해 주세요. 미입금 시간은 자동으로 해제됩니다.',
+    'rules.5': '취소는 예약일 하루 전까지 알려 주세요.',
+    'rules.6': '결제한 시술은 일정 변경이 가능하며 환불은 되지 않습니다.',
+    'rules.7': '문진표 작성을 위해 10분 전에 도착해 주세요.',
+    'rules.8': '본 약관의 최종 해석 권한은 센터에 있습니다.',
+
+    'btn.next': '다음',
+    'btn.back': '이전',
+    'btn.submit': '예약 신청',
+    'btn.newBooking': '새 예약 하기',
+    'btn.mail': '이메일로 보내기',
+    'btn.copy': '예약 내용 복사',
+    'btn.ics': '.ics 파일 다운로드',
+
+    'btn.gcal': 'Google 캘린더에 추가',
+    'done.title': '예약이 접수되었습니다',
+    'done.desc': '예약 신청을 받았습니다. 영업일 기준 1일 이내에 센터에서 확인 연락을 드리며, 확정 후 계좌 이체를 진행해 주세요.',
+    'done.code': '예약 번호',
+    'done.mailnote': '메일 앱이 열리지 않으면 아래 버튼을 누르시거나, 내용을 복사하여 {email} 로 보내 주세요.',
+
+    'gallery.title': '센터 모습',
+    'gallery.lead': '조용한 공간에서 한 분씩 정성껏',
+    'gallery.alt': '센터 사진 {n}',
+    'info.location': '오시는 길',
+    'info.map.open': 'Google 지도에서 열기',
+    'info.map.blocked': '지도가 보이지 않으면 위 링크를 이용해 주세요',
+    'footer.contact': '문의하기',
+    'footer.rights': 'All rights reserved',
+    'footer.demo': '본 페이지는 예약 신청 화면입니다. 신청 내용은 센터로 메일 발송되며, 최종 시간은 센터의 회신으로 확정됩니다.',
+
+    'weekday.0': '일', 'weekday.1': '월', 'weekday.2': '화', 'weekday.3': '수',
+    'weekday.4': '목', 'weekday.5': '금', 'weekday.6': '토',
+    'month.format': '{y}년 {m}월',
+    'am': '오전', 'pm': '오후'
+  },
+
+  ar: {
+    'meta.title': 'مركز إتيرنيتيز تشايلد · الحجز عبر الإنترنت',
+    'brand.name': 'مركز إتيرنيتيز تشايلد',
+    'brand.en': 'Eternity\'s Child Chiropractic',
+    'hero.tagline': 'الحجز الإلكتروني',
+    'hero.desc': 'تقويم العظام الكمي · تنسيق القوام · تصحيح العمود الفقري · المساج والتوينا · تقويم العظام التجميلي',
+    'hero.cta': 'ابدأ الحجز',
+    'hero.notice': 'يجب أن يكون الحجز بعد سبعة أيام من اليوم على الأقل',
+    'step.1': 'الخدمة',
+    'step.2': 'التاريخ والوقت',
+    'step.3': 'بياناتك',
+    'step.4': 'التأكيد',
+    'step.of': 'الخطوة {n} من 4',
+    'visit.title': 'نوع الزيارة',
+    'visit.first': 'زيارة أولى',
+    'visit.first.desc': 'أول مرة لدينا — نخصص وقتاً إضافياً للتقييم',
+    'visit.return': 'زيارة متابعة',
+    'visit.return.desc': 'لديك سجل سابق عندنا',
+    'service.title': 'اختر الخدمة',
+    'service.quantum': 'تقويم العظام الكمي',
+    'service.quantum.desc': 'موازنة الطاقة مع تصحيح الهيكل العظمي لتحرير الشد العميق',
+    'service.sculpt': 'تنسيق القوام',
+    'service.sculpt.desc': 'تحديد الخطوط وتحسين الدورة الدموية لإعادة توازن القوام',
+    'service.spine': 'تصحيح العمود الفقري',
+    'service.spine.desc': 'تعديل العمود الفقري والحوض لتحسين الوضعية وتخفيف الألم',
+    'service.massage': 'المساج والتوينا',
+    'service.massage.desc': 'تدليك المسارات وإرخاء اللفائف العضلية لتخفيف الإجهاد',
+    'service.aesthetic': 'تقويم العظام التجميلي',
+    'service.aesthetic.desc': 'وجه أنحف وخطوط أكثر تناسقاً وقوام أخف — اختر من عشرة مواضع',
+    'pkg.title': 'الباقة',
+    'pkg.3': 'اختر 3',
+    'pkg.5': 'اختر 5',
+    'pkg.pick': 'أي {n} مواضع',
+    'parts.title': 'اختر المواضع',
+    'parts.count': 'تم اختيار {n} من {max}',
+    'parts.more': 'يرجى اختيار {n} موضعاً إضافياً',
+    'parts.full': 'تم اختيار {max} مواضع — أزل واحداً للتبديل',
+    'part.face': 'تناسق الوجه',
+    'part.jaw': 'خط الفك',
+    'part.pelvis': 'تضييق الحوض',
+    'part.hip': 'تنسيق الأرداف',
+    'part.waist': 'خط الخصر',
+    'part.belly': 'شد البطن',
+    'part.shoulder': 'الأكتاف المنحنية',
+    'part.hunch': 'تحدب الظهر',
+    'part.tuina': 'توينا للجسم كامل',
+    'part.detail': 'التنسيق الدقيق',
+    'review.parts': 'المواضع',
+    'err.pkg': 'يرجى اختيار باقة',
+    'duration.title': 'مدة الجلسة',
+    'duration.40': '40 دقيقة',
+    'duration.60': '60 دقيقة',
+    'duration.90': '90 دقيقة',
+    'duration.minutes': 'دقيقة',
+    'date.title': 'اختر التاريخ',
+    'date.hint': 'أقرب تاريخ متاح للحجز هو {date}',
+    'time.title': 'اختر الوقت',
+    'time.pickdate': 'يرجى اختيار التاريخ أولاً',
+    'time.none': 'لا توجد أوقات متاحة في هذا التاريخ — يرجى اختيار يوم آخر',
+    'time.taken': 'محجوز',
+    'time.sunday.only': 'الأحد صباحاً فقط وللزيارات الأولى',
+    'time.sunday.block': 'الأحد مخصص للزيارات الأولى فقط. لزيارات المتابعة يرجى اختيار الاثنين إلى السبت.',
+    'hours.title': 'ساعات العمل',
+    'hours.week': 'الاثنين – السبت',
+    'hours.thu': 'الخميس',
+    'hours.break': 'فترة الراحة',
+    'hours.sun': 'الأحد',
+    'hours.sun.value': '09:00 – 12:00 (الزيارات الأولى فقط)',
+    'hours.closed': 'مغلق',
+    'form.title': 'بياناتك',
+    'form.name': 'الاسم الكامل',
+    'form.name.ph': 'اكتب اسمك',
+    'form.phone': 'رقم الهاتف',
+    'form.phone.ph': 'مثال: +966 5 1234 5678',
+    'form.email': 'البريد الإلكتروني',
+    'form.email.ph': 'your@email.com',
+    'form.lang': 'اللغة المفضلة',
+    'form.last5': 'آخر 5 أرقام من الحوالة',
+    'form.last5.ph': 'مثال: 12345',
+    'form.last5.hint': 'املأ هذا الحقل إذا أتممت الحوالة — واتركه فارغاً إن لم تفعل',
+    'err.last5': 'اكتب 5 أرقام بالضبط، أو اترك الحقل فارغاً',
+    'review.last5': 'آخر 5 أرقام',
+    'form.notes': 'حالتك أو ملاحظاتك',
+    'form.notes.ph': 'مثال: تيبس مزمن في الرقبة، ألم أسفل الظهر… (اختياري)',
+    'form.optional': 'اختياري',
+    'form.required': 'مطلوب',
+    'form.agree': 'قرأت شروط الحجز والدفع وأوافق عليها',
+    'err.name': 'يرجى كتابة اسمك',
+    'err.phone': 'يرجى كتابة رقم هاتف صحيح',
+    'err.email': 'يرجى كتابة بريد إلكتروني صحيح',
+    'err.agree': 'يرجى الموافقة على شروط الحجز',
+    'err.service': 'يرجى اختيار خدمة',
+    'err.slot': 'يرجى اختيار التاريخ والوقت',
+    'review.title': 'راجع حجزك',
+    'review.service': 'الخدمة',
+    'review.visit': 'نوع الزيارة',
+    'review.datetime': 'التاريخ والوقت',
+    'review.duration': 'المدة',
+    'review.price': 'المبلغ',
+    'review.name': 'الاسم',
+    'review.phone': 'الهاتف',
+    'review.email': 'البريد',
+    'review.notes': 'ملاحظات',
+    'review.lang': 'اللغة',
+    'review.none': '(لا شيء)',
+    'pay.title': 'الدفع · حوالة بنكية',
+    'pay.bank': 'البنك',
+    'pay.bank.value': 'بنك تايوان (الرمز 004)',
+    'pay.acct': 'رقم الحساب',
+    'pay.qr': 'يمكنك أيضاً استخدام رمز TWQR في المركز',
+    'pay.note': 'يرجى إتمام الحوالة في نفس يوم الحجز، والاحتفاظ بآخر خمسة أرقام للمطابقة. الحجوزات غير المدفوعة تُلغى تلقائياً.',
+    'pay.copy': 'نسخ رقم الحساب',
+    'pay.copied': 'تم النسخ!',
+    'form.notes.hint': 'إذا أجريت عملية جراحية في أي موضع، يرجى إخبارنا هنا',
+    'pkg.10': 'التنسيق الدقيق × العناية السطحية',
+    'pkg.all': 'جميع المواضع العشرة',
+    'pkg.extras': 'يشمل أيضاً',
+    'extra.pulse': 'النبض الكمي',
+    'extra.detail': 'التنسيق الدقيق',
+    'extra.surface': 'العناية السطحية',
+    'extra.lift': 'الشد والتماسك',
+    'info.contact.name': 'المسؤول',
+    'info.contact.instagram': 'Instagram',
+    'info.contact.lineqr': 'امسح رمز QR لإضافتنا على LINE',
+    'info.bank.title': 'معلومات التحويل',
+    'info.contact.phone': 'الهاتف',
+    'info.contact.line': 'LINE',
+    'info.contact.email': 'البريد الإلكتروني',
+    'info.contact.address': 'العنوان',
+    'footer.terms': 'يحتفظ المركز بحق التفسير النهائي',
+    'rules.title': 'شروط الحجز',
+    'rules.1': 'يجب أن يكون كل حجز بعد سبعة أيام من اليوم على الأقل.',
+    'rules.2': 'الأحد صباحاً فقط ومخصص للزيارات الأولى.',
+    'rules.3': 'الخميس يُغلق الساعة 17:00، وآخر جلسة تنتهي قبل ذلك.',
+    'rules.4': 'يرجى إتمام الحوالة في نفس يوم الحجز — الأوقات غير المدفوعة تُعاد للحجز.',
+    'rules.5': 'للإلغاء، أبلغنا قبل يوم واحد من موعدك على الأقل.',
+    'rules.6': 'يمكن تأجيل الجلسات المدفوعة، ولا يوجد استرداد للمبالغ.',
+    'rules.7': 'يرجى الحضور 10 دقائق مبكراً لتعبئة استبيان الحالة الصحية.',
+    'rules.8': 'يحتفظ المركز بحق التفسير النهائي لهذه الشروط.',
+    'btn.next': 'التالي',
+    'btn.back': 'السابق',
+    'btn.submit': 'إرسال الحجز',
+    'btn.newBooking': 'حجز آخر',
+    'btn.mail': 'إرسال بالبريد',
+    'btn.copy': 'نسخ تفاصيل الحجز',
+    'btn.ics': 'تنزيل ملف .ics',
+    'btn.gcal': 'إضافة إلى تقويم Google',
+    'done.title': 'تم إرسال الحجز',
+    'done.desc': 'استلمنا طلبك. سيؤكده المركز خلال يوم عمل واحد، ثم يرجى إتمام الحوالة البنكية.',
+    'done.code': 'رقم المرجع',
+    'done.mailnote': 'إذا لم يفتح تطبيق البريد، استخدم الزر أدناه أو انسخ التفاصيل وأرسلها إلى {email}.',
+    'gallery.title': 'من داخل المركز',
+    'gallery.lead': 'مكان هادئ — نستقبل عميلاً واحداً في كل مرة',
+    'gallery.alt': 'صورة {n} من المركز',
+    'info.location': 'موقعنا',
+    'info.map.open': 'افتح في خرائط Google',
+    'info.map.blocked': 'إذا لم تظهر الخريطة، استخدم الرابط أعلاه',
+    'footer.contact': 'اتصل بنا',
+    'footer.rights': 'جميع الحقوق محفوظة',
+    'footer.demo': 'هذه صفحة طلب الحجز. يُرسل طلبك إلى المركز، ويُثبَّت الموعد النهائي بردّنا عليك.',
+    'weekday.0': 'أحد',
+    'weekday.1': 'إثن',
+    'weekday.2': 'ثلا',
+    'weekday.3': 'أرب',
+    'weekday.4': 'خمي',
+    'weekday.5': 'جمع',
+    'weekday.6': 'سبت',
+    'month.format': '{monthName} {y}',
+    'am': 'صباحاً',
+    'pm': 'مساءً'
+  }
+};
+
+/* ============================================================
+   永恆之子整椎中心 · 線上預約系統  |  app logic
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------------- state ---------------- */
+  const STORE_KEY = 'ecc_bookings_v1';
+
+  const state = {
+    lang: 'zh',
+    visit: 'first',
+    service: null,
+    duration: CONFIG.durations[0],
+    pkg: null,          // index into CONFIG.pickService.packages, for the pick-a-part service
+    parts: [],          // selected part keys, for the pick-a-part service
+    date: null,          // 'YYYY-MM-DD'
+    time: null,          // 'HH:MM'
+    step: 1,
+    calYear: 0,
+    calMonth: 0,         // 0-based
+    contact: { name: '', phone: '', email: '', lang: '', last5: '', notes: '' },
+    ref: ''
+  };
+
+  /* Slots already booked by other clients, read back from the endpoint.
+     Empty until the first successful fetch, so the page still works offline
+     or on a deployment without a slots API. */
+  let serverTaken = {};
+  let takenFetchedAt = 0;
+
+  const $  = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  /* ---------------- i18n ---------------- */
+  function t(key, vars) {
+    const dict = I18N[state.lang] || I18N.zh;
+    let s = dict[key] != null ? dict[key] : (I18N.zh[key] != null ? I18N.zh[key] : key);
+    if (vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+    return s;
+  }
+
+  function currentLangMeta() {
+    return LANGS.find(l => l.code === state.lang) || LANGS[0];
+  }
+
+  function applyI18n() {
+    const meta = currentLangMeta();
+    const rtl = meta.dir === 'rtl';
+    document.documentElement.lang = meta.htmlLang;
+    document.documentElement.dir = meta.dir || 'ltr';
+    document.title = t('meta.title');
+
+    // 版面用邏輯屬性寫成，會自動鏡射；但這兩個箭頭字元的方向意義相反，要手動換
+    const prev = $('#calPrev'), next = $('#calNext');
+    if (prev && next) {
+      prev.textContent = rtl ? '\u203A' : '\u2039';
+      next.textContent = rtl ? '\u2039' : '\u203A';
+    }
+
+    $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    const mapNote = document.getElementById('mapNote');
+    if (mapNote) mapNote.textContent = t('info.map.blocked');
+    const qrCap = document.getElementById('lineQrCap');
+    if (qrCap) qrCap.textContent = t('info.contact.lineqr');
+    $$('#galleryGrid img').forEach(img => {
+      img.alt = t('gallery.alt', { n: img.dataset.index });
+    });
+    $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+
+    $$('#langSwitch button').forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang));
+    });
+
+    renderVisitOptions();
+    renderServiceOptions();
+    renderDurationOptions();
+    renderPartsOptions();
+    renderLangSelect();
+    renderCalendar();
+    renderSlots();
+    renderStepper();
+    if (state.step === 4) renderSummary();
+    if (state.step === 5) renderDone();
+  }
+
+  /* ---------------- date helpers ---------------- */
+  const pad = n => String(n).padStart(2, '0');
+  const key = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const fromKey = k => { const p = k.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); };
+
+  function addMonths(d, n) {
+    const day = d.getDate();
+    const x = new Date(d.getFullYear(), d.getMonth() + n, 1);
+    const lastDay = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+    x.setDate(Math.min(day, lastDay));
+    return x;
+  }
+
+  const toMin = hhmm => { const p = hhmm.split(':').map(Number); return p[0] * 60 + p[1]; };
+  const toHHMM = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+
+  /* 前置期可以用天數或月數表示；leadDays 有值時優先。 */
+  function minDate() {
+    const base = startOfToday();
+    if (CONFIG.leadDays) {
+      const d = new Date(base);
+      d.setDate(d.getDate() + CONFIG.leadDays);
+      return d;
+    }
+    return addMonths(base, CONFIG.leadMonths || 0);
+  }
+  function maxDate() { return addMonths(startOfToday(), CONFIG.windowMonths); }
+  function startOfToday() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+
+  function formatDate(k) {
+    const d = fromKey(k);
+    const meta = currentLangMeta();
+    try {
+      return new Intl.DateTimeFormat(meta.locale, {
+        year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+      }).format(d);
+    } catch (e) {
+      return k + ' (' + t('weekday.' + d.getDay()) + ')';
+    }
+  }
+
+  function monthTitle(y, m) {
+    const meta = currentLangMeta();
+    let name = String(m + 1);
+    // 中日韓的字典直接寫「9 月」，只有需要月份名稱的語言才去問 Intl
+    if (t('month.format').indexOf('{monthName}') !== -1) {
+      try {
+        name = new Intl.DateTimeFormat(meta.locale, { month: 'long' }).format(new Date(y, m, 1));
+      } catch (e) { /* 退回數字 */ }
+    }
+    return t('month.format', { y: y, m: m + 1, monthName: name });
+  }
+
+  /* ---------------- availability ---------------- */
+  function dayRule(dateKey) {
+    if (CONFIG.closedDates.indexOf(dateKey) !== -1) return null;
+    return CONFIG.hours[fromKey(dateKey).getDay()] || null;
+  }
+
+  function dateInWindow(d) {
+    return d >= minDate() && d <= maxDate();
+  }
+
+  /** Reason a date cannot be picked, or '' when it is open. */
+  function dateBlockReason(dateKey) {
+    const rule = dayRule(dateKey);
+    if (!rule) return 'closed';
+    if (rule.firstVisitOnly && state.visit !== 'first') return 'firstVisitOnly';
+    return '';
+  }
+
+  function takenIntervals(dateKey) {
+    let all = {};
+    try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
+    const mine = all[dateKey] || [];
+    const theirs = (serverTaken[dateKey] || []).filter(
+      iv => Array.isArray(iv) && typeof iv[0] === 'number' && typeof iv[1] === 'number'
+    );
+    return mine.concat(theirs);
+  }
+
+  function saveBooking(dateKey, start, end) {
+    let all = {};
+    try { all = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch (e) { all = {}; }
+    (all[dateKey] = all[dateKey] || []).push([start, end]);
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch (e) { /* private mode */ }
+  }
+
+  function slotsUrl() {
+    if (!CONFIG.endpoint) return '';
+    return CONFIG.endpoint + (CONFIG.endpoint.indexOf('?') === -1 ? '?' : '&') + 'action=slots';
+  }
+
+  /** Refresh the booked-slot list; failures leave the page on local data. */
+  function fetchTakenSlots() {
+    const url = slotsUrl();
+    if (!url) return;
+    if (Date.now() - takenFetchedAt < 30000) return;   // don't hammer it while stepping back and forth
+    takenFetchedAt = Date.now();
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : null))
+      .then(res => {
+        if (!res || !res.taken || typeof res.taken !== 'object') return;
+        serverTaken = res.taken;
+        if (state.step === 2) { renderCalendar(); renderSlots(); }
+      })
+      .catch(() => { /* offline, or an endpoint with no slots API — local data only */ });
+  }
+
+  /** 該日的休息時間，單位為分鐘。當日自訂的優先於全域設定。 */
+  function breaksFor(dateKey) {
+    const rule = dayRule(dateKey);
+    const list = (rule && rule.breaks) || CONFIG.breaks || [];
+    return list.map(b => [toMin(b[0]), toMin(b[1])]);
+  }
+
+  function slotsFor(dateKey) {
+    const rule = dayRule(dateKey);
+    if (!rule || dateBlockReason(dateKey)) return [];
+    const open = toMin(rule.open), close = toMin(rule.close);
+    const dur = state.duration;
+    const taken = takenIntervals(dateKey);
+    const rest = breaksFor(dateKey);
+    const out = [];
+    for (let s = open; s + dur <= close; s += CONFIG.slotStep) {
+      // 療程整段都不能碰到休息時間，跨進去的起始點直接不列出
+      if (rest.some(b => s < b[1] && (s + dur) > b[0])) continue;
+      const busy = taken.some(iv => s < iv[1] && (s + dur) > iv[0]);
+      out.push({ start: s, label: toHHMM(s), disabled: busy });
+    }
+    return out;
+  }
+
+  /* ---------------- render : language switch ---------------- */
+  function renderLangSwitch() {
+    const nav = $('#langSwitch');
+    nav.innerHTML = '';
+    LANGS.forEach(l => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.lang = l.code;
+      b.textContent = l.label;
+      b.setAttribute('aria-pressed', String(l.code === state.lang));
+      b.addEventListener('click', () => setLang(l.code));
+      nav.appendChild(b);
+    });
+  }
+
+  function setLang(code) {
+    state.lang = code;
+    try { localStorage.setItem('ecc_lang', code); } catch (e) {}
+    applyI18n();
+  }
+
+  function detectLang() {
+    let saved = null;
+    try { saved = localStorage.getItem('ecc_lang'); } catch (e) {}
+    const url = new URLSearchParams(location.search).get('lang');
+    const nav = (navigator.language || 'zh').toLowerCase();
+    const guess = nav.startsWith('ja') ? 'ja'
+                : nav.startsWith('ko') ? 'ko'
+                : nav.startsWith('zh') ? 'zh'
+                : 'en';
+    const pick = url || saved || guess;
+    return LANGS.some(l => l.code === pick) ? pick : 'zh';
+  }
+
+  /* ---------------- render : options ---------------- */
+  function optionButton(opts) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'opt';
+    b.setAttribute('aria-pressed', String(!!opts.selected));
+    b.innerHTML = '<div class="opt-title"></div>' +
+                  (opts.desc ? '<div class="opt-desc"></div>' : '') +
+                  (opts.extra ? '<div class="opt-extra"></div>' : '') +
+                  (opts.price ? '<div class="opt-price"></div>' : '');
+    $('.opt-title', b).textContent = opts.title;
+    if (opts.desc) $('.opt-desc', b).textContent = opts.desc;
+    if (opts.extra) $('.opt-extra', b).textContent = opts.extra;
+    if (opts.price) $('.opt-price', b).textContent = opts.price;
+    b.addEventListener('click', opts.onClick);
+    return b;
+  }
+
+  function renderVisitOptions() {
+    const box = $('#visitOptions');
+    box.innerHTML = '';
+    [['first', 'visit.first'], ['return', 'visit.return']].forEach(pair => {
+      box.appendChild(optionButton({
+        title: t(pair[1]),
+        desc: t(pair[1] + '.desc'),
+        selected: state.visit === pair[0],
+        onClick: () => {
+          state.visit = pair[0];
+          // Sunday is first-visit only — drop an incompatible selection.
+          if (state.date && dateBlockReason(state.date)) { state.date = null; state.time = null; }
+          applyI18n();
+        }
+      }));
+    });
+  }
+
+  /* zh/ja list items with a full-width enumeration comma; en/ko use a plain one */
+  /* 中日文用全形冒號，其餘語言用半形加空格。 */
+  function labelSep() {
+    return (state.lang === 'zh' || state.lang === 'ja') ? '：' : ': ';
+  }
+
+  function listSep() {
+    if (state.lang === 'zh' || state.lang === 'ja') return '、';
+    if (state.lang === 'ar') return '، ';
+    return ', ';
+  }
+
+  /* 字典裡沒有這個時長時，自行以分鐘數組字，不讓鍵名漏到畫面上。 */
+  function durationLabel(min) {
+    const key = 'duration.' + min;
+    const dict = I18N[state.lang] || I18N.zh;
+    return dict[key] != null ? dict[key] : min + ' ' + t('duration.minutes');
+  }
+
+  function money(n) {
+    return CONFIG.currency + ' ' + n.toLocaleString('en-US');
+  }
+
+  /* The pick-a-part service ("醫美整骨") is priced by how many areas the client
+     chooses, not by session length. */
+  function isPickService() {
+    return !!CONFIG.pickService && state.service === CONFIG.pickService.key;
+  }
+
+  function currentPackage() {
+    if (!isPickService() || state.pkg == null) return null;
+    return CONFIG.pickService.packages[state.pkg];
+  }
+
+  function currentPrice() {
+    const p = currentPackage();
+    return p ? p.price : CONFIG.prices[state.duration];
+  }
+
+  function partsLimit() {
+    const p = currentPackage();
+    return p ? p.pick : 0;
+  }
+
+  function allParts() {
+    return (CONFIG.pickService && CONFIG.pickService.parts) || [];
+  }
+
+  /** The flagship package covers every area, so it is chosen for the client
+      rather than clicked ten times. */
+  function isAllPartsPackage() {
+    const p = currentPackage();
+    return !!p && p.pick >= allParts().length;
+  }
+
+  function packageExtras() {
+    const p = currentPackage();
+    return (p && p.extras) || [];
+  }
+
+  function renderServiceOptions() {
+    const box = $('#serviceOptions');
+    box.innerHTML = '';
+    CONFIG.services.forEach(s => {
+      box.appendChild(optionButton({
+        title: t('service.' + s),
+        desc: t('service.' + s + '.desc'),
+        selected: state.service === s,
+        onClick: () => {
+          state.service = s;
+          if (isPickService()) {
+            if (state.pkg == null) state.pkg = 0;
+            state.duration = CONFIG.pickService.packages[state.pkg].minutes;
+          } else {
+            state.pkg = null;
+            state.parts = [];
+          }
+          state.time = null;
+          hideError(1);
+          applyI18n();
+        }
+      }));
+    });
+  }
+
+  function renderDurationOptions() {
+    const box = $('#durationOptions');
+    const label = $('#durationLabel');
+    box.innerHTML = '';
+
+    if (isPickService()) {
+      label.textContent = t('pkg.title');
+      const total = allParts().length;
+      CONFIG.pickService.packages.forEach((p, i) => {
+        const all = p.pick >= total;
+        box.appendChild(optionButton({
+          title: t('pkg.' + p.pick),
+          desc: all ? t('pkg.all') : t('pkg.pick', { n: p.pick }),
+          extra: (p.extras && p.extras.length)
+            ? t('pkg.extras') + labelSep() + p.extras.map(k => t('extra.' + k)).join(listSep())
+            : '',
+          price: money(p.price) + ' · ' + p.minutes + ' ' + t('duration.minutes'),
+          selected: state.pkg === i,
+          onClick: () => {
+            state.pkg = i;
+            state.duration = p.minutes;
+            state.time = null;                       // slot length changed
+            state.parts = all
+              ? allParts().slice()                   // every area is included
+              : state.parts.slice(0, p.pick);        // a smaller package trims the list
+            applyI18n();
+          }
+        }));
+      });
+      return;
+    }
+
+    label.textContent = t('duration.title');
+    CONFIG.durations.forEach(d => {
+      box.appendChild(optionButton({
+        title: durationLabel(d),
+        price: money(CONFIG.prices[d]),
+        selected: state.duration === d,
+        onClick: () => {
+          state.duration = d;
+          state.time = null;         // slot length changed
+          applyI18n();
+        }
+      }));
+    });
+  }
+
+  function renderPartsOptions() {
+    const section = $('#partsSection');
+    if (!isPickService()) { section.hidden = true; return; }
+    section.hidden = false;
+
+    const max = partsLimit();
+    const locked = isAllPartsPackage();
+    const full = locked || state.parts.length >= max;
+    const counter = $('#partsCount');
+    counter.textContent = t('parts.count', { n: state.parts.length, max: max });
+    counter.classList.toggle('full', full);
+
+    const box = $('#partsOptions');
+    box.innerHTML = '';
+    CONFIG.pickService.parts.forEach(key => {
+      const on = state.parts.indexOf(key) !== -1;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'part';
+      b.setAttribute('aria-pressed', String(on));
+      b.innerHTML = '<span class="box" aria-hidden="true">\u2713</span><span class="txt"></span>';
+      $('.txt', b).textContent = t('part.' + key);
+      if (locked) { b.disabled = true; b.title = t('pkg.all'); }
+      else if (!on && full) { b.disabled = true; b.title = t('parts.full', { max: max }); }
+      b.addEventListener('click', () => {
+        if (locked) return;
+        const i = state.parts.indexOf(key);
+        if (i === -1) { if (state.parts.length >= max) return; state.parts.push(key); }
+        else state.parts.splice(i, 1);
+        hideError(1);
+        renderPartsOptions();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderLangSelect() {
+    const sel = $('#fLang');
+    const chosen = state.contact.lang || state.lang;
+    sel.innerHTML = '';
+    LANGS.forEach(l => {
+      const o = document.createElement('option');
+      o.value = l.code;
+      o.textContent = l.label;
+      if (l.code === chosen) o.selected = true;
+      sel.appendChild(o);
+    });
+    state.contact.lang = chosen;
+  }
+
+  /* ---------------- render : calendar ---------------- */
+  function renderCalendar() {
+    const grid = $('#calGrid');
+    grid.innerHTML = '';
+    $('#calTitle').textContent = monthTitle(state.calYear, state.calMonth);
+    $('#calHint').textContent = t('date.hint', { date: formatDate(key(minDate())) });
+
+    for (let i = 0; i < 7; i++) {
+      const h = document.createElement('div');
+      h.className = 'cal-dow';
+      h.textContent = t('weekday.' + i);
+      grid.appendChild(h);
+    }
+
+    const first = new Date(state.calYear, state.calMonth, 1);
+    const days = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+    for (let i = 0; i < first.getDay(); i++) {
+      const e = document.createElement('div');
+      e.className = 'cal-cell empty';
+      grid.appendChild(e);
+    }
+
+    for (let d = 1; d <= days; d++) {
+      const dt = new Date(state.calYear, state.calMonth, d);
+      const k = key(dt);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-cell';
+      btn.textContent = d;
+
+      const open = dateInWindow(dt) && !dateBlockReason(k) && slotsFor(k).some(s => !s.disabled);
+      if (!open) btn.disabled = true;
+      if (state.date === k) btn.classList.add('selected');
+
+      const rule = CONFIG.hours[dt.getDay()];
+      if (rule && rule.firstVisitOnly && dateInWindow(dt)) {
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = t('am');
+        btn.appendChild(tag);
+      }
+
+      btn.addEventListener('click', () => {
+        state.date = k;
+        state.time = null;
+        hideError(2);
+        renderCalendar();
+        renderSlots();
+      });
+      grid.appendChild(btn);
+    }
+
+    const cur = new Date(state.calYear, state.calMonth, 1);
+    const lo = new Date(minDate().getFullYear(), minDate().getMonth(), 1);
+    const hi = new Date(maxDate().getFullYear(), maxDate().getMonth(), 1);
+    $('#calPrev').disabled = cur <= lo;
+    $('#calNext').disabled = cur >= hi;
+  }
+
+  function shiftMonth(delta) {
+    const d = new Date(state.calYear, state.calMonth + delta, 1);
+    state.calYear = d.getFullYear();
+    state.calMonth = d.getMonth();
+    renderCalendar();
+  }
+
+  /* ---------------- render : slots ---------------- */
+  function renderSlots() {
+    const area = $('#slotArea');
+    area.innerHTML = '';
+
+    if (!state.date) {
+      area.innerHTML = '<div class="empty-note"></div>';
+      $('.empty-note', area).textContent = t('time.pickdate');
+      return;
+    }
+
+    const block = dateBlockReason(state.date);
+    if (block === 'firstVisitOnly') {
+      area.innerHTML = '<div class="empty-note"></div>';
+      $('.empty-note', area).textContent = t('time.sunday.block');
+      return;
+    }
+
+    const slots = slotsFor(state.date);
+    if (!slots.length) {
+      area.innerHTML = '<div class="empty-note"></div>';
+      $('.empty-note', area).textContent = t('time.none');
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'slot-grid';
+    let period = null;
+    slots.forEach(s => {
+      const p = s.start < 12 * 60 ? 'am' : 'pm';
+      if (p !== period) {
+        period = p;
+        const h = document.createElement('div');
+        h.className = 'slot-period';
+        h.textContent = t(p);
+        grid.appendChild(h);
+      }
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'slot';
+      b.textContent = s.label;
+      b.disabled = s.disabled;
+      if (s.disabled) b.title = t('time.taken');
+      b.setAttribute('aria-pressed', String(state.time === s.label));
+      b.addEventListener('click', () => {
+        state.time = s.label;
+        hideError(2);
+        renderSlots();
+      });
+      grid.appendChild(b);
+    });
+    area.appendChild(grid);
+  }
+
+  /* ---------------- steps ---------------- */
+  function renderStepper() {
+    $$('#stepper .node').forEach(n => {
+      const s = Number(n.dataset.step);
+      n.classList.toggle('active', s === state.step);
+      n.classList.toggle('done', s < state.step || state.step === 5);
+    });
+  }
+
+  function goto(step) {
+    state.step = step;
+    $$('.panel').forEach(p => p.classList.remove('active'));
+    $('#panel-' + step).classList.add('active');
+    renderStepper();
+    if (step === 2) fetchTakenSlots();
+    if (step === 4) renderSummary();
+    if (step === 5) renderDone();
+    const top = $('#booking').getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+
+  function showError(step, msg) {
+    const el = $('#err' + step);
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  function hideError(step) { $('#err' + step).classList.remove('show'); }
+
+  function validateStep(step) {
+    if (step === 1) {
+      if (!state.service) { showError(1, t('err.service')); return false; }
+      if (isPickService()) {
+        if (state.pkg == null) { showError(1, t('err.pkg')); return false; }
+        const short = partsLimit() - state.parts.length;
+        if (short > 0) { showError(1, t('parts.more', { n: short })); return false; }
+      }
+      hideError(1); return true;
+    }
+    if (step === 2) {
+      if (!state.date || !state.time) { showError(2, t('err.slot')); return false; }
+      hideError(2); return true;
+    }
+    if (step === 3) return validateContact();
+    return true;
+  }
+
+  function setFieldValid(name, ok) {
+    const f = $('[data-field="' + name + '"]');
+    if (f) f.classList.toggle('invalid', !ok);
+  }
+
+  function validateContact() {
+    const c = state.contact;
+    c.name  = $('#fName').value.trim();
+    c.phone = $('#fPhone').value.trim();
+    c.email = $('#fEmail').value.trim();
+    c.lang  = $('#fLang').value;
+    c.last5 = $('#fLast5').value.trim();
+    c.notes = $('#fNotes').value.trim();
+
+    const okName  = c.name.length >= 1;
+    const okPhone = /^[0-9+()\-\s.]{6,24}$/.test(c.phone);
+    const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email);
+    // optional: the client may not have transferred yet when booking
+    const okLast5 = c.last5 === '' || /^\d{5}$/.test(c.last5);
+    const okAgree = $('#fAgree').checked;
+
+    setFieldValid('name', okName);
+    setFieldValid('phone', okPhone);
+    setFieldValid('email', okEmail);
+    setFieldValid('last5', okLast5);
+    $('#agreeWrap').classList.toggle('invalid', !okAgree);
+
+    if (!okName)  { showError(3, t('err.name'));  return false; }
+    if (!okPhone) { showError(3, t('err.phone')); return false; }
+    if (!okEmail) { showError(3, t('err.email')); return false; }
+    if (!okLast5) { showError(3, t('err.last5')); return false; }
+    if (!okAgree) { showError(3, t('err.agree')); return false; }
+    hideError(3);
+    return true;
+  }
+
+  /* ---------------- summary ---------------- */
+  function endTime() {
+    return toHHMM(toMin(state.time) + state.duration);
+  }
+
+  function summaryRows() {
+    const c = state.contact;
+    const langLabel = (LANGS.find(l => l.code === c.lang) || currentLangMeta()).label;
+    const rows = [
+      [t('review.service'),  t('service.' + state.service)],
+      [t('review.visit'),    t(state.visit === 'first' ? 'visit.first' : 'visit.return')],
+      [t('review.datetime'), formatDate(state.date) + '  ' + state.time + ' – ' + endTime()],
+      [t('review.duration'), durationLabel(state.duration)],
+      [t('review.name'),     c.name],
+      [t('review.phone'),    c.phone],
+      [t('review.email'),    c.email],
+      [t('review.lang'),     langLabel],
+      [t('review.last5'),    c.last5 || t('review.none')],
+      [t('review.notes'),    c.notes || t('review.none')],
+      [t('review.price'),    money(currentPrice()), 'total']
+    ];
+    if (isPickService()) {
+      rows.splice(1, 0, [t('review.parts'), state.parts.map(k => t('part.' + k)).join(listSep())]);
+      const ex = packageExtras();
+      if (ex.length) {
+        rows.splice(2, 0, [t('pkg.extras'), ex.map(k => t('extra.' + k)).join(listSep())]);
+      }
+    }
+    return rows;
+  }
+
+  function renderSummary() {
+    const dl = $('#summary');
+    dl.innerHTML = '';
+    summaryRows().forEach(row => {
+      const wrap = document.createElement('div');
+      wrap.className = 'summary-row' + (row[2] ? ' ' + row[2] : '');
+      const dt = document.createElement('dt');
+      const dd = document.createElement('dd');
+      dt.textContent = row[0];
+      dd.textContent = row[1];
+      wrap.appendChild(dt); wrap.appendChild(dd);
+      dl.appendChild(wrap);
+    });
+  }
+
+  /* ---------------- submit ---------------- */
+  function makeRef() {
+    const d = new Date();
+    const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+    return 'ECC-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + rand;
+  }
+
+  /** Look a key up in a specific language, whatever the UI is showing. */
+  function tIn(lang, key) {
+    const keep = state.lang;
+    state.lang = lang;
+    try { return t(key); } finally { state.lang = keep; }
+  }
+
+  function bookingPayload() {
+    const c = state.contact;
+    const lang = c.lang || state.lang;
+    return {
+      ref: state.ref,
+      service: state.service,
+      serviceLabel: I18N.zh['service.' + state.service],
+      visit: state.visit,
+      date: state.date,
+      startTime: state.time,
+      endTime: endTime(),
+      durationMinutes: state.duration,
+      parts: isPickService() ? state.parts.slice() : [],
+      partsLabels: isPickService() ? state.parts.map(k => I18N.zh['part.' + k]) : [],
+      // the centre reads Chinese; the client's confirmation uses their own language
+      extras: packageExtras(),
+      extrasLabels: packageExtras().map(k => I18N.zh['extra.' + k]),
+      extrasLabelsLocal: packageExtras().map(k => tIn(lang, 'extra.' + k)),
+      serviceLabelLocal: tIn(lang, 'service.' + state.service),
+      partsLabelsLocal: isPickService() ? state.parts.map(k => tIn(lang, 'part.' + k)) : [],
+      price: currentPrice(),
+      currency: CONFIG.currency,
+      timezone: CONFIG.tzName,
+      name: c.name,
+      phone: c.phone,
+      email: c.email,
+      preferredLanguage: c.lang,
+      transferLast5: c.last5,
+      notes: c.notes,
+      submittedAt: new Date().toISOString()
+    };
+  }
+
+  function bookingText() {
+    const p = bookingPayload();
+    const L = [
+      t('done.code') + ': ' + p.ref,
+      '',
+      t('review.service')  + ': ' + t('service.' + p.service) +
+        (t('service.' + p.service) === p.serviceLabel ? '' : ' / ' + p.serviceLabel),
+      t('review.visit')    + ': ' + t(p.visit === 'first' ? 'visit.first' : 'visit.return'),
+      p.parts.length
+        ? t('review.parts') + ': ' + p.parts.map(k => t('part.' + k)).join(listSep()) +
+          (state.lang === 'zh' ? '' : ' / ' + p.partsLabels.join('、'))
+        : null,
+      p.extras.length ? t('pkg.extras') + ': ' + p.extrasLabels.join('、') : null,
+      t('review.datetime') + ': ' + p.date + ' ' + p.startTime + '-' + p.endTime + ' (' + p.timezone + ')',
+      t('review.duration') + ': ' + p.durationMinutes + ' ' + t('duration.minutes'),
+      t('review.price')    + ': ' + money(p.price),
+      '',
+      t('review.name')  + ': ' + p.name,
+      t('review.phone') + ': ' + p.phone,
+      t('review.email') + ': ' + p.email,
+      t('review.lang')  + ': ' +
+        ((LANGS.find(l => l.code === p.preferredLanguage) || {}).label || p.preferredLanguage),
+      t('review.last5') + ': ' + (p.transferLast5 || '-'),
+      t('review.notes') + ': ' + (p.notes || '-'),
+      '',
+      t('pay.title'),
+      t('pay.bank') + ': ' + t('pay.bank.value'),
+      t('pay.acct') + ': ' + CONFIG.bank.account
+    ];
+    return L.filter(line => line !== null).join('\n');
+  }
+
+  /* 'form' posts through a hidden iframe: a plain form submission is not a
+     cross-origin XHR, so it is subject to neither CORS nor a page's
+     connect-src policy. Nothing can be read back, which is the trade — but
+     it reaches Apps Script from anywhere, which fetch does not. */
+  function submitMode() {
+    if (CONFIG.endpointMode === 'form' || CONFIG.endpointMode === 'fetch') return CONFIG.endpointMode;
+    return /script\.google\.com/.test(CONFIG.endpoint) ? 'form' : 'fetch';
+  }
+
+  function submitViaForm() {
+    const sinkName = 'ecc-sink-' + Date.now();
+    const frame = document.createElement('iframe');
+    frame.name = sinkName;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px';
+    document.body.appendChild(frame);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CONFIG.endpoint;
+    form.target = sinkName;
+    form.style.display = 'none';
+
+    const fields = Object.assign({}, CONFIG.endpointFields || {},
+                                 { payload: JSON.stringify(bookingPayload()),
+                                   '預約明細': bookingTextZh() });
+    Object.keys(fields).forEach(k => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = typeof fields[k] === 'string' ? fields[k] : JSON.stringify(fields[k]);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(() => { form.remove(); frame.remove(); }, 20000);
+
+    takenFetchedAt = 0;
+    goto(5);
+  }
+
+  /* Google Apps Script web apps answer no CORS preflight, so an
+     application/json POST is blocked before it ever reaches the script.
+     text/plain keeps the request "simple" and the script reads the body
+     the same way. */
+  function endpointContentType() {
+    if (CONFIG.endpointContentType) return CONFIG.endpointContentType;
+    return /script\.google\.com/.test(CONFIG.endpoint)
+      ? 'text/plain;charset=utf-8'
+      : 'application/json';
+  }
+
+  /* The centre reads its notifications in Chinese regardless of which
+     language the client filled the form in. */
+  function bookingTextZh() {
+    const keep = state.lang;
+    state.lang = 'zh';
+    try { return bookingText(); } finally { state.lang = keep; }
+  }
+
+  function mailtoUrl() {
+    const subject = '[' + state.ref + '] ' + t('brand.name') + ' — ' +
+                    state.date + ' ' + state.time + ' ' + t('service.' + state.service);
+    return 'mailto:' + CONFIG.email +
+           '?subject=' + encodeURIComponent(subject) +
+           '&body=' + encodeURIComponent(bookingText());
+  }
+
+  /* 行事曆事件的共用資料，.ics 與 Google 日曆連結都由這裡出發。 */
+  function calendarEvent() {
+    const p = bookingPayload();
+    const d = fromKey(p.date);
+    // 中心固定在台北（UTC+8，無日光節約），把當地時間換算成 UTC 才不會跑掉
+    const toUTC = hhmm => {
+      const m = toMin(hhmm) - CONFIG.tzOffsetHours * 60;
+      const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0));
+      dt.setUTCMinutes(dt.getUTCMinutes() + m);
+      return dt.getUTCFullYear() + pad(dt.getUTCMonth() + 1) + pad(dt.getUTCDate()) + 'T' +
+             pad(dt.getUTCHours()) + pad(dt.getUTCMinutes()) + '00Z';
+    };
+    return {
+      payload: p,
+      start: toUTC(p.startTime),
+      end: toUTC(p.endTime),
+      title: t('brand.name') + ' — ' + t('service.' + p.service),
+      details: bookingText(),
+      location: t('brand.name') + (CONFIG.map && CONFIG.map.link ? ' ' + CONFIG.map.link : '')
+    };
+  }
+
+  function icsContent() {
+    const ev = calendarEvent();
+    const esc = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+
+    // RFC 5545 規定每行不超過 75 個位元組，超過要折行（續行以空白開頭）。
+    // 不折行時，Outlook 等較嚴格的軟體會讀不到後半段內容。
+    const fold = line => {
+      const bytes = [];
+      let out = '', len = 0;
+      for (const ch of line) {
+        const n = new TextEncoder().encode(ch).length;
+        if (len + n > 73) { out += '\r\n '; len = 1; }
+        out += ch; len += n;
+      }
+      return out;
+    };
+
+    const now = new Date();
+    const stamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' +
+                  pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+
+    return [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Eternitys Child Chiropractic//Booking//EN',
+      'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:' + ev.payload.ref + '@eternitys-child',
+      'DTSTAMP:' + stamp,                    // 事件建立的時間，不是預約時間
+      'DTSTART:' + ev.start,
+      'DTEND:'   + ev.end,
+      fold('SUMMARY:' + esc(ev.title)),
+      fold('LOCATION:' + esc(ev.location)),
+      fold('DESCRIPTION:' + esc(ev.details)),
+      'BEGIN:VALARM', 'TRIGGER:-PT1440M', 'ACTION:DISPLAY',
+      fold('DESCRIPTION:' + esc(ev.title)), 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+  }
+
+  /* 手機上比 .ics 可靠：只是一個網址，在 LINE、IG 的內建瀏覽器裡也能開。 */
+  function gcalUrl() {
+    const ev = calendarEvent();
+    const q = [
+      'action=TEMPLATE',
+      'text=' + encodeURIComponent(ev.title),
+      'dates=' + ev.start + '%2F' + ev.end,
+      'details=' + encodeURIComponent(ev.details),
+      'location=' + encodeURIComponent(ev.location),
+      'ctz=' + encodeURIComponent(CONFIG.tzName)
+    ].join('&');
+    return 'https://calendar.google.com/calendar/render?' + q;
+  }
+
+  function download(name, text, mime) {
+    const blob = new Blob([text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  let toastTimer = null;
+  function toast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  function copyText(text, msg) {
+    const done = () => toast(msg);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, () => fallback());
+    } else { fallback(); }
+    function fallback() {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  }
+
+  function submitBooking() {
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3)) return;
+    state.ref = makeRef();
+    saveBooking(state.date, toMin(state.time), toMin(state.time) + state.duration);
+
+    if (!CONFIG.endpoint) {
+      try { window.location.href = mailtoUrl(); } catch (e) {}
+      goto(5);
+      return;
+    }
+
+    if (submitMode() === 'form') { submitViaForm(); return; }
+
+    const btn = $('#submitBtn');
+    btn.disabled = true;
+    fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': endpointContentType() },
+      body: JSON.stringify(Object.assign(
+        {},
+        CONFIG.endpointFields || {},
+        bookingPayload(),
+        // a Chinese-keyed readable block, so a generic form service's
+        // notification email is legible without any template setup
+        { '預約明細': bookingTextZh() }
+      ))
+    })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(() => ({})); })
+      .then(res => {
+        // our PHP answers {ok:…}; FormSubmit and Web3Forms answer {success:…},
+        // and FormSubmit reports failure as the string "false"
+        const ok = res.ok !== false &&
+                   res.success !== false && res.success !== 'false';
+        if (!ok) throw new Error(res.error || res.message || 'rejected');
+        takenFetchedAt = 0;   // this booking is now on the server too
+        goto(5);
+      })
+      .catch(() => {
+        // the endpoint is unreachable or refused the booking: fall back to email
+        // so the request still reaches the centre
+        try { window.location.href = mailtoUrl(); } catch (e) {}
+        goto(5);
+      })
+      .then(() => { btn.disabled = false; });
+  }
+
+  function renderDone() {
+    $('#refCode').textContent = state.ref;
+    const g = $('#gcalBtn');
+    if (g) g.href = gcalUrl();
+    $('#mailNote').textContent = t('done.mailnote', { email: CONFIG.email });
+  }
+
+  function resetAll() {
+    state.service = null;
+    state.pkg = null;
+    state.parts = [];
+    state.date = null;
+    state.time = null;
+    state.ref = '';
+    state.contact = { name: '', phone: '', email: '', lang: state.lang, last5: '', notes: '' };
+    ['fName', 'fPhone', 'fEmail', 'fLast5', 'fNotes'].forEach(id => { $('#' + id).value = ''; });
+    $('#fAgree').checked = false;
+    $$('.field').forEach(f => f.classList.remove('invalid'));
+    $('#agreeWrap').classList.remove('invalid');
+    [1, 2, 3, 4].forEach(hideError);
+    const m = minDate();
+    state.calYear = m.getFullYear();
+    state.calMonth = m.getMonth();
+    applyI18n();
+    goto(1);
+  }
+
+  /* A photo that has not been uploaded yet must leave no gap, so each figure
+     is removed again if its image 404s, and the strip stays hidden until at
+     least one photo has actually loaded. Note: no loading="lazy" here — the
+     figures start hidden and so have no layout, and a lazy image that is
+     never "in the viewport" would never be fetched at all. Four small photos
+     load eagerly at no real cost. */
+  function renderGallery() {
+    const section = $('#gallery');
+    const grid = $('#galleryGrid');
+    if (!section || !grid) return;
+    const list = (CONFIG.photos || []).filter(Boolean);
+    if (!list.length) return;
+
+    list.forEach((src, i) => {
+      const fig = document.createElement('figure');
+      fig.style.order = String(i);            // keep the configured order
+      fig.hidden = true;
+
+      const img = document.createElement('img');
+      img.decoding = 'async';
+      img.dataset.index = String(i + 1);
+      img.alt = t('gallery.alt', { n: i + 1 });
+      img.addEventListener('load', () => {
+        fig.hidden = false;
+        section.hidden = false;
+      });
+      img.addEventListener('error', () => { fig.remove(); });
+
+      fig.appendChild(img);
+      grid.appendChild(fig);
+      img.src = src;
+    });
+  }
+
+  /* Only the details that are actually filled in appear; an empty setting
+     leaves no dangling label. */
+  function renderContact() {
+    const box = $('#contactList');
+    if (!box) return;
+    const c = CONFIG.contact || {};
+    const rows = [
+      ['name',      c.name,      ''],
+      ['phone',     c.phone,     c.phone ? 'tel:' + c.phone.replace(/[^\d+]/g, '') : ''],
+      ['instagram', c.instagram ? '@' + c.instagram : '',
+                    c.instagram ? 'https://instagram.com/' + c.instagram : ''],
+      ['line',      c.line,      /^https?:/.test(c.line || '') ? c.line : ''],
+      ['email',     CONFIG.email, CONFIG.email ? 'mailto:' + CONFIG.email : ''],
+      ['address',   c.address,   '']
+    ].filter(r => r[1]);
+
+    box.innerHTML = '';
+    rows.forEach(([key, value, href]) => {
+      const row = document.createElement('div');
+      row.className = 'contact-row';
+      const k = document.createElement('span');
+      k.className = 'ck';
+      k.dataset.i18n = 'info.contact.' + key;
+      k.textContent = t('info.contact.' + key);
+      const v = document.createElement(href ? 'a' : 'span');
+      v.className = 'cv';
+      v.textContent = value;
+      if (href) { v.href = href; if (/^https?:/.test(href)) { v.target = '_blank'; v.rel = 'noopener'; } }
+      row.appendChild(k); row.appendChild(v);
+      box.appendChild(row);
+    });
+
+    // LINE 的 QR 圖：沿用照片那套做法，檔案還沒放上去就整塊不出現
+    if (c.lineQr) {
+      const wrap = document.createElement('div');
+      wrap.className = 'line-qr';
+      wrap.hidden = true;
+      const img = document.createElement('img');
+      img.alt = 'LINE QR';
+      img.addEventListener('load', () => { wrap.hidden = false; });
+      img.addEventListener('error', () => { wrap.remove(); });
+      const cap = document.createElement('span');
+      cap.className = 'qr-cap';
+      cap.id = 'lineQrCap';
+      cap.textContent = t('info.contact.lineqr');
+      wrap.appendChild(img); wrap.appendChild(cap);
+      box.appendChild(wrap);
+      img.src = c.lineQr;
+    }
+  }
+
+  /* ---------------- wiring ---------------- */
+  function init() {
+    state.lang = detectLang();
+    const m = minDate();
+    state.calYear = m.getFullYear();
+    state.calMonth = m.getMonth();
+    state.contact.lang = state.lang;
+
+    $('#year').textContent = new Date().getFullYear();
+    if (CONFIG.version) $('#ver').textContent = 'v' + CONFIG.version;
+
+    // 開發者確認用：在瀏覽器主控台就能看出這份頁面把預約送去哪裡
+    try {
+      console.info('[預約系統] v' + (CONFIG.version || '?') +
+        ' · 收單：' + (CONFIG.endpoint || '（未設定，會開啟客人的信箱程式）') +
+        (CONFIG.endpoint ? ' · 送出方式：' + submitMode() : ''));
+    } catch (e) {}
+    $('#acctNo').textContent = CONFIG.bank.account;
+
+    renderLangSwitch();
+    fetchTakenSlots();
+    applyI18n();
+    goto(1);
+    window.scrollTo({ top: 0 });
+
+    $$('[data-next]').forEach(b => b.addEventListener('click', () => {
+      const next = Number(b.dataset.next);
+      if (validateStep(next - 1)) goto(next);
+    }));
+    $$('[data-back]').forEach(b => b.addEventListener('click', () => goto(Number(b.dataset.back))));
+
+    $('#calPrev').addEventListener('click', () => shiftMonth(-1));
+    $('#calNext').addEventListener('click', () => shiftMonth(1));
+
+    $('#submitBtn').addEventListener('click', submitBooking);
+    $('#copyAcct').addEventListener('click', () => copyText(CONFIG.bank.account, t('pay.copied')));
+    $('#copyBtn').addEventListener('click', () => copyText(bookingText(), t('pay.copied')));
+    $('#mailBtn').addEventListener('click', () => { window.location.href = mailtoUrl(); });
+    const icsBtn = $('#icsBtn');
+    if (icsBtn) icsBtn.addEventListener('click', () => download(state.ref + '.ics', icsContent(), 'text/calendar'));
+    $('#restartBtn').addEventListener('click', resetAll);
+
+    ['fName', 'fPhone', 'fEmail', 'fLast5'].forEach(id => {
+      $('#' + id).addEventListener('input', () => hideError(3));
+    });
+    $('#fLang').addEventListener('change', e => { state.contact.lang = e.target.value; });
+
+    renderGallery();
+    renderContact();
+
+    // The map is injected rather than hard-coded so the address lives in
+    // config.js alone, and so pages that block third-party frames degrade to
+    // the plain link instead of an empty box.
+    const mapCard = $('.map-card');
+    if (mapCard && CONFIG.map && CONFIG.map.embed) {
+      const iframe = document.createElement('iframe');
+      iframe.src = CONFIG.map.embed;
+      iframe.loading = 'lazy';
+      iframe.title = t('info.location');
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.setAttribute('allowfullscreen', '');
+      $('#mapFrame').appendChild(iframe);
+      $('#mapLink').href = CONFIG.map.link || CONFIG.map.embed;
+      const note = document.createElement('span');
+      note.className = 'map-note';
+      note.id = 'mapNote';
+      note.textContent = t('info.map.blocked');
+      $('.map-links').appendChild(document.createElement('br'));
+      $('.map-links').appendChild(note);
+    } else if (mapCard) {
+      mapCard.hidden = true;
+    }
+
+    if (CONFIG.qrImage) {
+      const qrImg = $('#qrImg');
+      qrImg.addEventListener('load', () => { qrImg.hidden = false; });
+      qrImg.src = CONFIG.qrImage;
+    }
+  }
+
+  /* When embedded in an iframe (e.g. a WordPress page), tell the parent how
+     tall we are so it can size the frame — see wordpress/README. */
+  function reportHeight() {
+    if (window.parent === window) return;
+    const h = Math.ceil(document.documentElement.scrollHeight);
+    try { window.parent.postMessage({ eccBookingHeight: h }, '*'); } catch (e) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    init();
+    reportHeight();
+    window.addEventListener('resize', reportHeight);
+    if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+  });
+})();
+
+</script>
+</body>
+</html>

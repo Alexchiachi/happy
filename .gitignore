@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+fixtures/
+reports/
+*-fixed.epub
+*-optimized.epub
+
+# 測試腳本產生的暫存截圖
+v-*.png
+inner-flow-e2e.html
+
+# 預約系統的 Artifact 建置產物
+eternitychildbooking/artifact.html
+
+# Cloudflare wrangler 本機暫存
+.wrangler/
+node_modules/

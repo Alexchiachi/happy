@@ -1,0 +1,38 @@
+// 幸福餐桌三階段課程：部署到 Cloudflare Workers（也負責收大道至簡品牌站 connect.html 的來信）
+// - 網站是 executive-table/ 裡的靜態檔案；排除清單見 executive-table/.assetsignore
+// - 只有 /api/*、/admin 與 /photos/* 會先進到 Worker 程式（executive-table/worker/）
+// - 預約資料存在 D1；第一次部署時會依 database_name 自動建立資料庫
+// - Gmail 應用程式密碼、收件信箱、管理頁密碼放在 Cloudflare 專案的 Variables and Secrets，不寫在這裡（見 executive-table/README.md）
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "executive-table",
+  "main": "./executive-table/worker/index.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./executive-table",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*", "/admin", "/admin/*", "/photos/*"]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "executive-table-inquiries" }
+  ],
+  "vars": {
+    // 用 Gmail 寄信時的寄件人名稱（地址就是 NOTIFY_EMAIL 那個 Gmail）
+    "MAIL_FROM_NAME": "簡家旗｜幸福餐桌",
+    // 選用：改用 Resend 寄信時的寄件人，網域要先在 Resend 驗證過
+    "MAIL_FROM": "簡家旗｜幸福餐桌 <table@mail.daoissimple.com>",
+    // 允許從這些網站送出表單（GitHub Pages 上的課程頁與大道至簡品牌站）
+    "ALLOWED_ORIGINS": "https://alexchiachi.github.io",
+    // 大道至簡品牌站「連繫」表單：通知寄到哪個信箱、寄件人名稱、確認信裡的網站連結（見 worker/letters.js）
+    "LETTER_NOTIFY_EMAIL": "dadaoissimple@gmail.com",
+    "LETTER_FROM_NAME": "大道至簡 · Dao is simple",
+    "BRAND_SITE_URL": "https://alexchiachi.github.io/happy/"
+  },
+  // 保留在 Cloudflare 後台設定的變數（ACCESS_TEAM_DOMAIN、ACCESS_AUD），部署時不要清掉
+  "keep_vars": true,
+  "observability": { "enabled": true },
+  "workers_dev": true,
+  "preview_urls": true
+}

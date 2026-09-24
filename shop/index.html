@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>雲南好物 · 大道至簡</title>
+  <meta name="description" content="從雲南高山帶回來的茶、菌、香與甜。常備好物隨時可訂，節令預購限期開放。">
+  <!-- 設計稿階段：先不讓搜尋引擎收錄，正式上線時拿掉 -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要內容</a>
+
+<header class="bar">
+  <a class="brand" href="../yunnan.html">
+    <span class="brand-seal" aria-hidden="true">雲</span>
+    <span class="brand-text">雲南好物<small>大道至簡 · Dao is simple</small></span>
+  </a>
+  <a class="bar-bag" href="#checkout" aria-label="前往結帳">
+    訂單 <span class="bag-count" data-count>0</span>
+  </a>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- 一、開場：一句話＋本檔資訊 -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Yunnan · 彩雲之南</p>
+        <h1>山上的東西，<br>慢慢寄到你桌上。</h1>
+        <p class="lede">茶、菌、香、甜——每一樣都是我們在雲南親手挑過、自己也在用的。常備好物隨時可訂；節令預購只在限定期間開放，收單後才向產地叫貨。</p>
+      </div>
+      <aside class="season-card" aria-labelledby="season-title">
+        <p class="season-kicker">本檔預購</p>
+        <h2 id="season-title" class="season-name">冬藏 · 年節</h2>
+        <dl class="season-dates">
+          <div><dt>收單至</dt><dd data-deadline-text>2027 年 1 月 15 日</dd></div>
+          <div><dt>出貨</dt><dd>1 月 25 日前寄出</dd></div>
+        </dl>
+        <p class="countdown" data-countdown aria-live="polite"></p>
+        <a class="btn btn-ghost" href="#season">看本檔五樣 ↓</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 二、規則一眼看完 -->
+  <section class="rules" aria-label="訂購須知">
+    <div class="wrap rules-grid">
+      <div class="rule"><span class="rule-han">運</span><p><b>滿 NT$2,000 免運</b><br>未滿：宅配 80、超商 60、南投市／草屯面交免運</p></div>
+      <div class="rule"><span class="rule-han">付</span><p><b>LINE Pay 或匯款</b><br>送出訂單後，頁面與確認信會附上付款資訊</p></div>
+      <div class="rule"><span class="rule-han">寄</span><p><b>常備好物 3–5 天出貨</b><br>預購品依本檔出貨日寄出</p></div>
+      <div class="rule"><span class="rule-han">合</span><p><b>同檔多次下單自動合併</b><br>同一支電話，金額合計計算免運</p></div>
+    </div>
+  </section>
+
+  <!-- 三、本檔預購 -->
+  <section id="season" class="shelf shelf-season">
+    <div class="wrap">
+      <header class="shelf-head">
+        <p class="eyebrow">Seasonal · 節令預購</p>
+        <h2>冬藏 · 年節</h2>
+        <p class="shelf-note">限期收單，截止後統一向產地叫貨。適合年節送禮，也適合冬天自己留著。</p>
+      </header>
+      <div class="grid" data-shelf="season"></div>
+    </div>
+  </section>
+
+  <!-- 四、常備好物 -->
+  <section id="always" class="shelf shelf-always">
+    <div class="wrap">
+      <header class="shelf-head">
+        <p class="eyebrow">Always · 常備好物</p>
+        <h2>日常的雲南</h2>
+        <p class="shelf-note">吃完、喝完、點完，會想再補的那幾樣。全年可訂，現貨出貨。</p>
+      </header>
+      <div class="grid" data-shelf="always"></div>
+    </div>
+  </section>
+
+  <!-- 五、結帳 -->
+  <section id="checkout" class="checkout">
+    <div class="wrap checkout-grid">
+      <div class="summary" aria-labelledby="summary-title">
+        <p class="eyebrow">Your order · 你的訂單</p>
+        <h2 id="summary-title">訂單明細</h2>
+        <ul class="lines" data-lines></ul>
+        <p class="empty" data-empty>還沒有選任何東西。往上挑一兩樣吧。</p>
+        <dl class="totals">
+          <div><dt>商品小計</dt><dd data-subtotal>NT$0</dd></div>
+          <div><dt>運費</dt><dd data-shipping>—</dd></div>
+          <div class="grand"><dt>合計</dt><dd data-total>NT$0</dd></div>
+        </dl>
+        <div class="freeship" data-freeship>
+          <div class="meter"><span data-meter></span></div>
+          <p data-freeship-text>滿 NT$2,000 免運</p>
+          <div class="addons" data-addons hidden></div>
+        </div>
+      </div>
+
+      <form class="order-form" data-form novalidate>
+        <p class="eyebrow">Details · 收件資料</p>
+        <h2>寄到哪裡</h2>
+
+        <div class="field-row">
+          <label class="field"><span>姓名</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span>手機</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}" required></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span>Email <em>寄確認信用</em></span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="field"><span>LINE ID <em>選填</em></span><input name="line"></label>
+        </div>
+
+        <fieldset class="choice">
+          <legend>取貨方式</legend>
+          <label><input type="radio" name="delivery" value="home" checked> 宅配</label>
+          <label><input type="radio" name="delivery" value="711"> 7-11</label>
+          <label><input type="radio" name="delivery" value="family"> 全家</label>
+          <label><input type="radio" name="delivery" value="meet"> 面交（南投市／草屯）</label>
+        </fieldset>
+        <label class="field" data-when="home"><span>宅配地址</span><input name="address" autocomplete="street-address"></label>
+        <label class="field" data-when="711 family" hidden><span>門市名稱</span><input name="store" placeholder="例：7-11 龍辰門市"></label>
+        <p class="hint" data-when="meet" hidden>我們會用 LINE 或電話跟你約時間地點。</p>
+
+        <fieldset class="choice">
+          <legend>付款方式</legend>
+          <label><input type="radio" name="pay" value="linepay" checked> LINE Pay</label>
+          <label><input type="radio" name="pay" value="bank"> 匯款</label>
+        </fieldset>
+        <p class="hint">送出後會直接顯示收款資訊。匯款的朋友，付完回信告訴我們末五碼即可。</p>
+
+        <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="送禮需要附卡片、指定到貨時段……"></textarea></label>
+
+        <button class="btn btn-solid" type="submit">送出訂單</button>
+        <p class="form-msg" data-form-msg role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- 送出後 -->
+  <section class="done" data-done hidden tabindex="-1">
+    <div class="wrap done-card">
+      <span class="done-seal" aria-hidden="true">謝</span>
+      <h2>訂單收到了</h2>
+      <p>訂單編號 <b data-order-no></b>，合計 <b data-order-total></b>。確認信已寄到你的信箱。</p>
+      <div class="pay-box">
+        <div><h3>LINE Pay</h3><div class="qr" aria-label="LINE Pay 收款碼">收款碼</div></div>
+        <div><h3>匯款</h3><p>銀行代碼與帳號<br><span class="muted">（待提供）</span></p><p>付款後回信告知末五碼</p></div>
+      </div>
+      <p class="muted small">設計稿：目前按「送出訂單」只會顯示這個畫面，不會真的建立訂單。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <p class="foot-brand">大道至簡 · Dao is simple<br><span>做幸福的事，讓幸福變成有價值的事。</span></p>
+    <p><a href="../yunnan.html">雲南選物</a> · <a href="../journal.html">幸福誌</a> · <a href="../connect.html">寫信給我們</a> · <a href="../privacy.html">隱私權政策</a></p>
+  </div>
+</footer>
+
+<!-- 手機：固定在底部的小計列 -->
+<div class="dock" data-dock hidden>
+  <div class="dock-text"><b data-dock-total>NT$0</b><span data-dock-hint></span></div>
+  <a class="btn btn-solid" href="#checkout">結帳</a>
+</div>
+
+<script src="shop.js" defer></script>
+</body>
+</html>

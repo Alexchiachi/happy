@@ -1,0 +1,111 @@
+/* Inner Flow：與測驗頁同一套配色（米白 / 炭黑 / 風土暖棕 / 鼠尾草綠）。
+   佈景主題的字級與行高差異很大，因此這裡的樣式刻意寫得保守，只管自己的區塊。 */
+
+.inner-flow-unlock,
+.inner-flow-report {
+  --if-paper: #F7F5F0;
+  --if-ink: #2A2723;
+  --if-clay: #A67C52;
+  --if-sage: #7A8B7B;
+  color: var(--if-ink);
+  letter-spacing: .05em;
+  line-height: 2;
+}
+
+.if-eyebrow {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--if-sage);
+  margin: 0 0 1rem;
+}
+
+.inner-flow-unlock {
+  max-width: 34rem;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: var(--if-paper);
+  border: 1px solid rgba(42, 39, 35, .12);
+}
+
+.if-title { font-size: 1.35rem; font-weight: 300; margin: 0 0 1rem; letter-spacing: .08em; }
+.if-lead { font-size: .9rem; color: rgba(42, 39, 35, .6); margin: 0 0 2rem; }
+
+.if-form { display: flex; flex-wrap: wrap; gap: .75rem; }
+.if-form input {
+  flex: 1 1 16rem;
+  padding: .8rem .2rem;
+  border: 0;
+  border-bottom: 1px solid rgba(42, 39, 35, .2);
+  background: transparent;
+  font-size: .9rem;
+  letter-spacing: .08em;
+}
+.if-form input:focus { outline: none; border-color: var(--if-clay); }
+.if-form button {
+  padding: .8rem 2rem;
+  border: 1px solid rgba(42, 39, 35, .25);
+  background: transparent;
+  font-size: .8rem;
+  letter-spacing: .12em;
+  cursor: pointer;
+  transition: border-color .3s, color .3s;
+}
+.if-form button:hover:not(:disabled) { border-color: var(--if-clay); color: var(--if-clay); }
+.if-form button:disabled { opacity: .45; cursor: default; }
+
+.if-msg { min-height: 1.4rem; margin: 1.2rem 0 0; font-size: .78rem; letter-spacing: .1em; }
+.if-msg.is-ok { color: var(--if-sage); }
+.if-msg.is-error { color: var(--if-clay); }
+
+.if-progress { margin-top: 1.5rem; }
+.if-bar { height: 2px; background: rgba(42, 39, 35, .1); }
+.if-bar span { display: block; height: 100%; width: 0; background: var(--if-clay); transition: width .6s ease-out; }
+.if-step { margin: .9rem 0 0; font-size: .75rem; letter-spacing: .12em; color: rgba(42, 39, 35, .45); }
+
+.if-chapter-preview { margin-top: 2rem; padding-top: 1.4rem; border-top: 1px solid rgba(42, 39, 35, .1); }
+.if-chapter-preview h4 { font-size: 1rem; font-weight: 400; margin: 0 0 .6rem; letter-spacing: .08em; }
+.if-chapter-preview p { font-size: .82rem; color: rgba(42, 39, 35, .55); margin: 0; }
+
+/* ---------- 報告 ---------- */
+
+.inner-flow-report { max-width: 44rem; margin: 0 auto; }
+.if-cover { text-align: center; padding: 3rem 0 4rem; }
+.if-report-title { font-size: 1.9rem; font-weight: 300; letter-spacing: .1em; margin: 0 0 1.2rem; }
+.if-archetype { font-size: 1.05rem; color: var(--if-clay); letter-spacing: .08em; margin: 0 0 1rem; }
+.if-meta { font-size: .75rem; letter-spacing: .12em; color: rgba(42, 39, 35, .45); }
+.if-print {
+  margin-top: 2rem; padding: .7rem 2rem; border: 1px solid rgba(42, 39, 35, .25);
+  background: transparent; font-size: .75rem; letter-spacing: .12em; cursor: pointer;
+}
+.if-print:hover { border-color: var(--if-clay); color: var(--if-clay); }
+
+.if-coordinates { padding: 2.5rem 0; border-top: 1px solid rgba(42, 39, 35, .12); }
+.if-dims { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+.if-dim b { display: block; font-size: 1.8rem; font-weight: 300; }
+.if-dim span { font-size: .75rem; letter-spacing: .12em; color: rgba(42, 39, 35, .5); }
+.if-dim p { font-size: .78rem; color: rgba(42, 39, 35, .55); margin: .6rem 0 0; }
+.if-dim.is-bottleneck b, .if-dim.is-bottleneck span { color: var(--if-clay); }
+.if-formula, .if-bottleneck { font-size: .78rem; letter-spacing: .1em; color: rgba(42, 39, 35, .45); margin: .4rem 0 0; }
+
+.if-chapter, .if-message, .if-audio { padding: 2.5rem 0; border-top: 1px solid rgba(42, 39, 35, .12); }
+.if-chapter h2, .if-message h2, .if-audio h2, .if-coordinates h2 {
+  font-size: 1.15rem; font-weight: 300; letter-spacing: .1em; margin: 0 0 1.5rem;
+}
+.if-chapter p, .if-message p { font-size: .95rem; margin: 0 0 1.2rem; }
+.if-message { background: rgba(166, 124, 82, .05); padding-left: 1.5rem; padding-right: 1.5rem; }
+.if-sign { font-size: .78rem; color: rgba(42, 39, 35, .45); }
+.if-audio audio { width: 100%; margin-top: 1rem; }
+.if-footer { padding: 2.5rem 0; font-size: .72rem; letter-spacing: .1em; color: rgba(42, 39, 35, .35); }
+.inner-flow-note { text-align: center; padding: 4rem 1rem; color: rgba(42, 39, 35, .5); }
+
+/* 列印即為 PDF 輸出：文字與版面都是向量 */
+@media print {
+  @page { size: A4; margin: 18mm 16mm; }
+  body { background: #fff; }
+  .no-print, .if-print, .if-audio { display: none !important; }
+  .inner-flow-report { max-width: none; }
+  .if-chapter, .if-message, .if-coordinates { break-inside: avoid-page; page-break-inside: avoid; }
+  .if-chapter h2 { break-after: avoid; }
+  .if-cover { padding-top: 0; }
+}

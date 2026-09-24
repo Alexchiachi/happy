@@ -1,0 +1,6 @@
+# 這些是維護用檔案，不發布到網站上
+*.py
+README.md
+.assetsignore
+worker
+CLAUDE.md

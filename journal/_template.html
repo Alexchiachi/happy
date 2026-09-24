@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ①改這裡：文章標題（會顯示在瀏覽器分頁與 Google 搜尋結果） -->
+  <title>文章標題 · 幸福誌 · 大道至簡</title>
+  <!-- ②改這裡：一兩句摘要，給搜尋引擎與社群分享用 -->
+  <meta name="description" content="一兩句話說明這篇文章在寫什麼。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <!-- 注意：文章在 journal/ 資料夾裡，所以路徑要用 ../ 往上一層 -->
+  <link rel="stylesheet" href="../styles.css?v=507a3546">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要內容</a>
+
+<nav class="nav">
+  <a class="nav-brand" href="../index.html">大道至簡<small>Dao is simple</small></a>
+  <button class="nav-toggle" aria-label="menu">≡</button>
+  <ul class="nav-menu">
+    <li><a href="../yunnan.html">雲南</a></li>
+    <li><a href="../taiwan.html">台灣</a></li>
+    <li><a href="../journal.html" class="active">幸福誌</a></li>
+    <li><a href="../services.html">服務體驗</a></li>
+    <li><a href="../about.html">關於</a></li>
+    <li><a href="../connect.html">連繫</a></li>
+  </ul>
+</nav>
+
+<main id="main" tabindex="-1">
+  <article class="container narrow">
+
+    <!-- ③首圖：標題壓在色塊正中央。
+         色塊三選一：tea（雲南・茶褐）／moss（台灣・苔綠）／dark（墨黑）
+         再加一個構圖變化 v2–v6（不加就是預設），同色系的文章請用不同的變化，
+         而且要跟 journal.html 上那張卡片用同一組。
+         有照片的話：圖放進 images/，然後在同一個 div 加上
+         style="--img: url('../images/你的檔名.jpg');" 就會蓋在色塊上。 -->
+    <div class="img-placeholder tea article-cover cover-title reveal v2">
+      <div class="cover-inner">
+        <!-- ④改這裡：分類 · 年月。分類請用：生活提案／產地故事／選物筆記／二地對話 -->
+        <div class="meta">產地故事 · 2026.05</div>
+        <!-- ⑤改這裡：大標。標題一律排成最多兩行，所以字級要跟著長度選：
+             t-xl（≤12 字）／t-lg（13–17）／t-md（18–21）／t-sm（22 字以上）
+             預設不要加 <br>，交給版面自動平衡。只有在自動斷點切壞詞
+             （例如把「一炷香」拆開）時，才在標點處手動加一個 <br>，
+             但加完要確認較長那行沒有超出，否則會變成三行。 -->
+        <h1 class="t-lg">文章標題寫在這裡</h1>
+      </div>
+      <span>JOURNAL</span>
+    </div>
+
+    <header class="article-hero after-cover reveal">
+      <!-- ⑥改這裡：開場摘要，兩三句，比內文大一點 -->
+      <p class="lede">這裡放開場的摘要。兩三句話，讓人願意讀下去。</p>
+
+      <!-- ⑦改這裡：作者與閱讀時間 -->
+      <div class="byline">文 · 簡家旗 &nbsp;|&nbsp; 約 6 分鐘</div>
+    </header>
+
+    <!-- ⑧從這裡開始寫內文 ============================== -->
+    <div class="article-body">
+
+      <p>第一段。開場不用鋪陳太多，直接把讀者帶到現場。</p>
+
+      <p>第二段。每一段之間空一行就好，系統會自動處理間距。</p>
+
+      <!-- 小標，用來分段落章節 -->
+      <h2>這是一個小標</h2>
+
+      <p>小標底下的段落。</p>
+
+      <!-- 引用某人說的話 -->
+      <blockquote>
+        這裡放一句想被記住的話。
+        <cite>— 說話的人 · 地點</cite>
+      </blockquote>
+
+      <p>引用之後可以接著解釋。</p>
+
+      <!-- 文中插圖（不需要就整段刪掉） -->
+      <figure>
+        <div class="img-placeholder moss"><span>PHOTO</span></div>
+        <figcaption>圖說寫在這裡。</figcaption>
+      </figure>
+
+      <!-- 條列（不需要就整段刪掉） -->
+      <ul>
+        <li>第一點</li>
+        <li>第二點</li>
+        <li>第三點</li>
+      </ul>
+
+      <!-- 三顆點的分隔符號（不需要就刪掉） -->
+      <hr>
+
+      <p>收尾的段落。</p>
+
+    </div>
+    <!-- ⑧內文到這裡結束 ================================ -->
+
+    <footer class="article-foot">
+      <!-- 往前走的去處：指向對得上的選物、服務章節（services.html#rice-table
+           #salon #windy-place #curation #consulting）或另一篇文章。
+           指到商品要確認真的在架上；服務只說「可以看看」，不要承諾行程內容。 -->
+      <p class="article-next">一句話，接一個 <a href="../yunnan.html">連結</a>。</p>
+      <a href="../journal.html" class="svc-cta">← 回幸福誌</a>
+      <div class="seal">大道至簡</div>
+    </footer>
+
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">大道至簡</div>
+        <div class="footer-brand-en">Dao is simple</div>
+        <p class="footer-brand-desc">做幸福的事，讓幸福變成有價值的事。雲南與台灣的好物與生活提案，由簡家旗主理。</p>
+      </div>
+      <div><h2>選物</h2><ul><li><a href="../yunnan.html">雲南選物</a></li><li><a href="../taiwan.html">台灣選物</a></li></ul></div>
+      <div><h2>內容</h2><ul><li><a href="../journal.html">幸福誌</a></li><li><a href="../about.html">關於</a></li></ul></div>
+      <div><h2>連繫</h2><ul><li><a href="../services.html">服務體驗</a></li><li><a href="../connect.html">寫信給我們</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 大道至簡 · Dao is simple</p>
+      <p>Designed in stillness · 設計於靜處</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts.js?v=098239fd"></script>
+</body>
+</html>

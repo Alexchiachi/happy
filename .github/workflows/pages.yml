@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      # 白名單：只發布下面列出的檔案與資料夾，其他（書稿、白皮書、內部文件、工具程式）一律不上網站。
+      # 新增要公開的頁面或資料夾時，記得加進這份清單。
+      - name: 組出要發布的網站
+        run: |
+          set -euo pipefail
+          mkdir _site
+          # 大道至簡品牌站
+          cp .nojekyll index.html about.html journal.html yunnan.html taiwan.html \
+             services.html connect.html privacy.html 404.html \
+             robots.txt sitemap.xml styles.css scripts.js _site/
+          cp -r images journal zh-cn shop _site/
+          # 其他對外使用中的網頁：內耗熵值檢測、課程頁舊網址、永恆之子整椎中心預約系統
+          cp -r inner-flow executive-table eternitychildbooking _site/
+          cp inner-flow.html _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

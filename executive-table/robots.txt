@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://executive-table.jianchiachi.workers.dev/sitemap.xml

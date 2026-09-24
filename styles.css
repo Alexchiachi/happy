@@ -1,0 +1,1411 @@
+/* ============================================================
+   大道至簡 — Design System
+   Refined minimalism. Brand spirit in every token.
+   ============================================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: "kern", "liga", "palt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; transition: color var(--dur-ui) ease-out; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+/* --- Design Tokens --- */
+:root {
+  /* Color */
+  --paper:        #FAF6EF;
+  --paper-deep:   #F2EBDF;
+  --ink:          #2A2520;
+  --ink-soft:     #4A423A;
+  --tea:          #82663F;   /* Yunnan accent，對 paper 4.97:1 */
+  --moss:         #547050;   /* Taiwan accent，對 paper 5.12:1 */
+  --mist:         #736C63;   /* 對 paper 4.81:1；原本 #9A938A 只有 2.82，讀不到 */
+  --line:         #D9D1C2;
+  --seal:         #A8543A;   /* Vermilion seal accent */
+  /* 整頁的強調色。地區頁用 <body class="region-*"> 換掉，
+     原本這件事寫在每個元素的行內樣式裡，所以會漏。 */
+  --accent:       var(--tea);
+
+  /* Typography */
+  --font-display: "Cormorant Garamond", "Noto Serif TC", serif;
+  --font-body:    "Noto Serif TC", "Songti TC", "PingFang TC", serif;
+  --font-han:     "Noto Serif TC", "Songti TC", serif;
+
+  /* Spacing scale */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2.5rem;
+  --s-5: 4rem;
+  --s-6: 6rem;
+  --s-7: 9rem;
+  --s-8: 12rem;
+
+  /* Layout */
+  --container:    1240px;
+  --container-narrow: 760px;
+  --gutter:       clamp(1.25rem, 5vw, 3rem);
+
+  /* Motion
+     時間分三層，因為三件事的性質不同：
+     --dur        進場／敘事。捲到了才發生，慢一點是氣氛。
+     --dur-chrome 介面狀態切換（導覽列、手風琴）。0.3–0.4 秒是不打斷閱讀的上限。
+     --dur-ui     互動回饋（hover、按下）。超過 0.2 秒，人的感受就不是「優雅」而是「卡住」。
+     原本全站共用 720ms，滑過一個連結要 0.6 秒才換完色，像壞掉。 */
+  --ease:         cubic-bezier(0.19, 1, 0.22, 1);
+  --dur:          720ms;
+  --dur-chrome:   320ms;
+  --dur-ui:       180ms;
+
+  /* 縱向節奏
+     段與段之間只用這三個值。原本的間距是 211/192/221/339/144/0/64——
+     七個缺口七個不同的數字，因為元件自己帶著垂直內距，疊在 section 的
+     內距上面（.products 在 .section-tight 的 64 裡又有 64，.portrait 在
+     .section 的 144 裡又有 96）。現在節奏由 section 持有，元件只負責
+     自己上方的起手距離。 */
+  --flow-s:        4rem;   /*  64px */
+  --flow-m:        8rem;   /* 128px */
+  --flow-l:       12rem;   /* 192px */
+}
+
+/* --- Type Scale --- */
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.4em;
+  /* letter-spacing 會在最後一個字後面也加一格，置中時整行會偏左約 2.4px。
+     負 margin 把那一格從盒寬裡扣掉；靠左對齊的用法不受影響。 */
+  margin-right: -0.4em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
+.h-display {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+.h-han-display {
+  font-family: var(--font-han);
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  letter-spacing: 0.05em;
+  font-weight: 300;
+}
+.h-section {
+  font-family: var(--font-han);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: 0.08em;
+  font-weight: 400;
+}
+.h-card {
+  font-family: var(--font-han);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--s-2);
+}
+.lede {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  max-width: 38em;
+}
+
+/* --- Layout helpers --- */
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.container.narrow { max-width: var(--container-narrow); }
+.section { padding: var(--flow-m) 0; }
+.section-tight { padding: var(--flow-s) 0; }
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: var(--s-3) var(--gutter);
+  z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background var(--dur-chrome) var(--ease), padding var(--dur-chrome) var(--ease), border-color var(--dur-chrome) var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(250, 246, 239, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding: var(--s-2) var(--gutter);
+  border-bottom-color: var(--line);
+}
+.nav-brand {
+  font-family: var(--font-han);
+  font-size: 1.15rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+.nav-brand small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--tea);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+.nav-menu { display: flex; gap: var(--s-4); list-style: none; }
+.nav-menu a {
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  position: relative;
+  padding: 4px 0;
+}
+.nav-menu a::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -2px;
+  height: 1px; background: var(--tea);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-ui) var(--ease);
+}
+.nav-menu a.active::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu a:hover::after { transform: scaleX(1); }
+}
+.nav-menu a.active { color: var(--ink); }
+
+.nav-toggle { display: none; }
+@media (max-width: 860px) {
+  .nav-menu { display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; gap: var(--s-2); padding: var(--s-3) var(--gutter);
+    background: var(--paper); border-bottom: 1px solid var(--line); }
+  .nav-menu.open { display: flex; }
+  /* 「≡」本身只有 11×36，手指點不到。padding 把命中區撐到 45×44，
+     再用等量負 margin 抵銷，所以字元停在原來的位置，只有命中區變大。 */
+  .nav-toggle {
+    display: block; font-size: 1.2rem; color: var(--ink);
+    padding: 4px 17px;
+    margin: -4px -17px;
+  }
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  /* svh 是「網址列展開時」的高度，捲動時不會跟著跳；不支援的瀏覽器退回 vh。
+     高度原本寫在各頁的 inline style 裡，改成修飾類別才有辦法一起補 svh。 */
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 120px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+}
+.hero.mid   { min-height: 80vh; min-height: 80svh; }
+.hero.short { min-height: 70vh; min-height: 70svh; }
+.hero .container { width: 100%; }
+.hero-eyebrow { margin-bottom: var(--s-3); }
+.hero-title {
+  font-family: var(--font-han);
+  font-size: clamp(3.2rem, 9vw, 7rem);
+  font-weight: 200;
+  letter-spacing: 0.12em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: var(--s-4);
+}
+.hero-title .accent { color: var(--tea); font-weight: 300; }
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: var(--s-5);
+  letter-spacing: 0.02em;
+}
+.hero-meta {
+  /* 詞與詞之間 = flex gap + ::after 的 margin，兩邊共用同一個值。
+     桌機仍是 4rem（與改版前一致），窄螢幕才縮，390px 下三個詞排得下。 */
+  --meta-gap: clamp(1.25rem, 8vw, 4rem);
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--meta-gap);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.hero-meta span:not(:last-child)::after {
+  content: "·"; margin-left: var(--meta-gap); color: var(--line);
+}
+.hero-scroll {
+  position: absolute; bottom: var(--s-4); left: 50%; transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--mist); writing-mode: vertical-rl; padding-left: 2px;
+}
+
+/* ============================================================
+   Pull Quote
+   ============================================================ */
+.pull-quote {
+  padding: var(--s-7) 0;
+  text-align: center;
+  position: relative;
+}
+.pull-quote::before, .pull-quote::after {
+  content: ""; display: block; width: 60px; height: 1px;
+  background: var(--tea); margin: 0 auto;
+}
+.pull-quote::before { margin-bottom: var(--s-4); }
+.pull-quote::after { margin-top: var(--s-4); }
+.pull-quote q {
+  font-family: var(--font-han);
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  color: var(--ink);
+  display: block;
+  max-width: 24em; margin: 0 auto;
+}
+.pull-quote q::before, .pull-quote q::after { content: ""; }
+.pull-quote-attr {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--mist);
+  margin-top: var(--s-3);
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   Three Doors (entry cards)
+   ============================================================ */
+.doors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); }
+.door {
+  background: var(--paper);
+  padding: var(--s-6) var(--s-4);
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 480px;
+  transition: background var(--dur-ui) ease-out;
+  position: relative;
+}
+/* 以下所有 hover 都關在能力查詢裡：觸控裝置上 :hover 會在點擊後「黏住」，
+   直到使用者點別的地方才消失，看起來像卡在選取狀態。 */
+@media (hover: hover) and (pointer: fine) {
+  .door:hover { background: var(--paper-deep); }
+}
+.door-num {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  color: var(--tea);
+}
+.door-title {
+  font-family: var(--font-han);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 200;
+  letter-spacing: 0.1em;
+  margin: var(--s-4) 0 var(--s-3);
+}
+.door-en {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--mist);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--s-3);
+}
+.door-desc { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: var(--s-4); }
+.door-cta {
+  font-family: var(--font-han);
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: var(--tea);
+  align-self: flex-start;
+  border-bottom: 1px solid var(--tea);
+  padding-bottom: 4px;
+}
+.door:nth-child(2) .door-cta { color: var(--moss); border-bottom-color: var(--moss); }
+.door:nth-child(2) .door-num { color: var(--moss); }
+@media (max-width: 860px) { .doors { grid-template-columns: 1fr; } .door { min-height: 360px; } }
+
+/* ============================================================
+   Duet (雲南 × 台灣)
+   ============================================================ */
+.duet { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s-5); padding: var(--s-7) 0; }
+.duet-side {
+  text-align: center;
+  padding: var(--s-4);
+}
+.duet-han {
+  font-family: var(--font-han);
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 200;
+  line-height: 1;
+}
+.duet-side.yunnan .duet-han { color: var(--tea); }
+.duet-side.taiwan .duet-han { color: var(--moss); }
+.duet-en { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; color: var(--mist); margin-top: var(--s-2); letter-spacing: 0.1em; }
+.duet-tagline { color: var(--ink-soft); margin-top: var(--s-3); max-width: 22em; margin-left: auto; margin-right: auto; }
+.duet-cross { font-family: var(--font-display); font-size: 2rem; color: var(--mist); }
+@media (max-width: 760px) {
+  .duet { grid-template-columns: 1fr; gap: var(--s-3); }
+  .duet-cross { transform: rotate(90deg); }
+}
+
+/* ============================================================
+   Services Grid
+   ============================================================ */
+.services { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3); }
+.service {
+  border: 1px solid var(--line);
+  padding: var(--s-5) var(--s-4);
+  background: var(--paper);
+  transition: border-color var(--dur-ui) ease-out, background var(--dur-ui) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .service:hover { border-color: var(--tea); background: var(--paper-deep); }
+}
+.service-num {
+  font-family: var(--font-display);
+  font-size: 0.8rem; letter-spacing: 0.3em; color: var(--mist);
+  margin-bottom: var(--s-3);
+}
+.service-title { font-family: var(--font-han); font-size: 1.4rem; letter-spacing: 0.05em; margin-bottom: var(--s-2); }
+.service-en { font-family: var(--font-display); font-style: italic; color: var(--tea); margin-bottom: var(--s-3); font-size: 0.95rem; letter-spacing: 0.05em; }
+.service-desc { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.75; }
+@media (max-width: 760px) { .services { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   Closing Seal (印)
+   ============================================================ */
+.seal {
+  text-align: center;
+  padding: var(--flow-m) 0;
+}
+.seal-mark {
+  display: inline-block;
+  width: 88px; height: 88px;
+  border: 2px solid var(--seal);
+  color: var(--seal);
+  font-family: var(--font-han);
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  line-height: 1.2;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--s-3);
+  font-weight: 500;
+  flex-direction: column;
+  background: rgba(168, 84, 58, 0.04);
+}
+.seal-mark span { display: block; }
+.seal-tag { font-family: var(--font-display); font-style: italic; color: var(--mist); letter-spacing: 0.15em; }
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: var(--s-5) 0 var(--s-4);
+  margin-top: var(--s-5);
+}
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--s-4); margin-bottom: var(--s-5); }
+.footer h2 { font-family: var(--font-han); font-size: 0.9rem; letter-spacing: 0.2em; color: var(--ink); margin-bottom: var(--s-3); font-weight: 500; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 8px; }
+.footer ul a { font-size: 0.92rem; color: var(--ink-soft); transition: color var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  .footer ul a:hover { color: var(--tea); }
+}
+.footer-brand-name { font-family: var(--font-han); font-size: 1.4rem; letter-spacing: 0.15em; margin-bottom: var(--s-2); }
+.footer-brand-en { font-family: var(--font-display); font-style: italic; color: var(--tea); letter-spacing: 0.1em; margin-bottom: var(--s-3); }
+.footer-brand-desc { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.8; max-width: 28em; }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: var(--s-3); border-top: 1px solid var(--line);
+  font-size: 0.82rem; color: var(--mist); letter-spacing: 0.05em;
+}
+.footer-bottom p { font-family: var(--font-display); }
+@media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-bottom { flex-direction: column; gap: var(--s-2); } }
+
+/* ============================================================
+   Article / Journal
+   ============================================================ */
+.article-feature {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5);
+  align-items: center;
+  padding: var(--s-6) 0;
+  border-bottom: 1px solid var(--line);
+}
+.article-feature .img-placeholder { aspect-ratio: 4/3; }
+.article-feature .meta { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: var(--s-2); }
+.article-feature h2 { font-family: var(--font-han); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 300; letter-spacing: 0.04em; line-height: 1.35; margin-bottom: var(--s-3); }
+.article-feature p { color: var(--ink-soft); margin-bottom: var(--s-3); }
+@media (max-width: 760px) { .article-feature { grid-template-columns: 1fr; } }
+
+.article-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-5) var(--s-4); padding: var(--s-5) 0; }
+.article-card { padding-bottom: var(--s-4); border-bottom: 1px solid var(--line); }
+.article-card .img-placeholder { aspect-ratio: 4/3; margin-bottom: var(--s-3); }
+.article-card .meta { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--mist); text-transform: uppercase; margin-bottom: 8px; }
+.article-card h3 { font-family: var(--font-han); font-size: 1.4rem; font-weight: 400; letter-spacing: 0.04em; line-height: 1.45; margin-bottom: var(--s-2); }
+.article-card p { color: var(--ink-soft); font-size: 0.95rem; }
+@media (max-width: 760px) { .article-list { grid-template-columns: 1fr; } }
+
+.filters { display: flex; gap: var(--s-3); padding: var(--s-3) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: var(--s-3) 0; flex-wrap: wrap; }
+.filter {
+  font-family: var(--font-han);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  transition: color var(--dur-ui) ease-out, border-color var(--dur-ui) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .filter:hover { color: var(--tea); }
+}
+.filter.active { color: var(--tea); border-color: var(--tea); }
+
+/* ============================================================
+   Product Cards
+   ============================================================ */
+.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--flow-s) 0 0; }
+.product { background: var(--paper); }
+.product .img-placeholder { aspect-ratio: 4/5; margin-bottom: var(--s-2); }
+.product .cat { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: 6px; }
+.product .cat.moss { color: var(--moss); }
+.product h3 { font-family: var(--font-han); font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 6px; }
+.product .origin { font-size: 0.85rem; color: var(--mist); margin-bottom: var(--s-2); font-family: var(--font-display); font-style: italic; }
+.product .price { font-family: var(--font-display); font-size: 1rem; color: var(--ink); letter-spacing: 0.05em; }
+@media (max-width: 760px) { .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); } }
+
+/* Sub-themes (yunnan/taiwan large characters) */
+.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--flow-s) 0 0; }
+.theme { background: var(--paper); padding: var(--s-4) var(--s-2); text-align: center; transition: background var(--dur-ui) ease-out; }
+/* 主題列目前沒有對應的分類頁，是展示不是導覽，所以不做 hover 變化 */
+.theme-han { font-family: var(--font-han); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; letter-spacing: 0.05em; color: var(--ink); }
+.theme-en { font-family: var(--font-display); font-style: italic; color: var(--mist); font-size: 0.85rem; margin-top: 4px; letter-spacing: 0.1em; }
+@media (max-width: 760px) { .themes { grid-template-columns: 1fr 1fr; } }
+
+/* Portrait section */
+.portrait { display: grid; grid-template-columns: 5fr 7fr; gap: var(--s-5); align-items: center; padding: var(--flow-s) 0 0; border-top: 1px solid var(--line); }
+.portrait .img-placeholder { aspect-ratio: 3/4; }
+.portrait .name { font-family: var(--font-han); font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: var(--s-2); }
+.portrait .role { font-family: var(--font-display); font-style: italic; color: var(--tea); letter-spacing: 0.08em; margin-bottom: var(--s-3); }
+.portrait .role.moss { color: var(--moss); }
+.portrait blockquote { font-family: var(--font-han); font-size: 1.25rem; line-height: 1.8; color: var(--ink); border-left: 2px solid var(--tea); padding-left: var(--s-3); margin: var(--s-3) 0; font-weight: 300; }
+.portrait blockquote.moss { border-left-color: var(--moss); }
+@media (max-width: 760px) { .portrait { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   About — Triad & Negation
+   ============================================================ */
+.triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.triad-cell { background: var(--paper); padding: var(--s-5) var(--s-4); }
+@media (hover: hover) and (pointer: fine) {
+  .triad-cell:hover { background: var(--paper-deep); }
+}
+.triad-han { font-family: var(--font-han); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 200; line-height: 1; margin-bottom: var(--s-3); color: var(--tea); }
+.triad-cell:nth-child(2) .triad-han { color: var(--seal); }
+.triad-cell:nth-child(3) .triad-han { color: var(--moss); }
+.triad-en { font-family: var(--font-display); font-style: italic; font-size: 0.9rem; color: var(--mist); letter-spacing: 0.15em; margin-bottom: var(--s-3); text-transform: uppercase; }
+.triad-text { color: var(--ink-soft); line-height: 1.85; }
+@media (max-width: 760px) { .triad { grid-template-columns: 1fr; } }
+
+.negation { padding: var(--s-6) 0; max-width: 720px; margin: 0 auto; }
+.negation h3 { font-family: var(--font-han); font-size: 1.8rem; letter-spacing: 0.05em; font-weight: 300; margin-bottom: var(--s-4); text-align: center; }
+.negation ul { list-style: none; }
+.negation li {
+  padding: var(--s-3) 0;
+  border-bottom: 1px dashed var(--line);
+  font-family: var(--font-han);
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  display: flex; align-items: baseline; gap: var(--s-2);
+}
+.negation li::before {
+  content: "✕"; color: var(--seal); font-size: 0.9rem; flex-shrink: 0;
+}
+
+/* Sticky label (about) */
+.sticky-label {
+  position: sticky; top: 100px;
+  font-family: var(--font-han);
+  font-size: 0.85rem; letter-spacing: 0.3em;
+  color: var(--tea);
+  writing-mode: vertical-rl;
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--tea);
+  border-bottom: 1px solid var(--tea);
+}
+
+/* ============================================================
+   Service chapters (alternating)
+   ============================================================ */
+.svc-chapter { padding: var(--s-6) 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); align-items: center; }
+/* 原本用 :nth-child(even) 讓章節左右交錯，但每個 .svc-chapter 都是自己 section
+   的唯一子元素，永遠是 nth-child(1)，所以從來沒生效過。改用明確的 .flip。 */
+.svc-chapter.flip .svc-img { order: 2; }
+.svc-chapter .img-placeholder { aspect-ratio: 4/3; }
+.svc-chapter .num { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.4em; color: var(--tea); margin-bottom: var(--s-2); }
+.svc-chapter h2 { font-family: var(--font-han); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 300; letter-spacing: 0.05em; margin-bottom: var(--s-3); }
+.svc-chapter .en { font-family: var(--font-display); font-style: italic; color: var(--mist); margin-bottom: var(--s-3); font-size: 1.1rem; letter-spacing: 0.05em; }
+.svc-chapter p { color: var(--ink-soft); margin-bottom: var(--s-3); line-height: 1.85; }
+.svc-table { width: 100%; border-top: 1px solid var(--line); margin: var(--s-3) 0; }
+.svc-table tr { border-bottom: 1px solid var(--line); }
+.svc-table td { padding: 12px 0; font-size: 0.92rem; vertical-align: top; }
+.svc-table td:first-child { font-family: var(--font-han); color: var(--tea); letter-spacing: 0.15em; width: 30%; }
+.svc-cta {
+  display: inline-block;
+  font-family: var(--font-han);
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  color: var(--tea);
+  border: 1px solid var(--tea);
+  padding: 12px 28px;
+  margin-top: var(--s-3);
+  transition: background var(--dur-ui) ease-out, color var(--dur-ui) ease-out, transform var(--dur-ui) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .svc-cta:hover { background: var(--tea); color: var(--paper); }
+}
+@media (max-width: 760px) { .svc-chapter { grid-template-columns: 1fr; } .svc-chapter.flip .svc-img { order: 0; } }
+
+/* ============================================================
+   Connect page — cards & form
+   ============================================================ */
+.contact-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.contact-card {
+  background: var(--paper);
+  padding: var(--s-5) var(--s-4);
+  text-align: center;
+  /* 三張卡的內容高度不一（QR 比圓形標記高），置中對齊才不會參差 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contact-card .icon-mark {
+  font-family: var(--font-han);
+  font-size: 1.5rem; color: var(--tea);
+  border: 1px solid var(--tea); border-radius: 50%;
+  width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--s-3);
+}
+.contact-card h2 { font-family: var(--font-han); letter-spacing: 0.15em; margin-bottom: var(--s-2); font-size: 1.1rem; font-weight: 400; }
+.contact-card .value { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); margin-bottom: var(--s-2); letter-spacing: 0.05em; overflow-wrap: anywhere; }
+/* 中文的值：CJK 字身填滿字框，用 1.25rem 會比旁邊的西文值明顯大一號，
+   改用中文字體並略縮，三張卡看起來才等重 */
+.contact-card .value-han { font-family: var(--font-han); font-size: 1.05rem; letter-spacing: 0.12em; }
+.contact-card .value a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .contact-card .value a:hover { color: var(--tea); border-bottom-color: var(--tea); }
+}
+.contact-card p { font-size: 0.88rem; color: var(--mist); }
+
+/* QR 碼（微信公眾號）。尺寸對齊 icon-mark 的置中節奏，白底留掃描靜區 */
+.contact-card .qr-mark {
+  width: 156px; height: 156px;
+  margin: 0 auto var(--s-3);
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 6px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) { .contact-cards { grid-template-columns: 1fr; } }
+
+/* Letter form */
+.letter-form { max-width: 640px; margin: 0 auto; padding: var(--s-5) 0; }
+.letter-form .row { margin-bottom: var(--s-3); }
+.letter-form label { display: block; font-family: var(--font-han); font-size: 0.85rem; letter-spacing: 0.2em; color: var(--tea); margin-bottom: 8px; }
+.letter-form input, .letter-form textarea {
+  width: 100%;
+  font: inherit;
+  font-family: var(--font-body);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+  color: var(--ink);
+  transition: border-color var(--dur-ui) ease-out;
+}
+.letter-form input:focus, .letter-form textarea:focus { outline: none; border-bottom-color: var(--tea); }
+/* 滑鼠點進來看底線就夠；用鍵盤走到這裡的人需要看得見的框。 */
+.letter-form input:focus-visible, .letter-form textarea:focus-visible {
+  outline: 2px solid var(--tea); outline-offset: 2px;
+}
+.letter-form textarea { min-height: 120px; resize: vertical; }
+.letter-form button[type=submit] {
+  font-family: var(--font-han);
+  font-size: 0.95rem; letter-spacing: 0.25em;
+  color: var(--paper); background: var(--ink);
+  padding: 14px 36px; margin-top: var(--s-3);
+  transition: background var(--dur-ui) ease-out, transform var(--dur-ui) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .letter-form button[type=submit]:hover { background: var(--tea); }
+}
+.letter-form button[type=submit]:disabled { opacity: 0.45; cursor: default; background: var(--ink); }
+/* 蜜罐欄位：真人看不到，機器人會填 */
+.letter-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.letter-form .form-status {
+  margin-top: var(--s-2); min-height: 1.5em;
+  font-size: 0.9rem; letter-spacing: 0.02em; color: var(--ink-soft);
+}
+.letter-form .form-status.ok { color: var(--moss); }
+.letter-form .form-status.err { color: var(--seal); }
+
+/* FAQ accordion */
+.faq { max-width: 760px; margin: 0 auto; padding: var(--s-5) 0; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q {
+  width: 100%;
+  text-align: left;
+  padding: var(--s-3) 0;
+  font-family: var(--font-han);
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.faq-q::after { content: "+"; color: var(--tea); font-size: 1.4rem; transition: transform var(--dur-chrome) var(--ease); }
+.faq-item.open .faq-q::after { content: "−"; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height var(--dur-chrome) var(--ease), padding var(--dur-chrome) var(--ease); color: var(--ink-soft); }
+.faq-item.open .faq-a { max-height: 400px; padding: 0 0 var(--s-3); }
+
+/* ============================================================
+   Image placeholder — for now, atmospheric blocks
+   In production, replace with real photography
+   ============================================================ */
+.img-placeholder {
+  /* --img  掛上真實照片時由 HTML 的 style 屬性設定
+     --tone 沒有照片時的色塊，由下面的 .tea/.moss/.dark 決定 */
+  /* --ang 漸層角度、--w1/--w2 兩個光斑的位置，由下面的 .v2–.v6 覆寫，
+     讓同色系的色塊不會每一篇長得一模一樣 */
+  --ang: 135deg;
+  --w1x: 30%; --w1y: 30%;
+  --w2x: 70%; --w2y: 70%;
+  --tone: linear-gradient(var(--ang), var(--paper-deep) 0%, var(--line) 100%);
+  /* 兩層：有圖蓋在色塊上；圖還沒上傳(404)時自動露出下層色塊，不會開天窗 */
+  background-image: var(--img, none), var(--tone);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+/* 真實照片放 <img>，才有 alt 可以被螢幕閱讀器讀到、被圖片搜尋索引。
+   底下的色塊留著當退路：圖 404 時 scripts.js 會把 <img> 移掉，露出色塊，
+   不會出現破圖圖示。 */
+.img-placeholder > img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.img-placeholder::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle at var(--w1x) var(--w1y), rgba(139, 111, 71, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at var(--w2x) var(--w2y), rgba(92, 122, 90, 0.06) 0%, transparent 50%);
+}
+.img-placeholder.tea { --tone: linear-gradient(var(--ang), #C9B28A 0%, #8B6F47 100%); }
+.img-placeholder.moss { --tone: linear-gradient(var(--ang), #A8B89A 0%, #5C7A5A 100%); }
+.img-placeholder.dark { --tone: linear-gradient(var(--ang), #5A4F45 0%, #2A2520 100%); }
+
+/* 構圖變化：只動角度與光斑位置，不動色系。
+   同一篇文章的列表卡片與內頁封面用同一個變化，視覺才接得上。 */
+.img-placeholder.v2 { --ang: 200deg; --w1x: 74%; --w1y: 24%; --w2x: 26%; --w2y: 76%; }
+.img-placeholder.v3 { --ang:  25deg; --w1x: 18%; --w1y: 72%; --w2x: 78%; --w2y: 32%; }
+.img-placeholder.v4 { --ang: 165deg; --w1x: 52%; --w1y: 14%; --w2x: 42%; --w2y: 88%; }
+.img-placeholder.v5 { --ang:  95deg; --w1x: 84%; --w1y: 56%; --w2x: 16%; --w2y: 44%; }
+.img-placeholder.v6 { --ang: 300deg; --w1x: 34%; --w1y: 62%; --w2x: 72%; --w2y: 14%; }
+.img-placeholder.v7 { --ang:  60deg; --w1x: 66%; --w1y: 78%; --w2x: 30%; --w2y: 20%; }
+.img-placeholder.v8 { --ang: 240deg; --w1x: 22%; --w1y: 40%; --w2x: 76%; --w2y: 66%; }
+.img-placeholder span {
+  position: absolute; bottom: var(--s-2); right: var(--s-2);
+  font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.3em;
+  color: rgba(250, 246, 239, 0.92); text-transform: uppercase;
+  /* 色塊是漸層，而且角度會被 .v2–.v8 換掉，所以浮水印底下到底是深是淺
+     並不固定。淡陰影讓字在中間調上也描得出邊，不必為每個角度調一次。 */
+  text-shadow: 0 1px 3px rgba(42, 37, 32, 0.45);
+}
+/* 預設色塊（paper-deep → line）整條都是淺的，近白的字會整個消失：
+   實測 #D9D1C2 上的對比只有 1.2:1。這一種要反過來用墨色。 */
+.img-placeholder:not(.tea):not(.moss):not(.dark) span {
+  color: rgba(42, 37, 32, 0.62);   /* 對 #D9D1C2 為 3.7:1，原本是 1.2:1 */
+  text-shadow: none;
+}
+
+/* ============================================================
+   Reveal-on-scroll (used by scripts.js)
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+/* 關掉 JavaScript 時，.reveal 會永遠停在 opacity:0，整頁是空白的。
+   這一條讓內容照常顯示，不必在十六個 HTML 檔裡各塞一段 <noscript>。 */
+@media (scripting: none) {
+  .reveal, .reveal.in { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   Page wrapper for non-home pages
+   ============================================================ */
+main { padding-top: 88px; } /* room for fixed nav on inner pages */
+main.main-flush { padding-top: 0; } /* 首頁的 hero 滿版起頭，不需要讓位 */
+
+/* 跳到主要內容：平常在畫面外，鍵盤 Tab 到才滑進來。
+   沒有它，用鍵盤的人每進一頁都要先穿過七個導覽連結才碰得到內容。 */
+.skip-link {
+  position: fixed;
+  top: 0; left: var(--gutter);
+  z-index: 200;
+  transform: translateY(-140%);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--tea);
+  padding: 12px 20px;
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  transition: transform var(--dur-ui) ease-out;
+}
+.skip-link:focus { transform: translateY(0); }
+/* <main> 預設不可聚焦，沒有 tabindex="-1" 的話按下 skip link 焦點不會真的
+   移過去，下一次 Tab 又回到導覽列——看起來有用而已。加了之後要把它自己的
+   外框關掉，否則整塊主內容會被框起來。 */
+main:focus { outline: none; }
+
+/* ============================================================
+   鍵盤焦點
+   ------------------------------------------------------------
+   原本只有商品卡與表單欄位有 :focus-visible，導覽列、CTA、頁尾連結
+   靠瀏覽器預設外框——看得見，但不是這個網站的顏色，而且在米色底上
+   很淡。改成全站一致，並跟著 --accent 走（台灣頁是苔綠）。
+   用 :focus-visible 而不是 :focus，滑鼠點擊不會留下框。
+   ============================================================ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   斷行與數字
+   ------------------------------------------------------------
+   text-wrap 原本只掛在文章頁的 .article-* 上，其他頁一個都沒有，
+   所以標題可能在最後一行只剩一兩個字，段落可能留下孤字。
+   balance 給短標題（瀏覽器對超過約六行的文字會自動忽略），
+   pretty 給內文，只動最後一行的斷點。
+   ============================================================ */
+h1, h2, h3, h4,
+.h-display, .h-han-display, .h-section, .h-card,
+.hero-tagline, .next-step p, .pull-quote q { text-wrap: balance; }
+
+p, li, blockquote { text-wrap: pretty; }
+
+/* 這裡刻意沒有 .price { font-variant-numeric: tabular-nums }：
+   實測 Cormorant Garamond 沒有 tnum，tabular 與 proportional 產生完全
+   相同的寬度，那行是無作用的宣告。而且價格是靠左對齊在各自的卡片裡，
+   起點本來就齊，數字寬度只影響結尾——這一頁不需要等寬數字。 */
+.page-hero {
+  padding: var(--s-7) 0 var(--s-5);
+  text-align: center;
+}
+.page-hero .eyebrow { margin-bottom: var(--s-3); }
+.page-hero h1 {
+  font-family: var(--font-han);
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 200;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  margin-bottom: var(--s-3);
+}
+.page-hero .en {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--mist);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   Journal article — single post page
+   單篇文章頁。版心 760px，長文閱讀用。
+   ============================================================ */
+
+/* --- 文章開頭 --- */
+.article-hero {
+  padding: var(--s-6) 0 var(--s-4);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--s-5);
+}
+.article-hero .meta {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--tea);
+  margin-bottom: var(--s-3);
+}
+.article-hero h1 {
+  font-family: var(--font-han);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  margin-bottom: var(--s-3);
+}
+.article-hero .lede {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  margin-bottom: var(--s-4);
+}
+.article-hero .byline {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--mist);
+  text-transform: uppercase;
+}
+
+/* 首圖：滿版於版心之上 */
+.article-cover {
+  aspect-ratio: 16/9;
+  margin-bottom: var(--s-5);
+}
+
+/* --- 標題壓在色塊上 ---
+   文章內頁封面（.cover-title）、列表卡片與精選區（.has-title）共用這套機制：
+   內容置中、加一層暗罩保證可讀性。字級各自在下面調。 */
+.img-placeholder.cover-title,
+.img-placeholder.has-title {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.img-placeholder.cover-title::after,
+.img-placeholder.has-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+              rgba(42, 37, 32, 0.46) 0%,
+              rgba(42, 37, 32, 0.26) 62%,
+              rgba(42, 37, 32, 0.15) 100%);
+}
+.img-placeholder.cover-title .cover-inner,
+.img-placeholder.has-title .cover-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+}
+/* 角落小標籤要浮在暗罩之上 */
+.img-placeholder.cover-title > span,
+.img-placeholder.has-title > span { z-index: 1; }
+
+.img-placeholder.cover-title .meta,
+.img-placeholder.has-title .meta { color: rgba(250, 246, 239, 0.72); }
+
+.img-placeholder.cover-title h1,
+.img-placeholder.has-title h2,
+.img-placeholder.has-title h3 {
+  margin: 0 auto;
+  color: var(--paper);
+  font-family: var(--font-han);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-shadow: 0 1px 20px rgba(42, 37, 32, 0.4);
+  text-wrap: balance;
+}
+
+/* 列表卡片：色塊小，字級跟著縮 */
+.article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
+.article-card .img-placeholder.has-title .meta { margin-bottom: var(--s-2); }
+.article-card .img-placeholder.has-title h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  max-width: 15em;
+}
+
+/* 精選區：色塊大，字級接近內頁封面 */
+.article-feature .img-placeholder.has-title { padding: clamp(1.5rem, 4vw, 2.5rem); }
+.article-feature .img-placeholder.has-title .meta { margin-bottom: var(--s-3); }
+.article-feature .img-placeholder.has-title h2 {
+  font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  max-width: 13em;
+}
+
+/* --- 文章內頁封面 --- */
+.article-cover.cover-title {
+  /* 用 min-height 而不是固定比例：標題長的時候版面要能長高，
+     固定比例會被 overflow:hidden 裁掉字 */
+  aspect-ratio: auto;
+  min-height: clamp(260px, 32vw, 400px);
+  padding: clamp(1.75rem, 6vw, 4rem);
+}
+.article-cover.cover-title .meta {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: var(--s-3);
+}
+.article-cover.cover-title h1 {
+  max-width: 15em;
+  /* 預設；實際字級由下面依標題長度分級的 .t-* 決定 */
+  font-size: clamp(1.7rem, 4.6vw, 2.9rem);
+}
+
+/* 標題一律排成最多兩行，所以字級跟著標題長度走：
+   短標放大，長標縮小。分級由 docs/ADD_JOURNAL_POST.md 說明。 */
+.article-cover.cover-title h1.t-xl { font-size: clamp(2.0rem, 6.0vw, 3.9rem); }  /* ≤12 字 */
+.article-cover.cover-title h1.t-lg { font-size: clamp(1.85rem, 5.2vw, 3.3rem); } /* 13–17 字 */
+.article-cover.cover-title h1.t-md { font-size: clamp(1.65rem, 4.5vw, 2.8rem); } /* 18–21 字 */
+.article-cover.cover-title h1.t-sm { font-size: clamp(1.4rem, 3.7vw, 2.3rem); }  /* 22 字以上 */
+
+/* 標題移到封面之後，下面這塊只剩前言與作者，上緣留白要收掉 */
+.article-hero.after-cover {
+  padding-top: 0;
+  margin-bottom: var(--s-5);
+}
+.article-hero.after-cover .lede { margin-bottom: var(--s-3); }
+
+/* --- 內文 --- */
+.article-body { font-size: 1.05rem; line-height: 2.05; color: var(--ink); }
+.article-body > * + * { margin-top: var(--s-3); }
+.article-body p { text-wrap: pretty; }
+
+.article-body h2 {
+  font-family: var(--font-han);
+  font-size: 1.55rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+.article-body h3 {
+  font-family: var(--font-han);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--tea);
+  margin-top: var(--s-4);
+}
+
+.article-body ul, .article-body ol { padding-left: 1.4em; color: var(--ink-soft); }
+.article-body li + li { margin-top: var(--s-1); }
+
+.article-body blockquote {
+  border-left: 2px solid var(--tea);
+  padding: var(--s-1) 0 var(--s-1) var(--s-3);
+  margin-top: var(--s-4);
+  margin-bottom: var(--s-4);
+  font-family: var(--font-han);
+  font-size: 1.2rem;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.article-body blockquote cite {
+  display: block;
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-style: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* 圖片 + 圖說 */
+.article-body figure { margin-top: var(--s-5); margin-bottom: var(--s-5); }
+.article-body figure .img-placeholder { aspect-ratio: 3/2; }
+.article-body figcaption {
+  margin-top: var(--s-2);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--mist);
+  text-align: center;
+}
+
+/* 分隔：三顆點，不是一條線 */
+.article-body hr {
+  border: 0;
+  margin: var(--s-5) auto;
+  text-align: center;
+}
+.article-body hr::after {
+  content: "· · ·";
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.5em;
+  color: var(--line);
+}
+
+/* --- 文末落款 --- */
+.article-foot {
+  margin-top: var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.article-foot .seal {
+  font-family: var(--font-han);
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  color: var(--seal);
+  /* 這裡的 .seal 是文章結尾的小落款，不是整段的結尾印章；
+     不清掉的話會吃到 .seal 那組給整個區塊用的上下留白，
+     整個頁尾被撐到 380px 高。 */
+  padding: 0;
+}
+
+/* --- 讓 journal.html 的卡片可以整張點擊 --- */
+a.article-card { display: block; color: inherit; }
+a.article-card h3 { transition: color var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.article-card:hover h3 { color: var(--tea); }
+}
+a.article-card .img-placeholder { transition: transform var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.article-card:hover .img-placeholder { transform: translateY(-4px); }
+}
+
+/* ------------------------------------------------------------
+   文章內的對照區塊（例：天然香 vs 化學香）
+   窄螢幕上下堆疊，寬螢幕左標右文對齊成兩欄
+   ------------------------------------------------------------ */
+.article-body .compare {
+  margin-top: var(--s-2);
+  border-top: 1px solid var(--line);
+}
+.article-body .compare dt {
+  font-family: var(--font-han);
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  padding-top: var(--s-2);
+}
+.article-body .compare dt.nat  { color: var(--moss); }
+.article-body .compare dt.chem { color: var(--seal); }
+.article-body .compare dd {
+  margin: 6px 0 0;
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.98rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+@media (min-width: 720px) {
+  .article-body .compare {
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    column-gap: var(--s-3);
+  }
+  .article-body .compare dd { margin: 0; padding-top: var(--s-2); }
+}
+
+/* 文末的來源／編按，比內文再退一階 */
+.article-body .editor-note {
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  line-height: 1.9;
+  color: var(--mist);
+}
+
+/* 分類篩選的篇數提示 */
+.filter-status {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--mist);
+  margin-top: calc(var(--s-2) * -0.5);
+}
+
+/* a.article-card 設了 display:block，優先權高過瀏覽器預設的 [hidden]{display:none}，
+   會讓 JS 設的 hidden 失效。這裡補回來，篩選才真的藏得掉。 */
+.article-card[hidden] { display: none; }
+
+/* 頁尾連結原本只有 16px 高，手機上不好點（WCAG 2.2 建議觸控目標至少 24px）。
+   加上下內距把可點區域撐到 24px，視覺位置幾乎不變。 */
+.footer-grid a,
+.footer-bottom a {
+  display: inline-block;
+  padding: 4px 0;
+}
+
+/* 服務章節的封面：標題壓在色塊上，字級比文章封面小一階 */
+.svc-chapter .img-placeholder.has-title { padding: clamp(1.25rem, 3.5vw, 2rem); }
+.svc-chapter .img-placeholder.has-title .meta {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  margin-bottom: var(--s-2);
+}
+.svc-chapter .img-placeholder.has-title h2 {
+  font-size: clamp(1.45rem, 2.9vw, 2.1rem);
+  margin-bottom: 0;
+  max-width: 12em;
+}
+
+/* 語言切換：放在導覽列最後，比其他項目再淡一階，不搶主導覽 */
+.nav-menu .lang-switch a {
+  font-family: var(--font-han);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: var(--tea);
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu .lang-switch a:hover { color: var(--ink); }
+}
+
+/* ============================================================
+   Next step — 讀完之後的下一步
+   ------------------------------------------------------------
+   選物頁、關於頁、文章頁原本讀到底就沒有出口了：導覽列和頁尾
+   每頁都有，等於沒有出口。這一塊是「讀到這裡的人，接下來想做
+   什麼」的答案，所以每頁的字不一樣，按鈕也不一樣。
+   語氣要安靜——是邀請，不是推銷。
+   ============================================================ */
+.next-step {
+  text-align: center;
+  padding: var(--flow-m) 0 var(--flow-s);
+  border-top: 1px solid var(--line);
+}
+.next-step .eyebrow { margin-bottom: var(--s-2); }
+.next-step p {
+  font-family: var(--font-han);
+  font-weight: 200;
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  line-height: 1.9;
+  color: var(--ink-soft);
+  max-width: 30em;
+  margin: 0 auto var(--s-4);
+}
+.next-step-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+/* 第二個選項退一階，避免兩顆按鈕互相搶 */
+.next-step-actions .svc-cta.quiet {
+  color: var(--mist);
+  border-color: var(--line);
+}
+@media (hover: hover) and (pointer: fine) {
+  .next-step-actions .svc-cta.quiet:hover {
+    background: transparent;
+    color: var(--tea);
+    border-color: var(--tea);
+  }
+}
+
+/* 文章結尾：原本只有「← 回幸福誌」，是往回走的。
+   中間補一個往前走的去處，依文章主題決定指向哪裡。 */
+.article-foot .article-next {
+  flex: 1 1 100%;
+  order: -1;
+  font-family: var(--font-han);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+.article-foot .article-next a {
+  color: var(--tea);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .article-foot .article-next a:hover { border-bottom-color: var(--tea); }
+}
+.article-foot .svc-cta { margin-top: 0; }
+
+/* 導覽列是 fixed 的，錨點直接跳過去標題會被蓋住，要留出高度 */
+.svc-chapter { scroll-margin-top: 96px; }
+
+/* 系統層級關掉動態效果的人，就別再平滑捲動與淡入了 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .reveal.in { transition: none; opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   商品卡 → 詢問
+   ------------------------------------------------------------
+   卡片本身就是連結，沒有 JS 也能點到連繫頁；有 JS 的話
+   scripts.js 會把商品名（讀自卡片自己的 h3）接在網址後面，
+   連繫頁再把它填進「想聊的事情」。
+   商品名刻意不寫死在 href 裡——改 h3 就好，不必兩邊同步。
+   ============================================================ */
+/* 商品名有的一行有的兩行，如果不撐開，同一列卡片的「寫信詢問 →」會差
+   二十幾個 pixel。用 flex 讓它一律貼在卡片底部（見下方 .ask 的 margin-top）。 */
+a.product { display: flex; flex-direction: column; color: inherit; }
+a.product .img-placeholder { transition: transform var(--dur-ui) ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  a.product:hover .img-placeholder { transform: scale(1.02); }
+  a.product:hover h3 { color: var(--tea); }
+}
+
+.product .ask {
+  display: inline-block;
+  /* auto 把它推到卡片底部，與同列對齊；padding 保住最小間距，
+     因為最高的那張卡沒有剩餘空間，auto 會算成 0。 */
+  margin-top: auto;
+  padding-top: var(--s-2);
+  font-family: var(--font-han);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--mist);
+  transition: color var(--dur-ui) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  a.product:hover .ask { color: var(--tea); }
+}
+
+/* 鍵盤操作看得見焦點 */
+a.product:focus-visible { outline: 2px solid var(--tea); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  a.product:hover .img-placeholder { transform: none; }
+}
+
+/* 表單底下的一句話：訪客填了姓名與信箱，總得讓他知道這些字去了哪裡，
+   以及從哪裡讀完整的政策。刻意放在按鈕之後——不擋著人寫信。 */
+.letter-form .form-note {
+  margin-top: var(--s-2);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+.letter-form .form-note a {
+  color: var(--tea);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .letter-form .form-note a:hover { border-bottom-color: var(--tea); }
+}
+
+/* ============================================================
+   按下狀態
+   ------------------------------------------------------------
+   原本全站沒有任何 :active。桌機還有 :hover 撐著，手機上 :hover
+   不存在，所以從手指按下到頁面切換之間，畫面是完全沒有反應的。
+   回饋要發生在「按下」的那一刻，不是放開之後，也不是等頁面換完。
+   時間用 --dur-ui（180ms）：再長就不像是自己按出來的。
+   ============================================================ */
+a.product:active .img-placeholder { transform: scale(0.985); }
+a.product:active h3 { color: var(--tea); }
+a.article-card:active .img-placeholder { transform: scale(0.985); }
+a.article-card:active h3 { color: var(--tea); }
+
+.svc-cta:active,
+.letter-form button[type=submit]:active:not(:disabled) { transform: scale(0.97); }
+
+.nav-toggle:active,
+.nav-menu a:active,
+.footer ul a:active,
+.filter:active { opacity: 0.55; }
+
+.door:active, .service:active, .triad-cell:active { background: var(--paper-deep); }
+
+/* 系統層級關掉動態的人，按下的縮放也一起關掉；顏色與透明度的回饋留著，
+   那不是位移，不會引起前庭不適，而且是「我按到了」唯一的線索。 */
+@media (prefers-reduced-motion: reduce) {
+  a.product:active .img-placeholder,
+  a.article-card:active .img-placeholder,
+  .svc-cta:active,
+  .letter-form button[type=submit]:active:not(:disabled) { transform: none; }
+}
+
+/* ============================================================
+   另外兩個系統偏好
+   ------------------------------------------------------------
+   prefers-reduced-motion 已經在上面處理了。這兩個是它的同伴：
+   有人是暈眩，有人是看不清楚半透明，有人是需要更硬的對比。
+   ============================================================ */
+@media (prefers-reduced-transparency: reduce) {
+  .nav.scrolled {
+    background: var(--paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --mist: #595248;   /* 對 paper 7.0:1（原本 4.81） */
+    --line: #B5AB98;   /* 分隔線要看得出來才有分隔的意思 */
+  }
+  .nav.scrolled {
+    background: var(--paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .img-placeholder span { text-shadow: none; }
+}
+
+/* ============================================================
+   地區頁（雲南／台灣）
+   ------------------------------------------------------------
+   兩頁是同一套模板，差別只有強調色。原本這件事散在 HTML 的行內
+   樣式裡——雲南 3 處、台灣 8 處——結果 taiwan.html 五個 eyebrow
+   只有兩個寫了苔綠，另外三個漏掉，還留著雲南的茶褐。
+   改由 <body class="region-*"> 設定 --accent，漏不掉。
+   ============================================================ */
+body.region-taiwan { --accent: var(--moss); }
+
+/* 地區大字標題：這一頁的主視覺，原本七個屬性全寫在 <h1> 的 style 裡 */
+.region-title {
+  font-family: var(--font-han);
+  font-size: clamp(8rem, 22vw, 18rem);
+  font-weight: 200;
+  letter-spacing: 0.05em;
+  line-height: 0.95;
+  color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+/* 台灣頁的五個主題字跟著強調色走；雲南頁維持墨色 */
+body.region-taiwan .theme-han { color: var(--accent); }
+
+/* 置中的段落標頭。原本同一個元件有 2rem 與 3rem 兩種下邊距，統一成一個值。 */
+.section-head { text-align: center; margin-bottom: var(--s-4); }
+.section-head .h-section { margin-top: var(--s-2); }
+
+/* 帶底線的段落標頭（當季選物）。
+   右邊那個位置是空的——space-between 只有一個子元素時不起作用。
+   保留 flex 是因為這裡本來就規劃了第二個元素（例如「看全部 →」）。 */
+.section-rule {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: var(--s-4); padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.lede-center { text-align: center; }
+
+/* 人像區 */
+.portrait .name { margin-top: var(--s-2); }
+.portrait .note { color: var(--ink-soft); font-size: 0.95rem; margin-top: var(--s-3); }
