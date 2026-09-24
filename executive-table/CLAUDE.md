@@ -131,6 +131,12 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
   改繁體頁後跑 `python3 tools/build_zhcn.py`（重建根目錄 `zh-cn/`）。這支腳本已設定略過 `executive-table/`，
   並保留 `zh-cn/executive-table/index.html`（課程頁舊簡體網址的轉址殼），不要移除這兩個設定。
 - 新增到 `executive-table/` 的維護用檔案（像這份 `CLAUDE.md`）要加進 `.assetsignore`，否則會被公開發布。
+- **Cloudflare 自動部署是用倉庫的內部 ID 綁定的，不是名字。** 2026-09-24 倉庫改名重建後，Cloudflare 畫面仍顯示
+  `Alexchiachi/happy`，實際卻綁著舊倉庫（已改名 `happychiachi`），合併 PR 都沒有觸發部署，線上 Worker 停在舊版
+  （症狀：`/admin` 沒有新分頁、品牌站送出訂單顯示連不上）。Build 設定頁會出現紅字
+  「Error fetching GitHub User or Organization details」。解法：Settings → Build → Disconnect，再 Connect 到新的
+  `Alexchiachi/happy`（分支 `main`、Deploy command `npx wrangler deploy`、Root directory `/`），之後推一次 `main` 觸發部署。
+  合併後若 GitHub 上完全沒有 Cloudflare 的 check／預覽網址，先懷疑這個。
 - 表單下方的隱私說明寫「沒有安裝分析或追蹤工具」；啟用 GA4／Plausible 時要一起改那句。
 - 幻燈片沒有顯示中的照片時整段隱藏；照片只能由 `/admin` 上傳，不要把照片檔放進倉庫。
 - claude.ai 上還有一份早期的 Artifact 副本（https://claude.ai/artifact/14em5ks6rCrSvoxhVLupyh），正式站以 Cloudflare 為準。
