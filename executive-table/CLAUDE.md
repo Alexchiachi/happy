@@ -9,7 +9,7 @@
 靜態 HTML 放在 GitHub（`alexchiachi/happy` 的 `executive-table/`），由 Cloudflare Workers 從 GitHub 自動部署；
 表單、寄信、照片、管理頁全部在同一支 Worker 裡，沒有其他服務。
 這支 Worker 也負責收**大道至簡品牌站**（倉庫根目錄的 `connect.html`，GitHub Pages）的「連繫」來信，
-以及品牌站**雲南好物選購頁**（`shop/`）的訂單。
+以及品牌站**雲南好物選購頁**（`shop/`）的訂單、**安寧幸福之家**（`anning/`）的入住預約。
 
 - 正式網址：https://executive-table.jianchiachi.workers.dev/ （簡體：`/zh-cn/`，管理頁：`/admin`）
 - 舊網址仍在：https://alexchiachi.github.io/happy/executive-table/ （GitHub Pages 白名單發布，表單一樣送到 Worker）
@@ -69,6 +69,13 @@
     renachien1@gmail.com（`SHOP_NOTIFY_EMAIL`），客人收到訂單確認＋付款資訊。付款仍是 LINE Pay／匯款＋後台手動改狀態。
     之後加上：送禮（收件人、卡片、不附價格明細）、後台填物流與追蹤號碼、改「已付款」「已出貨」時寄信通知客人。
     `orders` 表後加的欄位在 `ensureOrderSchema` 裡用 `ALTER TABLE ... ADD COLUMN` 補（重複欄位的錯誤略過）。
+15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。
+    這是**旅居方案（短期租賃居住）**，不是旅行社行程，文案不要寫成跟團、套裝行程。
+    三種房型（雙人套房 8,888、雙人雅房 6,666、單人雅房 3,666，都是 7 天 6 夜）各一間，可複選；
+    房型、開放月份（2026/10–12）在 `anning/stay.json`，Worker import 這份重算金額（所選房型加總）。
+    入住日期必填、須在開放月份內；人數不超過所選房間的人數與上限 5 位。一次只接一組客人，所以**送出時不付款**：
+    待確認 →（管理頁填入住日期、可調金額）已確認，寄付款資訊 → 已付款，寄收款確認 → 已完成／取消。
+    通知一樣寄 `SHOP_NOTIFY_EMAIL`；同月已有預約會標出來。
 
 思考原則（一人公司）：**少一個服務就少一個會壞、要付費、要記密碼的地方**。
 資料、照片、寄信、登入都收在一支 Worker＋一個 D1；所有秘密只放在 Cloudflare 後台；使用者只需要會用 `/admin`。
@@ -82,10 +89,11 @@
                  ├─ POST /api/inquiry     存 D1 inquiries → Gmail SMTP 寄 2 封 HTML 信（通知主理人、確認給預約者）
                  ├─ POST /api/letter      大道至簡品牌站來信 → D1 letters → 通知 dadaoissimple@gmail.com＋收信確認
                  ├─ POST /api/order       雲南好物訂單 → 依 shop/products.json 重算 → D1 orders → 通知 SHOP_NOTIFY_EMAIL＋訂單確認
+                 ├─ POST /api/stay        安寧幸福之家預約 → 依 anning/stay.json 重算 → D1 stays → 通知 SHOP_NOTIFY_EMAIL＋預約確認
                  ├─ GET  /api/photos      公開照片清單；GET /photos/<id>-<ver>.<ext> 照片本身
-                 ├─ GET  /admin           管理頁（分頁：幸福餐桌預約／大道至簡來信／雲南訂單／幻燈片照片）
+                 ├─ GET  /admin           管理頁（分頁：幸福餐桌預約／大道至簡來信／雲南訂單／幸福之家預約／幻燈片照片）
                  └─ /api/admin/*          管理 API（Basic Auth；照片寫入另檢查同源）
-            D1：executive-table-inquiries（表 inquiries、letters、orders、photos，程式自動建表）
+            D1：executive-table-inquiries（表 inquiries、letters、orders、stays、photos，程式自動建表）
 ```
 
 | 檔案 | 內容 |
@@ -95,11 +103,12 @@
 | `worker/index.js` | 路由、表單驗證、限流（10 分鐘 5 次，IP 只存雜湊）、CORS、管理登入、CSV |
 | `worker/letters.js` | 品牌站來信：收信、兩封信的模板（繁／簡）、管理 API、CSV |
 | `worker/orders.js` | 雲南好物訂單：`import` 根目錄 `shop/products.json` 重算金額、截止日檢查、同檔同電話標記、信件模板、管理 API、CSV |
+| `worker/stays.js` | 安寧幸福之家預約：`import` 根目錄 `anning/stay.json` 依房型重算金額、入住日期與人數檢查、同月標記、信件模板（預約確認、付款資訊、收款確認）、管理 API、CSV |
 | `worker/mail.js`、`worker/util.js` | 共用：寄信（Gmail 優先，選用 Resend；可指定另一組 Gmail）、IP 雜湊、時間格式、JSON 回應 |
 | `worker/smtp.js` | `cloudflare:sockets` 連 `smtp.gmail.com:465`，AUTH PLAIN、RFC 2047、dot-stuffing |
 | `worker/emails.js` | 兩封信的 HTML／純文字模板（署名、頁尾在這裡） |
 | `worker/photos.js` | 照片 D1 存取、magic bytes 檢查、快取 |
-| `worker/admin.js` | 管理頁 HTML（分頁：預約／來信／雲南訂單／幻燈片照片） |
+| `worker/admin.js` | 管理頁 HTML（分頁：預約／來信／雲南訂單／幸福之家預約／幻燈片照片） |
 | `worker/access.js` | 選用的 Cloudflare Access JWT 驗證 |
 | `_headers`、`404.html`、`robots.txt`、`sitemap.xml` | 快取與安全標頭、錯誤頁、SEO |
 | `set_site_url.py` | 換正式網址（全站絕對網址＋重建簡體版） |
@@ -107,7 +116,7 @@
 Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：`NOTIFY_EMAIL`、`GMAIL_APP_PASSWORD`、`ADMIN_PASSWORD`。
 選用：`RESEND_API_KEY`、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`、`LETTER_GMAIL_APP_PASSWORD`（讓來信相關的信改由 dadaoissimple@gmail.com 寄出）。
 `wrangler.jsonc` vars：`MAIL_FROM_NAME`、`MAIL_FROM`、`ALLOWED_ORIGINS`、`LETTER_NOTIFY_EMAIL`、`LETTER_FROM_NAME`、`BRAND_SITE_URL`、
-`SHOP_NOTIFY_EMAIL`（逗號分隔，每個信箱各寄一封）、`SHOP_FROM_NAME`。`wrangler.jsonc` 有 `keep_vars: true`。
+`SHOP_NOTIFY_EMAIL`（逗號分隔，每個信箱各寄一封；幸福之家預約也寄這裡）、`SHOP_FROM_NAME`、`STAY_FROM_NAME`。`wrangler.jsonc` 有 `keep_vars: true`。
 
 ## 6. 改東西的固定流程
 
@@ -121,7 +130,7 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
      攔截 `**/*`，把頁面掛在假 https 網域上提供本機檔案，並假造 `/api/photos` 等回應；需要計時的用 `page.clock`。
    - Worker：`npx wrangler dev --local --var SMTP_HOST:127.0.0.1 --var SMTP_PORT:2525 --var SMTP_SECURE:off --var GMAIL_APP_PASSWORD:x --var NOTIFY_EMAIL:x@example.com --var ADMIN_PASSWORD:<12字以上>`，
      本機起一個假 SMTP 伺服器（asyncio 寫幾十行即可）接信；`--persist-to` 指到暫存目錄，測完刪掉 `.wrangler/`。
-     `npx wrangler deploy --dry-run --outdir <暫存>` 可確認打包（含 `shop/products.json`）成功。
+     `npx wrangler deploy --dry-run --outdir <暫存>` 可確認打包（含 `shop/products.json`、`anning/stay.json`）成功。
    - 容器連不到 `workers.dev`，正式站請使用者實測。
 5. commit（訊息用繁體中文，加 session 要求的署名行）→ push → 用 GitHub MCP 開 PR → squash 合併
    → 把分支重設到新的 `origin/main`。使用者習慣直接合併，Cloudflare 合併後一兩分鐘自動上線（PR 也會有預覽網址）。

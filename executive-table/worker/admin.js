@@ -1,5 +1,5 @@
 /**
- * 管理頁：幸福餐桌預約清單、大道至簡來信、雲南好物訂單（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
+ * 管理頁：幸福餐桌預約清單、大道至簡來信、雲南好物訂單、安寧幸福之家預約（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
  * 只有輸入管理頁密碼、或通過 Cloudflare Access 登入的人看得到（見 index.js adminIdentity）。
  */
 
@@ -68,13 +68,15 @@ const STYLE = `
   .ship button { font: inherit; font-size: .85rem; color: var(--moss); background: none; border: 1px solid var(--moss); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; }
   .ship button:disabled { opacity: .5; cursor: default; }
   .notify-opt { display: inline-flex; gap: .4rem; align-items: center; font-size: .9rem; color: var(--soft); cursor: pointer; }
+  select.status[data-v="待確認"] { border-color: var(--seal); color: var(--seal); }
+  .ship input.total { width: 8rem; }
 `;
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-export function adminPage(email, statuses, planLabels, letterStatuses, orderStatuses) {
+export function adminPage(email, statuses, planLabels, letterStatuses, orderStatuses, stayStatuses) {
   return `<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -92,6 +94,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
     <button type="button" role="tab" id="tabBtnInq" aria-selected="true" data-tab="inq">幸福餐桌預約</button>
     <button type="button" role="tab" id="tabBtnLet" aria-selected="false" data-tab="let">大道至簡來信<span class="badge" id="letBadge"></span></button>
     <button type="button" role="tab" id="tabBtnOrd" aria-selected="false" data-tab="ord">雲南訂單<span class="badge" id="ordBadge"></span></button>
+    <button type="button" role="tab" id="tabBtnStay" aria-selected="false" data-tab="stay">幸福之家預約<span class="badge" id="stayBadge"></span></button>
     <button type="button" role="tab" id="tabBtnPh" aria-selected="false" data-tab="ph">幻燈片照片</button>
   </div>
   <section id="tab-inq">
@@ -133,6 +136,21 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
   收到款項改「已付款」（客人會收到款項確認信）；寄出後先填物流與追蹤號碼，再改「已出貨」（客人會收到附追蹤號碼的出貨通知）。
   送禮訂單會標出收件人、卡片內容與「不附價格明細」。金額由系統依商品表重算；同一支電話在同一檔重複下單會標出來，方便合併寄送。</p>
   </section>
+  <section id="tab-stay" hidden>
+  <div class="bar">
+    <div class="filters">
+      <select id="sStatus" aria-label="依狀態篩選"><option value="">全部狀態</option>${stayStatuses.map(s => `<option>${esc(s)}</option>`).join('')}</select>
+      <input id="sText" type="search" placeholder="搜尋預約編號、姓名、電話、微信／LINE、房型、日期" aria-label="搜尋預約">
+      <label class="notify-opt"><input type="checkbox" id="sNotify" checked> 改成已確認／已付款時寄信通知客人</label>
+    </div>
+    <a class="btn" href="/api/admin/stays.csv">匯出 CSV</a>
+  </div>
+  <div class="count" id="sCount"></div>
+  <div id="sList"><p class="empty">載入中…</p></div>
+  <p class="hint">預約來自大道至簡品牌站的安寧幸福之家頁（anning/）。客人送出時不付款；每筆預約都會寄通知給你們，並寄預約確認給客人。
+  先用微信或 LINE 跟客人對好日期，填上「入住日期」（需要時調整金額），再改「已確認」——客人會收到付款資訊。收到款項改「已付款」（客人會收到收款確認）。
+  一次只接一組，同一個月已有其他預約時會標出來。</p>
+  </section>
   <section id="tab-ph" hidden>
     <label class="drop" id="drop" for="files">把照片拖到這裡，或<b>點這裡選擇照片</b>（可一次選多張）
       <input type="file" id="files" accept="image/*" multiple hidden>
@@ -147,6 +165,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
 const STATUSES = ${JSON.stringify(statuses)};
 const LSTATUSES = ${JSON.stringify(letterStatuses)};
 const OSTATUSES = ${JSON.stringify(orderStatuses)};
+const SSTATUSES = ${JSON.stringify(stayStatuses)};
 const PLAN = ${JSON.stringify(planLabels)};
 let rows = [];
 const $ = s => document.querySelector(s);
@@ -211,10 +230,10 @@ async function save(r, sel) {
 }
 
 /* ---------------- 分頁 ---------------- */
-const HASH = { inq: '#', let: '#letters', ord: '#orders', ph: '#photos' };
+const HASH = { inq: '#', let: '#letters', ord: '#orders', stay: '#stays', ph: '#photos' };
 function showTab(t) {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
-  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-ph').hidden = t !== 'ph';
+  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-stay').hidden = t !== 'stay'; $('#tab-ph').hidden = t !== 'ph';
   history.replaceState(null, '', HASH[t]);
   if (t === 'ph' && !photosLoaded) loadPhotos();
 }
@@ -395,6 +414,104 @@ async function saveOrder(r, body, ctl) {
 $('#oStatus').addEventListener('change', renderOrders);
 $('#oText').addEventListener('input', renderOrders);
 
+/* ---------------- 安寧幸福之家預約 ---------------- */
+let stays = [], SPAY = {};
+async function loadStays() {
+  try {
+    const res = await fetch('/api/admin/stays', { cache: 'no-store' });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.code);
+    stays = out.stays; SPAY = out.pay; renderStays();
+  } catch (e) {
+    $('#sList').innerHTML = ''; $('#sList').append(el('p', 'err', '讀不到預約（' + e.message + '）。重新整理頁面再試一次。'));
+  }
+}
+function renderStays() {
+  const st = $('#sStatus').value, q = $('#sText').value.trim().toLowerCase();
+  const shown = stays.filter(r => (!st || r.status === st) &&
+    (!q || [r.booking_no, r.name, r.phone, r.email, r.im, r.companions, r.rooms, r.checkin].join(' ').toLowerCase().includes(q)));
+  const waiting = stays.filter(r => r.status === '待確認').length;
+  $('#stayBadge').textContent = waiting ? String(waiting) : '';
+  $('#sCount').textContent = '共 ' + stays.length + ' 筆，顯示 ' + shown.length + ' 筆' + (waiting ? '，' + waiting + ' 筆待確認' : '');
+  const list = $('#sList'); list.innerHTML = '';
+  if (!shown.length) { list.append(el('p', 'empty', stays.length ? '沒有符合條件的預約。' : '目前還沒有預約。')); return; }
+  for (const r of shown) {
+    const item = el('div', 'item');
+    const top = el('div', 'top');
+    const name = el('div', 'name', r.booking_no || ('#' + r.id)); name.append(el('small', '', r.name));
+    const sel = el('select', 'status'); sel.setAttribute('aria-label', (r.booking_no || r.id) + ' 的狀態');
+    for (const s of SSTATUSES) { const o = el('option', '', s); if (s === r.status) o.selected = true; sel.append(o); }
+    sel.dataset.v = r.status;
+    top.append(name, sel);
+    const meta = el('div', 'meta');
+    meta.append(fmt(r.created_at) + '・' + r.phone + '・');
+    const mail = el('a', '', r.email); mail.href = 'mailto:' + r.email + '?subject=' + encodeURIComponent('你的幸福之家預約 ' + (r.booking_no || '')); meta.append(mail);
+    if (r.im) meta.append('・微信／LINE ' + r.im);
+    const chips = el('div');
+    chips.append(el('span', 'chip', r.checkin + ' 入住'), el('span', 'chip', r.rooms), el('span', 'chip', r.guests + ' 位'), el('span', 'chip', SPAY[r.pay] || r.pay));
+    const sum = el('div', 'sum');
+    sum.append((r.dates ? '確認日期 ' + r.dates + '・' : '') + '金額 ');
+    sum.append(el('b', '', money(r.total)));
+    item.append(top, meta, chips, sum);
+    if (r.companions) item.append(el('div', 'meta', '同行：' + r.companions));
+    if (r.wishes) item.append(el('div', 'meta', '想要的：' + r.wishes));
+    if (r.story) item.append(el('div', 'msg', r.story));
+    // 入住日期與金額：改「已確認」時會寫進付款資訊信
+    const box = el('div', 'ship');
+    const dates = el('input'); dates.placeholder = '入住日期，例：10/12（一）～10/18（日）'; dates.value = r.dates || ''; dates.maxLength = 60;
+    dates.setAttribute('aria-label', (r.booking_no || r.id) + ' 的入住日期');
+    const total = el('input', 'total'); total.type = 'number'; total.min = '0'; total.step = '1'; total.value = r.total;
+    total.setAttribute('aria-label', (r.booking_no || r.id) + ' 的金額');
+    const saveBtn = el('button', '', '儲存'); saveBtn.type = 'button';
+    saveBtn.addEventListener('click', () => saveStay(r, { status: r.status, dates: dates.value.trim(), total: total.value, notify: false }, saveBtn));
+    box.append('入住：', dates, '金額：', total, saveBtn);
+    if (r.status === '已確認' || r.status === '已付款') {
+      const again = el('button', '', r.status === '已確認' ? '重寄付款資訊' : '重寄收款確認'); again.type = 'button';
+      again.addEventListener('click', () => {
+        if (confirm('用目前的入住日期與金額，再寄一次給 ' + r.email + '？'))
+          saveStay(r, { status: r.status, dates: dates.value.trim(), total: total.value, notify: true, resend: true }, again);
+      });
+      box.append(again);
+    }
+    item.append(box);
+    sel.addEventListener('change', () => {
+      const notify = $('#sNotify').checked;
+      if ((sel.value === '已確認' || sel.value === '已付款') && notify && !dates.value.trim()) {
+        sel.value = r.status; dates.focus();
+        alert('先填入住日期，再改狀態——通知信會寫上這個日期。\\n（不想寄信的話，把上方「寄信通知客人」取消勾選。）');
+        return;
+      }
+      saveStay(r, { status: sel.value, dates: dates.value.trim(), total: total.value, notify }, sel);
+    });
+    if (r.same_month) item.append(el('div', 'flag', '同一個月已有其他預約：' + r.same_month + '（一次只接一組，排日期時留意）'));
+    const ms = r.mail_status || '';
+    const zh = ms ? ms.replace(/owner/g, '通知信').replace(/guest/g, '確認信').replace(/confirmed/g, '付款資訊信').replace(/paid/g, '收款確認信').replace(/ sent/g, ' 已寄出')
+      .replace(/ skipped:?/g, ' 未寄出：').replace(/ failed:?/g, ' 失敗：').replace(/; /g, '，') : '寄送中或尚無紀錄';
+    item.append(el('div', 'mail' + (/failed|skipped/.test(ms) ? ' bad' : ''), '寄信：' + zh));
+    list.append(item);
+  }
+}
+const STAY_ERR = { need_dates: '要寄通知信，請先填入住日期。', invalid_total: '金額要是整數。' };
+async function saveStay(r, body, ctl) {
+  const prev = r.status; ctl.disabled = true;
+  try {
+    const res = await fetch('/api/admin/stays/' + r.id + '/status', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const out = await res.json(); if (!out.ok) throw new Error(STAY_ERR[out.code] || out.code);
+    r.status = body.status; r.dates = body.dates; if (body.total !== '') r.total = Number(body.total);
+    const tag = body.status === '已確認' ? 'confirmed ' : 'paid ';
+    if (out.mail) r.mail_status = [r.mail_status, tag + out.mail].filter(Boolean).join('; ');
+    renderStays();
+    if (out.mail && out.mail !== 'sent') alert('狀態已存，但通知信沒有寄出（' + out.mail + '）。');
+  } catch (e) {
+    if (ctl.tagName === 'SELECT') ctl.value = prev;
+    alert('沒有存到（' + e.message + '），請再試一次。');
+  } finally { ctl.disabled = false; }
+}
+$('#sStatus').addEventListener('change', renderStays);
+$('#sText').addEventListener('input', renderStays);
+
 /* ---------------- 幻燈片照片 ---------------- */
 let photos = [], photosLoaded = false;
 async function api(path, body) {
@@ -473,12 +590,14 @@ drop.addEventListener('drop', e => uploadFiles(e.dataTransfer.files));
 if (location.hash === '#photos') showTab('ph');
 if (location.hash === '#letters') showTab('let');
 if (location.hash === '#orders') showTab('ord');
+if (location.hash === '#stays') showTab('stay');
 
 ['#fStatus', '#fPlan'].forEach(s => $(s).addEventListener('change', render));
 $('#fText').addEventListener('input', render);
 load();
 loadLetters();
 loadOrders();
+loadStays();
 </script>
 </body>
 </html>`;

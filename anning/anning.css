@@ -1,0 +1,108 @@
+/* 雲南安寧幸福之家：共用選購頁的 ../shop/shop.css（色票、頂列、開場、表單、完成畫面），這裡只放介紹段落 */
+
+.room-prices { margin-top: .9rem; }
+.room-prices dt { color: var(--ink); }
+.room-prices dt small { color: var(--mist); font-size: .78rem; margin-left: .5rem; }
+.room-prices dd { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; }
+.season-meta { margin: 1rem 0 1.2rem; font-size: .88rem; color: var(--ink-soft); }
+
+/* ---------- 我們相信的幸福 ---------- */
+.story { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.story-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+.story h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 300; letter-spacing: .16em; line-height: 1.5; }
+.story-text { display: grid; gap: 1.2rem; color: var(--ink-soft); font-size: 1.02rem; line-height: 2; max-width: 36em; }
+
+/* ---------- 我們怎麼招待你 ---------- */
+.how-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2.2vw, 1.75rem); }
+.how-item { background: var(--card); border: 1px solid var(--line); padding: clamp(1.4rem, 3vw, 2rem); display: grid; gap: .5rem; align-content: start; }
+.how-han { width: 2.4rem; height: 2.4rem; display: grid; place-items: center; background: var(--seal); color: var(--paper); border-radius: 4px; font-size: 1.1rem; }
+.how-item h3 { font-size: 1.2rem; font-weight: 500; letter-spacing: .1em; margin-top: .4rem; }
+.how-item p { color: var(--ink-soft); font-size: .95rem; }
+
+/* ---------- 我們的家 ---------- */
+.home { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.home-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.home h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); letter-spacing: .16em; margin-bottom: 1.2rem; }
+.home-text { display: grid; gap: .9rem; color: var(--ink-soft); }
+.home-text .eyebrow { margin-bottom: -.4rem; }
+.home-text h2 { color: var(--ink); }
+.home-photos { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: .8rem; aspect-ratio: 5 / 4; }
+.home-photos > :first-child { grid-row: span 2; }
+.home-photos img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 安寧 ---------- */
+.guide { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
+.guide-card { border-top: 2px solid var(--ink); padding-top: 1rem; display: grid; gap: .3rem; align-content: start; }
+.guide-card h3 { font-size: 1.25rem; font-weight: 500; letter-spacing: .12em; }
+.guide-card dl { margin: .6rem 0 0; display: grid; gap: .9rem; }
+.guide-card dt { font-weight: 500; letter-spacing: .06em; }
+.guide-card dd { margin: .15rem 0 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.8; }
+.seasons { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(2.5rem, 5vw, 3.5rem); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.seasons > div { display: flex; gap: .9rem; align-items: center; padding: 1.2rem 1rem; font-size: .92rem; color: var(--ink-soft); }
+.seasons > div + div { border-left: 1px solid var(--line); }
+.taste { margin-top: 1.4rem; color: var(--ink-soft); font-size: .95rem; }
+.taste b { color: var(--ink); font-weight: 500; }
+
+/* ---------- 療心卡 ---------- */
+.blessing { padding: clamp(3.5rem, 8vw, 6rem) 0; background: var(--paper-deep); }
+.blessing-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.blessing-photo { margin: 0; }
+.blessing-photo img { width: 100%; height: auto; }
+.blessing-text { display: grid; gap: .9rem; }
+.blessing-text h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 300; letter-spacing: .14em; line-height: 1.5; }
+.blessing-en { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--tea); }
+.blessing-text p:last-child { color: var(--ink-soft); }
+
+/* ---------- 預約表單 ---------- */
+.rooms-pick { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+.rooms-pick legend { font-size: .85rem; letter-spacing: .1em; color: var(--ink-soft); margin-bottom: .5rem; padding: 0; }
+.rooms-pick legend em { font-style: normal; color: var(--mist); font-size: .78rem; margin-left: .3rem; letter-spacing: 0; }
+.room-card {
+  position: relative; display: grid; justify-items: center; gap: .15rem; text-align: center; cursor: pointer;
+  background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1.4rem .8rem 1.2rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.room-card input { position: absolute; opacity: 0; pointer-events: none; }
+.room-name { font-size: 1.15rem; letter-spacing: .14em; }
+.room-price { font-family: var(--font-display); font-size: 2rem; font-weight: 500; color: var(--seal); line-height: 1.3; }
+.room-price small { font-size: 1rem; margin-right: .1rem; }
+.room-meta { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
+.room-bath { font-size: .75rem; color: var(--tea); letter-spacing: .12em; }
+.room-tick { position: absolute; top: .6rem; right: .6rem; width: 1.3rem; height: 1.3rem; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; font-size: .8rem; color: transparent; }
+@media (hover: hover) { .room-card:hover { border-color: var(--tea); } }
+.room-card:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.room-card:has(input:checked) .room-tick { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.room-card:has(input:focus-visible) { outline: 2px solid var(--seal); outline-offset: 3px; }
+.summary-note { margin-top: 1.2rem; font-size: .88rem; color: var(--ink-soft); border-left: 2px solid var(--tea); padding-left: .9rem; }
+.stepper-lg { justify-self: start; }
+.stepper-lg button { width: 44px; height: 44px; }
+.stepper-lg output { min-width: 2.4rem; font-size: 1.3rem; }
+.choice legend em { font-style: normal; color: var(--mist); font-size: .78rem; margin-left: .3rem; letter-spacing: 0; }
+.choice label:has(input:disabled) { opacity: .45; cursor: not-allowed; }
+.choice-multi input { accent-color: var(--paper); }
+
+/* ---------- 完成畫面：微信 ---------- */
+.wechat-box { display: flex; gap: 1.4rem; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--card); padding: 1.2rem; margin-top: .6rem; }
+.wechat-box img { width: 150px; height: auto; flex: none; }
+
+@media (max-width: 1000px) {
+  .guide-grid { grid-template-columns: repeat(2, 1fr); row-gap: 2rem; }
+}
+@media (max-width: 680px) {
+  .rooms-pick { grid-template-columns: 1fr; }
+  .room-card { grid-template-columns: 1fr auto; justify-items: start; text-align: left; padding: 1rem 3rem 1rem 1.1rem; column-gap: 1rem; }
+  .room-name { grid-column: 1; }
+  .room-meta, .room-bath { grid-column: 1; }
+  .room-price { grid-column: 2; grid-row: 1 / span 3; align-self: center; font-size: 1.6rem; }
+  .room-tick { top: 50%; transform: translateY(-50%); }
+  .story-grid, .home-grid, .blessing-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .seasons { grid-template-columns: repeat(2, 1fr); }
+  .seasons > div:nth-child(3) { border-left: 0; }
+  .seasons > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .seasons > div { padding: 1rem .4rem; }
+  .home-photos { aspect-ratio: 4 / 3; }
+  .wechat-box { flex-direction: column; text-align: center; }
+}
