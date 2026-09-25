@@ -297,6 +297,30 @@ p { margin: 0; }
 .btn-line { display: inline-flex; background: #06C755; border: 1px solid #06C755; color: #fff; margin-bottom: .8rem; font-size: .9rem; }
 .btn-line[hidden] { display: none; }
 .btn-line:hover { background: #05a647; border-color: #05a647; }
+/* ---------- 姊妹頁互推（雲南好物 ⇄ 安寧幸福之家，兩頁共用） ---------- */
+.done-sibling a { color: var(--ink-soft); }
+.sibling { padding: 0 0 clamp(3rem, 7vw, 5rem); }
+.sibling-card {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--line); background: var(--card); padding: clamp(1.2rem, 3vw, 1.8rem);
+  text-decoration: none; color: var(--ink-soft); transition: border-color .3s var(--ease);
+}
+.sibling-seal { width: 3.2rem; height: 3.2rem; display: grid; place-items: center; background: var(--seal); color: var(--paper); font-size: 1.4rem; border-radius: 4px; }
+.sibling-text { display: grid; gap: .35rem; }
+.sibling-text .eyebrow { margin-bottom: 0; }
+.sibling-title { color: var(--ink); font-size: clamp(1.15rem, 2.4vw, 1.4rem); letter-spacing: .12em; }
+.sibling-note { font-size: .92rem; line-height: 1.8; }
+.sibling-go { color: var(--ink); letter-spacing: .08em; white-space: nowrap; border-bottom: 1px solid var(--ink); padding-bottom: .15rem; }
+@media (hover: hover) {
+  .sibling-card:hover { border-color: var(--ink); }
+  .sibling-card:hover .sibling-go { color: var(--seal); border-color: var(--seal); }
+}
+.sibling-card:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+@media (max-width: 680px) {
+  .sibling-card { grid-template-columns: auto 1fr; }
+  .sibling-go { grid-column: 1 / -1; justify-self: start; }
+}
+
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .v-closed { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
 .load-err { color: var(--seal); padding: 1rem 0; }
