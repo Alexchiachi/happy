@@ -138,11 +138,14 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
   （症狀：`/admin` 沒有新分頁、品牌站送出訂單顯示連不上）。Build 設定頁會出現紅字
   「Error fetching GitHub User or Organization details」。解法：Settings → Build → Disconnect，再 Connect 到新的
   `Alexchiachi/happy`（分支 `main`、Deploy command `npx wrangler deploy`、Root directory `/`），之後推一次 `main` 觸發部署。
-  合併後若 GitHub 上完全沒有 Cloudflare 的 check／預覽網址，先懷疑這個。
   重新連接後仍未觸發，因此改由 **GitHub Actions 部署 Worker**（`.github/workflows/worker.yml`，`npx wrangler@4 deploy`，
   需要 GitHub Secrets `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`）。部署紀錄在 GitHub Actions，可用 GitHub MCP 讀 log、
   用 workflow_dispatch 手動重跑。D1 綁定只寫 `database_name`：wrangler 會沿用線上 Worker 既有的綁定或依名稱找到現有資料庫，
   Token 需含 D1 權限。
+  2026-09-25 已在 Cloudflare 把舊的 Workers Builds 自動建置 Disconnect（它每次都一開始就失敗，PR 上會出現紅叉
+  「Workers Builds: executive-table ✗」）。之後 PR 上不會再有 Cloudflare 的 check 或預覽網址，這是正常的；
+  確認有沒有部署成功，看 GitHub Actions 的「Deploy Worker to Cloudflare」。不要再把 Workers Builds 接回來，
+  否則會和 GitHub Actions 重複部署。
 - 表單下方的隱私說明寫「沒有安裝分析或追蹤工具」；啟用 GA4／Plausible 時要一起改那句。
 - 幻燈片沒有顯示中的照片時整段隱藏；照片只能由 `/admin` 上傳，不要把照片檔放進倉庫。
 - claude.ai 上還有一份早期的 Artifact 副本（https://claude.ai/artifact/14em5ks6rCrSvoxhVLupyh），正式站以 Cloudflare 為準。
