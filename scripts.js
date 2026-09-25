@@ -93,7 +93,9 @@
         setTimeout(() => entry.target.classList.add('in'), Math.min(idx, 4) * 80);
         io.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    // threshold 用 0：只要露出一點就算進場。原本是 0.12，但隱私權政策那種整篇包在一個 .reveal 裡的長文，
+    // 在手機上高 7000 多 px，可見比例永遠到不了 12%，整篇就一直是透明的（頁面看起來空白）。
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach((el) => io.observe(el));
   } else {
     // Fallback: just show everything
