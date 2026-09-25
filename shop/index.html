@@ -110,12 +110,23 @@
         <h2>寄到哪裡</h2>
 
         <div class="field-row">
-          <label class="field"><span>姓名</span><input name="name" autocomplete="name" required></label>
-          <label class="field"><span>手機</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}" required></label>
+          <label class="field"><span data-gift-alt="你的姓名">姓名</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span data-gift-alt="你的手機">手機</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}" required></label>
         </div>
         <div class="field-row">
           <label class="field"><span>Email <em>寄確認信用</em></span><input name="email" type="email" autocomplete="email" required></label>
           <label class="field"><span>LINE ID <em>選填</em></span><input name="line"></label>
+        </div>
+
+        <label class="check gift-toggle"><input type="checkbox" name="gift" value="1" data-gift> 這是送禮，寄給別人</label>
+        <div class="gift-box" data-gift-box hidden>
+          <div class="field-row">
+            <label class="field"><span>收件人姓名</span><input name="to_name" autocomplete="off"></label>
+            <label class="field"><span>收件人手機 <em>物流聯絡用</em></span><input name="to_phone" type="tel" inputmode="tel" autocomplete="off" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}"></label>
+          </div>
+          <label class="field"><span>卡片想說的話 <em>選填，200 字內，附在禮物裡</em></span><textarea name="card" rows="3" maxlength="200" placeholder="例：中秋快樂，謝謝你這一年的照顧。"></textarea></label>
+          <label class="check"><input type="checkbox" name="hide_price" value="1" checked> 包裹裡不附價格明細</label>
+          <p class="hint">訂單明細與付款資訊只寄到你的信箱；出貨時我們也會通知你。</p>
         </div>
 
         <fieldset class="choice">
@@ -125,8 +136,8 @@
           <label><input type="radio" name="delivery" value="family"> 全家</label>
           <label><input type="radio" name="delivery" value="meet"> 面交（南投市／草屯）</label>
         </fieldset>
-        <label class="field" data-when="home"><span>宅配地址</span><input name="address" autocomplete="street-address"></label>
-        <label class="field" data-when="711 family" hidden><span>門市名稱</span><input name="store" placeholder="例：7-11 龍辰門市"></label>
+        <label class="field" data-when="home"><span data-gift-alt="收件人地址">宅配地址</span><input name="address" autocomplete="street-address"></label>
+        <label class="field" data-when="711 family" hidden><span data-gift-alt="收件人取貨門市">門市名稱</span><input name="store" placeholder="例：7-11 龍辰門市"></label>
         <p class="hint" data-when="meet" hidden>我們會用 LINE 或電話跟你約時間地點。</p>
 
         <fieldset class="choice">
@@ -139,8 +150,9 @@
         <!-- 擋機器人：真人看不到這一欄 -->
         <label class="hp" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label>
 
-        <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="送禮需要附卡片、指定到貨時段……"></textarea></label>
+        <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="指定到貨時段、其他想交代的事……"></textarea></label>
 
+        <p class="privacy-note">個資說明：你填的姓名、手機、Email 與地址（送禮時含收件人資料），只用在這張訂單的確認、出貨、聯絡與寄送通知；寄送時提供給物流業者，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 或回信告訴我們。<a href="../privacy.html#shop">完整隱私權政策</a></p>
         <button class="btn btn-solid" type="submit">送出訂單</button>
         <p class="form-msg" data-form-msg role="status"></p>
       </form>
@@ -157,7 +169,8 @@
         <div data-pay-box="linepay"><h3>LINE Pay</h3><img class="qr" data-pay-qr alt="LINE Pay 收款碼" hidden><p data-pay-linepay></p><p class="muted small">付款後回覆確認信告訴我們即可。</p></div>
         <div data-pay-box="bank"><h3>匯款</h3><p data-pay-bank></p><p class="muted small">匯款後回覆確認信，告訴我們帳號末五碼。</p></div>
       </div>
-      <p class="muted small">收到款項後依出貨時程寄出。有任何問題，直接回覆確認信就好。</p>
+      <p class="muted small">收到款項後依出貨時程寄出，出貨時會寄信附上物流追蹤號碼。</p>
+      <p class="muted small done-contact">有任何問題，直接回覆確認信，或加 LINE 官方帳號 <a data-contact-line href="https://line.me/R/ti/p/@617aipgs" target="_blank" rel="noopener">@617aipgs</a>。</p>
     </div>
   </section>
 
@@ -166,7 +179,10 @@
 <footer class="foot">
   <div class="wrap foot-grid">
     <p class="foot-brand">大道至簡 · Dao is simple<br><span>做幸福的事，讓幸福變成有價值的事。</span></p>
-    <p><a href="../yunnan.html">雲南選物</a> · <a href="../journal.html">幸福誌</a> · <a href="../connect.html">寫信給我們</a> · <a href="../privacy.html">隱私權政策</a></p>
+    <div>
+      <p><a href="../yunnan.html">雲南選物</a> · <a href="../journal.html">幸福誌</a> · <a href="../connect.html">寫信給我們</a> · <a href="../privacy.html">隱私權政策</a></p>
+      <p class="foot-contact">與我們聯繫：LINE 官方 <a data-contact-line href="https://line.me/R/ti/p/@617aipgs" target="_blank" rel="noopener">@617aipgs</a> · <a data-contact-fb href="https://www.facebook.com/profile.php?id=100075746177370" target="_blank" rel="noopener">Facebook</a></p>
+    </div>
   </div>
 </footer>
 

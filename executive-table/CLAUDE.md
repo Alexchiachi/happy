@@ -67,6 +67,8 @@
 14. **雲南好物訂單**：`/api/order`、D1 `orders` 表、管理頁「雲南訂單」分頁。商品與運費在 `shop/products.json`，
     Worker 直接 import 這份 JSON 重算金額（客人只送商品 id／規格／數量）。新訂單通知寄給 jianchiachi@gmail.com 與
     renachien1@gmail.com（`SHOP_NOTIFY_EMAIL`），客人收到訂單確認＋付款資訊。付款仍是 LINE Pay／匯款＋後台手動改狀態。
+    之後加上：送禮（收件人、卡片、不附價格明細）、後台填物流與追蹤號碼、改「已付款」「已出貨」時寄信通知客人。
+    `orders` 表後加的欄位在 `ensureOrderSchema` 裡用 `ALTER TABLE ... ADD COLUMN` 補（重複欄位的錯誤略過）。
 
 思考原則（一人公司）：**少一個服務就少一個會壞、要付費、要記密碼的地方**。
 資料、照片、寄信、登入都收在一支 Worker＋一個 D1；所有秘密只放在 Cloudflare 後台；使用者只需要會用 `/admin`。

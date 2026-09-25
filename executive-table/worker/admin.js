@@ -61,6 +61,13 @@ const STYLE = `
   .flag { color: var(--seal); font-size: .88rem; }
   select.status[data-v="待付款"] { border-color: var(--seal); color: var(--seal); }
   select.status[data-v="取消"] { color: var(--mist); }
+  .gift { border-left: 2px solid var(--moss); padding-left: .8rem; margin: .3rem 0; font-size: .92rem; color: var(--soft); white-space: pre-wrap; }
+  .gift b { color: var(--seal); font-weight: 500; }
+  .ship { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .3rem; font-size: .9rem; }
+  .ship input { width: 12rem; }
+  .ship button { font: inherit; font-size: .85rem; color: var(--moss); background: none; border: 1px solid var(--moss); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; }
+  .ship button:disabled { opacity: .5; cursor: default; }
+  .notify-opt { display: inline-flex; gap: .4rem; align-items: center; font-size: .9rem; color: var(--soft); cursor: pointer; }
 `;
 
 function esc(s) {
@@ -115,14 +122,16 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
   <div class="bar">
     <div class="filters">
       <select id="oStatus" aria-label="依狀態篩選"><option value="">全部狀態</option>${orderStatuses.map(s => `<option>${esc(s)}</option>`).join('')}</select>
-      <input id="oText" type="search" placeholder="搜尋訂單編號、姓名、電話、商品" aria-label="搜尋訂單">
+      <input id="oText" type="search" placeholder="搜尋訂單編號、姓名、電話、商品、追蹤號碼" aria-label="搜尋訂單">
+      <label class="notify-opt"><input type="checkbox" id="oNotify" checked> 改成已付款／已出貨時寄信通知客人</label>
     </div>
     <a class="btn" href="/api/admin/orders.csv">匯出 CSV</a>
   </div>
   <div class="count" id="oCount"></div>
   <div id="oList"><p class="empty">載入中…</p></div>
   <p class="hint">訂單來自大道至簡品牌站的雲南好物選購頁（shop/）。每張訂單都會寄通知給你們，並寄訂單確認與付款資訊給客人。
-  收到款項改「已付款」，寄出後改「已出貨」。金額由系統依商品表重算；同一支電話在同一檔重複下單會標出來，方便合併寄送。</p>
+  收到款項改「已付款」（客人會收到款項確認信）；寄出後先填物流與追蹤號碼，再改「已出貨」（客人會收到附追蹤號碼的出貨通知）。
+  送禮訂單會標出收件人、卡片內容與「不附價格明細」。金額由系統依商品表重算；同一支電話在同一檔重複下單會標出來，方便合併寄送。</p>
   </section>
   <section id="tab-ph" hidden>
     <label class="drop" id="drop" for="files">把照片拖到這裡，或<b>點這裡選擇照片</b>（可一次選多張）
@@ -272,14 +281,15 @@ $('#lText').addEventListener('input', renderLetters);
 document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
 
 /* ---------------- 雲南訂單 ---------------- */
-let orders = [], DELIVERY = {}, PAY = {};
+let orders = [], DELIVERY = {}, PAY = {}, CARRIERS = [];
+const DEFAULT_CARRIER = { '711': '7-11 交貨便', family: '全家店到店' };
 const money = n => 'NT$' + Number(n).toLocaleString('en-US');
 async function loadOrders() {
   try {
     const res = await fetch('/api/admin/orders', { cache: 'no-store' });
     const out = await res.json();
     if (!out.ok) throw new Error(out.code);
-    orders = out.orders; DELIVERY = out.delivery; PAY = out.pay; renderOrders();
+    orders = out.orders; DELIVERY = out.delivery; PAY = out.pay; CARRIERS = out.carriers || []; renderOrders();
   } catch (e) {
     $('#oList').innerHTML = ''; $('#oList').append(el('p', 'err', '讀不到訂單（' + e.message + '）。重新整理頁面再試一次。'));
   }
@@ -288,7 +298,7 @@ function itemsOf(r) { try { return JSON.parse(r.items); } catch (e) { return [];
 function renderOrders() {
   const st = $('#oStatus').value, q = $('#oText').value.trim().toLowerCase();
   const shown = orders.filter(r => (!st || r.status === st) &&
-    (!q || [r.order_no, r.name, r.phone, r.email, r.items].join(' ').toLowerCase().includes(q)));
+    (!q || [r.order_no, r.name, r.phone, r.email, r.items, r.to_name, r.to_phone, r.tracking_no].join(' ').toLowerCase().includes(q)));
   const unpaid = orders.filter(r => r.status === '待付款').length;
   $('#ordBadge').textContent = unpaid ? String(unpaid) : '';
   const open = orders.filter(r => r.status !== '取消');
@@ -303,7 +313,6 @@ function renderOrders() {
     const sel = el('select', 'status'); sel.setAttribute('aria-label', (r.order_no || r.id) + ' 的狀態');
     for (const s of OSTATUSES) { const o = el('option', '', s); if (s === r.status) o.selected = true; sel.append(o); }
     sel.dataset.v = r.status;
-    sel.addEventListener('change', () => saveOrder(r, sel));
     top.append(name, sel);
     const meta = el('div', 'meta');
     meta.append(fmt(r.created_at) + '・' + (r.season || '') + '・' + r.phone + '・');
@@ -311,32 +320,77 @@ function renderOrders() {
     if (r.line) meta.append('・LINE ' + r.line);
     const chips = el('div');
     chips.append(el('span', 'chip', PAY[r.pay] || r.pay), el('span', 'chip', DELIVERY[r.delivery] || r.delivery));
+    if (r.gift) chips.append(el('span', 'chip', '送禮'));
     const where = r.delivery === 'home' ? r.address : r.delivery === 'meet' ? '另外約時間地點' : r.store;
     const ul = el('ul', 'lines');
     for (const l of itemsOf(r)) { const li = el('li'); li.append(el('span', '', l.name + '（' + l.label + '）× ' + l.qty), el('span', '', money(l.amount))); ul.append(li); }
     const sum = el('div', 'sum'); sum.append('小計 ' + money(r.subtotal) + '・運費 ' + (r.shipping ? money(r.shipping) : '免運') + '・合計 ');
     sum.append(el('b', '', money(r.total)));
-    item.append(top, meta, chips, el('div', 'meta', '寄送：' + (where || '')), ul, sum);
+    item.append(top, meta, chips, el('div', 'meta', '寄送：' + (r.gift ? r.to_name + '・' + r.to_phone + '・' : '') + (where || '')), ul, sum);
+    if (r.gift) {
+      const g = el('div', 'gift');
+      if (r.hide_price) g.append(el('b', '', '不附價格明細（包裹裡不要放明細、出貨單不寫金額）'), '\\n');
+      g.append(r.card ? '卡片：' + r.card : '不附卡片');
+      item.append(g);
+    }
+    // 物流與追蹤號碼
+    const ship = el('div', 'ship');
+    const car = el('select'); car.setAttribute('aria-label', (r.order_no || r.id) + ' 的物流');
+    car.append(el('option', '', '選物流'));
+    car.options[0].value = '';
+    const carNow = r.carrier || (r.status !== '已出貨' && DEFAULT_CARRIER[r.delivery]) || '';
+    for (const c of CARRIERS) { const o = el('option', '', c); if (c === carNow) o.selected = true; car.append(o); }
+    const trk = el('input'); trk.placeholder = r.delivery === 'meet' ? '面交不用填' : '追蹤號碼'; trk.value = r.tracking_no || '';
+    trk.setAttribute('aria-label', (r.order_no || r.id) + ' 的追蹤號碼');
+    const saveBtn = el('button', '', '儲存物流'); saveBtn.type = 'button';
+    saveBtn.addEventListener('click', () => saveOrder(r, { status: r.status, carrier: car.value, tracking: trk.value.trim(), notify: false }, saveBtn));
+    ship.append('出貨：', car, trk, saveBtn);
+    if (r.status === '已出貨') {
+      const again = el('button', '', '重寄出貨通知'); again.type = 'button';
+      again.addEventListener('click', () => {
+        if (confirm('用目前的物流與追蹤號碼，再寄一次出貨通知給 ' + r.email + '？'))
+          saveOrder(r, { status: r.status, carrier: car.value, tracking: trk.value.trim(), notify: true, resend: true }, again);
+      });
+      ship.append(again);
+    }
+    if (r.shipped_at) ship.append(el('span', 'meta', '出貨時間 ' + fmt(r.shipped_at)));
+    item.append(ship);
+    sel.addEventListener('change', () => {
+      const notify = $('#oNotify').checked;
+      if (sel.value === '已出貨' && notify && r.delivery !== 'meet' && !trk.value.trim()) {
+        sel.value = r.status; trk.focus();
+        alert('先填追蹤號碼，再改成「已出貨」——出貨通知信會附上這個號碼。\\n（不想寄信的話，把上方「寄信通知客人」取消勾選。）');
+        return;
+      }
+      saveOrder(r, { status: sel.value, carrier: car.value, tracking: trk.value.trim(), notify }, sel);
+    });
     if (r.same_phone) item.append(el('div', 'flag', '同一支電話本檔已有訂單：' + r.same_phone + '（可合併寄送，運費請手動調整）'));
     if (r.note) item.append(el('div', 'msg', r.note));
     const ms = r.mail_status || '';
-    const zh = ms ? ms.replace(/owner/g, '通知信').replace(/guest/g, '確認信').replace(/ sent/g, ' 已寄出')
+    const zh = ms ? ms.replace(/owner/g, '通知信').replace(/guest/g, '確認信').replace(/paid/g, '款項確認信').replace(/shipped/g, '出貨通知').replace(/ sent/g, ' 已寄出')
       .replace(/ skipped:?/g, ' 未寄出：').replace(/ failed:?/g, ' 失敗：').replace(/; /g, '，') : '寄送中或尚無紀錄';
     item.append(el('div', 'mail' + (/failed|skipped/.test(ms) ? ' bad' : ''), '寄信：' + zh));
     list.append(item);
   }
 }
-async function saveOrder(r, sel) {
-  const prev = r.status; sel.disabled = true;
+const SAVE_ERR = { need_tracking: '要寄出貨通知，請先填追蹤號碼。', invalid_carrier: '物流選項不對，請重新整理頁面。' };
+async function saveOrder(r, body, ctl) {
+  const prev = r.status; ctl.disabled = true;
   try {
     const res = await fetch('/api/admin/orders/' + r.id + '/status', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: sel.value })
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
     });
-    const out = await res.json(); if (!out.ok) throw new Error(out.code);
-    r.status = sel.value; sel.dataset.v = sel.value; renderOrders();
+    const out = await res.json(); if (!out.ok) throw new Error(SAVE_ERR[out.code] || out.code);
+    r.status = body.status; r.carrier = body.carrier; r.tracking_no = body.tracking;
+    if (body.status === '已出貨' && !r.shipped_at) r.shipped_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const tag = body.status === '已出貨' ? 'shipped ' : 'paid ';
+    if (out.mail) r.mail_status = [r.mail_status, tag + out.mail].filter(Boolean).join('; ');
+    renderOrders();
+    if (out.mail && out.mail !== 'sent') alert('狀態已存，但通知信沒有寄出（' + out.mail + '）。');
   } catch (e) {
-    sel.value = prev; alert('沒有存到（' + e.message + '），請再試一次。');
-  } finally { sel.disabled = false; }
+    if (ctl.tagName === 'SELECT') ctl.value = prev;
+    alert('沒有存到（' + e.message + '），請再試一次。');
+  } finally { ctl.disabled = false; }
 }
 $('#oStatus').addEventListener('change', renderOrders);
 $('#oText').addEventListener('input', renderOrders);
