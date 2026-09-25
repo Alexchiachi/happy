@@ -81,8 +81,9 @@
     "lineUrl": "https://line.me/R/ti/p/@617aipgs",
     "facebook": "https://www.facebook.com/profile.php?id=100075746177370",
     "wechatName": "Rena chien",
+    "wechatId": "",
     "wechatImage": "images/wechat-qr.jpg",
-    "wechatUrl": "https://u.wechat.com/MFWggE4CfosIJYLjwrmClqU?s=2"
+    "_微信說明": "微信個人 QR 連結只能在微信裡掃，瀏覽器打不開，所以網頁不放連結。wechatId 填了才會出現「複製微信號」按鈕。"
   },
   "cover": [
     {

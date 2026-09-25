@@ -197,12 +197,16 @@ const signature = '<tr><td style="padding:28px 40px 36px;font-family:' + SERIF +
   + '<div style="height:1px;background:' + C.line + ';line-height:1px;font-size:1px;margin-bottom:22px;">&nbsp;</div>雲南安寧幸福之家｜大道至簡</td></tr>';
 
 const CONTACT = stay.contact || {};
+// 微信個人 QR 連結只能在微信 App 裡掃，信裡不放連結：寫微信號（有的話），並指到網頁上的「加微信」說明
+const WECHAT_PAGE = 'https://alexchiachi.github.io/happy/anning/#wechat';
+const wechatId = () => CONTACT.wechatId ? '（微信號 ' + CONTACT.wechatId + '）' : '';
 const contactHtml = () => '有任何問題，直接回覆這封信'
-  + (CONTACT.wechatName ? '，或加微信 <a href="' + esc(CONTACT.wechatUrl) + '" style="color:' + C.tea + ';">' + esc(CONTACT.wechatName) + '</a>' : '')
+  + (CONTACT.wechatName ? '，或加微信 <b>' + esc(CONTACT.wechatName) + '</b>' + esc(wechatId())
+    + '（<a href="' + WECHAT_PAGE + '" style="color:' + C.tea + ';">加微信的方法</a>）' : '')
   + (CONTACT.line ? '、LINE 官方帳號 <a href="' + esc(CONTACT.lineUrl) + '" style="color:' + C.tea + ';">' + esc(CONTACT.line) + '</a>' : '')
   + '。<br>以家為媒，赴一場幸福之約。';
 const contactText = () => '有問題直接回覆這封信'
-  + (CONTACT.wechatName ? '，或加微信 ' + CONTACT.wechatName + '（' + CONTACT.wechatUrl + '）' : '')
+  + (CONTACT.wechatName ? '，或加微信 ' + CONTACT.wechatName + wechatId() + '（加微信的方法：' + WECHAT_PAGE + '）' : '')
   + (CONTACT.line ? '、LINE 官方帳號 ' + CONTACT.line : '');
 
 function infoRows(b, forOwner) {
@@ -227,7 +231,9 @@ function wechatBox(siteUrl) {
   return '<tr><td style="padding:22px 40px 0;"><div style="background:' + C.paper + ';border:1px solid ' + C.line + ';padding:16px 18px;font-family:' + SERIF + ';font-size:14px;line-height:1.9;color:' + C.soft + ';">'
     + '<div style="color:' + C.seal + ';letter-spacing:2px;font-size:12px;margin-bottom:6px;">加微信，確認日期更快</div>'
     + '<img src="' + esc(siteUrl + 'anning/' + CONTACT.wechatImage) + '" alt="微信 QR Code（' + esc(CONTACT.wechatName) + '）" width="160" style="display:block;width:160px;max-width:100%;height:auto;margin:8px 0;border:1px solid ' + C.line + ';">'
-    + '用微信掃描，加 <b>' + esc(CONTACT.wechatName) + '</b> 為朋友。</div></td></tr>';
+    + '打開微信「掃一掃」掃這張圖，加 <b>' + esc(CONTACT.wechatName) + '</b> 為朋友'
+    + (CONTACT.wechatId ? '；或在微信搜尋微信號 <b>' + esc(CONTACT.wechatId) + '</b>' : '') + '。<br>'
+    + '<span style="color:' + C.mist + ';font-size:13px;">用手機看這封信的話：長按圖片存到相簿，再到微信「掃一掃」右上角的相簿選這張圖。</span></div></td></tr>';
 }
 
 function guestHtml(b) {
