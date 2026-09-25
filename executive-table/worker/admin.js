@@ -140,7 +140,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
   <div class="bar">
     <div class="filters">
       <select id="sStatus" aria-label="依狀態篩選"><option value="">全部狀態</option>${stayStatuses.map(s => `<option>${esc(s)}</option>`).join('')}</select>
-      <input id="sText" type="search" placeholder="搜尋預約編號、姓名、電話、微信／LINE" aria-label="搜尋預約">
+      <input id="sText" type="search" placeholder="搜尋預約編號、姓名、電話、微信／LINE、房型、日期" aria-label="搜尋預約">
       <label class="notify-opt"><input type="checkbox" id="sNotify" checked> 改成已確認／已付款時寄信通知客人</label>
     </div>
     <a class="btn" href="/api/admin/stays.csv">匯出 CSV</a>
@@ -415,13 +415,13 @@ $('#oStatus').addEventListener('change', renderOrders);
 $('#oText').addEventListener('input', renderOrders);
 
 /* ---------------- 安寧幸福之家預約 ---------------- */
-let stays = [], SPAY = {}, SMONTHS = {};
+let stays = [], SPAY = {};
 async function loadStays() {
   try {
     const res = await fetch('/api/admin/stays', { cache: 'no-store' });
     const out = await res.json();
     if (!out.ok) throw new Error(out.code);
-    stays = out.stays; SPAY = out.pay; SMONTHS = out.months || {}; renderStays();
+    stays = out.stays; SPAY = out.pay; renderStays();
   } catch (e) {
     $('#sList').innerHTML = ''; $('#sList').append(el('p', 'err', '讀不到預約（' + e.message + '）。重新整理頁面再試一次。'));
   }
@@ -429,7 +429,7 @@ async function loadStays() {
 function renderStays() {
   const st = $('#sStatus').value, q = $('#sText').value.trim().toLowerCase();
   const shown = stays.filter(r => (!st || r.status === st) &&
-    (!q || [r.booking_no, r.name, r.phone, r.email, r.im, r.companions].join(' ').toLowerCase().includes(q)));
+    (!q || [r.booking_no, r.name, r.phone, r.email, r.im, r.companions, r.rooms, r.checkin].join(' ').toLowerCase().includes(q)));
   const waiting = stays.filter(r => r.status === '待確認').length;
   $('#stayBadge').textContent = waiting ? String(waiting) : '';
   $('#sCount').textContent = '共 ' + stays.length + ' 筆，顯示 ' + shown.length + ' 筆' + (waiting ? '，' + waiting + ' 筆待確認' : '');
@@ -448,9 +448,9 @@ function renderStays() {
     const mail = el('a', '', r.email); mail.href = 'mailto:' + r.email + '?subject=' + encodeURIComponent('你的幸福之家預約 ' + (r.booking_no || '')); meta.append(mail);
     if (r.im) meta.append('・微信／LINE ' + r.im);
     const chips = el('div');
-    chips.append(el('span', 'chip', SMONTHS[r.month] || r.month), el('span', 'chip', r.guests + ' 位・' + r.rooms + ' 間'), el('span', 'chip', SPAY[r.pay] || r.pay));
+    chips.append(el('span', 'chip', r.checkin + ' 入住'), el('span', 'chip', r.rooms), el('span', 'chip', r.guests + ' 位'), el('span', 'chip', SPAY[r.pay] || r.pay));
     const sum = el('div', 'sum');
-    sum.append((r.checkin ? '希望 ' + r.checkin + ' 入住・' : '') + (r.dates ? '確認日期 ' + r.dates + '・' : '') + '金額 ');
+    sum.append((r.dates ? '確認日期 ' + r.dates + '・' : '') + '金額 ');
     sum.append(el('b', '', money(r.total)));
     item.append(top, meta, chips, sum);
     if (r.companions) item.append(el('div', 'meta', '同行：' + r.companions));

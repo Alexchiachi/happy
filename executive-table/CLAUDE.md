@@ -69,8 +69,11 @@
     renachien1@gmail.com（`SHOP_NOTIFY_EMAIL`），客人收到訂單確認＋付款資訊。付款仍是 LINE Pay／匯款＋後台手動改狀態。
     之後加上：送禮（收件人、卡片、不附價格明細）、後台填物流與追蹤號碼、改「已付款」「已出貨」時寄信通知客人。
     `orders` 表後加的欄位在 `ensureOrderSchema` 裡用 `ALTER TABLE ... ADD COLUMN` 補（重複欄位的錯誤略過）。
-15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。方案與開放月份在
-    `anning/stay.json`，Worker import 這份重算預估金額。一次只接一組客人，所以**送出時不付款**：
+15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。
+    這是**旅居方案（短期租賃居住）**，不是旅行社行程，文案不要寫成跟團、套裝行程。
+    三種房型（雙人套房 8,888、雙人雅房 6,666、單人雅房 3,666，都是 7 天 6 夜）各一間，可複選；
+    房型、開放月份（2026/10–12）在 `anning/stay.json`，Worker import 這份重算金額（所選房型加總）。
+    入住日期必填、須在開放月份內；人數不超過所選房間的人數與上限 5 位。一次只接一組客人，所以**送出時不付款**：
     待確認 →（管理頁填入住日期、可調金額）已確認，寄付款資訊 → 已付款，寄收款確認 → 已完成／取消。
     通知一樣寄 `SHOP_NOTIFY_EMAIL`；同月已有預約會標出來。
 
@@ -100,7 +103,7 @@
 | `worker/index.js` | 路由、表單驗證、限流（10 分鐘 5 次，IP 只存雜湊）、CORS、管理登入、CSV |
 | `worker/letters.js` | 品牌站來信：收信、兩封信的模板（繁／簡）、管理 API、CSV |
 | `worker/orders.js` | 雲南好物訂單：`import` 根目錄 `shop/products.json` 重算金額、截止日檢查、同檔同電話標記、信件模板、管理 API、CSV |
-| `worker/stays.js` | 安寧幸福之家預約：`import` 根目錄 `anning/stay.json` 重算預估金額、月份與人數檢查、同月標記、信件模板（預約確認、付款資訊、收款確認）、管理 API、CSV |
+| `worker/stays.js` | 安寧幸福之家預約：`import` 根目錄 `anning/stay.json` 依房型重算金額、入住日期與人數檢查、同月標記、信件模板（預約確認、付款資訊、收款確認）、管理 API、CSV |
 | `worker/mail.js`、`worker/util.js` | 共用：寄信（Gmail 優先，選用 Resend；可指定另一組 Gmail）、IP 雜湊、時間格式、JSON 回應 |
 | `worker/smtp.js` | `cloudflare:sockets` 連 `smtp.gmail.com:465`，AUTH PLAIN、RFC 2047、dot-stuffing |
 | `worker/emails.js` | 兩封信的 HTML／純文字模板（署名、頁尾在這裡） |

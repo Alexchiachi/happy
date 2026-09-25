@@ -1,15 +1,17 @@
 /**
  * 雲南安寧幸福之家（大道至簡品牌站 anning/）的入住預約。
  *
- *   POST /api/stay                         公開：收一筆預約（JSON），依 anning/stay.json 重算預估金額，存進 D1，寄信
+ *   POST /api/stay                         公開：收一筆預約（JSON），依 anning/stay.json 重算金額，存進 D1，寄信
  *   GET  /api/admin/stays                  管理：全部預約
  *   POST /api/admin/stays/<id>/status      管理：改狀態（待確認 → 已確認 → 已付款 → 已完成，或取消）；
  *                                          改成已確認時填入住日期與金額，寄付款資訊給客人；改成已付款時寄收款確認
  *   GET  /api/admin/stays.csv              管理：匯出 CSV
  *
+ * 旅居方案（短期租賃居住）：三居室裡三種房型各一間（雙人套房、雙人雅房、單人雅房），一組客人可選一間或多間。
  * 一次只接待一組客人，日期要先對過才收錢，所以跟雲南好物不同：送出時不付款，
  * 管理頁確認日期（可調整金額）後，系統才寄付款資訊。
- * 方案、價格、開放月份、付款資訊都寫在 anning/stay.json，網頁和這裡共用同一份。
+ * 房型、價格、開放月份、付款資訊都寫在 anning/stay.json，網頁和這裡共用同一份；
+ * 客人送來的只有「哪幾個房型、入住日期、幾位」，金額一律在這裡重算。
  *
  * 寄信用幸福餐桌那組 Gmail，寄件人名稱 STAY_FROM_NAME；通知信寄到 SHOP_NOTIFY_EMAIL（與雲南好物相同）。
  */
@@ -40,7 +42,6 @@ export async function handleStay(request, env, ctx, url) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) missing.push('email');
   if (!f.im) missing.push('im');
   if (!PAY[f.pay]) missing.push('pay');
-  if (f.checkin && !/^\d{4}-\d{2}-\d{2}$/.test(f.checkin)) missing.push('checkin');
   if (missing.length) return json({ ok: false, code: 'invalid', fields: missing }, 400);
 
   const priced = quote(data);
@@ -60,24 +61,24 @@ export async function handleStay(request, env, ctx, url) {
   const sameMonth = same.map(r => r.booking_no).join(', ');
 
   const row = await env.DB.prepare(
-    `INSERT INTO stays (created_at, month, checkin, guests, rooms, name, phone, email, im, companions, wishes, story,
-       pay, price, total, same_month, ip_hash)
+    `INSERT INTO stays (created_at, month, checkin, guests, room_ids, rooms, name, phone, email, im, companions, wishes, story,
+       pay, total, same_month, ip_hash)
      VALUES (datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at`
-  ).bind(priced.month.key, f.checkin, priced.guests, priced.rooms, f.name, f.phone, f.email, f.im, f.companions,
-    f.wishes.join('、'), f.story, f.pay, stay.plan.price, priced.total, sameMonth, ipHash).first();
+  ).bind(priced.month.key, priced.checkin, priced.guests, priced.rooms.map(r => r.id).join(','), priced.roomNames,
+    f.name, f.phone, f.email, f.im, f.companions, f.wishes.join('、'), f.story, f.pay, priced.total, sameMonth, ipHash).first();
 
   const bookingNo = 'HS' + taipeiDate(row.created_at) + '-' + String(row.id).padStart(3, '0');
   await env.DB.prepare('UPDATE stays SET booking_no = ? WHERE id = ?').bind(bookingNo, row.id).run();
 
   const b = {
-    ...f, id: row.id, bookingNo, month: priced.month.key, monthLabel: priced.month.label,
-    guests: priced.guests, rooms: priced.rooms, total: priced.total, sameMonth,
+    ...f, id: row.id, bookingNo, month: priced.month.key, monthLabel: priced.month.label, checkin: priced.checkin,
+    guests: priced.guests, rooms: priced.roomNames, total: priced.total, sameMonth,
     wishes: f.wishes.join('、'), submittedAt: formatTaipei(row.created_at), adminUrl: url.origin + '/admin#stays',
     siteUrl: env.BRAND_SITE_URL || 'https://alexchiachi.github.io/happy/'
   };
   // 預約已經存好；寄信放到回應之後，不讓客人等
   ctx.waitUntil(sendNewMails(env, b));
-  return json({ ok: true, bookingNo, monthLabel: b.monthLabel, guests: b.guests, rooms: b.rooms, total: b.total });
+  return json({ ok: true, bookingNo, checkin: b.checkin, roomNames: b.rooms, guests: b.guests, total: b.total });
 }
 
 const cleanText = (v, max) => String(v == null ? '' : v)
@@ -95,23 +96,40 @@ function clean(d) {
     companions: s(d.companions, LIMITS.companions),
     wishes: [...new Set(wishes)],
     story: s(d.story, LIMITS.story),
-    checkin: s(d.checkin, 10),
     pay: s(d.pay, 10)
   };
 }
 
-// 依 stay.json 重算：只收開放中的月份；每間套房住 perRoom 人，總人數不超過 maxGuests
-export function quote(d) {
-  const month = stay.months.find(m => m.key === String(d && d.month));
-  if (!month) return { error: 'invalid', fields: ['month'] };
+// 依 stay.json 重算：只收上架中的房型、開放月份內且不早於今天（台北）的入住日；
+// 人數不超過所選房間住得下的人數，也不超過一次接待的上限 stay.maxGuests
+export function quote(d, now = new Date()) {
+  const ids = Array.isArray(d && d.rooms) ? [...new Set(d.rooms.map(String))] : [];
+  if (!ids.length || ids.length > stay.rooms.length) return { error: 'no_rooms' };
+  const rooms = [];
+  for (const id of ids) {
+    const r = stay.rooms.find(x => x.id === id);
+    if (!r) return { error: 'invalid', fields: ['rooms'] };
+    if (r.active === false) return { error: 'room_closed' };
+    rooms.push(r);
+  }
+  rooms.sort((a, b) => stay.rooms.indexOf(a) - stay.rooms.indexOf(b));
+
+  const checkin = String((d && d.checkin) || '');
+  const valid = /^\d{4}-\d{2}-\d{2}$/.test(checkin) && !isNaN(Date.parse(checkin + 'T00:00:00Z'))
+    && new Date(checkin + 'T00:00:00Z').toISOString().slice(0, 10) === checkin;
+  const today = new Date(now.getTime() + 8 * 3600000).toISOString().slice(0, 10);
+  const month = valid && stay.months.find(m => m.key === checkin.slice(0, 7));
+  if (!valid || !month || checkin < today) return { error: 'invalid', fields: ['checkin'] };
   if (month.open === false) return { error: 'month_closed' };
-  const guests = Number(d.guests), rooms = Number(d.rooms);
+
+  const guests = Number(d.guests);
   if (!Number.isInteger(guests) || guests < 1) return { error: 'invalid', fields: ['guests'] };
-  if (guests > stay.stay.maxGuests) return { error: 'too_many' };
-  const need = Math.ceil(guests / stay.plan.perRoom);
-  if (!Number.isInteger(rooms) || rooms < need || rooms > stay.plan.maxRooms) return { error: 'invalid', fields: ['rooms'] };
-  if (d.checkin && !String(d.checkin).startsWith(month.key)) return { error: 'invalid', fields: ['checkin'] };
-  return { month, guests, rooms, total: stay.plan.price * rooms };
+  const cap = Math.min(stay.stay.maxGuests, rooms.reduce((a, r) => a + r.people, 0));
+  if (guests > cap) return { error: 'too_many' };
+  return {
+    month, checkin, guests, rooms, roomNames: rooms.map(r => r.name).join('、'),
+    total: rooms.reduce((a, r) => a + r.price, 0)
+  };
 }
 
 function taipeiDate(sqlUtc) {
@@ -132,7 +150,7 @@ async function sendNewMails(env, b) {
   for (const to of notify) {
     results.push('owner ' + await sendMail(env, {
       fromName, to, replyTo: b.email,
-      subject: '[幸福之家] 新預約 ' + b.bookingNo + '｜' + b.name + '｜' + b.monthLabel + '｜' + b.guests + ' 位' + (b.sameMonth ? '｜同月已有預約' : ''),
+      subject: '[幸福之家] 新預約 ' + b.bookingNo + '｜' + b.name + '｜' + b.checkin + '｜' + b.rooms + '｜' + b.guests + ' 位' + (b.sameMonth ? '｜同月已有預約' : ''),
       html: ownerHtml(b), text: ownerText(b)
     }));
   }
@@ -154,7 +172,7 @@ function esc(s) {
 const para = s => esc(s).replace(/\r?\n/g, '<br>');
 const money = n => 'NT$' + Number(n).toLocaleString('en-US');
 const monthLabelOf = key => (stay.months.find(m => m.key === key) || {}).label || key;
-const roomsText = b => b.guests + ' 位・' + b.rooms + ' 間' + stay.plan.unit;
+const roomsText = b => b.rooms + '・' + b.guests + ' 位';
 
 function shell(preheader, inner, footer) {
   return '<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">'
@@ -190,10 +208,10 @@ const contactText = () => '有問題直接回覆這封信'
 function infoRows(b, forOwner) {
   const row = (k, v) => '<tr><td style="padding:3px 16px 3px 0;color:' + C.mist + ';white-space:nowrap;vertical-align:top;">' + k + '</td><td style="padding:3px 0;color:' + C.ink + ';">' + v + '</td></tr>';
   return '<tr><td style="padding:12px 40px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family:' + SERIF + ';font-size:14px;line-height:1.7;">'
-    + row('月份', esc(b.monthLabel || monthLabelOf(b.month)) + '・' + esc(stay.stay.label))
-    + (b.dates ? row('入住日期', '<b>' + esc(b.dates) + '</b>') : b.checkin ? row('希望入住', esc(b.checkin)) : '')
-    + row('人數', esc(roomsText(b)))
-    + row('金額', (b.dates ? '' : '預估 ') + money(b.total))
+    + row('房型', esc(b.rooms) + '・' + esc(stay.stay.label))
+    + (b.dates ? row('入住日期', '<b>' + esc(b.dates) + '</b>') : row('入住日期', esc(b.checkin)))
+    + row('人數', esc(b.guests) + ' 位')
+    + row('金額', money(b.total))
     + row('預約人', esc(b.name) + '・' + esc(b.phone))
     + (forOwner ? row('Email', esc(b.email)) : '')
     + row('微信／LINE', esc(b.im))
@@ -214,20 +232,20 @@ function wechatBox(siteUrl) {
 
 function guestHtml(b) {
   const inner = heading(esc(b.name) + '，預約收到了。')
-    + lead('預約編號 <b style="color:' + C.ink + ';">' + esc(b.bookingNo) + '</b>。<br>現在先不用付款。一次只接待一組客人，我們會在兩三天內用微信或 LINE 跟你確認入住日期；確認後再寄一封信，附上付款資訊與最終金額。')
+    + lead('預約編號 <b style="color:' + C.ink + ';">' + esc(b.bookingNo) + '</b>。<br>現在先不用付款。一次只接待一組客人，我們會在兩三天內用微信或 LINE 跟你確認日期與房間；確認後再寄一封信，附上付款資訊。')
     + infoRows(b, false) + wechatBox(b.siteUrl) + signature;
-  return shell('預約 ' + b.bookingNo + '，' + b.monthLabel + '。我們會先跟你確認日期。', inner, contactHtml());
+  return shell('預約 ' + b.bookingNo + '，' + b.checkin + ' 入住。我們會先跟你確認日期。', inner, contactHtml());
 }
 
 function guestText(b) {
   return [
     b.name + '，預約收到了。', '',
     '預約編號：' + b.bookingNo,
-    '月份：' + b.monthLabel + '・' + stay.stay.label,
-    b.checkin ? '希望入住：' + b.checkin : '',
-    '人數：' + roomsText(b),
-    '預估金額：' + money(b.total), '',
-    '現在先不用付款。我們會在兩三天內用微信或 LINE 跟你確認入住日期，確認後再寄付款資訊與最終金額。', '',
+    '房型：' + b.rooms + '・' + stay.stay.label,
+    '入住日期：' + b.checkin,
+    '人數：' + b.guests + ' 位',
+    '金額：' + money(b.total), '',
+    '現在先不用付款。我們會在兩三天內用微信或 LINE 跟你確認日期與房間，確認後再寄付款資訊。', '',
     contactText(), '',
     '雲南安寧幸福之家｜大道至簡'
   ].filter(l => l !== '').join('\n');
@@ -242,15 +260,15 @@ function ownerHtml(b) {
     + flag + infoRows(b, true)
     + '<tr><td style="padding:28px 40px 36px;font-family:' + SERIF + ';font-size:14px;line-height:1.8;color:' + C.soft + ';">'
     + '先用微信或 LINE 跟客人對好日期。確認後到 <a href="' + esc(b.adminUrl) + '" style="color:' + C.tea + ';">管理頁</a> 填上入住日期（需要時調整金額），改成「已確認」，系統會寄付款資訊給客人；收到款項再改「已付款」。</td></tr>';
-  return shell(b.name + '・' + b.monthLabel + '・' + b.guests + ' 位', inner, '#' + b.id + ' · 已存進預約紀錄；客人同時收到一封預約確認信。');
+  return shell(b.name + '・' + b.checkin + '・' + b.rooms + '・' + b.guests + ' 位', inner, '#' + b.id + ' · 已存進預約紀錄；客人同時收到一封預約確認信。');
 }
 
 function ownerText(b) {
   return [
     '預約：' + b.bookingNo + '（' + b.submittedAt + '）',
     b.sameMonth ? '※ 這個月已經有其他預約：' + b.sameMonth : '',
-    '月份：' + b.monthLabel + (b.checkin ? '（希望 ' + b.checkin + ' 入住）' : ''),
-    '人數：' + roomsText(b) + '・預估 ' + money(b.total),
+    '入住日期：' + b.checkin,
+    '房型：' + b.rooms + '・' + b.guests + ' 位・' + money(b.total),
     '預約人：' + b.name, '手機：' + b.phone, 'Email：' + b.email, '微信／LINE：' + b.im,
     b.companions ? '同行：' + b.companions : '',
     b.wishes ? '想要的：' + b.wishes : '',
@@ -289,7 +307,7 @@ function statusMail(b, siteUrl) {
       subject: '日期確認與付款資訊 ' + b.bookingNo + '｜雲南安寧幸福之家',
       html: shell(b.dates + '，金額 ' + money(b.total) + '。付款資訊在信裡。', inner, contactHtml()),
       text: [b.name + '，日期確認好了。', '',
-        '預約編號：' + b.bookingNo, '入住日期：' + b.dates + '（' + stay.stay.label + '）', '人數：' + roomsText(b),
+        '預約編號：' + b.bookingNo, '入住日期：' + b.dates + '（' + stay.stay.label + '）', '房型：' + roomsText(b),
         '金額：' + money(b.total), '',
         '付款方式：' + PAY[b.pay],
         b.pay === 'bank' ? '匯款資訊：' + p.bank + '\n匯款後回覆這封信告訴我們帳號末五碼。'
@@ -327,11 +345,11 @@ export async function handleAdminStays(request, env, url, path) {
 
   if (path === '/api/admin/stays' && request.method === 'GET') {
     const { results } = await env.DB.prepare(
-      `SELECT id, booking_no, created_at, month, checkin, dates, guests, rooms, name, phone, email, im, companions,
-              wishes, story, pay, price, total, status, same_month, mail_status, confirmed_at
+      `SELECT id, booking_no, created_at, month, checkin, dates, guests, room_ids, rooms, name, phone, email, im, companions,
+              wishes, story, pay, total, status, same_month, mail_status, confirmed_at
        FROM stays ORDER BY id DESC LIMIT 2000`
     ).all();
-    return json({ ok: true, stays: results, pay: PAY, months: Object.fromEntries(stay.months.map(m => [m.key, m.label])) });
+    return json({ ok: true, stays: results, pay: PAY });
   }
 
   if (path === '/api/admin/stays.csv' && request.method === 'GET') {
@@ -388,8 +406,8 @@ export async function handleAdminStays(request, env, url, path) {
 
 function toCsv(rows) {
   const cols = [
-    ['booking_no', '預約編號'], ['created_at', '送出時間'], ['status', '狀態'], ['month', '月份'], ['checkin', '希望入住日'],
-    ['dates', '確認的入住日期'], ['guests', '人數'], ['rooms', '套房數'], ['total', '金額'], ['pay', '付款方式'],
+    ['booking_no', '預約編號'], ['created_at', '送出時間'], ['status', '狀態'], ['month', '月份'], ['checkin', '入住日期'],
+    ['dates', '確認的入住日期'], ['rooms', '房型'], ['guests', '人數'], ['total', '金額'], ['pay', '付款方式'],
     ['name', '預約人'], ['phone', '手機'], ['email', 'Email'], ['im', '微信／LINE'], ['companions', '同行'],
     ['wishes', '想要的'], ['story', '想說的話'], ['confirmed_at', '確認時間'], ['same_month', '同月其他預約'], ['mail_status', '寄信結果']
   ];
@@ -422,7 +440,8 @@ export function ensureStaySchema(env) {
         checkin TEXT,
         dates TEXT,
         guests INTEGER NOT NULL,
-        rooms INTEGER NOT NULL,
+        room_ids TEXT NOT NULL,
+        rooms TEXT NOT NULL,
         name TEXT NOT NULL,
         phone TEXT NOT NULL,
         email TEXT NOT NULL,
@@ -431,7 +450,6 @@ export function ensureStaySchema(env) {
         wishes TEXT,
         story TEXT,
         pay TEXT NOT NULL,
-        price INTEGER NOT NULL,
         total INTEGER NOT NULL,
         status TEXT NOT NULL DEFAULT '待確認',
         same_month TEXT,

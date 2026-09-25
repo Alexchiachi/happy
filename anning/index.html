@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>雲南安寧幸福之家 · 大道至簡</title>
-  <meta name="description" content="昆明旁的安寧，一間不做商業化的三居室。一次只接待一組、最多五位朋友，7 天 6 夜，像住在老朋友家。">
+  <meta name="description" content="昆明旁的安寧，一間不做商業化的三居室。7 天 6 夜的旅居方案，一次只接待一組、最多五位朋友，像住在老朋友家。">
   <!-- 設計稿階段：先不讓搜尋引擎收錄，正式上線時拿掉 -->
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#FAF6EF">
@@ -46,15 +46,14 @@
         <p class="cover-note" data-cover-note hidden></p>
       </section>
       <aside class="season-card" aria-labelledby="period-title">
-        <p class="season-kicker" id="period-title" data-period-name>10–12 月體驗期</p>
-        <p class="stay-price"><span data-price>NT$8,888</span><small>／套房・2 人</small></p>
-        <dl class="season-dates">
-          <div><dt>天數</dt><dd data-stay-label>7 天 6 夜</dd></div>
-          <div><dt>接待</dt><dd>一次一組，最多 <span data-max-guests>5</span> 位</dd></div>
-          <div><dt>地點</dt><dd>安寧・太平新城</dd></div>
+        <p class="season-kicker" id="period-title">旅居方案・<span data-period-name>10–12 月體驗期</span></p>
+        <dl class="season-dates room-prices" data-room-prices>
+          <div><dt>雙人套房<small>兩人</small></dt><dd>NT$8,888</dd></div>
+          <div><dt>雙人雅房<small>兩人</small></dt><dd>NT$6,666</dd></div>
+          <div><dt>單人雅房<small>一人</small></dt><dd>NT$3,666</dd></div>
         </dl>
-        <p class="countdown" data-wish>8888，藏著一份「幸福圓滿」的小祝願。</p>
-        <a class="btn btn-ghost" href="#book">預約入住 ↓</a>
+        <p class="season-meta"><span data-stay-label>7 天 6 夜</span>・一次一組，最多 <span data-max-guests>5</span> 位・安寧太平新城</p>
+        <a class="btn btn-ghost" href="#book">選房型預約 ↓</a>
       </aside>
     </div>
   </section>
@@ -63,7 +62,7 @@
   <section class="rules" aria-label="入住須知">
     <div class="wrap rules-grid">
       <div class="rule"><span class="rule-han">家</span><p><b>一次只接一組</b><br>最多 5 位朋友，留足空間，像回自己家一樣自在</p></div>
-      <div class="rule"><span class="rule-han">七</span><p><b>7 天 6 夜</b><br>首日接風、末日送別，中間五天你自在安排</p></div>
+      <div class="rule"><span class="rule-han">七</span><p><b>7 天 6 夜旅居</b><br>短期居住，不是跟團：首日接風、末日送別，中間五天你自在安排</p></div>
       <div class="rule"><span class="rule-han">聽</span><p><b>出發前先聽你的故事</b><br>你嚮往怎樣的旅途，我們先聊，再幫你準備</p></div>
       <div class="rule"><span class="rule-han">付</span><p><b>先確認日期，再付款</b><br>送出預約後，我們對好日期才寄付款資訊</p></div>
     </div>
@@ -212,37 +211,30 @@
         <p class="eyebrow">Your stay · 你的旅居</p>
         <h2 id="summary-title">預約明細</h2>
         <ul class="lines" data-lines></ul>
+        <p class="empty" data-empty>還沒選房型。往右邊挑一間吧。</p>
         <dl class="totals">
-          <div><dt>方案</dt><dd data-plan-note>NT$8,888／套房／2 人</dd></div>
-          <div class="grand"><dt>預估金額</dt><dd data-total>NT$8,888</dd></div>
+          <div class="grand"><dt>合計</dt><dd data-total>NT$0</dd></div>
         </dl>
-        <p class="summary-note">送出後先不用付款。我們會用微信或 LINE 跟你確認入住日期，確認後再寄付款資訊與最終金額。</p>
+        <p class="summary-note">送出後先不用付款。一次只接待一組，我們會用微信或 LINE 跟你確認日期與房間，確認後再寄付款資訊。</p>
       </div>
 
       <form class="order-form" data-form novalidate>
         <p class="eyebrow">Booking · 預約入住</p>
-        <h2>什麼時候來？</h2>
+        <h2>選擇旅居方案</h2>
 
-        <fieldset class="choice" data-months>
-          <legend>想入住的月份</legend>
+        <fieldset class="rooms-pick" data-rooms>
+          <legend>入住房型 <em>可複選，三種房型各一間</em></legend>
         </fieldset>
-        <label class="field"><span>希望入住日 <em>選填，日期我們再一起確認</em></span><input name="checkin" type="date"></label>
+        <p class="hint" data-rooms-note></p>
 
         <div class="field-row">
+          <label class="field"><span>入住日期 <em><span data-open-range>2026/10/1–12/31</span></em></span><input name="checkin" type="date" required></label>
           <div class="field">
-            <span id="guests-label">入住人數</span>
+            <span id="guests-label">同行人數（含本人）</span>
             <span class="stepper stepper-lg" data-guests-stepper>
               <button type="button" data-guests="-1" aria-label="人數減一">−</button>
-              <output aria-live="polite" aria-labelledby="guests-label" data-guests-out>2</output>
+              <output aria-live="polite" aria-labelledby="guests-label" data-guests-out>1</output>
               <button type="button" data-guests="1" aria-label="人數加一">＋</button>
-            </span>
-          </div>
-          <div class="field">
-            <span id="rooms-label">套房數 <em>每間 2 人</em></span>
-            <span class="stepper stepper-lg" data-rooms-stepper>
-              <button type="button" data-rooms="-1" aria-label="套房減一">−</button>
-              <output aria-live="polite" aria-labelledby="rooms-label" data-rooms-out>1</output>
-              <button type="button" data-rooms="1" aria-label="套房加一">＋</button>
             </span>
           </div>
         </div>
@@ -272,7 +264,7 @@
         <!-- 擋機器人：真人看不到這一欄 -->
         <label class="hp" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label>
 
-        <p class="privacy-note">個資說明：你填的姓名、手機、Email、微信或 LINE ID 與同行朋友稱呼，只用在這次預約的確認、聯絡、收款與入住安排，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 或回信告訴我們。<a href="../privacy.html#anning">完整隱私權政策</a></p>
+        <p class="privacy-note">個資說明：你填的入住日期、房型、人數、姓名、手機、Email、微信或 LINE ID 與同行朋友稱呼，只用在這次預約的確認、聯絡、收款與入住安排，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 或回信告訴我們。<a href="../privacy.html#anning">完整隱私權政策</a></p>
         <button class="btn btn-solid" type="submit">送出預約</button>
         <p class="form-msg" data-form-msg role="status"></p>
       </form>
@@ -284,8 +276,8 @@
     <div class="wrap done-card">
       <span class="done-seal" aria-hidden="true">謝</span>
       <h2>預約收到了</h2>
-      <p>預約編號 <b data-booking-no></b>，<span data-booking-month></span>・<span data-booking-rooms></span>，預估 <b data-booking-total></b>。<br>確認信已寄到你的信箱。</p>
-      <p class="muted">現在先不用付款。我們會在兩三天內用微信或 LINE 跟你確認入住日期，確認後再寄付款資訊。</p>
+      <p>預約編號 <b data-booking-no></b>，<span data-booking-date></span> 入住・<span data-booking-rooms></span>，合計 <b data-booking-total></b>。<br>確認信已寄到你的信箱。</p>
+      <p class="muted">現在先不用付款。我們會在兩三天內用微信或 LINE 跟你確認日期與房間，確認後再寄付款資訊。</p>
       <div class="wechat-box">
         <img src="images/wechat-qr.jpg" alt="微信 QR Code（Rena chien）" width="260" height="368" loading="lazy">
         <p>也可以直接加微信<br><b data-wechat-name>Rena chien</b><br><span class="muted small">用微信掃描，加我為朋友</span></p>
@@ -308,7 +300,7 @@
 
 <!-- 手機：固定在底部的預約列 -->
 <div class="dock" data-dock hidden>
-  <div class="dock-text"><b data-dock-total>NT$8,888</b><span data-dock-hint>7 天 6 夜</span></div>
+  <div class="dock-text"><b data-dock-total>NT$3,666 起</b><span data-dock-hint>7 天 6 夜</span></div>
   <a class="btn btn-solid" href="#book">預約</a>
 </div>
 
