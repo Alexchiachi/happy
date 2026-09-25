@@ -83,6 +83,8 @@ p { margin: 0; }
 /* 控制列放在照片下方，不蓋住照片（也不擋住攝影者浮水印） */
 .cover-ui { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
 .cover-dots { display: flex; gap: .15rem; }
+.cover-note { margin-top: .3rem; font-size: .75rem; line-height: 1.6; color: var(--mist); letter-spacing: .04em; }
+.cover-note a { color: var(--ink-soft); }
 .cover-dots button {
   width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center;
 }
@@ -330,7 +332,7 @@ p { margin: 0; }
   .has-cover .season-card { max-width: none; }
   .hero:has(.has-cover) { padding-top: 0; }
   .has-cover .cover { margin: 0 calc(var(--gutter) * -1); }
-  .cover-ui { padding: 0 var(--gutter); }
+  .cover-ui, .cover-note { padding: 0 var(--gutter); }
   .cover-track { aspect-ratio: 4 / 5; max-height: 72svh; }
   .shelf-head { grid-template-columns: 1fr; row-gap: .6rem; margin-bottom: 1.6rem; }
   .rules-grid { grid-template-columns: 1fr; }

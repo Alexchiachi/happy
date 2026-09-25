@@ -72,6 +72,12 @@
       return '<button type="button" aria-label="看第 ' + (i + 1) + ' 張"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
     }).join('');
     pauseBtn.hidden = list.length < 2;
+    var note = box.querySelector('[data-cover-note]');
+    if (DATA.coverNote) {
+      var c = DATA.contact || {};
+      note.innerHTML = esc(DATA.coverNote) + (c.line ? ' <a href="' + c.lineUrl + '" target="_blank" rel="noopener">LINE ' + esc(c.line) + '</a>' : '');
+      note.hidden = false;
+    }
     box.hidden = false;
     box.closest('.hero-grid').classList.add('has-cover');
     if (list.length < 2) return;
