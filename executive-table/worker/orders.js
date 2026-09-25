@@ -23,7 +23,7 @@ import { sendMail } from './mail.js';
 import { json, hashIp, formatTaipei } from './util.js';
 
 export const ORDER_STATUSES = ['待付款', '已付款', '已出貨', '取消'];
-const DELIVERY = { home: '宅配', '711': '7-11 取貨', family: '全家取貨', meet: '面交（南投市／草屯）' };
+const DELIVERY = { home: '宅配', '711': '7-11 取貨', family: '全家取貨', meet: '面交（南投市／草屯鎮）' };
 const PAY = { linepay: 'LINE Pay', bank: '匯款' };
 const LIMITS = { name: 40, phone: 20, email: 120, line: 60, address: 200, store: 60, note: 1000, card: 200, tracking: 40 };
 export const CARRIERS = ['黑貓宅急便', '新竹物流', '中華郵政', '7-11 交貨便', '全家店到店', '其他'];
@@ -85,7 +85,7 @@ export async function handleOrder(request, env, ctx, url) {
   const o = {
     ...f, id: row.id, orderNo, season, lines: priced.lines, subtotal: priced.subtotal, shipping,
     total: priced.subtotal + shipping, samePhone, submittedAt: formatTaipei(row.created_at),
-    adminUrl: url.origin + '/admin#orders'
+    adminUrl: url.origin + '/admin#orders', siteUrl: env.BRAND_SITE_URL || 'https://alexchiachi.github.io/happy/'
   };
   // 訂單已經存好；寄信放到回應之後，不讓客人等
   ctx.waitUntil(sendOrderMails(env, o));
@@ -259,7 +259,10 @@ function payBox(o) {
   const p = catalog.payment;
   const body = o.pay === 'bank'
     ? '請匯款 <b>' + money(o.total) + '</b> 到：<br>' + para(p.bank) + '<br>匯款後直接回覆這封信，告訴我們帳號末五碼就好。'
-    : '請用 LINE Pay 付款 <b>' + money(o.total) + '</b>：<br>' + para(p.linepay) + '<br>付款後直接回覆這封信告訴我們，我們核對後就安排出貨。';
+    : '請用 LINE Pay 付款 <b>' + money(o.total) + '</b>：<br>' + para(p.linepay)
+      + (p.linepayImage ? '<br><img src="' + esc(o.siteUrl + 'shop/' + p.linepayImage) + '" alt="LINE Pay 收款碼（嘉禮慕華）" width="200" style="display:block;width:200px;max-width:100%;height:auto;margin:12px 0;border:1px solid ' + C.line + ';">' : '')
+      + (p.linepayUrl ? '<a href="' + esc(p.linepayUrl) + '" style="display:inline-block;margin:4px 0 8px;padding:8px 18px;background:#06C755;color:#FFFFFF;text-decoration:none;border-radius:999px;font-size:14px;">開啟 LINE Pay 付款</a><br>' : '')
+      + '付款後直接回覆這封信告訴我們，我們核對後就安排出貨。';
   return '<tr><td style="padding:24px 40px 0;"><div style="background:' + C.paper + ';border:1px solid ' + C.line + ';padding:16px 18px;font-family:' + SERIF + ';font-size:14px;line-height:1.9;color:' + C.soft + ';">'
     + '<div style="color:' + C.seal + ';letter-spacing:2px;font-size:12px;margin-bottom:6px;">付款方式・' + esc(PAY[o.pay]) + '</div>' + body + '</div></td></tr>';
 }
@@ -286,7 +289,7 @@ function guestText(o) {
     '運費：' + (o.shipping ? money(o.shipping) : '免運'),
     '合計：' + money(o.total), '',
     '付款方式：' + PAY[o.pay],
-    o.pay === 'bank' ? '匯款資訊：' + p.bank + '\n匯款後回覆這封信告訴我們帳號末五碼。' : 'LINE Pay：' + p.linepay + '\n付款後回覆這封信告訴我們。',
+    o.pay === 'bank' ? '匯款資訊：' + p.bank + '\n匯款後回覆這封信告訴我們帳號末五碼。' : 'LINE Pay：' + p.linepay + (p.linepayUrl ? '\n手機付款連結：' + p.linepayUrl : '') + '\n付款後回覆這封信告訴我們。',
     '',
     ...giftText(o, false),
     '取貨：' + DELIVERY[o.delivery] + '・' + whereOf(o),

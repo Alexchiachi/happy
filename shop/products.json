@@ -15,14 +15,33 @@
   },
   "payment": {
     "bank": "合作金庫 草屯分行（銀行代號 006）\n帳號 5573717-232117\n戶名 嘉禮慕華舖",
-    "linepay": "（LINE Pay 收款資訊待提供）",
-    "linepayImage": ""
+    "linepay": "收款帳號：嘉禮慕華\n用 LINE 掃描收款碼（手機上可直接點「開啟 LINE Pay 付款」），輸入訂單金額後付款。",
+    "linepayImage": "images/linepay-qr.jpg",
+    "linepayUrl": "https://qrcodepay.line.me/qr/payment/%252BGglGp22MnGMT9HMIGb66InRjQTS3MFLyxdw6FU4QP7b6TrIEx9OWYX8PpKeUPG4"
   },
   "contact": {
     "line": "@617aipgs",
     "lineUrl": "https://line.me/R/ti/p/@617aipgs",
     "facebook": "https://www.facebook.com/profile.php?id=100075746177370"
   },
+  "cover": [
+    {
+      "img": "images/cover-lake.jpg",
+      "alt": "雪山下的高原湖泊，湖邊草地上一位戴黑帽、披黑色披肩的旅人提著竹籃走向湖岸"
+    },
+    {
+      "img": "images/cover-jacaranda.jpg",
+      "alt": "盛開的紫色藍花楹圍繞著一座重簷古建築，庭院中央有一位撐傘的行人"
+    },
+    {
+      "img": "images/cover-mountain.jpg",
+      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線，一匹馱著貨物的騾子和一位趕路人走下山坡"
+    },
+    {
+      "img": "images/cover-erhai.jpg",
+      "alt": "藍天白雲下的寬闊湖面，水上開滿點點白色小花，遠處是青色山巒"
+    }
+  ],
   "products": [
     {
       "active": true,
@@ -58,7 +77,7 @@
         {
           "key": "std",
           "label": "一盒 6 枚",
-          "price": 550,
+          "price": 680,
           "unit": "盒"
         }
       ],
@@ -355,15 +374,15 @@
       "variants": [
         {
           "key": "long",
-          "label": "長支",
+          "label": "長支・1 管",
           "price": 350,
-          "unit": "盒"
+          "unit": "管"
         },
         {
           "key": "short",
-          "label": "短支",
+          "label": "短支・1 管",
           "price": 200,
-          "unit": "盒"
+          "unit": "管"
         }
       ],
       "featured": true

@@ -64,6 +64,40 @@ p { margin: 0; }
 /* ---------- 開場 ---------- */
 .hero { padding: clamp(3rem, 9vw, 7rem) 0 clamp(2.5rem, 6vw, 4.5rem); }
 .hero-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: end; }
+/* 有封面輪播時：左邊文字＋本檔卡，右邊直式照片 */
+.hero-grid.has-cover {
+  grid-template-columns: 1.1fr 1fr; grid-template-areas: "copy cover" "season cover";
+  row-gap: 2.2rem; align-items: start;
+}
+.has-cover .hero-copy { grid-area: copy; align-self: end; }
+.has-cover .cover { grid-area: cover; }
+.has-cover .season-card { grid-area: season; max-width: 26rem; }
+
+/* ---------- 封面輪播 ---------- */
+.cover { margin: 0; }
+.cover-track { position: relative; aspect-ratio: 3 / 4; max-height: 78vh; overflow: hidden; background: var(--paper-deep); }
+.cover-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.4s var(--ease); }
+.cover-slide.on { opacity: 1; }
+.cover-slide img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; transform: scale(1.06); transition: transform 7s linear; }
+.cover-slide.on img { transform: scale(1); }
+/* 控制列放在照片下方，不蓋住照片（也不擋住攝影者浮水印） */
+.cover-ui { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
+.cover-dots { display: flex; gap: .15rem; }
+.cover-dots button {
+  width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center;
+}
+.cover-dots button::before { content: ""; width: 22px; height: 2px; background: var(--line); transition: background .3s, width .3s var(--ease); }
+.cover-dots button[aria-current="true"]::before { background: var(--ink); width: 30px; }
+.cover-pause {
+  width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: var(--card); cursor: pointer;
+  display: grid; place-items: center; color: var(--ink);
+}
+.cover-pause span { width: 10px; height: 11px; border-left: 3px solid currentColor; border-right: 3px solid currentColor; }
+.cover-pause.paused span { width: 0; height: 0; border: 0; border-left: 10px solid currentColor; border-top: 6px solid transparent; border-bottom: 6px solid transparent; margin-left: 3px; }
+@media (hover: hover) {
+  .cover-pause:hover { border-color: var(--ink); }
+  .cover-dots button:hover::before { background: var(--ink-soft); }
+}
 .hero h1 { font-size: clamp(2rem, 5.2vw, 3.5rem); font-weight: 300; letter-spacing: .1em; line-height: 1.45; }
 .lede { margin-top: 1.5rem; color: var(--ink-soft); max-width: 34em; font-size: 1.02rem; }
 
@@ -257,7 +291,10 @@ p { margin: 0; }
 .pay-box h3 { font-size: 1rem; letter-spacing: .15em; margin-bottom: .6rem; }
 .pay-box > div.chosen { border-color: var(--ink); }
 .pay-box p { font-size: .92rem; white-space: pre-line; }
-.qr { width: 160px; height: auto; margin-bottom: .6rem; }
+.qr { width: 180px; height: auto; margin-bottom: .6rem; border: 1px solid var(--line); }
+.btn-line { display: inline-flex; background: #06C755; border: 1px solid #06C755; color: #fff; margin-bottom: .8rem; font-size: .9rem; }
+.btn-line[hidden] { display: none; }
+.btn-line:hover { background: #05a647; border-color: #05a647; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .v-closed { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
 .load-err { color: var(--seal); padding: 1rem 0; }
@@ -289,6 +326,12 @@ p { margin: 0; }
 /* ---------- 手機 ---------- */
 @media (max-width: 680px) {
   .hero-grid { grid-template-columns: 1fr; }
+  .hero-grid.has-cover { grid-template-columns: 1fr; grid-template-areas: "cover" "copy" "season"; row-gap: 1.8rem; }
+  .has-cover .season-card { max-width: none; }
+  .hero:has(.has-cover) { padding-top: 0; }
+  .has-cover .cover { margin: 0 calc(var(--gutter) * -1); }
+  .cover-ui { padding: 0 var(--gutter); }
+  .cover-track { aspect-ratio: 4 / 5; max-height: 72svh; }
   .shelf-head { grid-template-columns: 1fr; row-gap: .6rem; margin-bottom: 1.6rem; }
   .rules-grid { grid-template-columns: 1fr; }
   .rule + .rule { border-left: 0; border-top: 1px solid var(--line); }
