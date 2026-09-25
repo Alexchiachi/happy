@@ -13,6 +13,13 @@
 | `anning.js` | 房型卡片、入住日期範圍、人數、合計、送出（`STAY_ENDPOINT` 指向 Worker） |
 | `images/` | `healing-card.jpg`（療心卡，1200×675）、`wechat-qr.jpg`（Rena chien 的微信 QR Code，縮圖後仍可掃描） |
 
+## 加微信
+
+微信個人 QR Code 的連結（`u.wechat.com/...`）只能在微信 App 裡掃，用瀏覽器點開只會顯示「請在微信中打開」，
+所以網頁與信件**不放微信連結**。改用：頁尾前的「加微信」段落（`#wechat`）與完成畫面提供
+「複製微信號」（`contact.wechatId` 有填才出現）、「儲存 QR Code 圖片」、手機上的「打開微信」（`weixin://`），
+並依裝置顯示步驟（手機：存圖 → 掃一掃 → 相簿選圖；電腦：用手機掃畫面）。信件寫微信號並連到 `#wechat`。
+
 ## 內容來源
 
 - 文案：Google 文件「雲南/ 安寧-太平新城幸福之家」（id `1vnEuBAFTE0eraD0751d6lRoWZ12t5oANguLP03CEMWc`，2026-09-25）。

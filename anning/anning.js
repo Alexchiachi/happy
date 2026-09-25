@@ -29,7 +29,7 @@
     document.querySelectorAll('[data-max-guests]').forEach(function (el) { el.textContent = data.stay.maxGuests; });
     document.querySelectorAll('[data-contact-line]').forEach(function (el) { el.textContent = c.line; el.href = c.lineUrl; });
     document.querySelectorAll('[data-contact-fb]').forEach(function (el) { el.href = c.facebook; });
-    document.querySelectorAll('[data-wechat-link]').forEach(function (el) { el.textContent = c.wechatName; el.href = c.wechatUrl; });
+    document.querySelectorAll('[data-wechat-actions]').forEach(function (el) { el.innerHTML = wechatActions(c); });
     document.querySelectorAll('[data-wechat-name]').forEach(function (el) { el.textContent = c.wechatName; });
     // 開場的房型列：點了直接帶到預約區並勾好這個房型（少一步）
     $('[data-room-prices]').innerHTML = ROOMS.map(function (r) {
@@ -69,6 +69,42 @@
     initCover(data.cover || []);
     render();
   }
+  // ---------- 加微信 ----------
+  // 微信個人 QR Code 只能在微信 App 裡掃，瀏覽器沒有「點一下加好友」的連結，所以提供：
+  // 複製微信號（有填 wechatId 才出現）、儲存 QR Code 圖片（手機掃不到自己的螢幕）、手機上打開微信
+  var TOUCH = matchMedia('(pointer: coarse)').matches;
+  document.documentElement.classList.toggle('touch', TOUCH); // 步驟說明與按鈕用同一個判斷
+  function wechatActions(c) {
+    var h = '';
+    if (c.wechatId) h += '<button type="button" class="btn btn-solid" data-copy-wechat="' + esc(c.wechatId) + '">複製微信號 ' + esc(c.wechatId) + '</button>';
+    h += '<a class="btn btn-ghost" href="' + esc(c.wechatImage) + '" download="wechat-' + esc(String(c.wechatName).replace(/\s+/g, '-')) + '.jpg">儲存 QR Code 圖片</a>';
+    if (TOUCH) h += '<a class="btn btn-ghost" href="weixin://">打開微信</a>';
+    return h;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy-wechat]');
+    if (!b) return;
+    var id = b.dataset.copyWechat;
+    copyText(id).then(function () {
+      b.textContent = '已複製，到微信搜尋框貼上';
+      b.classList.add('copied');
+    }, function () {
+      b.textContent = '微信號：' + id + '（請手動複製）';
+    });
+  });
+  function copyText(t) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+    return new Promise(function (ok, fail) {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false;
+      try { done = document.execCommand('copy'); } catch (err) { /* 舊瀏覽器 */ }
+      ta.remove();
+      if (done) ok(); else fail();
+    });
+  }
+
   function who(n) { return n === 1 ? '一人' : n === 2 ? '兩人' : n + ' 人'; }
 
   // ---------- 封面輪播（與選購頁同一套） ----------

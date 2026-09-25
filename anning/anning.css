@@ -121,6 +121,25 @@
 .wechat-box { display: flex; gap: 1.4rem; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--card); padding: 1.2rem; margin-top: .6rem; }
 .wechat-box img { width: 150px; height: auto; flex: none; }
 
+/* ---------- 加微信 ---------- */
+.wechat { padding: clamp(3.5rem, 8vw, 6rem) 0; border-top: 1px solid var(--line); }
+.wechat-grid { display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.wechat-qr { margin: 0; background: #fff; border: 1px solid var(--line); padding: .6rem; }
+.wechat-qr img { width: 100%; height: auto; }
+.wechat-text { display: grid; gap: .9rem; color: var(--ink-soft); max-width: 34rem; }
+.wechat-text .eyebrow { margin-bottom: -.4rem; }
+.wechat-text h2 { color: var(--ink); font-size: clamp(1.5rem, 3.2vw, 2.1rem); letter-spacing: .14em; line-height: 1.5; }
+.wechat-text b { color: var(--ink); font-weight: 500; }
+.wechat-steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .3rem; font-size: .93rem; }
+.wechat-steps li::marker { color: var(--seal); font-family: var(--font-display); }
+.only-touch { display: none; }
+.touch .only-touch { display: grid; }
+.touch .only-pointer { display: none; }
+.wechat-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .3rem; }
+.wechat-actions .btn { font-size: .9rem; min-height: 44px; }
+.wechat-actions .copied { background: var(--moss); border-color: var(--moss); }
+.wechat-box .wechat-actions { justify-content: center; margin-top: .8rem; }
+
 @media (max-width: 1000px) {
   .checkout .summary { display: none; }
   .form-total {
@@ -149,6 +168,9 @@
   .seasons > div { padding: 1rem .4rem; }
   .home-photos { aspect-ratio: 4 / 3; }
   .wechat-box { flex-direction: column; text-align: center; }
+  .wechat-grid { grid-template-columns: 1fr; justify-items: center; }
+  .wechat-qr { width: min(240px, 70vw); }
+  .wechat-actions .btn { flex: 1 1 100%; justify-content: center; }
 }
 
 /* 減少動態效果：輪播不要硬切，改成短的淡入淡出；照片不縮放 */
