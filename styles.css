@@ -755,6 +755,8 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .reveal.in { opacity: 1; transform: translateY(0); }
+/* 用錨點（例如 privacy.html#shop）跳到標題時，別讓固定頁首蓋住標題 */
+[id] { scroll-margin-top: 130px; }
 /* 關掉 JavaScript 時，.reveal 會永遠停在 opacity:0，整頁是空白的。
    這一條讓內容照常顯示，不必在十六個 HTML 檔裡各塞一段 <noscript>。 */
 @media (scripting: none) {
