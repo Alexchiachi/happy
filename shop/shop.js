@@ -99,13 +99,24 @@
     if (b) {
       var key = b.parentNode.dataset.key;
       var n = Math.max(0, Math.min(99, (cart[key] || 0) + Number(b.dataset.step)));
+      var before = cart[key] || 0;
       if (n) cart[key] = n; else delete cart[key];
       save(); render();
+      if (n > before) bumpCount();
+      if (b.disabled) b.parentNode.querySelector('[data-step="1"]').focus(); // 按到 0 時焦點不要掉
       return;
     }
     var a = e.target.closest('[data-add]');
-    if (a) { cart[a.dataset.add] = (cart[a.dataset.add] || 0) + 1; save(); render(); }
+    if (a) { cart[a.dataset.add] = (cart[a.dataset.add] || 0) + 1; save(); render(); bumpCount(); }
   });
+
+  function bumpCount() {
+    document.querySelectorAll('[data-count]').forEach(function (el) {
+      el.classList.remove('bump');
+      void el.offsetWidth; // 重新觸發動畫
+      el.classList.add('bump');
+    });
+  }
 
   // ---------- 金額（顯示用；實際金額以 Worker 回傳為準） ----------
   var form = $('[data-form]');
@@ -124,6 +135,7 @@
     document.querySelectorAll('.stepper').forEach(function (s) {
       var n = cart[s.dataset.key] || 0;
       s.querySelector('output').textContent = n;
+      s.querySelector('[data-step="-1"]').disabled = n === 0;
       s.classList.toggle('on', n > 0);
       s.closest('.variant').classList.toggle('picked', n > 0);
     });
@@ -175,6 +187,48 @@
   }
   form.addEventListener('change', function (e) { if (e.target.name === 'delivery') syncDelivery(); });
 
+  // ---------- 欄位即時驗證（離開欄位時檢查，不等到送出） ----------
+  var FIELD_HINT = {
+    name: '請填收件人姓名',
+    phone: '手機格式是 09 開頭共 10 碼，例如 0912-345-678',
+    email: 'Email 格式好像不對，確認信會寄到這裡',
+    address: '請填宅配地址',
+    store: '請填門市名稱，例如 7-11 龍辰門市'
+  };
+  function checkField(input, show) {
+    var field = input.closest('.field');
+    if (!field || field.hidden) return true;
+    var ok = input.checkValidity();
+    var err = field.querySelector('.field-err');
+    if (ok || !show) {
+      field.classList.remove('invalid');
+      input.removeAttribute('aria-invalid');
+      if (err) err.remove();
+      return ok;
+    }
+    field.classList.add('invalid');
+    input.setAttribute('aria-invalid', 'true');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'field-err';
+      err.id = 'err-' + input.name;
+      input.setAttribute('aria-describedby', err.id);
+      field.appendChild(err);
+    }
+    err.textContent = FIELD_HINT[input.name] || '請確認這一欄';
+    return false;
+  }
+  // 按下送出時先不跑離開欄位的檢查：錯誤提示若這時插進來，按鈕會被推走，這一下就按不到了
+  var pressingSubmit = false;
+  form.addEventListener('pointerdown', function (e) { pressingSubmit = !!e.target.closest('button[type=submit]'); });
+  form.addEventListener('focusout', function (e) {
+    if (pressingSubmit) { pressingSubmit = false; return; }
+    if (e.target.matches('.field input') && e.target.value !== '') checkField(e.target, true);
+  });
+  form.addEventListener('input', function (e) {
+    if (e.target.closest('.field.invalid')) checkField(e.target, true);
+  });
+
   // ---------- 送出訂單 ----------
   var FIELD_LABEL = { name: '姓名', phone: '手機', email: 'Email', address: '宅配地址', store: '門市名稱', delivery: '取貨方式', pay: '付款方式' };
   var ERRORS = {
@@ -192,8 +246,12 @@
     var btn = form.querySelector('button[type=submit]');
     var t = calc();
     if (!t.count) { msg.textContent = ERRORS.empty_cart; return; }
-    var bad = Array.prototype.filter.call(form.querySelectorAll('input[required]'), function (i) { return !i.checkValidity(); })[0];
-    if (bad) { msg.textContent = '請確認「' + (FIELD_LABEL[bad.name] || bad.name) + '」'; bad.focus(); return; }
+    var bad = Array.prototype.filter.call(form.querySelectorAll('input[required]'), function (i) { return !checkField(i, true); });
+    if (bad.length) {
+      msg.textContent = '還有 ' + bad.length + ' 個欄位要確認：' + bad.map(function (i) { return FIELD_LABEL[i.name] || i.name; }).join('、');
+      bad[0].focus();
+      return;
+    }
 
     var fd = new FormData(form);
     var body = {
@@ -202,8 +260,9 @@
       delivery: fd.get('delivery'), address: fd.get('address'), store: fd.get('store'),
       pay: fd.get('pay'), note: fd.get('note'), website: fd.get('website')
     };
-    msg.textContent = '送出中…';
+    msg.textContent = '';
     btn.disabled = true;
+    btn.textContent = '送出中…';
     // 20 秒沒回應就放棄，免得按鈕一直卡在送出中
     var ctrl = 'AbortController' in window ? new AbortController() : null;
     var timer = ctrl && setTimeout(function () { ctrl.abort(); }, 20000);
@@ -225,7 +284,7 @@
         msg.textContent = err && err.shown ? err.message
           : '沒有連上訂單系統，這張訂單還沒有送出。請稍後再按一次「送出訂單」；一直失敗的話，請寫信或用 LINE 告訴我們。';
       })
-      .then(function () { clearTimeout(timer); btn.disabled = false; });
+      .then(function () { clearTimeout(timer); btn.disabled = false; btn.textContent = '送出訂單'; });
   });
 
   function showDone(out, pay) {
