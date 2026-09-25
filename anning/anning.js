@@ -31,8 +31,9 @@
     document.querySelectorAll('[data-contact-fb]').forEach(function (el) { el.href = c.facebook; });
     document.querySelectorAll('[data-wechat-link]').forEach(function (el) { el.textContent = c.wechatName; el.href = c.wechatUrl; });
     document.querySelectorAll('[data-wechat-name]').forEach(function (el) { el.textContent = c.wechatName; });
+    // 開場的房型列：點了直接帶到預約區並勾好這個房型（少一步）
     $('[data-room-prices]').innerHTML = ROOMS.map(function (r) {
-      return '<div><dt>' + esc(r.name) + '<small>' + who(r.people) + '</small></dt><dd>' + money(r.price) + '</dd></div>';
+      return '<li><a class="room-row" href="#book" data-pick="' + esc(r.id) + '"><span>' + esc(r.name) + '<small>' + who(r.people) + '</small></span><b>' + money(r.price) + '</b></a></li>';
     }).join('');
     $('[data-rooms-note]').textContent = data.roomsNote || '';
 
@@ -136,6 +137,12 @@
     return Math.min(DATA.stay.maxGuests, list.reduce(function (a, r) { return a + r.people; }, 0));
   }
   document.addEventListener('click', function (e) {
+    var pick = e.target.closest('[data-pick]');
+    if (pick && DATA) {
+      var box = form.querySelector('input[name=rooms][value="' + pick.dataset.pick + '"]');
+      if (box && !box.checked) { box.checked = true; roomsChanged(); }
+      return; // 捲動交給連結本身（#book）
+    }
     var g = e.target.closest('[data-guests]');
     if (!g || !DATA) return;
     var cap = capacity(picked()) || DATA.stay.maxGuests;
@@ -160,17 +167,26 @@
     }).join('');
     $('[data-empty]').hidden = list.length > 0;
     $('[data-total]').textContent = money(total);
+    $('[data-form-total-amt]').textContent = money(total);
     var cheapest = Math.min.apply(null, ROOMS.map(function (r) { return r.price; }));
     $('[data-dock-total]').textContent = list.length ? money(total) : money(cheapest) + ' 起';
     $('[data-dock-hint]').textContent = DATA.stay.label + (list.length ? '・' + guests + ' 位' : '');
     dockVisible();
   }
-  form.addEventListener('change', function (e) {
-    if (e.target.name !== 'rooms') return;
+  function roomsChanged() {
     var msg = $('[data-form-msg]');
     if (msg.textContent === ERRORS.no_rooms || msg.textContent === ERRORS.too_many) msg.textContent = '';
+    showRoomsError(false);
     render();
-  });
+  }
+  form.addEventListener('change', function (e) { if (e.target.name === 'rooms') roomsChanged(); });
+
+  // 房型沒選：錯誤就寫在房型卡片旁邊，並把畫面帶回那裡（不是只在按鈕下方說）
+  function showRoomsError(on) {
+    $('[data-rooms-err]').hidden = !on;
+    $('[data-rooms]').classList.toggle('invalid', on);
+  }
+  function reduceMotion() { return matchMedia('(prefers-reduced-motion: reduce)').matches; }
 
   // ---------- 欄位即時驗證 ----------
   var FIELD_HINT = {
@@ -229,7 +245,13 @@
     var msg = $('[data-form-msg]');
     var btn = form.querySelector('button[type=submit]');
     var fd = new FormData(form);
-    if (!picked().length) { msg.textContent = ERRORS.no_rooms; $('[data-rooms] input').focus(); return; }
+    if (!picked().length) {
+      msg.textContent = ERRORS.no_rooms;
+      showRoomsError(true);
+      $('[data-rooms]').scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+      $('[data-rooms] input').focus({ preventScroll: true });
+      return;
+    }
     var bad = Array.prototype.filter.call(form.querySelectorAll('input[required]'), function (i) { return !checkField(i, true); });
     if (bad.length) {
       msg.textContent = '還有 ' + bad.length + ' 個欄位要確認：' + bad.map(function (i) { return FIELD_LABEL[i.name] || i.name; }).join('、');
@@ -274,18 +296,22 @@
     $('[data-booking-total]').textContent = money(out.total);
     var done = $('[data-done]');
     done.hidden = false;
+    done.classList.add('arrive');
     $('#book').hidden = true;
     form.reset();
     guests = 1; render();
     done.focus();
-    done.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    done.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' });
   }
 
-  // ---------- 手機底部預約列：看不到預約區時才出現 ----------
-  var dock = $('[data-dock]'), bookInView = false;
-  function dockVisible() { dock.hidden = !DATA || bookInView || !$('[data-done]').hidden; }
+  // ---------- 手機底部預約列：開場的價格卡與預約區都看不到時才出現（不跟畫面上的按鈕重複） ----------
+  var dock = $('[data-dock]'), inView = {};
+  function dockVisible() { dock.hidden = !DATA || inView.book || inView.hero || !$('[data-done]').hidden; }
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { bookInView = es[0].isIntersecting; dockVisible(); }, { threshold: 0.05 })
-      .observe($('#book'));
+    var watch = function (el, key) {
+      new IntersectionObserver(function (es) { inView[key] = es[0].isIntersecting; dockVisible(); }, { threshold: 0.05 }).observe(el);
+    };
+    watch($('#book'), 'book');
+    watch($('.season-card'), 'hero');
   }
 })();

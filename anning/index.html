@@ -24,7 +24,11 @@
     <span class="brand-seal" aria-hidden="true">家</span>
     <span class="brand-text">安寧幸福之家<small>大道至簡 · Dao is simple</small></span>
   </a>
-  <a class="bar-bag" href="#book">預約入住</a>
+  <nav class="bar-nav" aria-label="本頁段落">
+    <a href="#home">我們的家</a>
+    <a href="#anning">安寧</a>
+    <a class="bar-cta" href="#book">預約入住</a>
+  </nav>
 </header>
 
 <main id="main" tabindex="-1">
@@ -47,11 +51,11 @@
       </section>
       <aside class="season-card" aria-labelledby="period-title">
         <p class="season-kicker" id="period-title">旅居方案・<span data-period-name>10–12 月體驗期</span></p>
-        <dl class="season-dates room-prices" data-room-prices>
-          <div><dt>雙人套房<small>兩人</small></dt><dd>NT$8,888</dd></div>
-          <div><dt>雙人雅房<small>兩人</small></dt><dd>NT$6,666</dd></div>
-          <div><dt>單人雅房<small>一人</small></dt><dd>NT$3,666</dd></div>
-        </dl>
+        <ul class="room-rows" data-room-prices>
+          <li><a class="room-row" href="#book" data-pick="suite"><span>雙人套房<small>兩人</small></span><b>NT$8,888</b></a></li>
+          <li><a class="room-row" href="#book" data-pick="double"><span>雙人雅房<small>兩人</small></span><b>NT$6,666</b></a></li>
+          <li><a class="room-row" href="#book" data-pick="single"><span>單人雅房<small>一人</small></span><b>NT$3,666</b></a></li>
+        </ul>
         <p class="season-meta"><span data-stay-label>7 天 6 夜</span>・一次一組，最多 <span data-max-guests>5</span> 位・安寧太平新城</p>
         <a class="btn btn-ghost" href="#book">選房型預約 ↓</a>
       </aside>
@@ -116,7 +120,7 @@
   </section>
 
   <!-- 五、我們的家 -->
-  <section class="home">
+  <section class="home" id="home">
     <div class="wrap home-grid">
       <div class="home-text">
         <p class="eyebrow">Our home · 我們的家</p>
@@ -134,7 +138,7 @@
   </section>
 
   <!-- 六、安寧 -->
-  <section class="guide shelf">
+  <section class="guide shelf" id="anning">
     <div class="wrap">
       <header class="shelf-head">
         <p class="eyebrow">Anning · 春城旁的慢生活</p>
@@ -211,7 +215,7 @@
         <p class="eyebrow">Your stay · 你的旅居</p>
         <h2 id="summary-title">預約明細</h2>
         <ul class="lines" data-lines></ul>
-        <p class="empty" data-empty>還沒選房型。往右邊挑一間吧。</p>
+        <p class="empty" data-empty>還沒選房型，先挑一間吧。</p>
         <dl class="totals">
           <div class="grand"><dt>合計</dt><dd data-total>NT$0</dd></div>
         </dl>
@@ -225,6 +229,7 @@
         <fieldset class="rooms-pick" data-rooms>
           <legend>入住房型 <em>可複選，三種房型各一間</em></legend>
         </fieldset>
+        <p class="field-err rooms-err" data-rooms-err role="alert" hidden>請先選入住房型。</p>
         <p class="hint" data-rooms-note></p>
 
         <div class="field-row">
@@ -265,6 +270,10 @@
         <label class="hp" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label>
 
         <p class="privacy-note">個資說明：你填的入住日期、房型、人數、姓名、手機、Email、微信或 LINE ID 與同行朋友稱呼，只用在這次預約的確認、聯絡、收款與入住安排，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 或回信告訴我們。<a href="../privacy.html#anning">完整隱私權政策</a></p>
+        <div class="form-total" data-form-total aria-live="polite">
+          <span>合計 <b data-form-total-amt>NT$0</b></span>
+          <small>送出後先不用付款，確認日期後才收款</small>
+        </div>
         <button class="btn btn-solid" type="submit">送出預約</button>
         <p class="form-msg" data-form-msg role="status"></p>
       </form>
