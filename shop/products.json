@@ -26,20 +26,32 @@
   },
   "cover": [
     {
-      "img": "images/cover-lake.jpg",
-      "alt": "雪山下的高原湖泊，湖邊草地上一位戴黑帽、披黑色披肩的旅人提著竹籃走向湖岸"
-    },
-    {
       "img": "images/cover-jacaranda.jpg",
       "alt": "盛開的紫色藍花楹圍繞著一座重簷古建築，庭院中央有一位撐傘的行人"
     },
     {
-      "img": "images/cover-mountain.jpg",
-      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線，一匹馱著貨物的騾子和一位趕路人走下山坡"
+      "img": "images/cover-terraces.jpg",
+      "alt": "陽光穿過雲層灑在層層梯田上，水面映著天光，遠方是連綿山巒"
+    },
+    {
+      "img": "images/cover-lake.jpg",
+      "alt": "雪山下的高原湖泊，湖邊草地上一位戴黑帽、披黑色披肩的旅人提著竹籃走向湖岸"
+    },
+    {
+      "img": "images/cover-alpine-lake.jpg",
+      "alt": "雲霧繚繞的高山下一座碧藍湖泊，湖水化成小瀑布流下，岸邊開著黃色與紫色的野花"
+    },
+    {
+      "img": "images/cover-lake-spring.jpg",
+      "alt": "雪山下的湛藍湖泊，湖心小島開滿粉紅花樹，岸邊是白牆村落與金黃油菜花田，一艘船劃過湖面"
     },
     {
       "img": "images/cover-erhai.jpg",
       "alt": "藍天白雲下的寬闊湖面，水上開滿點點白色小花，遠處是青色山巒"
+    },
+    {
+      "img": "images/cover-mountain.jpg",
+      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線，一匹馱著貨物的騾子和一位趕路人走下山坡"
     }
   ],
   "coverNote": "照片取自網路，若有侵權請告知，我們會立即下架。",
