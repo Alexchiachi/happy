@@ -51,6 +51,7 @@
   暫停某個房型設 `"active": false`。
 - 換季調價：改各房型的 `price`、`period.name`、`period.note`。已送出的預約金額不會跟著變。
 - 改完推上 `main`：GitHub Pages（頁面）與 Cloudflare（Worker 重算金額）都會自動更新。
+  Worker 的自動部署靠 `.github/workflows/worker.yml` 的 `paths`，`anning/stay.json` 必須在清單裡（2026-09-25 補上）。
 
 ## 還缺的素材
 

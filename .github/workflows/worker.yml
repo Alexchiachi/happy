@@ -13,6 +13,7 @@ on:
     paths:
       - 'executive-table/**'
       - 'shop/products.json'
+      - 'anning/stay.json'
       - 'wrangler.jsonc'
       - '.github/workflows/worker.yml'
   workflow_dispatch:
