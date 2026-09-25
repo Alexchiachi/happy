@@ -34,7 +34,7 @@ CC = OpenCC("tw2sp")
 # inner-flow（內耗熵值檢測）自己就有一套五語系切換。
 SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
              "eternitychildbooking", "inner-flow", "docs", "tools", "tests",
-             "images", "google", "executive-table")  # 課程頁有自己的簡體建置（executive-table/build_zh_cn.py）
+             "images", "google", "executive-table", "shop")  # shop：選購頁不做簡體版（noindex、相對路徑讀 products.json）；課程頁有自己的簡體建置（executive-table/build_zh_cn.py）
 
 # 舊網址的轉址殼，不做簡體版。
 # 404.html 同理：GitHub Pages 只認根目錄那一份，而且它必須用絕對路徑

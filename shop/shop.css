@@ -236,6 +236,14 @@ p { margin: 0; }
 .choice label:has(input:checked) { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 .choice input { accent-color: var(--seal); }
 .hint { font-size: .85rem; color: var(--mist); margin-top: -.4rem; }
+.check { display: inline-flex; align-items: center; gap: .6rem; cursor: pointer; min-height: 44px; font-size: .95rem; justify-self: start; }
+.check input { width: 1.15rem; height: 1.15rem; accent-color: var(--seal); margin: 0; }
+.gift-toggle { border: 1px solid var(--line); background: var(--card); padding: .5rem 1rem; }
+.gift-toggle:has(input:checked) { border-color: var(--ink); }
+.gift-box { display: grid; gap: 1.1rem; border-left: 2px solid var(--tea); padding: .2rem 0 .2rem 1.1rem; }
+.gift-box[hidden] { display: none; }
+.privacy-note { font-size: .8rem; line-height: 1.8; color: var(--mist); max-width: 34rem; }
+.privacy-note a { color: var(--ink-soft); }
 .order-form .btn-solid { justify-self: start; min-width: 12rem; margin-top: .4rem; }
 .form-msg { color: var(--seal); font-size: .9rem; min-height: 1.4em; }
 
@@ -262,6 +270,8 @@ p { margin: 0; }
 .foot-brand span { color: var(--mist); letter-spacing: .04em; }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--seal); }
+.foot-contact { margin-top: .4rem; }
+.done-contact a { color: var(--ink-soft); }
 
 /* ---------- 手機底部小計列 ---------- */
 .dock { display: none; }

@@ -38,6 +38,11 @@
     document.querySelectorAll('[data-free]').forEach(function (el) { el.textContent = money(s.free); });
     document.querySelectorAll('[data-fee-home]').forEach(function (el) { el.textContent = s.home; });
     document.querySelectorAll('[data-fee-cvs]').forEach(function (el) { el.textContent = s.cvs; });
+    var c = data.contact;
+    if (c) {
+      document.querySelectorAll('[data-contact-line]').forEach(function (el) { el.textContent = c.line; el.href = c.lineUrl; });
+      document.querySelectorAll('[data-contact-fb]').forEach(function (el) { el.href = c.facebook; });
+    }
 
     var days = Math.ceil((new Date(data.season.deadline) - new Date()) / 86400000);
     var closed = days <= 0;
@@ -49,6 +54,7 @@
         .map(function (p) { return cardHTML(p, closed && shelf === 'season'); }).join('');
     });
     syncDelivery();
+    syncGift();
   }
 
   function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(cart)); } catch (e) { /* 無痕模式等情況：不記也沒關係 */ } }
@@ -185,7 +191,25 @@
     });
     render();
   }
-  form.addEventListener('change', function (e) { if (e.target.name === 'delivery') syncDelivery(); });
+  form.addEventListener('change', function (e) {
+    if (e.target.name === 'delivery') syncDelivery();
+    if (e.target.name === 'gift') syncGift();
+  });
+
+  // ---------- 送禮：訂購人與收件人分開 ----------
+  function syncGift() {
+    var on = form.querySelector('[data-gift]').checked;
+    form.querySelector('[data-gift-box]').hidden = !on;
+    ['to_name', 'to_phone'].forEach(function (n) {
+      var input = form.querySelector('input[name=' + n + ']');
+      input.required = on;
+      if (!on) checkField(input, false);
+    });
+    form.querySelectorAll('[data-gift-alt]').forEach(function (el) {
+      if (!el.dataset.orig) el.dataset.orig = el.textContent;
+      el.textContent = on ? el.dataset.giftAlt : el.dataset.orig;
+    });
+  }
 
   // ---------- 欄位即時驗證（離開欄位時檢查，不等到送出） ----------
   var FIELD_HINT = {
@@ -193,11 +217,13 @@
     phone: '手機格式是 09 開頭共 10 碼，例如 0912-345-678',
     email: 'Email 格式好像不對，確認信會寄到這裡',
     address: '請填宅配地址',
+    to_name: '請填收件人姓名',
+    to_phone: '收件人手機格式是 09 開頭共 10 碼，物流會用這支電話聯絡',
     store: '請填門市名稱，例如 7-11 龍辰門市'
   };
   function checkField(input, show) {
     var field = input.closest('.field');
-    if (!field || field.hidden) return true;
+    if (!field || field.closest('[hidden]')) return true;
     var ok = input.checkValidity();
     var err = field.querySelector('.field-err');
     if (ok || !show) {
@@ -230,7 +256,7 @@
   });
 
   // ---------- 送出訂單 ----------
-  var FIELD_LABEL = { name: '姓名', phone: '手機', email: 'Email', address: '宅配地址', store: '門市名稱', delivery: '取貨方式', pay: '付款方式' };
+  var FIELD_LABEL = { to_name: '收件人姓名', to_phone: '收件人手機', name: '姓名', phone: '手機', email: 'Email', address: '宅配地址', store: '門市名稱', delivery: '取貨方式', pay: '付款方式' };
   var ERRORS = {
     empty_cart: '還沒有選商品喔。',
     unknown_item: '有商品已經下架，請重新整理頁面再選一次。',
@@ -260,6 +286,10 @@
       delivery: fd.get('delivery'), address: fd.get('address'), store: fd.get('store'),
       pay: fd.get('pay'), note: fd.get('note'), website: fd.get('website')
     };
+    if (fd.get('gift')) {
+      body.gift = true; body.to_name = fd.get('to_name'); body.to_phone = fd.get('to_phone');
+      body.card = fd.get('card'); body.hide_price = !!fd.get('hide_price');
+    }
     msg.textContent = '';
     btn.disabled = true;
     btn.textContent = '送出中…';
@@ -282,7 +312,7 @@
       .catch(function (err) {
         // 瀏覽器的連線錯誤（Chrome「Failed to fetch」、Safari「Load failed」、逾時）一律換成中文說明
         msg.textContent = err && err.shown ? err.message
-          : '沒有連上訂單系統，這張訂單還沒有送出。請稍後再按一次「送出訂單」；一直失敗的話，請寫信或用 LINE 告訴我們。';
+          : '沒有連上訂單系統，這張訂單還沒有送出。請稍後再按一次「送出訂單」；一直失敗的話，請用 LINE 官方帳號 ' + ((DATA.contact && DATA.contact.line) || '@617aipgs') + ' 告訴我們。';
       })
       .then(function () { clearTimeout(timer); btn.disabled = false; btn.textContent = '送出訂單'; });
   });
@@ -303,6 +333,7 @@
     $('#checkout').hidden = true;
     cart = {}; save(); render();
     form.reset();
+    syncDelivery(); syncGift();
     done.focus();
     done.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
