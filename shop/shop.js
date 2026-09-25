@@ -55,6 +55,65 @@
     });
     syncDelivery();
     syncGift();
+    initCover(data.cover || []);
+  }
+
+  // ---------- 封面輪播：照片清單在 products.json 的 cover ----------
+  function initCover(list) {
+    var box = $('[data-cover]');
+    if (!box || !list.length) return;
+    var track = box.querySelector('[data-cover-track]'), dots = box.querySelector('[data-cover-dots]');
+    var pauseBtn = box.querySelector('[data-cover-pause]');
+    track.innerHTML = list.map(function (c, i) {
+      return '<figure class="cover-slide' + (i === 0 ? ' on' : '') + '" role="group" aria-roledescription="投影片" aria-label="第 ' + (i + 1) + ' 張，共 ' + list.length + ' 張"' + (i ? ' aria-hidden="true"' : '') + '>' +
+        '<img src="' + c.img + '" alt="' + esc(c.alt || '') + '" width="900" height="1200" decoding="async"' + (i ? ' loading="lazy"' : ' fetchpriority="high"') + '></figure>';
+    }).join('');
+    dots.innerHTML = list.length < 2 ? '' : list.map(function (c, i) {
+      return '<button type="button" aria-label="看第 ' + (i + 1) + ' 張"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
+    }).join('');
+    pauseBtn.hidden = list.length < 2;
+    var note = box.querySelector('[data-cover-note]');
+    if (DATA.coverNote) {
+      var c = DATA.contact || {};
+      note.innerHTML = esc(DATA.coverNote) + (c.line ? ' <a href="' + c.lineUrl + '" target="_blank" rel="noopener">LINE ' + esc(c.line) + '</a>' : '');
+      note.hidden = false;
+    }
+    box.hidden = false;
+    box.closest('.hero-grid').classList.add('has-cover');
+    if (list.length < 2) return;
+
+    var slides = track.children, now = 0, timer = null, paused = false;
+    function show(i) {
+      now = (i + slides.length) % slides.length;
+      Array.prototype.forEach.call(slides, function (el, k) {
+        el.classList.toggle('on', k === now);
+        if (k === now) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+      });
+      Array.prototype.forEach.call(dots.children, function (b, k) {
+        if (k === now) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      });
+    }
+    function play() { clearInterval(timer); timer = paused || document.hidden ? null : setInterval(function () { show(now + 1); }, 5500); }
+    dots.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      show(Array.prototype.indexOf.call(dots.children, b)); play();
+    });
+    pauseBtn.addEventListener('click', function () {
+      paused = !paused;
+      pauseBtn.classList.toggle('paused', paused);
+      pauseBtn.setAttribute('aria-label', paused ? '繼續輪播' : '暫停輪播');
+      play();
+    });
+    // 手機左右滑動換張
+    var x0 = null;
+    track.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) { show(now + (dx < 0 ? 1 : -1)); play(); }
+    }, { passive: true });
+    document.addEventListener('visibilitychange', play);
+    play();
   }
 
   function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(cart)); } catch (e) { /* 無痕模式等情況：不記也沒關係 */ } }
@@ -325,6 +384,8 @@
     $('[data-pay-linepay]').textContent = p.linepay;
     var qr = $('[data-pay-qr]');
     if (p.linepayImage) { qr.src = p.linepayImage; qr.hidden = false; }
+    var link = $('[data-pay-link]');
+    if (p.linepayUrl) { link.href = p.linepayUrl; link.hidden = false; }
     document.querySelectorAll('[data-pay-box]').forEach(function (el) {
       el.classList.toggle('chosen', el.dataset.payBox === pay);
     });
