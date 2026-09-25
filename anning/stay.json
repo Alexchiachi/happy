@@ -1,0 +1,64 @@
+{
+  "_說明": "雲南安寧幸福之家的預約設定。網頁（anning.js）和 Worker（executive-table/worker/stays.js）共用這一份：金額由 Worker 依這裡重算。方案 id、月份 key 上線後不要改，舊預約會對不上；不再開放的月份改 open:false。",
+  "name": "雲南安寧幸福之家",
+  "place": "雲南・昆明・安寧市 太平新城",
+  "stay": {
+    "days": 7,
+    "nights": 6,
+    "label": "7 天 6 夜",
+    "maxGuests": 5
+  },
+  "period": {
+    "name": "10–12 月體驗期",
+    "note": "體驗期價格。之後隨季節微調，始終保持親民。"
+  },
+  "months": [
+    { "key": "2026-10", "label": "2026 年 10 月", "open": true },
+    { "key": "2026-11", "label": "2026 年 11 月", "open": true },
+    { "key": "2026-12", "label": "2026 年 12 月", "open": true }
+  ],
+  "plan": {
+    "id": "suite",
+    "name": "套房",
+    "price": 8888,
+    "unit": "套房",
+    "perRoom": 2,
+    "maxRooms": 3,
+    "priceNote": "NT$8,888／套房／2 人／7 天 6 夜",
+    "wish": "8888，藏著一份「幸福圓滿」的小祝願。"
+  },
+  "wishes": ["溫泉放鬆", "自然療癒", "文化探索", "雲南美食", "自由漫遊", "慢慢生活"],
+  "payment": {
+    "bank": "合作金庫 草屯分行（銀行代號 006）\n帳號 5573717-232117\n戶名 嘉禮慕華舖",
+    "linepay": "收款帳號：嘉禮慕華\n用 LINE 掃描收款碼（手機上可直接點「開啟 LINE Pay 付款」），輸入確認信上的金額後付款。",
+    "linepayImage": "../shop/images/linepay-qr.jpg",
+    "linepayUrl": "https://qrcodepay.line.me/qr/payment/%252BGglGp22MnGMT9HMIGb66InRjQTS3MFLyxdw6FU4QP7b6TrIEx9OWYX8PpKeUPG4"
+  },
+  "contact": {
+    "line": "@617aipgs",
+    "lineUrl": "https://line.me/R/ti/p/@617aipgs",
+    "facebook": "https://www.facebook.com/profile.php?id=100075746177370",
+    "wechatName": "Rena chien",
+    "wechatImage": "images/wechat-qr.jpg",
+    "wechatUrl": "https://u.wechat.com/MFWggE4CfosIJYLjwrmClqU?s=2"
+  },
+  "cover": [
+    {
+      "img": "../shop/images/cover-jacaranda.jpg",
+      "alt": "盛開的紫色藍花楹圍繞著一座重簷古建築，庭院中央有一位撐傘的行人"
+    },
+    {
+      "img": "../shop/images/cover-terraces.jpg",
+      "alt": "陽光穿過雲層灑在層層梯田上，水面映著天光，遠方是連綿山巒"
+    },
+    {
+      "img": "../shop/images/cover-lake-spring.jpg",
+      "alt": "雪山下的湛藍湖泊，湖心小島開滿粉紅花樹，岸邊是白牆村落與金黃油菜花田"
+    },
+    {
+      "img": "../shop/images/cover-mountain.jpg",
+      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線"
+    }
+  ],
+  "coverNote": "雲南風景照取自網路，不是幸福之家的實景；若有侵權請告知，我們會立即下架。"
+}

@@ -31,7 +31,9 @@
     "BRAND_SITE_URL": "https://alexchiachi.github.io/happy/",
     // 雲南好物選購頁（shop/）訂單：新訂單通知寄到哪些信箱（逗號分隔）、寄件人名稱（見 worker/orders.js）
     "SHOP_NOTIFY_EMAIL": "jianchiachi@gmail.com,renachien1@gmail.com",
-    "SHOP_FROM_NAME": "大道至簡・雲南好物"
+    "SHOP_FROM_NAME": "大道至簡・雲南好物",
+    // 安寧幸福之家（anning/）預約：通知一樣寄到 SHOP_NOTIFY_EMAIL；寄件人名稱（見 worker/stays.js）
+    "STAY_FROM_NAME": "大道至簡・安寧幸福之家"
   },
   // 保留在 Cloudflare 後台設定的變數（ACCESS_TEAM_DOMAIN、ACCESS_AUD），部署時不要清掉
   "keep_vars": true,
