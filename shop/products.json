@@ -1,39 +1,40 @@
 {
   "_說明": "雲南好物的商品與檔期設定。網頁（shop.js）和 Worker（executive-table/worker/orders.js）共用這一份：金額由 Worker 依這裡重算。商品 id 與規格 key 上線後不要改，舊訂單會對不上；要下架改 active:false。",
   "season": {
-    "name": "冬藏・年節",
-    "deadline": "2027-01-15T23:59:59+08:00",
-    "deadlineText": "2027 年 1 月 15 日",
-    "ship": "1 月 25 日前寄出"
+    "name": "秋收・光輝十月",
+    "deadline": "2026-10-25T23:59:59+08:00",
+    "deadlineText": "2026 年 10 月 25 日",
+    "ship": "10 月底陸續寄出",
+    "note": "限期收單，截止後統一向產地叫貨，10 月底陸續寄出。"
   },
   "shipping": {
-    "free": 2000,
+    "free": 3000,
     "home": 80,
     "cvs": 80,
     "meet": 0
   },
   "payment": {
-    "bank": "（匯款帳號待提供）",
+    "bank": "合作金庫 草屯分行（銀行代號 006）\n帳號 5573717-232117\n戶名 嘉禮慕華舖",
     "linepay": "（LINE Pay 收款資訊待提供）",
     "linepayImage": ""
   },
   "products": [
     {
       "active": true,
-      "id": "rose-cake",
+      "id": "yak-rose-pie",
       "shelf": "season",
       "featured": true,
-      "badge": "上一檔賣最好",
+      "badge": "中秋回購",
       "cat": "餅 · Pastry",
-      "han": "餅",
-      "tone": "seal",
-      "name": "玫瑰花餅禮盒",
-      "intro": "雲南人過節一定要有的那一口，酥皮裡包著滿滿的玫瑰花醬。",
-      "story": "兩款禮盒同價：「暴美」是經典玫瑰花餅配玫瑰花松仁餅，一次吃兩種口感；「暴富」是 12 枚經典玫瑰花餅，名字討喜，最適合送長輩。",
+      "han": "派",
+      "tone": "sugar",
+      "name": "氂牛奶玫瑰派",
+      "intro": "高原的氂牛奶，配上雲南的玫瑰。",
+      "story": "",
       "specs": [
         [
-          "內容",
-          "暴美：花餅＋松仁餅各 6 枚／暴富：花餅 12 枚"
+          "內容量",
+          "160g"
         ],
         [
           "產地",
@@ -42,15 +43,9 @@
       ],
       "variants": [
         {
-          "key": "mei",
-          "label": "暴美 · 花餅＋松仁餅各 6 枚",
-          "price": 650,
-          "unit": "盒"
-        },
-        {
-          "key": "fu",
-          "label": "暴富 · 經典花餅 12 枚",
-          "price": 650,
+          "key": "std",
+          "label": "一盒 160g",
+          "price": 550,
           "unit": "盒"
         }
       ]
@@ -59,7 +54,7 @@
       "active": true,
       "id": "nougat",
       "shelf": "season",
-      "badge": "回購第二名",
+      "badge": "中秋熱賣",
       "cat": "甜 · Sweets",
       "han": "糖",
       "tone": "sugar",
@@ -163,53 +158,15 @@
     },
     {
       "active": true,
-      "id": "morel-gift",
+      "id": "rose-egg-yolk-pastry",
       "shelf": "season",
-      "badge": "一盒即免運",
-      "cat": "菌 · Mushroom",
-      "han": "菌",
-      "tone": "moss",
-      "name": "羊肚菌禮盒",
-      "intro": "菌中的珍品，一盒就是一份體面的年禮。",
-      "story": "乾燥羊肚菌，泡發後燉湯、清炒都好。禮盒裝，適合送給懂吃的朋友。",
-      "specs": [
-        [
-          "規格",
-          "160g"
-        ],
-        [
-          "產地",
-          "雲南"
-        ]
-      ],
-      "variants": [
-        {
-          "key": "std",
-          "label": "160g 禮盒",
-          "price": 2480,
-          "unit": "盒"
-        }
-      ]
-    },
-    {
-      "active": true,
-      "id": "rose-tea",
-      "shelf": "always",
-      "featured": true,
-      "badge": "兩檔都有人回購",
-      "cat": "花 · Flower",
-      "han": "玫",
+      "cat": "餅 · Pastry",
+      "han": "酥",
       "tone": "seal",
-      "img": "images/rose-tea.jpg",
-      "imgAlt": "兩罐透明罐裝的墨紅玫瑰乾燥花瓣，貼著手寫「墨紅玫瑰」的米色標籤",
-      "name": "墨紅玫瑰花茶",
-      "intro": "花瓣大、顏色深，沖開是一杯溫柔的暗紅。",
-      "story": "乾燥的墨紅玫瑰花瓣，熱水沖泡就能喝，也可以加進紅茶或紅糖水裡。放在辦公桌上，下午三點的那杯茶就有了。",
+      "name": "玫瑰蛋黃酥",
+      "intro": "玫瑰與蛋黃，一口酥皮裡的甜與鹹。",
+      "story": "",
       "specs": [
-        [
-          "規格",
-          "20g／罐"
-        ],
         [
           "產地",
           "雲南"
@@ -218,9 +175,9 @@
       "variants": [
         {
           "key": "std",
-          "label": "一罐 20g",
-          "price": 400,
-          "unit": "罐"
+          "label": "一盒",
+          "price": 480,
+          "unit": "盒"
         }
       ]
     },
@@ -257,7 +214,8 @@
           "price": 1250,
           "unit": "袋"
         }
-      ]
+      ],
+      "featured": true
     },
     {
       "active": true,
@@ -268,8 +226,12 @@
       "tone": "moss",
       "name": "雲南野生菌湯包",
       "intro": "一包燉一鍋湯，把雨季的山林味留在冬天。",
-      "story": "雲南野生菌配好的湯包，燉雞湯、排骨湯都適合。常喝的朋友喜歡一次帶幾包，所以有四包組。",
+      "story": "多種雲南菌菇配好的湯包，用來煮湯、燉雞湯都好。使用前先用溫水泡 20–30 分鐘，泡軟再下鍋。",
       "specs": [
+        [
+          "菌菇",
+          "羊肚菌、蟲草菌、姬松茸、雞油菌等"
+        ],
         [
           "產地",
           "雲南"
@@ -288,7 +250,9 @@
           "price": 1800,
           "unit": "組"
         }
-      ]
+      ],
+      "img": "images/mushroom-soup.jpg",
+      "imgAlt": "透明袋裝的雲南野生菌湯包，看得到羊肚菌、竹蓀與多種乾燥菌菇，袋上貼著紅色「雲南野生菌」標籤"
     },
     {
       "active": true,
@@ -351,6 +315,160 @@
           "label": "短支",
           "price": 200,
           "unit": "盒"
+        }
+      ],
+      "featured": true
+    },
+    {
+      "active": false,
+      "id": "rose-cake",
+      "shelf": "season",
+      "badge": "上一檔賣最好",
+      "cat": "餅 · Pastry",
+      "han": "餅",
+      "tone": "seal",
+      "name": "玫瑰花餅禮盒",
+      "intro": "雲南人過節一定要有的那一口，酥皮裡包著滿滿的玫瑰花醬。",
+      "story": "兩款禮盒同價：「暴美」是經典玫瑰花餅配玫瑰花松仁餅，一次吃兩種口感；「暴富」是 12 枚經典玫瑰花餅，名字討喜，最適合送長輩。",
+      "specs": [
+        [
+          "內容",
+          "暴美：花餅＋松仁餅各 6 枚／暴富：花餅 12 枚"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "mei",
+          "label": "暴美 · 花餅＋松仁餅各 6 枚",
+          "price": 650,
+          "unit": "盒"
+        },
+        {
+          "key": "fu",
+          "label": "暴富 · 經典花餅 12 枚",
+          "price": 650,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": false,
+      "id": "morel-gift",
+      "shelf": "season",
+      "badge": "一盒即免運",
+      "cat": "菌 · Mushroom",
+      "han": "菌",
+      "tone": "moss",
+      "name": "羊肚菌禮盒",
+      "intro": "菌中的珍品，一盒就是一份體面的年禮。",
+      "story": "乾燥羊肚菌，泡發後燉湯、清炒都好。禮盒裝，適合送給懂吃的朋友。",
+      "specs": [
+        [
+          "規格",
+          "160g"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "160g 禮盒",
+          "price": 2480,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": false,
+      "id": "rose-tea",
+      "shelf": "always",
+      "badge": "兩檔都有人回購",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "img": "images/rose-tea.jpg",
+      "imgAlt": "兩罐透明罐裝的墨紅玫瑰乾燥花瓣，貼著手寫「墨紅玫瑰」的米色標籤",
+      "name": "墨紅玫瑰花茶",
+      "intro": "花瓣大、顏色深，沖開是一杯溫柔的暗紅。",
+      "story": "墨紅玫瑰原產法國，是雲南種植的食用玫瑰品種之一，重瓣、每朵 30–35 枚花瓣。乾燥花瓣熱水沖泡就能喝，也可以加進紅茶或紅糖水裡。",
+      "specs": [
+        [
+          "規格",
+          "20g／罐"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 20g",
+          "price": 400,
+          "unit": "罐"
+        }
+      ]
+    },
+    {
+      "active": false,
+      "id": "baiyao-rose-tea",
+      "shelf": "season",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "name": "雲南白藥玫瑰花茶",
+      "intro": "",
+      "story": "",
+      "specs": [
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐",
+          "price": 0,
+          "unit": "罐"
+        }
+      ],
+      "_待補": "資料表沒有規格與價格，補齊前不上架"
+    },
+    {
+      "active": false,
+      "id": "golden-ear",
+      "shelf": "always",
+      "cat": "菌 · Mushroom",
+      "han": "耳",
+      "tone": "sugar",
+      "name": "雲南金耳菌",
+      "intro": "色如金箔、膠質綿密，燉湯煮甜品都軟糯Ｑ彈。",
+      "story": "乾貨，建議用清水或溫水泡發 3–4 小時。可以涼拌、炒蛋，或和蓮子、紅棗一起燉。",
+      "specs": [
+        [
+          "規格",
+          "乾貨 250g／包"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一包 250g",
+          "price": 500,
+          "unit": "包"
         }
       ]
     }

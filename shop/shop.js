@@ -33,6 +33,7 @@
     document.querySelectorAll('[data-season-name]').forEach(function (el) { el.textContent = data.season.name; });
     document.querySelectorAll('[data-deadline-text]').forEach(function (el) { el.textContent = data.season.deadlineText; });
     document.querySelectorAll('[data-ship-text]').forEach(function (el) { el.textContent = data.season.ship; });
+    document.querySelectorAll('[data-season-note]').forEach(function (el) { if (data.season.note) el.textContent = data.season.note; });
     var s = data.shipping;
     document.querySelectorAll('[data-free]').forEach(function (el) { el.textContent = money(s.free); });
     document.querySelectorAll('[data-fee-home]').forEach(function (el) { el.textContent = s.home; });
@@ -86,7 +87,7 @@
         '<p class="card-price">' + (p.variants.length > 1 ? '<small>自</small> ' : '') + money(from) + '</p>' +
         '<p class="card-intro">' + esc(p.intro) + '</p>' +
         '<details class="card-more"><summary>介紹與規格</summary>' +
-          '<p>' + esc(p.story) + '</p><dl class="specs">' + specs + '</dl>' +
+          (p.story ? '<p>' + esc(p.story) + '</p>' : '') + '<dl class="specs">' + specs + '</dl>' +
           (p.read ? '<a class="read" href="' + p.read.href + '">' + esc(p.read.text) + ' →</a>' : '') +
         '</details>' +
         '<ul class="variants">' + rows + '</ul>' +
