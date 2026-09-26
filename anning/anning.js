@@ -110,7 +110,9 @@
   // ---------- 封面輪播（與選購頁同一套） ----------
   function initCover(list) {
     var box = $('[data-cover]');
-    if (!box || !list.length) return;
+    if (!box) return;
+    // 版面預設有封面（HTML 先寫好，避免資料到了才跳版）；沒有照片就收起來
+    if (!list.length) { box.hidden = true; box.closest('.hero-grid').classList.remove('has-cover'); return; }
     var track = box.querySelector('[data-cover-track]'), dots = box.querySelector('[data-cover-dots]');
     var pauseBtn = box.querySelector('[data-cover-pause]');
     track.innerHTML = list.map(function (c, i) {
@@ -125,7 +127,6 @@
     if (DATA.coverNote) {
       var c = DATA.contact || {};
       note.innerHTML = esc(DATA.coverNote) + (c.line ? ' <a href="' + c.lineUrl + '" target="_blank" rel="noopener">LINE ' + esc(c.line) + '</a>' : '');
-      note.hidden = false;
     }
     box.hidden = false;
     box.closest('.hero-grid').classList.add('has-cover');

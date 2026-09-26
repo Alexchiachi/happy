@@ -10,6 +10,9 @@
   <meta name="theme-color" content="#FAF6EF">
   <link rel="icon" href="../images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+  <!-- 封面第一張照片先開始下載，不必等 JSON 讀完。換第一張封面時這裡要一起改；
+       版面（has-cover、輪播框）也先寫在 HTML 裡，資料到了才不會整頁往下跳。 -->
+  <link rel="preload" as="image" href="images/cover-jacaranda.jpg" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +26,7 @@
     <span class="brand-seal" aria-hidden="true">雲</span>
     <span class="brand-text">雲南好物<small>大道至簡 · Dao is simple</small></span>
   </a>
-  <a class="bar-bag" href="#checkout" aria-label="前往結帳">
+  <a class="bar-bag" href="#checkout">
     訂單 <span class="bag-count" data-count>0</span>
   </a>
 </header>
@@ -32,19 +35,19 @@
 
   <!-- 一、開場：一句話＋本檔資訊 -->
   <section class="hero">
-    <div class="wrap hero-grid">
+    <div class="wrap hero-grid has-cover">
       <div class="hero-copy">
         <p class="eyebrow">Yunnan · 彩雲之南</p>
         <h1>山上的東西，<br>慢慢寄到你桌上。</h1>
         <p class="lede">茶、菌、香、甜——每一樣都是我們在雲南親手挑過、自己也在用的。常備好物隨時可訂；節令預購只在限定期間開放，收單後才向產地叫貨。</p>
       </div>
-      <section class="cover" data-cover aria-roledescription="輪播" aria-label="雲南風景" hidden>
+      <section class="cover" data-cover aria-roledescription="輪播" aria-label="雲南風景">
         <div class="cover-track" data-cover-track aria-live="off"></div>
         <div class="cover-ui">
           <div class="cover-dots" data-cover-dots></div>
           <button type="button" class="cover-pause" data-cover-pause aria-label="暫停輪播"><span aria-hidden="true"></span></button>
         </div>
-        <p class="cover-note" data-cover-note hidden></p>
+        <p class="cover-note" data-cover-note></p>
       </section>
       <aside class="season-card" aria-labelledby="season-title">
         <p class="season-kicker">本檔預購</p>

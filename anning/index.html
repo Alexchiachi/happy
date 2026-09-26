@@ -10,6 +10,9 @@
   <meta name="theme-color" content="#FAF6EF">
   <link rel="icon" href="../images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+  <!-- 封面第一張照片先開始下載，不必等 JSON 讀完。換第一張封面時這裡要一起改；
+       版面（has-cover、輪播框）也先寫在 HTML 裡，資料到了才不會整頁往下跳。 -->
+  <link rel="preload" as="image" href="../shop/images/cover-jacaranda.jpg" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -35,19 +38,19 @@
 
   <!-- 一、開場 -->
   <section class="hero">
-    <div class="wrap hero-grid">
+    <div class="wrap hero-grid has-cover">
       <div class="hero-copy">
         <p class="eyebrow">Anning · 春城旁的家</p>
         <h1>推門見春城，<br>落腳即歸家。</h1>
         <p class="lede">春城昆明的煙火深處，有一間不追求商業化的小家。我們不是傳統短租，只想以家為橋，接住從海峽那一端來的有緣朋友——放下行李，吹吹春城的風，嘗嘗雲南的茶，把這裡當成家。</p>
       </div>
-      <section class="cover" data-cover aria-roledescription="輪播" aria-label="雲南風景" hidden>
+      <section class="cover" data-cover aria-roledescription="輪播" aria-label="雲南風景">
         <div class="cover-track" data-cover-track aria-live="off"></div>
         <div class="cover-ui">
           <div class="cover-dots" data-cover-dots></div>
           <button type="button" class="cover-pause" data-cover-pause aria-label="暫停輪播"><span aria-hidden="true"></span></button>
         </div>
-        <p class="cover-note" data-cover-note hidden></p>
+        <p class="cover-note" data-cover-note></p>
       </section>
       <aside class="season-card" aria-labelledby="period-title">
         <p class="season-kicker" id="period-title">旅居方案・<span data-period-name>10–12 月體驗期</span></p>
