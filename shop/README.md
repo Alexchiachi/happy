@@ -78,5 +78,7 @@
 - 運費：滿 `shipping.free` 免運；未滿宅配 `home`、超商 `cvs`，面交免運
 - 同一檔、同一支電話重複下單：不自動合併，在通知信與後台標出「同檔已有訂單」，由人工合併寄送、調整運費
 - 訂單編號：`YN` + 台北日期 + 流水號（例 `YN20261024-007`）
+- 流量統計：Cloudflare Web Analytics（hostname `alexchiachi.github.io`，JS 片段在 `index.html` 最後，`anning/` 同一個 token）。
+  不用 cookie；隱私權政策 `privacy.html`、`zh-cn/privacy.html` 的「二」「四」有寫。其他頁要加統計時，兩份政策一起改
 - 與安寧幸福之家互推：頁尾前的 `.sibling` 卡片、完成畫面一行（`.done-sibling`）、頁尾連結；樣式在 `shop.css`，兩頁共用。
   只放在網頁上，**確認信不放**（個資說明寫「不做行銷」）
