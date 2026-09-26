@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | 視覺方向、改版 | `frontend-design`、`redesign-existing-projects`、`apple-design`、`visual-audit` | 只取「克制、留白、層級」的部分；外觀照 `DESIGN.md` |
 | 無障礙 | `accessibility` | 全站已有 skip-link、對比註解、`prefers-*`；改色先算對比 |
-| 速度 | `performance`、`core-web-vitals` | 瓶頸多半是 Noto Serif TC（中文字檔大）與照片；圖片要寫寬高、第一屏以外 lazy |
+| 速度 | `performance`、`core-web-vitals` | 瓶頸多半是 Noto Serif TC（中文字檔大）與照片。`shop/`、`anning/` 已改用子集字型（`tools/subset_fonts.py`）與 AVIF／WebP（`tools/make_web_images.py`）；沙盒連不到 Google Fonts，本機 Lighthouse 會低估字型成本，測試時讓 Chromium 走 `$HTTPS_PROXY` |
 | 搜尋 | `seo` | hreflang、sitemap 由 `tools/build_zhcn.py` 產生，不要手改；`shop/`、`anning/` 刻意 `noindex` |
 | 安全與相容 | `best-practices` | 若加 CSP，要放行 Google Fonts 與 Cloudflare Web Analytics |
 | 上線前總檢查 | `web-quality-audit` | 附唯讀腳本 `scripts/analyze.sh`（需要 `jq`） |

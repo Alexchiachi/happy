@@ -9,6 +9,7 @@
 | --- | --- |
 | `products.json` | **唯一的商品表**：檔期（名稱、截止日、出貨日）、運費、付款資訊、10 樣商品。網頁與 Worker 共用 |
 | `index.html`、`shop.css`、`shop.js` | 頁面、樣式、購物車與送出（`ORDER_ENDPOINT` 指向 Worker） |
+| `fonts/` | Noto Serif TC 子集（300／400／500，只含本頁與 `anning/` 用到的字，約 300KB）與 `fonts.css`、授權 `OFL.txt`。由 `tools/subset_fonts.py` 產生，**不要手改**。頁面等 `load` 之後才載入它，先用系統明體顯示 |
 | `images/` | 商品照（4:5、800×1000 JPG＋同名 `.webp`）、封面照（3:4、900×1200 JPG＋同名 `.avif`）。WebP／AVIF 由 `tools/make_web_images.py` 產生，網頁優先載入 |
 
 改 `products.json` 的規矩：
@@ -95,3 +96,13 @@
   不用 cookie；隱私權政策 `privacy.html`、`zh-cn/privacy.html` 的「二」「四」有寫。其他頁要加統計時，兩份政策一起改
 - 與安寧幸福之家互推：頁尾前的 `.sibling` 卡片、完成畫面一行（`.done-sibling`）、頁尾連結；樣式在 `shop.css`，兩頁共用。
   只放在網頁上，**確認信不放**（個資說明寫「不做行銷」）
+
+## 字型（改文案、商品、房型之後）
+
+兩頁的中文字型不從 Google Fonts 載入（每個字重要抓約 30 段、2MB，手機 PageSpeed 只有 55／70 分），改用 `shop/fonts/` 裡的子集。改了 `shop/`、`anning/` 的文案或 `products.json`、`stay.json` 之後，在專案根目錄跑：
+
+```
+python3 tools/subset_fonts.py
+```
+
+它會打開兩頁、找出每個字重實際用到的字，重新產生 `shop/fonts/`。忘了跑也不會壞：子集裡沒有的字會用系統明體補上，只是字形略不同。

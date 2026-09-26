@@ -9,6 +9,7 @@
 | --- | --- |
 | `stay.json` | **唯一的設定表**：名稱、天數、最多人數、體驗期、開放月份、房型與價格、想要的旅居方式、付款與聯絡資訊、封面輪播。網頁與 Worker 共用 |
 | `index.html` | 頁面文案（理念、招待方式、我們的家、安寧介紹、療心卡、預約表單）。文案直接寫在這裡 |
+| 字型 | 跟 `shop/` 共用 `shop/fonts/` 的 Noto Serif TC 子集；改文案或 `stay.json` 後跑 `python3 tools/subset_fonts.py`（見 `shop/README.md`） |
 | `anning.css` | 本頁專用樣式；共用樣式（色票、頂列、開場、表單、完成畫面）直接載入 `../shop/shop.css` |
 | `anning.js` | 房型卡片、入住日期範圍、人數、合計、送出（`STAY_ENDPOINT` 指向 Worker） |
 | `images/` | `healing-card.jpg`（療心卡，1200×675）、`wechat-qr.jpg`（Rena chien 的微信 QR Code，縮圖後仍可掃描） |
