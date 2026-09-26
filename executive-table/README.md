@@ -11,6 +11,7 @@
 | --- | --- | --- |
 | `index.html` | 繁體中文課程頁（唯一需要手動編輯的頁面） | 是 |
 | `zh-cn/index.html` | 簡體版，由 `build_zh_cn.py` 產生，不要手改 | 是 |
+| `fonts/` | 中文子集字型（只含本頁用到的字），由 `tools/subset_fonts.py` 產生，不要手改 | 是 |
 | `images/` | 肖像（WebP＋JPEG）、分享預覽圖、網站圖示 | 是 |
 | `downloads/sroi-report-2013-2016.pdf` | SROI 報告（英文，2.3 MB） | 是 |
 | `404.html`、`robots.txt`、`sitemap.xml` | 找不到頁面、搜尋引擎設定 | 是 |
@@ -81,7 +82,9 @@
 1. 只改 `index.html`（繁體）。
 2. 執行 `python3 executive-table/build_zh_cn.py` 重新產生簡體版
    （第一次需先 `pip install opencc-python-reimplemented`）。
-3. 開 PR，在 Cloudflare 的預覽網址確認，再合併。
+3. 改了文字的話，在倉庫根目錄執行 `python3 tools/subset_fonts.py executive-table` 更新子集字型
+   （沒跑也不會壞，新加的字先用系統明體顯示）。
+4. 開 PR，在 Cloudflare 的預覽網址確認，再合併。
 
 ## 第一次在 Cloudflare 建立專案
 
