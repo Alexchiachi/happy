@@ -165,6 +165,11 @@ def main():
         shared_re = "|".join(re.escape(s) for s in SHARED)
         cn = re.sub(r'(href|src)="((?:\.\./)*)(%s)' % shared_re,
                     lambda m: '%s="../%s%s' % (m.group(1), m.group(2), m.group(3)), cn)
+        # srcset 裡每個候選網址都要退一層（雲南頁輪播的 WebP／JPG 兩種尺寸）
+        cn = re.sub(r'srcset="([^"]*)"',
+                    lambda m: 'srcset="%s"' % re.sub(r'(^|,\s*)((?:\.\./)*)(%s)' % shared_re,
+                                                     lambda k: '%s../%s%s' % (k.group(1), k.group(2), k.group(3)),
+                                                     m.group(1)), cn)
         # 內嵌樣式裡的 url(images/…)（--img 首圖）也要一起退一層
         cn = re.sub(r'url\((["\']?)((?:\.\./)*)images/',
                     lambda m: 'url(%s../%simages/' % (m.group(1), m.group(2)), cn)
