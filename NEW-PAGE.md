@@ -99,7 +99,7 @@
 | 沙盒連不到 `github.io` | 不能直接測正式網址 | 本機起伺服器測；上線後請使用者用 PageSpeed 測正式網址 |
 | PageSpeed API 有每日額度 | 沙盒呼叫常得到「Quota exceeded」或 429 | 同上 |
 | 本機 `python3 -m http.server` 不壓縮 | CSS／JS 比正式站大，分數略偏低 | 看趨勢與前後差，不看絕對值 |
-| **本機仍比正式網址樂觀約 15 分** | 走代理量到 94／95，PageSpeed 正式網址手機是 79／78（2026-09 實測）。正式網址多了 GitHub Pages 的連線與回應時間，PageSpeed 的伺服器與網路也跟沙盒不同 | 本機用來**比較改動前後**；要說「幾分」一律以 PageSpeed 正式網址為準。本機要到 90 以上，正式網址才大約有 75–80 |
+| **PageSpeed 每次測都不一樣，剛上線的第一次特別低** | PR #27 上線後：第一次手機 79／78，第二次 89／89（2026-09 實測）。剛部署時 GitHub Pages 的 CDN 還沒快取、字型與照片也是第一次被抓，回應較慢；PageSpeed 每次的伺服器與網路也有差異 | 上線後**隔幾分鐘再測，至少測 2–3 次，取中間值**。本機（走代理）量到 94／95，正式網址穩定後約 89，本機大約樂觀 5 分；本機用來比較改動前後，分數以 PageSpeed 正式網址為準 |
 | Lighthouse 的模擬（Lantern） | 在實際的第一次繪製前**已經下載完**的資源，都會被算進 FCP／LCP；本機太快，字型剛好搶在前面就會被算進去，分數忽高忽低 | 非必要資源（字型）等 `load` 之後再載；每頁跑 2–3 次 |
 
 **標準量法**：把正式版（`main`）和修改版放在兩個埠，同條件比較。
@@ -121,7 +121,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 - 效能以外的檢查：`bash .claude/skills/web-quality-audit/scripts/analyze.sh 頁面.html`（原始碼快篩），
   完整的 Lighthouse（不加 `--only-categories`）看無障礙、SEO、最佳實踐。
 - 互動要實際操作確認（Playwright）：輪播會換張、跳著點也會載入、表單送得出去、字型真的換上。
-- **上線後一定請使用者用 [PageSpeed Insights](https://pagespeed.web.dev/) 測正式網址**，貼截圖回來對照。
+- **上線後一定請使用者用 [PageSpeed Insights](https://pagespeed.web.dev/) 測正式網址**，隔幾分鐘、測 2–3 次，貼截圖回來對照。
 
 ---
 
@@ -155,7 +155,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 - [ ] `analyze.sh` 快篩、完整 Lighthouse 看無障礙與 SEO
 - [ ] Playwright 手機尺寸實際操作一次、截圖看過
 - [ ] PR 說明寫清楚前後數字與「上線後待確認」
-- [ ] 上線後請使用者用 PageSpeed 測正式網址
+- [ ] 上線後請使用者用 PageSpeed 測正式網址（隔幾分鐘、測 2–3 次，取中間值）
 
 ---
 
@@ -176,6 +176,6 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 | 2026-09-26 | 安寧幸福之家 | 49 → 75（本機） | 封面版面先寫在 HTML，CLS 0.655 → 0 |
 | 2026-09-26 | 三頁 | 本機 92／97／96，上線仍 55／70 | 字型改非同步、封面 AVIF、逐張載入——**字型量沒變，所以沒用** |
 | 2026-09-26 | 安寧／好物 | 65／73 → 94／95（本機走代理） | 中文字型子集 4.7MB → 300KB、load 後才載入、第一張封面寫進 HTML |
-| 2026-09-26 | 安寧／好物（**PageSpeed 正式網址**） | 手機 55／70 → **79／78**；電腦 **99／99** | 同上一列（PR #27 上線後實測） |
+| 2026-09-26 | 安寧／好物（**PageSpeed 正式網址**） | 手機 55／70 → **89／89**；電腦 **99／100** | 同上一列（PR #27 上線後實測。剛上線第一次測是 79／78、電腦 99／99，第二次才是 89／89） |
 
 之後每次上線，請把 PageSpeed 正式網址的手機與電腦分數補在這張表。
