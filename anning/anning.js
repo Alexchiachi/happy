@@ -129,10 +129,21 @@
     if (!list.length) { box.hidden = true; box.closest('.hero-grid').classList.remove('has-cover'); return; }
     var track = box.querySelector('[data-cover-track]'), dots = box.querySelector('[data-cover-dots]');
     var pauseBtn = box.querySelector('[data-cover-pause]');
-    track.innerHTML = list.map(function (c, i) {
+    // 第一張已經寫在 HTML 裡（不必等資料就能顯示）；圖檔跟資料一致就留著，其餘接在後面
+    var pre = track.querySelector('.cover-slide img');
+    var keepFirst = pre && pre.getAttribute('src') === list[0].img;
+    var html = list.map(function (c, i) {
       return '<figure class="cover-slide' + (i === 0 ? ' on' : '') + '" role="group" aria-roledescription="投影片" aria-label="第 ' + (i + 1) + ' 張，共 ' + list.length + ' 張"' + (i ? ' aria-hidden="true"' : '') + '>' +
         coverPicture(c, i) + '</figure>';
     }).join('');
+    if (keepFirst) {
+      var tmp = document.createElement('div'); tmp.innerHTML = html;
+      var built = tmp.children;
+      track.firstElementChild.setAttribute('aria-label', built[0].getAttribute('aria-label'));
+      while (built.length > 1) track.appendChild(built[1]);
+    } else {
+      track.innerHTML = html;
+    }
     dots.innerHTML = list.length < 2 ? '' : list.map(function (c, i) {
       return '<button type="button" aria-label="看第 ' + (i + 1) + ' 張"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
     }).join('');
