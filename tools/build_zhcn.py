@@ -46,7 +46,8 @@ KEEP_IN_OUT = {"executive-table"}
 
 # 這些東西只有根目錄那一份，兩種語系共用。簡體頁在 zh-cn/ 底下，
 # 所以路徑都要多退一層，否則會去找 zh-cn/ 底下不存在的檔案。
-SHARED = ("styles.css", "scripts.js", "images/", "inner-flow/", "inner-flow.html")
+SHARED = ("styles.css", "scripts.js", "images/", "inner-flow/", "inner-flow.html",
+          "shop/", "anning/")  # 選購頁與預約頁只有繁體一份，簡體頁連過去（含雲南頁輪播借用的 shop/images/）也要退一層
 
 # 同一個網域上、但不屬於本站的獨立專案。各自有自己的 sitemap，
 # 由 robots.txt 一起指出去——搜尋引擎照樣找得到，收錄卻是分開的。
