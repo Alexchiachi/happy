@@ -26,6 +26,8 @@
     formFail2:    { tw: '，或稍後再試一次。',        cn: '，或稍后再试一次。' },
     countAll:     { tw: ' 篇文章',                 cn: ' 篇文章' },
     countOne:     { tw: ' 篇',                    cn: ' 篇' },
+    carouselPause:{ tw: '暫停輪播',                 cn: '暂停轮播' },
+    carouselPlay: { tw: '繼續輪播',                 cn: '继续轮播' },
     copied:       { tw: '已複製，到微信搜尋貼上',    cn: '已复制，到微信搜索粘贴' },
     copyFail:     { tw: '請長按名稱自行複製',        cn: '请长按名称自行复制' },
   }[key][LANG]);
@@ -71,6 +73,50 @@
         navigator.clipboard.writeText(text).then(() => done(T('copied'), true), fallback);
       } else fallback();
     });
+  });
+
+  // --- 照片輪播（雲南頁開場）：投影片寫在 HTML 裡，沒有 JS 也看得到第一張 ---
+  document.querySelectorAll('[data-carousel]').forEach((box) => {
+    const track = box.querySelector('[data-carousel-track]');
+    const dots = box.querySelector('[data-carousel-dots]');
+    const pauseBtn = box.querySelector('[data-carousel-pause]');
+    const slides = Array.from(track.children);
+    if (slides.length < 2) { dots.hidden = true; pauseBtn.hidden = true; return; }
+    const dotBtns = Array.from(dots.children);
+    // 系統關掉動態效果的人，預設不自動換張（還是可以點、可以滑）
+    let now = 0, timer = null, paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const setPauseUI = () => {
+      pauseBtn.classList.toggle('paused', paused);
+      pauseBtn.setAttribute('aria-label', paused ? T('carouselPlay') : T('carouselPause'));
+    };
+    const show = (i) => {
+      now = (i + slides.length) % slides.length;
+      slides.forEach((el, k) => {
+        el.classList.toggle('on', k === now);
+        if (k === now) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+      });
+      dotBtns.forEach((b, k) => { if (k === now) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    };
+    const play = () => {
+      clearInterval(timer);
+      timer = paused || document.hidden ? null : setInterval(() => show(now + 1), 5500);
+    };
+    dots.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      show(dotBtns.indexOf(b)); play();
+    });
+    pauseBtn.addEventListener('click', () => { paused = !paused; setPauseUI(); play(); });
+    // 手機左右滑動換張
+    let x0 = null;
+    track.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) { show(now + (dx < 0 ? 1 : -1)); play(); }
+    }, { passive: true });
+    document.addEventListener('visibilitychange', play);
+    setPauseUI();
+    play();
   });
 
   // --- 真實照片載不到時，露出底下的色塊 ---

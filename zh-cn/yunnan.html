@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=89a6d3b8">
+  <link rel="stylesheet" href="../styles.css?v=6022f7d9">
 </head>
 <body class="region-yunnan">
 <a class="skip-link" href="#main">跳到主要内容</a>
@@ -51,16 +51,35 @@
 
 <main id="main" tabindex="-1">
   <!-- Large Character Hero -->
-  <section class="hero mid">
-    <div class="container">
-      <div class="eyebrow hero-eyebrow reveal">Yunnan · 彩云之南</div>
-      <h1 class="region-title reveal">云南</h1>
-      <p class="hero-tagline reveal">山有多高，茶就有多高。雾有多厚，故事就有多厚。</p>
-      <div class="hero-meta reveal">
-        <span>普洱</span>
-        <span>菌菇</span>
-        <span>织染</span>
+  <section class="hero mid hero-split">
+    <div class="container hero-split-grid">
+      <div class="hero-split-text">
+        <div class="eyebrow hero-eyebrow reveal">Yunnan · 彩云之南</div>
+        <h1 class="region-title reveal">云南</h1>
+        <p class="hero-tagline reveal">山有多高，茶就有多高。雾有多厚，故事就有多厚。</p>
+        <div class="hero-meta reveal">
+          <span>普洱</span>
+          <span>菌菇</span>
+          <span>织染</span>
+        </div>
       </div>
+      <!-- 云南照片轮播：跟云南好物（shop/products.json 的 cover）用同一组照片，换照片时两边一起换 -->
+      <section class="carousel hero-carousel reveal" data-carousel aria-roledescription="轮播" aria-label="云南风景">
+        <div class="carousel-track" data-carousel-track aria-live="off">
+          <figure class="carousel-slide on" role="group" aria-roledescription="投视频" aria-label="第 1 张，共 7 张"><img src="../shop/images/cover-jacaranda.jpg" alt="盛开的紫色蓝花楹围绕着一座重檐古建筑，庭院中央有一位撑伞的行人" width="900" height="1200" decoding="async" fetchpriority="high"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 2 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-terraces.jpg" alt="阳光穿过云层洒在层层梯田上，水面映着天光，远方是连绵山峦" width="900" height="1200" decoding="async" loading="lazy"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 3 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-lake.jpg" alt="雪山下的高原湖泊，湖边草地上一位戴黑帽、披黑色披肩的旅人提着竹篮走向湖岸" width="900" height="1200" decoding="async" loading="lazy"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 4 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-alpine-lake.jpg" alt="云雾缭绕的高山下一座碧蓝湖泊，湖水化成小瀑布流下，岸边开着黄色与紫色的野花" width="900" height="1200" decoding="async" loading="lazy"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 5 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-lake-spring.jpg" alt="雪山下的湛蓝湖泊，湖心小岛开满粉红花树，岸边是白墙村落与金黄油菜花田，一艘船划过湖面" width="900" height="1200" decoding="async" loading="lazy"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 6 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-erhai.jpg" alt="蓝天白云下的宽阔湖面，水上开满点点白色小花，远处是青色山峦" width="900" height="1200" decoding="async" loading="lazy"></figure>
+          <figure class="carousel-slide" role="group" aria-roledescription="投视频" aria-label="第 7 张，共 7 张" aria-hidden="true"><img src="../shop/images/cover-mountain.jpg" alt="夕阳把高原草坡染成金橘色，远方是雪山棱线，一匹驮着货物的骡子和一位赶路人走下山坡" width="900" height="1200" decoding="async" loading="lazy"></figure>
+        </div>
+        <div class="carousel-ui">
+          <div class="carousel-dots" data-carousel-dots><button type="button" aria-label="看第 1 张" aria-current="true"></button><button type="button" aria-label="看第 2 张"></button><button type="button" aria-label="看第 3 张"></button><button type="button" aria-label="看第 4 张"></button><button type="button" aria-label="看第 5 张"></button><button type="button" aria-label="看第 6 张"></button><button type="button" aria-label="看第 7 张"></button></div>
+          <button type="button" class="carousel-pause" data-carousel-pause aria-label="暂停轮播"><span aria-hidden="true"></span></button>
+        </div>
+        <p class="carousel-note">照片取自网络，若有侵权请<a href="connect.html">告知我们</a>，我们会立即下架。</p>
+      </section>
     </div>
   </section>
 
@@ -223,7 +242,7 @@
   </div>
 </footer>
 
-<script src="../scripts.js?v=0e75fbf0"></script>
+<script src="../scripts.js?v=49c45082"></script>
 <!-- Cloudflare Web Analytics：不用 cookie、不追踪个人，只统计浏览量（见 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
 </body>
 </html>
