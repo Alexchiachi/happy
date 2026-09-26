@@ -30,7 +30,9 @@
   <meta name="robots" content="index, follow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <!-- 字体 CSS 有 500KB（中文要切成上百段），不让它挡住画面：先用系统明体显示，载完再换 -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
   <link rel="stylesheet" href="../styles.css?v=6022f7d9">
 </head>
 <body>
@@ -317,7 +319,7 @@
   </div>
 </footer>
 
-<script src="../scripts.js?v=49c45082"></script>
+<script src="../scripts.js?v=fac3a3a3"></script>
 <!-- Cloudflare Web Analytics：不用 cookie、不追踪个人，只统计浏览量（见 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
 </body>
 </html>

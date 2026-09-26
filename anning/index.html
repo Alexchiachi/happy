@@ -12,10 +12,12 @@
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
   <!-- 封面第一張照片先開始下載，不必等 JSON 讀完。換第一張封面時這裡要一起改；
        版面（has-cover、輪播框）也先寫在 HTML 裡，資料到了才不會整頁往下跳。 -->
-  <link rel="preload" as="image" href="../shop/images/cover-jacaranda.jpg" fetchpriority="high">
+  <link rel="preload" as="image" type="image/avif" href="../shop/images/cover-jacaranda.avif" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- 字型 CSS 有 500KB（中文要切成上百段），不讓它擋住畫面：先用系統明體顯示，載完再換 -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap"></noscript>
   <link rel="stylesheet" href="../shop/shop.css">
   <link rel="stylesheet" href="anning.css">
 </head>

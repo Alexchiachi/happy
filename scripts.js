@@ -89,8 +89,17 @@
       pauseBtn.classList.toggle('paused', paused);
       pauseBtn.setAttribute('aria-label', paused ? T('carouselPlay') : T('carouselPause'));
     };
+    // 第一張以外的照片網址放在 data-*（見 yunnan.html），輪到前一張時才換上
+    const wake = (el) => {
+      if (!el) return;
+      el.querySelectorAll('[data-srcset]').forEach((s) => { s.srcset = s.dataset.srcset; delete s.dataset.srcset; });
+      el.querySelectorAll('img[data-src]').forEach((m) => { m.src = m.dataset.src; delete m.dataset.src; });
+    };
+    if (document.readyState === 'complete') wake(slides[1]);
+    else window.addEventListener('load', () => wake(slides[1]));
     const show = (i) => {
       now = (i + slides.length) % slides.length;
+      wake(slides[now]); wake(slides[(now + 1) % slides.length]);
       slides.forEach((el, k) => {
         el.classList.toggle('on', k === now);
         if (k === now) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');

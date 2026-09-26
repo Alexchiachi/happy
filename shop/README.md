@@ -9,7 +9,7 @@
 | --- | --- |
 | `products.json` | **唯一的商品表**：檔期（名稱、截止日、出貨日）、運費、付款資訊、10 樣商品。網頁與 Worker 共用 |
 | `index.html`、`shop.css`、`shop.js` | 頁面、樣式、購物車與送出（`ORDER_ENDPOINT` 指向 Worker） |
-| `images/` | 商品照（4:5、800×1000 JPG） |
+| `images/` | 商品照（4:5、800×1000 JPG＋同名 `.webp`）、封面照（3:4、900×1200 JPG＋同名 `.avif`）。WebP／AVIF 由 `tools/make_web_images.py` 產生，網頁優先載入 |
 
 改 `products.json` 的規矩：
 - 商品 `id`、規格 `key` 上線後不要改（舊訂單會對不上）；要下架設 `"active": false`。
@@ -62,10 +62,13 @@
    - 別人拍的照片（例：右下角有小紅書浮水印與帳號）先提醒使用者授權問題。2026-09-25 的七張封面照都是小紅書照片（播放順序照檔名 IMG_7037→7043，最後是 1790334251256），
      使用者決定先上線、之後換自己的照片；上線時**保留原作者浮水印，不裁掉**。
      Drive 資料夾列表會分頁，找新照片時記得翻到最後一頁（有 nextPageToken 就還有）。
-     品牌站 `yunnan.html` 開場的輪播**借用同一組照片**（寫死在 HTML 裡），換封面照時兩邊一起換。
+     品牌站 `yunnan.html` 開場的輪播**借用同一組照片**（寫死在 HTML 裡，第二張起網址放在 `data-src`／`data-srcset`），換封面照時兩邊一起換。
      輪播下方的聲明文字在 `products.json` 的 `coverNote`（「照片取自網路，若有侵權請告知…」）；換成自己的照片後把這行刪掉。
 3. 處理照片：裁成 **4:5**、800×1000、JPG 品質約 80、每張 250KB 以內，存進 `shop/images/`，
    檔名全小寫英文加連字號（例：`rose-tea.jpg`）。原檔不進倉庫。
+   接著在專案根目錄跑 `python3 tools/make_web_images.py`，產生網頁實際載入的 `.webp`（商品）與 `.avif`（封面），
+   兩種都要一起提交；`products.json` 仍只寫 `.jpg`。**換了第一張封面**，`shop/index.html` 與 `anning/index.html`
+   開頭的 `<link rel="preload" … .avif>` 也要改成新檔名。
 4. 文案：以資料表為準。語氣照品牌站（短句、具體、溫和）；資料表沒寫的事實不要自己補。
    **不寫療效**（止血、降血壓、調理某種病等），食品和中藥材都一樣。
 5. 更新 `shop/products.json`，

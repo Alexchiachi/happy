@@ -59,6 +59,20 @@
   }
 
   // ---------- 封面輪播：照片清單在 products.json 的 cover ----------
+  // 封面照：先給 AVIF（tools/make_web_images.py 產生），不支援的瀏覽器用 JPG。
+  // 只有第一張立刻載入；其他張疊在同一個框裡，lazy 不會生效，所以先把網址放在 data-*，
+  // 輪到前一張時才由 wakeSlide 換上（見下面 show）。原本一進頁面就把全部封面都下載了。
+  function coverPicture(c, i) {
+    var a = i ? 'data-' : '';
+    return '<picture><source type="image/avif" ' + a + 'srcset="' + c.img.replace(/\.jpg$/, '.avif') + '">' +
+      '<img ' + a + 'src="' + c.img + '" alt="' + esc(c.alt || '') + '" width="900" height="1200" decoding="async"' + (i ? '' : ' fetchpriority="high"') + '></picture>';
+  }
+  function wakeSlide(el) {
+    if (!el) return;
+    el.querySelectorAll('[data-srcset]').forEach(function (s) { s.srcset = s.getAttribute('data-srcset'); s.removeAttribute('data-srcset'); });
+    el.querySelectorAll('img[data-src]').forEach(function (m) { m.src = m.getAttribute('data-src'); m.removeAttribute('data-src'); });
+  }
+
   function initCover(list) {
     var box = $('[data-cover]');
     if (!box) return;
@@ -68,7 +82,7 @@
     var pauseBtn = box.querySelector('[data-cover-pause]');
     track.innerHTML = list.map(function (c, i) {
       return '<figure class="cover-slide' + (i === 0 ? ' on' : '') + '" role="group" aria-roledescription="投影片" aria-label="第 ' + (i + 1) + ' 張，共 ' + list.length + ' 張"' + (i ? ' aria-hidden="true"' : '') + '>' +
-        '<img src="' + c.img + '" alt="' + esc(c.alt || '') + '" width="900" height="1200" decoding="async"' + (i ? ' loading="lazy"' : ' fetchpriority="high"') + '></figure>';
+        coverPicture(c, i) + '</figure>';
     }).join('');
     dots.innerHTML = list.length < 2 ? '' : list.map(function (c, i) {
       return '<button type="button" aria-label="看第 ' + (i + 1) + ' 張"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
@@ -84,8 +98,11 @@
     if (list.length < 2) return;
 
     var slides = track.children, now = 0, timer = null, paused = false;
+    if (document.readyState === 'complete') wakeSlide(slides[1]);
+    else window.addEventListener('load', function () { wakeSlide(slides[1]); });
     function show(i) {
       now = (i + slides.length) % slides.length;
+      wakeSlide(slides[now]); wakeSlide(slides[(now + 1) % slides.length]);
       Array.prototype.forEach.call(slides, function (el, k) {
         el.classList.toggle('on', k === now);
         if (k === now) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
@@ -129,7 +146,7 @@
   // ---------- 商品卡 ----------
   function cardHTML(p, closed) {
     var visual = p.img
-      ? '<img src="' + p.img + '" alt="' + esc(p.imgAlt || p.name) + '" loading="lazy" decoding="async" width="800" height="1000">'
+      ? '<picture><source type="image/webp" srcset="' + p.img.replace(/\.jpg$/, '.webp') + '"><img src="' + p.img + '" alt="' + esc(p.imgAlt || p.name) + '" loading="lazy" decoding="async" width="800" height="1000"></picture>'
       : '<div class="ph tone-' + p.tone + '" role="img" aria-label="' + esc(p.name) + '（照片準備中）"><span class="ph-han">' + p.han + '</span><span class="ph-note">照片準備中</span></div>';
     var from = Math.min.apply(null, p.variants.map(function (v) { return v.price; }));
     var rows = p.variants.map(function (v) {
