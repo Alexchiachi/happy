@@ -26,6 +26,8 @@
     formFail2:    { tw: '，或稍後再試一次。',        cn: '，或稍后再试一次。' },
     countAll:     { tw: ' 篇文章',                 cn: ' 篇文章' },
     countOne:     { tw: ' 篇',                    cn: ' 篇' },
+    copied:       { tw: '已複製，到微信搜尋貼上',    cn: '已复制，到微信搜索粘贴' },
+    copyFail:     { tw: '請長按名稱自行複製',        cn: '请长按名称自行复制' },
   }[key][LANG]);
 
 
@@ -44,6 +46,31 @@
     // 所以除了監聽 error，也要補檢查「已經載入失敗」的狀態。
     if (img.complete && img.naturalWidth === 0) swap();
     else img.addEventListener('error', swap, { once: true });
+  });
+
+  // --- 一鍵複製（連繫頁：微信公眾號名稱） ---
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    const label = btn.textContent;
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.copy;
+      const done = (msg, ok) => {
+        btn.textContent = msg;
+        btn.classList.toggle('copied', ok);
+        setTimeout(() => { btn.textContent = label; btn.classList.remove('copied'); }, 2400);
+      };
+      const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { /* 舊瀏覽器 */ }
+        ta.remove();
+        done(ok ? T('copied') : T('copyFail'), ok);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => done(T('copied'), true), fallback);
+      } else fallback();
+    });
   });
 
   // --- 真實照片載不到時，露出底下的色塊 ---

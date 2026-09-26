@@ -584,7 +584,7 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* ============================================================
    Connect page — cards & form
    ============================================================ */
-.contact-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin: var(--s-5) 0; }
+.contact-cards { display: grid; gap: 1px; background: var(--line); margin: var(--s-5) 0; }
 .contact-card {
   background: var(--paper);
   padding: var(--s-5) var(--s-4);
@@ -623,7 +623,31 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
   object-fit: contain;
 }
 
-@media (max-width: 900px) { .contact-cards { grid-template-columns: 1fr; } }
+/* 一鍵動作（加 LINE、存微信 QR Code、複製名稱）。按鈕樣式沿用 .svc-cta 的線框風格 */
+.contact-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-2); margin-top: var(--s-3); }
+.contact-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  font-family: var(--font-han); font-size: 0.88rem; letter-spacing: 0.15em;
+  color: var(--tea); background: transparent; border: 1px solid var(--tea); padding: 10px 20px; cursor: pointer;
+  transition: background var(--dur-ui) ease-out, color var(--dur-ui) ease-out, transform var(--dur-ui) ease-out;
+}
+.contact-btn.quiet { color: var(--ink-soft); border-color: var(--line); }
+.contact-btn.copied { color: var(--paper); background: var(--tea); border-color: var(--tea); }
+.contact-btn:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-btn:hover { background: var(--tea); border-color: var(--tea); color: var(--paper); }
+}
+/* 手機與電腦的說明不同：手機掃不到自己的螢幕，要存圖再從相簿選 */
+.contact-card .only-touch { display: none; }
+@media (pointer: coarse) {
+  .contact-card .only-pointer { display: none; }
+  .contact-card p.only-touch { display: block; }
+  .contact-card .contact-btn.only-touch { display: inline-flex; }
+}
+
+/* 四張卡排成 2×2：排成一列時信箱與臉書網址會被硬折成兩行 */
+.contact-cards { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) { .contact-cards { grid-template-columns: 1fr; } }
 
 /* Letter form */
 .letter-form { max-width: 640px; margin: 0 auto; padding: var(--s-5) 0; }
