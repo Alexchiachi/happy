@@ -4,6 +4,7 @@
 - 「幸福餐桌｜高階主管三階段課程」網站（`executive-table/`，部署在 Cloudflare Workers）的完整交接說明在
   [`executive-table/CLAUDE.md`](executive-table/CLAUDE.md)，處理這個網站前先讀它。
 - 品牌站的視覺規範（色票、字體、元件、語氣、該做與不該做）在 [`DESIGN.md`](DESIGN.md)，做新頁面或改樣式前先讀它。
+- **做新網頁或改網頁效能前，先讀 [`NEW-PAGE.md`](NEW-PAGE.md)**：踩過的坑（中文字型、JS 才出現的開場、輪播、照片格式）、怎麼量才準、檢查清單與工具。
 - 雲南好物選購頁（`shop/`）的素材流程與架構在 [`shop/README.md`](shop/README.md)。
 - 雲南安寧幸福之家說明與預約頁（`anning/`）在 [`anning/README.md`](anning/README.md)。
 - LINE 官方帳號**刻意分成兩個**，不要統一：品牌站（`connect.html`）用 `@473nnjul`；
