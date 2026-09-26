@@ -174,7 +174,9 @@
           "price": 400,
           "unit": "盒"
         }
-      ]
+      ],
+      "img": "images/brown-sugar.jpg",
+      "imgAlt": "玫瑰、紅棗、薑汁三盒紅糖並排，旁邊有木匙、一杯紅糖水、薑片與切塊的紅糖"
     },
     {
       "active": true,
@@ -217,7 +219,9 @@
           "price": 880,
           "unit": "組"
         }
-      ]
+      ],
+      "img": "images/porcini-sauce.jpg",
+      "imgAlt": "紅色禮盒拉開，牛皮紙內盒裡放著三罐牛肝菌拌醬，一隻手正拿起綠色蓋子那罐"
     },
     {
       "active": true,
@@ -398,7 +402,9 @@
           "unit": "管"
         }
       ],
-      "featured": true
+      "featured": true,
+      "img": "images/tibetan-incense.jpg",
+      "imgAlt": "玻璃管裝的藏香貼著直式標籤，旁邊散著幾支線香、一盞點著的酥油燈和香灰碗"
     },
     {
       "active": false,
