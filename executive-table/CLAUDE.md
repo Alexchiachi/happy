@@ -100,6 +100,7 @@
 | --- | --- |
 | `index.html` | **唯一手改的頁面**（HTML＋CSS＋JS 全在一檔，無框架、無建置）。`INQUIRY_ENDPOINT` 指向 Worker |
 | `zh-cn/index.html` | `python3 executive-table/build_zh_cn.py` 產生（OpenCC tw2s＋手動詞彙修正），**不要手改** |
+| `fonts/` | Noto Serif TC 子集（繁簡兩版用到的字，約 190KB，檔名帶雜湊、快取一年），`tools/subset_fonts.py executive-table` 產生，**不要手改**；頁面等 `load` 後才載入。西文 Cormorant Garamond 仍從 Google Fonts 非同步載入 |
 | `worker/index.js` | 路由、表單驗證、限流（10 分鐘 5 次，IP 只存雜湊）、CORS、管理登入、CSV |
 | `worker/letters.js` | 品牌站來信：收信、兩封信的模板（繁／簡）、管理 API、CSV |
 | `worker/orders.js` | 雲南好物訂單：`import` 根目錄 `shop/products.json` 重算金額、截止日檢查、同檔同電話標記、信件模板、管理 API、CSV |
@@ -123,6 +124,8 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
 1. 開發分支：依 session 指定的分支；先 `git fetch origin main && git checkout -B <分支> origin/main`。
 2. 只改 `index.html`；改完一定跑 `python3 executive-table/build_zh_cn.py`
    （需要 `pip install opencc-python-reimplemented`）。改 Worker 後跑 `node --check`。
+   **改了文案**（含程式裡的訊息文字）還要跑 `python3 tools/subset_fonts.py executive-table` 重做子集字型；
+   沒跑不會壞，新字只是先用系統明體顯示。效能規範見倉庫根目錄 `NEW-PAGE.md`。
 3. **文字替換用精準字串，不要全域取代。** 典型陷阱：「田裡的餐桌」包含在「稻田裡的餐桌」裡。
    替換前 `grep -n` 看所有出現處，替換後再 grep 一次確認。
 4. 驗證：

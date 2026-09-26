@@ -45,6 +45,7 @@ def page_rules(base):
         # 簡體頁在下一層目錄
         ('"images/', '"../images/'),
         ('"downloads/', '"../downloads/'),
+        ('"fonts/', '"../fonts/'),
         ('<a class="nav-link lang" href="zh-cn/" hreflang="zh-Hans" lang="zh-Hans">简体</a>',
          '<a class="nav-link lang" href="../" hreflang="zh-Hant" lang="zh-Hant">繁體</a>'),
         ('<a href="zh-cn/" hreflang="zh-Hans" lang="zh-Hans">简体中文版</a>',

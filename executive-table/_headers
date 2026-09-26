@@ -11,3 +11,7 @@
 
 /downloads/*
   Cache-Control: public, max-age=2592000
+
+# 子集字型檔名帶內容雜湊（tools/subset_fonts.py），內容變了檔名就變，可以快取一年
+/fonts/*.woff2
+  Cache-Control: public, max-age=31536000, immutable

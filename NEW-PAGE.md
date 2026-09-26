@@ -39,7 +39,9 @@
   為什麼要等 `load`：字型若在第一次繪製前就被發現，Lighthouse 會把它算進 FCP／LCP（見第三節）。
 - **結果**：安寧 65 → 94、好物 73 → 95（同條件本機實測）。
 - **新網頁怎麼做**：
-  - 獨立頁（像 `shop/`、`anning/`）：直接共用 `shop/fonts/`，把新頁面加進 `tools/subset_fonts.py` 的 `PAGES`，重跑一次。
+  - 獨立頁（像 `shop/`、`anning/`）：直接共用 `shop/fonts/`，把新頁面加進 `tools/subset_fonts.py` 裡那組 `TARGETS` 的 `pages`，重跑一次。
+  - 部署在 Cloudflare 的課程頁（`executive-table/`）只發布自己資料夾裡的檔案，所以有自己一組 `executive-table/fonts/`
+    （檔名帶雜湊、`_headers` 設快取一年）。`python3 tools/subset_fonts.py executive-table` 只重做這一組。
   - 品牌站頁面目前仍從 Google Fonts 載入完整字型（文章多、用字廣，還沒處理）。新品牌站頁面照現狀即可，
     但**只載入真的用到的字重**（每多一個字重，就多一整套 2MB）。
   - 改了文案、商品、房型之後要重跑 `python3 tools/subset_fonts.py`。沒跑也不會缺字，只是新字會用系統明體顯示。
@@ -166,7 +168,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 | `tools/build_zhcn.py` | 改了任何品牌站繁體頁（重建 `zh-cn/`、sitemap、hreflang） |
 | `tools/bump_assets.py` | 改了 `styles.css` 或 `scripts.js`（更新快取版本號） |
 | `tools/make_web_images.py` | 新增或換了 `shop/images/` 的照片 |
-| `tools/subset_fonts.py` | 改了 `shop/`、`anning/` 的文案、`products.json`、`stay.json` |
+| `tools/subset_fonts.py` | 改了 `shop/`、`anning/` 的文案、`products.json`、`stay.json`；或改了 `executive-table/` 的文案（加引數 `executive-table` 只做那組） |
 | `.claude/skills/web-quality-audit/scripts/analyze.sh` | 交出去之前的原始碼快篩 |
 
 ## 七、成績紀錄
@@ -177,5 +179,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 | 2026-09-26 | 三頁 | 本機 92／97／96，上線仍 55／70 | 字型改非同步、封面 AVIF、逐張載入——**字型量沒變，所以沒用** |
 | 2026-09-26 | 安寧／好物 | 65／73 → 94／95（本機走代理） | 中文字型子集 4.7MB → 300KB、load 後才載入、第一張封面寫進 HTML |
 | 2026-09-26 | 安寧／好物（**PageSpeed 正式網址**） | 手機 55／70 → **89／89**；電腦 **99／100** | 同上一列（PR #27 上線後實測。剛上線第一次測是 79／78、電腦 99／99，第二次才是 89／89） |
+
+| 2026-09-27 | 幸福餐桌課程頁（繁／簡） | 55／55 → **99–100／99**（本機走代理） | 中文字型子集 1.4MB（簡體 2.9MB）→ 190KB、load 後才載入；hover 只給滑鼠；上線後待 PageSpeed 實測 |
 
 之後每次上線，請把 PageSpeed 正式網址的手機與電腦分數補在這張表。

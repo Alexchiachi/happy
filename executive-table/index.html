@@ -58,9 +58,15 @@
      <script defer data-domain="alexchiachi.github.io" src="https://plausible.io/js/script.js"></script>
      <script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
 -->
+<!-- 中文字（Noto Serif TC）用自己放的子集，只含本頁繁簡兩版用到的字（tools/subset_fonts.py 產生，改文案後重跑）。
+     等 load 之後才載入：先用系統明體顯示，字型不跟第一屏搶頻寬（完整字型每頁要抓十幾個檔、約 1.4MB）。
+     西文的 Cormorant Garamond 檔案小，仍從 Google Fonts 載入，但不擋畫面。見倉庫根目錄 NEW-PAGE.md。 -->
+<script>addEventListener("load", function () { var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "fonts/fonts.css"; document.head.appendChild(l); });</script>
+<noscript><link rel="stylesheet" href="fonts/fonts.css"></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap"></noscript>
 <style>
 /* 沿用「大道至簡」設計系統：紙、墨、苔綠（台灣）、朱印 */
 :root {
@@ -156,7 +162,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .bar.edge { border-bottom-color: var(--line); box-shadow: 0 6px 18px -14px rgba(42, 37, 32, 0.35); }
 .bar nav a.nav-link[aria-current="true"] { color: var(--accent); }
 .bar nav a.btn { color: var(--on-accent); }
-.bar nav a.btn:hover { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .bar nav a.btn:hover { color: var(--accent); } }
 section[id] { scroll-margin-top: 4.5rem; }
 @media (prefers-reduced-transparency: reduce) { .bar { background: var(--paper); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (prefers-contrast: more) { .bar { background: var(--paper); border-bottom-color: var(--ink); } :root { --line: #8C8273; --mist: #4A423A; } }
@@ -166,7 +172,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 .brand small { font-family: var(--font-display); font-style: italic; color: var(--mist); font-size: 0.85rem; letter-spacing: 0.04em; }
 .bar nav { display: flex; gap: 1.4rem; align-items: center; }
 .bar nav a { text-decoration: none; font-size: 0.92rem; letter-spacing: 0.1em; color: var(--ink-soft); transition: color var(--dur-ui); }
-.bar nav a:hover { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .bar nav a:hover { color: var(--accent); } }
 .bar nav .nav-link { display: none; }
 @media (min-width: 760px) { .bar nav .nav-link { display: inline; } }
 
@@ -177,14 +183,14 @@ section[id] { scroll-margin-top: 4.5rem; }
   letter-spacing: 0.12em; font-size: 0.95rem; text-decoration: none; cursor: pointer;
   transition: background var(--dur-ui), color var(--dur-ui), transform var(--dur-ui) ease-out;
 }
-.btn:hover { background: transparent; color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: transparent; color: var(--accent); } }
 html { -webkit-tap-highlight-color: transparent; }
 .btn, .format, .day, .tab, .seg button, .stepper button, .check-list label, .radio-row label, .faq summary { touch-action: manipulation; }
 .btn:active, .format:active, .day:active, .seg button:active, .stepper button:active:not(:disabled) { transform: scale(0.97); transition-duration: 100ms; }
 .check-list label:active, .radio-row label:active { transform: scale(0.99); }
 .format, .day, .check-list label, .radio-row label { transition-property: border-color, background, box-shadow, transform; transition-duration: var(--dur-ui); }
 .btn.ghost { background: transparent; color: var(--accent); }
-.btn.ghost:hover { background: var(--accent); color: var(--on-accent); }
+@media (hover: hover) and (pointer: fine) { .btn.ghost:hover { background: var(--accent); color: var(--on-accent); } }
 .btn.small { padding: 0.45em 1em; font-size: 0.85rem; }
 .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 
@@ -221,7 +227,7 @@ html { -webkit-tap-highlight-color: transparent; }
   background: var(--card); border: 1px solid var(--line);
   transition: border-color var(--dur-ui), box-shadow var(--dur-ui);
 }
-.format:hover { border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .format:hover { border-color: var(--accent); } }
 .format[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .format-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 .format .fh { font-size: 1.3rem; letter-spacing: 0.06em; }
@@ -236,7 +242,7 @@ html { -webkit-tap-highlight-color: transparent; }
 @media (min-width: 860px) { .check { grid-template-columns: 1fr 1.2fr; align-items: start; } }
 .check-list { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
 .check-list label { display: flex; gap: 0.8rem; align-items: flex-start; padding: 0.75rem 1rem; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; background: var(--card); transition: border-color var(--dur-ui); }
-.check-list label:hover { border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .check-list label:hover { border-color: var(--accent); } }
 .check-list input { accent-color: var(--moss); width: 1.1rem; height: 1.1rem; margin-top: 0.4rem; flex: none; }
 .verdict { font-size: 0.97rem; padding: 0.9rem 1.1rem; border-left: 2px solid var(--line); color: var(--ink-soft); min-height: 3.5rem; transition: border-color var(--dur-chrome); }
 .verdict.ready { border-color: var(--accent); color: var(--ink); }
@@ -254,7 +260,7 @@ html { -webkit-tap-highlight-color: transparent; }
 .tab .d { font-size: 0.8rem; }
 .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
 .tab[aria-selected="true"] .n { color: var(--accent); }
-.tab:hover { color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .tab:hover { color: var(--ink); } }
 .panel { padding-top: 2rem; display: grid; gap: 1.6rem; }
 .panel h3 { font-size: 1.35rem; letter-spacing: 0.06em; }
 .panel-grid { display: grid; gap: 1.6rem; }
@@ -272,7 +278,8 @@ html { -webkit-tap-highlight-color: transparent; }
 .day .k { font-size: 0.82rem; letter-spacing: 0.14em; color: var(--mist); }
 .day .t { font-size: 1.2rem; letter-spacing: 0.1em; }
 .day .c { font-size: 0.95rem; color: var(--ink-soft); }
-.day:hover, .day[aria-pressed="true"] { border-color: var(--accent); }
+.day[aria-pressed="true"] { border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .day:hover { border-color: var(--accent); } }
 .day[aria-pressed="true"] { background: var(--moss-soft); }
 
 .weeks-scroll { overflow-x: auto; padding-bottom: 0.3rem; }
@@ -497,7 +504,7 @@ body { font-size: 16.5px; }
 .hero h1 { font-weight: 300; }
 .hero-actions { align-items: center; gap: 1.6rem; margin-top: 2.4rem; }
 .text-link { color: var(--ink-soft); text-decoration: none; letter-spacing: 0.08em; font-size: 0.95rem; border-bottom: 1px solid var(--line); padding-bottom: 0.15rem; transition: color var(--dur-ui), border-color var(--dur-ui); }
-.text-link:hover { color: var(--accent); border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .text-link:hover { color: var(--accent); border-color: var(--accent); } }
 .table-fig { gap: 1.2rem; }
 .table-fig figcaption { font-size: 0.85rem; }
 .seg { background: transparent; border-color: var(--line); }
@@ -505,7 +512,7 @@ body { font-size: 16.5px; }
 /* Buttons: one filled style; ghost becomes a quiet outline */
 .btn { letter-spacing: 0.1em; }
 .btn.ghost { border-color: var(--line); color: var(--ink-soft); }
-.btn.ghost:hover { border-color: var(--accent); background: transparent; color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .btn.ghost:hover { border-color: var(--accent); background: transparent; color: var(--accent); } }
 
 /* Cards → open rows */
 .formats { gap: 0; border-top: 1px solid var(--line); }
@@ -591,7 +598,7 @@ footer { border-top: 0; }
 .ask dd { margin: 0; }
 .contacts { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; }
 .contact { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 0.1rem; min-height: 2.25rem; display: inline-flex; align-items: center; }
-.contact:hover { border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .contact:hover { border-color: var(--accent); } }
 .contact .id { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; margin-left: 0.3em; }
 .privacy { font-size: 0.88rem; color: var(--mist); }
 .privacy summary { cursor: pointer; width: fit-content; border-bottom: 1px solid var(--line); }
@@ -602,7 +609,7 @@ footer { border-top: 0; }
 .share-label { font-size: 0.88rem; }
 .share-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .share { font: inherit; font-size: 0.88rem; color: var(--ink-soft); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.35rem 1rem; min-height: 2.5rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; touch-action: manipulation; transition: border-color var(--dur-ui), color var(--dur-ui); }
-.share:hover { border-color: var(--accent); color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .share:hover { border-color: var(--accent); color: var(--accent); } }
 .share:active { transform: scale(0.97); }
 .share[data-done] { color: var(--accent); border-color: var(--accent); }
 
@@ -626,7 +633,7 @@ footer { border-top: 0; }
 .gallery-cap { font-size: 0.95rem; color: var(--ink-soft); letter-spacing: 0.04em; margin: 0; }
 .gallery-ctrl { display: flex; align-items: center; gap: 0.5rem; flex: none; }
 .gallery-ctrl button { width: 2.75rem; height: 2.75rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 1rem; touch-action: manipulation; transition: border-color var(--dur-ui), color var(--dur-ui); }
-.gallery-ctrl button:hover { border-color: var(--accent); color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .gallery-ctrl button:hover { border-color: var(--accent); color: var(--accent); } }
 .gallery-ctrl button:active { transform: scale(0.95); }
 .gallery-ctrl #galleryPlay { font-size: 0.72rem; letter-spacing: -0.08em; }
 .gallery-count { font-size: 0.82rem; color: var(--mist); font-variant-numeric: tabular-nums; min-width: 3.2rem; text-align: center; }
