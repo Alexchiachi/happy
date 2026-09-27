@@ -299,6 +299,11 @@ p { margin: 0; }
 .btn-line { display: inline-flex; background: #06C755; border: 1px solid #06C755; color: #fff; margin-bottom: .8rem; font-size: .9rem; }
 .btn-line[hidden] { display: none; }
 .btn-line:hover { background: #05a647; border-color: #05a647; }
+/* 延伸閱讀：一行小字連到幸福誌文章（兩頁共用） */
+.read-more { font-size: .88rem; color: var(--mist); }
+.read-more a { color: var(--ink-soft); border-bottom: 1px solid var(--line); text-decoration: none; }
+@media (hover: hover) { .read-more a:hover { color: var(--seal); border-color: var(--seal); } }
+
 /* ---------- 姊妹頁互推（雲南好物 ⇄ 安寧幸福之家，兩頁共用） ---------- */
 .done-sibling a { color: var(--ink-soft); }
 .sibling { padding: 0 0 clamp(3rem, 7vw, 5rem); }
