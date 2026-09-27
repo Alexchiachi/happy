@@ -2,7 +2,8 @@
 // - 網站是 executive-table/ 裡的靜態檔案；排除清單見 executive-table/.assetsignore
 // - 只有 /api/*、/admin 與 /photos/* 會先進到 Worker 程式（executive-table/worker/）
 // - 預約資料存在 D1；第一次部署時會依 database_name 自動建立資料庫
-// - Gmail 應用程式密碼、收件信箱、管理頁密碼放在 Cloudflare 專案的 Variables and Secrets，不寫在這裡（見 executive-table/README.md）
+// - Gmail 應用程式密碼、收件信箱、管理頁密碼、幸福記帳本的 GitHub 權杖放在
+//   Cloudflare 專案的 Variables and Secrets，不寫在這裡（見 executive-table/README.md）
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "executive-table",
@@ -33,7 +34,10 @@
     "SHOP_NOTIFY_EMAIL": "jianchiachi@gmail.com,renachien1@gmail.com",
     "SHOP_FROM_NAME": "大道至簡・雲南好物",
     // 安寧幸福之家（anning/）預約：通知一樣寄到 SHOP_NOTIFY_EMAIL；寄件人名稱（見 worker/stays.js）
-    "STAY_FROM_NAME": "大道至簡・安寧幸福之家"
+    "STAY_FROM_NAME": "大道至簡・安寧幸福之家",
+    // 幸福影響力記帳本：代為開 Issue 的 repo（見 worker/happiness.js）。
+    // 權杖是 Secret HAPPINESS_GITHUB_TOKEN，不寫在這裡。
+    "HAPPINESS_REPO": "Alexchiachi/happiness-ledger"
   },
   // 保留在 Cloudflare 後台設定的變數（ACCESS_TEAM_DOMAIN、ACCESS_AUD），部署時不要清掉
   "keep_vars": true,
