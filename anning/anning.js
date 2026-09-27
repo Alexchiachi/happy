@@ -66,7 +66,8 @@
       $('[data-open-range]').textContent = checkin.min.replace(/-/g, '/') + '–' + checkin.max.slice(5).replace('-', '/') + ' 可選';
     }
 
-    initCover(data.cover || []);
+    initCover($('[data-cover="home"]'), data.cover || [], data.coverNote, true);
+    initCover($('[data-cover="trip"]'), data.tripPhotos || [], data.tripNote, false);
     render();
   }
   // ---------- 加微信 ----------
@@ -111,10 +112,11 @@
   // 封面照：先給 AVIF（tools/make_web_images.py 產生），不支援的瀏覽器用 JPG。
   // 只有第一張立刻載入；其他張疊在同一個框裡，lazy 不會生效，所以先把網址放在 data-*，
   // 輪到前一張時才由 wakeSlide 換上（見下面 show）。原本一進頁面就把全部封面都下載了。
-  function coverPicture(c, i) {
+  // 開場那組的第一張是第一屏最大的圖，要優先下載；第一屏以外那組（安寧的雲南風景）第一張用 lazy
+  function coverPicture(c, i, hero) {
     var a = i ? 'data-' : '';
     return '<picture><source type="image/avif" ' + a + 'srcset="' + c.img.replace(/\.jpg$/, '.avif') + '">' +
-      '<img ' + a + 'src="' + c.img + '" alt="' + esc(c.alt || '') + '" width="900" height="1200" decoding="async"' + (i ? '' : ' fetchpriority="high"') + '></picture>';
+      '<img ' + a + 'src="' + c.img + '" alt="' + esc(c.alt || '') + '" width="900" height="1200" decoding="async"' + (i ? '' : hero ? ' fetchpriority="high"' : ' loading="lazy"') + '></picture>';
   }
   function wakeSlide(el) {
     if (!el) return;
@@ -122,11 +124,11 @@
     el.querySelectorAll('img[data-src]').forEach(function (m) { m.src = m.getAttribute('data-src'); m.removeAttribute('data-src'); });
   }
 
-  function initCover(list) {
-    var box = $('[data-cover]');
+  function initCover(box, list, noteText, hero) {
     if (!box) return;
+    var grid = box.closest('.hero-grid');
     // 版面預設有封面（HTML 先寫好，避免資料到了才跳版）；沒有照片就收起來
-    if (!list.length) { box.hidden = true; box.closest('.hero-grid').classList.remove('has-cover'); return; }
+    if (!list.length) { box.hidden = true; if (grid) grid.classList.remove('has-cover'); return; }
     var track = box.querySelector('[data-cover-track]'), dots = box.querySelector('[data-cover-dots]');
     var pauseBtn = box.querySelector('[data-cover-pause]');
     // 第一張已經寫在 HTML 裡（不必等資料就能顯示）；圖檔跟資料一致就留著，其餘接在後面
@@ -134,7 +136,7 @@
     var keepFirst = pre && pre.getAttribute('src') === list[0].img;
     var html = list.map(function (c, i) {
       return '<figure class="cover-slide' + (i === 0 ? ' on' : '') + '" role="group" aria-roledescription="投影片" aria-label="第 ' + (i + 1) + ' 張，共 ' + list.length + ' 張"' + (i ? ' aria-hidden="true"' : '') + '>' +
-        coverPicture(c, i) + '</figure>';
+        coverPicture(c, i, hero) + '</figure>';
     }).join('');
     if (keepFirst) {
       var tmp = document.createElement('div'); tmp.innerHTML = html;
@@ -149,12 +151,12 @@
     }).join('');
     pauseBtn.hidden = list.length < 2;
     var note = box.querySelector('[data-cover-note]');
-    if (DATA.coverNote) {
+    if (note && noteText) {
       var c = DATA.contact || {};
-      note.innerHTML = esc(DATA.coverNote) + (c.line ? ' <a href="' + c.lineUrl + '" target="_blank" rel="noopener">LINE ' + esc(c.line) + '</a>' : '');
+      note.innerHTML = esc(noteText) + (c.line ? ' <a href="' + c.lineUrl + '" target="_blank" rel="noopener">LINE ' + esc(c.line) + '</a>' : '');
     }
     box.hidden = false;
-    box.closest('.hero-grid').classList.add('has-cover');
+    if (grid) grid.classList.add('has-cover');
     if (list.length < 2) return;
 
     var slides = track.children, now = 0, timer = null, paused = false;
