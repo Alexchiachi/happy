@@ -95,6 +95,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
     <button type="button" role="tab" id="tabBtnLet" aria-selected="false" data-tab="let">大道至簡來信<span class="badge" id="letBadge"></span></button>
     <button type="button" role="tab" id="tabBtnOrd" aria-selected="false" data-tab="ord">雲南訂單<span class="badge" id="ordBadge"></span></button>
     <button type="button" role="tab" id="tabBtnStay" aria-selected="false" data-tab="stay">幸福之家預約<span class="badge" id="stayBadge"></span></button>
+    <button type="button" role="tab" id="tabBtnHap" aria-selected="false" data-tab="hap">幸福記帳本<span class="badge" id="hapBadge"></span></button>
     <button type="button" role="tab" id="tabBtnPh" aria-selected="false" data-tab="ph">幻燈片照片</button>
   </div>
   <section id="tab-inq">
@@ -150,6 +151,19 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
   <p class="hint">預約來自大道至簡品牌站的安寧幸福之家頁（anning/）。客人送出時不付款；每筆預約都會寄通知給你們，並寄預約確認給客人。
   先用微信或 LINE 跟客人對好日期，填上「入住日期」（需要時調整金額），再改「已確認」——客人會收到付款資訊。收到款項改「已付款」（客人會收到收款確認）。
   一次只接一組，同一個月已有其他預約時會標出來。</p>
+  </section>
+  <section id="tab-hap" hidden>
+  <div class="bar">
+    <div class="filters">
+      <select id="hStatus" aria-label="依狀態篩選"><option value="">全部狀態</option><option>已存入</option><option>暫緩</option><option>待補送</option></select>
+      <input id="hText" type="search" placeholder="搜尋稱呼、類型、內容" aria-label="搜尋紀錄">
+    </div>
+  </div>
+  <div class="count" id="hCount"></div>
+  <div id="hList"><p class="empty">載入中…</p></div>
+  <p class="hint">幸福影響力記帳本的存入紀錄。<strong>已存入</strong>表示已經成為一則 GitHub Issue，帳本會自動更新。
+  <strong>暫緩</strong>是內容含外部連結，要人看過才刊出；<strong>待補送</strong>是當時 GitHub 連不上，內容已經收下但還沒送出去。
+  這兩種都按「送去帳本」就會補上。<a href="https://alexchiachi.github.io/happiness-ledger/" target="_blank" rel="noopener">看網頁上的帳本</a></p>
   </section>
   <section id="tab-ph" hidden>
     <label class="drop" id="drop" for="files">把照片拖到這裡，或<b>點這裡選擇照片</b>（可一次選多張）
@@ -229,11 +243,74 @@ async function save(r, sel) {
   } finally { sel.disabled = false; }
 }
 
+/* ---------------- 幸福記帳本 ---------------- */
+let happiness = [];
+async function loadHappiness() {
+  try {
+    const res = await fetch('/api/admin/happiness', { cache: 'no-store' });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.code);
+    happiness = out.happiness; renderHappiness();
+  } catch (e) {
+    $('#hList').innerHTML = ''; $('#hList').append(el('p', 'err', '讀不到紀錄（' + e.message + '）。重新整理頁面再試一次。'));
+  }
+}
+function renderHappiness() {
+  const st = $('#hStatus').value, q = $('#hText').value.trim().toLowerCase();
+  const shown = happiness.filter(r => (!st || r.status === st) &&
+    (!q || [r.nickname, r.category, r.content].join(' ').toLowerCase().includes(q)));
+  // 只有「還沒進帳本」的才需要你動手，徽章就只算這些
+  const pending = happiness.filter(r => r.status !== '已存入').length;
+  $('#hapBadge').textContent = pending ? String(pending) : '';
+  $('#hCount').textContent = '共 ' + happiness.length + ' 筆，顯示 ' + shown.length + ' 筆'
+    + (pending ? '，' + pending + ' 筆待處理' : '');
+  const list = $('#hList'); list.innerHTML = '';
+  if (!shown.length) { list.append(el('p', 'empty', happiness.length ? '沒有符合條件的紀錄。' : '目前還沒有人存入。')); return; }
+  for (const r of shown) {
+    const item = el('div', 'item');
+    const top = el('div', 'top');
+    top.append(el('div', 'name', r.nickname), el('span', 'chip', r.status));
+    const meta = el('div', 'meta');
+    meta.append('#' + r.id + '・' + (r.created_at_taipei || fmt(r.created_at)));
+    if (r.issue_number) {
+      meta.append('・');
+      const link = el('a', '', 'Issue #' + r.issue_number);
+      link.href = 'https://github.com/Alexchiachi/happiness-ledger/issues/' + r.issue_number;
+      link.target = '_blank'; link.rel = 'noopener';
+      meta.append(link);
+    }
+    item.append(top, meta);
+    const chips = el('div'); chips.append(el('span', 'chip', r.category)); item.append(chips);
+    item.append(el('div', 'msg', r.content));
+    if (r.status !== '已存入') {
+      const btn = el('button', 'btn', '送去帳本');
+      btn.type = 'button';
+      btn.addEventListener('click', () => retryHappiness(r, btn));
+      item.append(btn);
+    }
+    list.append(item);
+  }
+}
+async function retryHappiness(r, btn) {
+  btn.disabled = true; btn.textContent = '送出中…';
+  try {
+    const res = await fetch('/api/admin/happiness/' + r.id + '/retry', { method: 'POST' });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.code);
+    r.status = '已存入'; r.issue_number = out.number; renderHappiness();
+  } catch (e) {
+    alert('沒有送出去（' + e.message + '）。權杖或 GitHub 可能有問題，內容仍然保留著。');
+    btn.disabled = false; btn.textContent = '送去帳本';
+  }
+}
+$('#hStatus').addEventListener('change', renderHappiness);
+$('#hText').addEventListener('input', renderHappiness);
+
 /* ---------------- 分頁 ---------------- */
-const HASH = { inq: '#', let: '#letters', ord: '#orders', stay: '#stays', ph: '#photos' };
+const HASH = { inq: '#', let: '#letters', ord: '#orders', stay: '#stays', hap: '#happiness', ph: '#photos' };
 function showTab(t) {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
-  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-stay').hidden = t !== 'stay'; $('#tab-ph').hidden = t !== 'ph';
+  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-stay').hidden = t !== 'stay'; $('#tab-hap').hidden = t !== 'hap'; $('#tab-ph').hidden = t !== 'ph';
   history.replaceState(null, '', HASH[t]);
   if (t === 'ph' && !photosLoaded) loadPhotos();
 }
@@ -591,6 +668,7 @@ if (location.hash === '#photos') showTab('ph');
 if (location.hash === '#letters') showTab('let');
 if (location.hash === '#orders') showTab('ord');
 if (location.hash === '#stays') showTab('stay');
+if (location.hash === '#happiness') showTab('hap');
 
 ['#fStatus', '#fPlan'].forEach(s => $(s).addEventListener('change', render));
 $('#fText').addEventListener('input', render);
@@ -598,6 +676,7 @@ load();
 loadLetters();
 loadOrders();
 loadStays();
+loadHappiness();
 </script>
 </body>
 </html>`;

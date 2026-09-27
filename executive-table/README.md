@@ -106,13 +106,45 @@
 ## 設定寄信與管理頁（第一次部署後做一次，約 5 分鐘）
 
 在 Cloudflare → **Workers & Pages** → `executive-table` → **Settings → Variables and Secrets**
-新增以下三個 **Secret**（存檔後立即生效，不用重新部署）：
+新增以下 **Secret**（存檔後立即生效，不用重新部署）：
 
-| 名稱 | 值 |
-| --- | --- |
-| `NOTIFY_EMAIL` | 你的 Gmail，例如 `jianchiachi@gmail.com`（收通知，也是寄件人） |
-| `GMAIL_APP_PASSWORD` | Gmail 應用程式密碼（16 個字母，做法見下方） |
-| `ADMIN_PASSWORD` | 管理頁密碼，至少 12 個字元，自己設定 |
+| 名稱 | 值 | 必要？ |
+| --- | --- | --- |
+| `NOTIFY_EMAIL` | 你的 Gmail，例如 `jianchiachi@gmail.com`（收通知，也是寄件人） | 是 |
+| `GMAIL_APP_PASSWORD` | Gmail 應用程式密碼（16 個字母，做法見下方） | 是 |
+| `ADMIN_PASSWORD` | 管理頁密碼，至少 12 個字元，自己設定 | 是 |
+| `HAPPINESS_GITHUB_TOKEN` | 幸福影響力記帳本用的 GitHub 權杖（做法見下方） | 只有 `/api/happiness` 要用 |
+
+`wrangler.jsonc` 設了 `keep_vars: true`，所以在後台設的這些值**不會被部署覆蓋掉**。
+
+### 建立幸福記帳本的 GitHub 權杖
+
+`/api/happiness` 會代訪客在 `Alexchiachi/happiness-ledger` 開 Issue，需要一把權杖。
+
+**另外開一把新的，不要沿用 Google Apps Script 那把。** 兩個系統共用同一把的話，
+日後換權杖要同時改兩邊；分開之後，等 GAS 停用就能直接把它那把撤銷，不影響 Worker。
+
+1. GitHub 右上角頭像 → **Settings** → 左側最下面 **Developer settings**
+   → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
+   （直接網址：<https://github.com/settings/personal-access-tokens>）
+2. 逐欄填：
+
+   | 欄位 | 填什麼 |
+   | --- | --- |
+   | Token name | `happiness-ledger-worker` |
+   | Resource owner | 你自己的帳號。**出現組織不要選**，選了要組織管理員核准 |
+   | Expiration | 有 **No expiration** 就選它（會跳警告，正常）。沒有就選最長的，並在行事曆設提醒 |
+   | Repository access | **Only select repositories** → `happiness-ledger`。**不要選 All repositories** |
+
+   ⚠️ 「Public repositories」是**唯讀**的，不能開 Issue，別選錯。
+
+3. **Permissions** → 展開 **Repository permissions** → 找到 **Issues** → 改成 **Read and write**。
+   其他全部維持 **No access**。`Metadata` 會自動變成 Read-only 且不能取消，那是正常的。
+4. **Generate token**。權杖只顯示這一次，開頭是 `github_pat_`，當場複製。
+5. 回到 Cloudflare 的 **Variables and Secrets**，**Type 選 Secret**（不是 Variable，
+   選錯會以明文存下來），名稱 `HAPPINESS_GITHUB_TOKEN`，值貼上，存檔。
+
+之後換權杖只要改這裡的值，程式碼不用動、也不用重新部署。
 
 ### 建立 Gmail 應用程式密碼
 
