@@ -161,19 +161,19 @@
         {
           "key": "rose",
           "label": "玫瑰紅糖 225g",
-          "price": 400,
+          "price": 480,
           "unit": "盒"
         },
         {
           "key": "date",
           "label": "紅棗紅糖 230g",
-          "price": 400,
+          "price": 480,
           "unit": "盒"
         },
         {
           "key": "ginger",
           "label": "薑汁紅糖 270g",
-          "price": 400,
+          "price": 480,
           "unit": "盒"
         }
       ],
@@ -257,7 +257,7 @@
         {
           "key": "std",
           "label": "一盒 6 枚",
-          "price": 480,
+          "price": 580,
           "unit": "盒"
         }
       ],
