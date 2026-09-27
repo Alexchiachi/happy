@@ -35,6 +35,9 @@
   封面用 IMG_5877（客廳）、5874（臥室看山）、5870（另一間臥室）；「我們的家」用 5881（客廳）、5880（廚房）、5873（臥室）。
   換照片後跑 `python3 tools/make_web_images.py`（`cover-*` 出 `.avif`、其他出 `.webp`），
   封面第一張同時寫在 `index.html` 與 `stay.json`，兩邊要一致。
+- 兩組輪播（`anning.js` 的 `initCover` 共用）：開場 `data-cover="home"` 是房子實景（`stay.json` 的 `cover`）；
+  「安寧」區塊 `data-cover="trip"` 是雲南風景（`tripPhotos`，借用 `shop/images/cover-*`，網路照片，`tripNote` 有侵權聲明）。
+  客人來旅居也會出門玩，所以風景照放在介紹景點的段落，不放開場。
 
 ## 預約流程
 

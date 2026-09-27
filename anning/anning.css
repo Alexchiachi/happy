@@ -52,6 +52,10 @@
 .home-photos img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- 安寧 ---------- */
+/* 安寧區塊開頭：左邊文字、右邊雲南風景輪播 */
+.trip { display: grid; grid-template-columns: 1fr minmax(260px, 400px); gap: clamp(2rem, 6vw, 5rem); align-items: center; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.trip-head { grid-template-columns: 1fr; row-gap: .9rem; margin-bottom: 0; }
+.trip-cover .cover-track { max-height: 70vh; max-height: 70svh; }
 .guide { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
 .guide-card { border-top: 2px solid var(--ink); padding-top: 1rem; display: grid; gap: .3rem; align-content: start; }
@@ -151,6 +155,8 @@
   .form-total b { font-family: var(--font-display); font-size: 1.6rem; font-weight: 500; letter-spacing: 0; margin-left: .4rem; font-variant-numeric: tabular-nums; }
   .form-total small { font-size: .8rem; color: var(--tea); }
   .guide-grid { grid-template-columns: repeat(2, 1fr); row-gap: 2rem; }
+  .trip { grid-template-columns: 1fr; }
+  .trip-cover { max-width: 460px; }
 }
 @media (max-width: 680px) {
   .bar-nav a:not(.bar-cta) { display: none; }

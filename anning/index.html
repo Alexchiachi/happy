@@ -49,7 +49,7 @@
         <h1>推門見春城，<br>落腳即歸家。</h1>
         <p class="lede">春城昆明的煙火深處，有一間不追求商業化的小家。我們不是傳統短租，只想以家為橋，接住從海峽那一端來的有緣朋友——放下行李，吹吹春城的風，嘗嘗雲南的茶，把這裡當成家。</p>
       </div>
-      <section class="cover" data-cover aria-roledescription="輪播" aria-label="幸福之家實景">
+      <section class="cover" data-cover="home" aria-roledescription="輪播" aria-label="幸福之家實景">
         <div class="cover-track" data-cover-track aria-live="off"><!-- 第一張封面直接寫在這裡，不必等 JS 與 JSON；要跟 stay.json 的 cover 第一張一致（不一致時 JS 會換掉） --><figure class="cover-slide on" role="group" aria-roledescription="投影片" aria-label="第 1 張"><picture><source type="image/avif" srcset="images/cover-living.avif"><img src="images/cover-living.jpg" alt="幸福之家的客廳：灰色布沙發、茶几與電視櫃，整面落地窗外是連綿的山和樹林" width="900" height="1200" decoding="async" fetchpriority="high"></picture></figure></div>
         <div class="cover-ui">
           <div class="cover-dots" data-cover-dots></div>
@@ -147,11 +147,23 @@
   <!-- 六、安寧 -->
   <section class="guide shelf" id="anning">
     <div class="wrap">
-      <header class="shelf-head">
-        <p class="eyebrow">Anning · 春城旁的慢生活</p>
-        <h2>安寧，古稱連然</h2>
-        <p class="shelf-note">從昆明往西約 32 公里，車程四十分鐘左右。曾是茶馬古道上的一站，如今是滇西旅遊環線的第一程，也是昆明人週末想躲一躲時，第一個想起的地方。</p>
-      </header>
+      <div class="trip">
+        <header class="shelf-head trip-head">
+          <p class="eyebrow">Anning · 春城旁的慢生活</p>
+          <h2>安寧，古稱連然</h2>
+          <p class="shelf-note">從昆明往西約 32 公里，車程四十分鐘左右。曾是茶馬古道上的一站，如今是滇西旅遊環線的第一程，也是昆明人週末想躲一躲時，第一個想起的地方。</p>
+          <p class="shelf-note">住在幸福之家，出門就是雲南。近的，是下面這些安寧的好去處；遠的，往西是滇西的山水。想怎麼玩先跟我們聊，我們幫你介紹在地可靠的包車師傅和旅行社。</p>
+        </header>
+        <!-- 雲南風景輪播：照片清單在 stay.json 的 tripPhotos（與雲南好物封面同一組）；在第一屏以外，由 JS 放進來，框先用比例留好位置 -->
+        <section class="cover trip-cover" data-cover="trip" aria-roledescription="輪播" aria-label="雲南風景">
+          <div class="cover-track" data-cover-track aria-live="off"></div>
+          <div class="cover-ui">
+            <div class="cover-dots" data-cover-dots></div>
+            <button type="button" class="cover-pause" data-cover-pause aria-label="暫停輪播"><span aria-hidden="true"></span></button>
+          </div>
+          <p class="cover-note" data-cover-note></p>
+        </section>
+      </div>
 
       <div class="guide-grid">
         <article class="guide-card">
