@@ -87,21 +87,24 @@
   },
   "cover": [
     {
-      "img": "../shop/images/cover-jacaranda.jpg",
-      "alt": "盛開的紫色藍花楹圍繞著一座重簷古建築，庭院中央有一位撐傘的行人"
+      "img": "images/cover-living.jpg",
+      "alt": "幸福之家的客廳：水晶吊燈、灰色布沙發與電視櫃，大片落地窗外是遠山與樹林，午後的光灑在米色磁磚地上"
     },
     {
-      "img": "../shop/images/cover-terraces.jpg",
-      "alt": "陽光穿過雲層灑在層層梯田上，水面映著天光，遠方是連綿山巒"
+      "img": "images/cover-bedroom-view.jpg",
+      "alt": "臥室裡一張鋪著白色床罩的木頭雙人床，窗外看得到綠樹與連綿的山"
     },
     {
-      "img": "../shop/images/cover-lake-spring.jpg",
-      "alt": "雪山下的湛藍湖泊，湖心小島開滿粉紅花樹，岸邊是白牆村落與金黃油菜花田"
+      "img": "images/cover-dining.jpg",
+      "alt": "從餐桌望向客廳：木頭餐桌椅、沙發與茶几，盡頭是明亮的大窗"
     },
     {
-      "img": "../shop/images/cover-mountain.jpg",
-      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線"
+      "img": "images/cover-bedroom.jpg",
+      "alt": "另一間臥室：灰色軟墊床頭的雙人床、書桌與床頭櫃，窗外是遠山"
+    },
+    {
+      "img": "images/cover-kitchen.jpg",
+      "alt": "白色櫥櫃的廚房，瓦斯爐、抽油煙機、冰箱與置物推車都齊全，地上鋪著小象圖案的地墊"
     }
-  ],
-  "coverNote": "雲南風景照取自網路，不是幸福之家的實景；若有侵權請告知，我們會立即下架。"
+  ]
 }
