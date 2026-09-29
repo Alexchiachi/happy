@@ -150,7 +150,15 @@
       "specs": [
         [
           "規格",
-          "玫瑰 225g／紅棗 230g／薑汁 270g"
+          "玫瑰 225g／紅棗 230g／薑汁 270g（每盒）"
+        ],
+        [
+          "原料",
+          "滇南甘蔗汁熬煮"
+        ],
+        [
+          "保存",
+          "18 個月"
         ],
         [
           "產地",
@@ -189,7 +197,7 @@
       "tone": "moss",
       "name": "牛肝菌拌醬禮盒",
       "intro": "拌麵、拌飯、炒一盤青菜，年菜桌上的隱藏主角。",
-      "story": "一組三罐。A 組偏香辣，B 組偏椒麻，兩組都有蔥油牛肝菌和牛肝菌白醬。",
+      "story": "一組三罐，用雲南楚雄的牛肝菌做成。A 組偏香辣，B 組偏椒麻，兩組都有蔥油牛肝菌和牛肝菌白醬。",
       "specs": [
         [
           "內容量",
@@ -267,7 +275,7 @@
     {
       "active": true,
       "id": "puer-minis",
-      "shelf": "always",
+      "shelf": "season",
       "cat": "茶 · Tea",
       "han": "茶",
       "tone": "tea",
@@ -298,12 +306,12 @@
           "unit": "袋"
         }
       ],
-      "featured": true
+      "featured": false
     },
     {
       "active": true,
       "id": "mushroom-soup",
-      "shelf": "always",
+      "shelf": "season",
       "cat": "菌 · Mushroom",
       "han": "湯",
       "tone": "moss",
@@ -340,7 +348,7 @@
     {
       "active": true,
       "id": "morel-daily",
-      "shelf": "always",
+      "shelf": "season",
       "cat": "菌 · Mushroom",
       "han": "菌",
       "tone": "moss",
@@ -371,6 +379,41 @@
       ],
       "img": "images/morel-daily.jpg",
       "imgAlt": "米色立袋包裝的乾燥羊肚菌，透明開窗裡可以看到一朵朵完整的羊肚菌，淨含量 100g"
+    },
+    {
+      "active": true,
+      "id": "baiyao-rose-tea",
+      "shelf": "season",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "name": "雲南白藥玫瑰花茶",
+      "intro": "花瓣大、顏色深，沖開是一杯溫柔的暗紅。",
+      "story": "墨紅玫瑰原產法國，是雲南種植的食用玫瑰品種之一，重瓣、每朵 30–35 枚花瓣。這一罐是凍乾的整朵花，花型完整、顏色深紫。熱水沖泡就能喝，也可以加進紅茶或紅糖水裡。",
+      "specs": [
+        [
+          "內容量",
+          "凍乾墨紅玫瑰 30g／罐"
+        ],
+        [
+          "保存",
+          "常溫乾燥處 12 個月"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 30g",
+          "price": 400,
+          "unit": "罐"
+        }
+      ],
+      "img": "images/baiyao-rose-tea.jpg",
+      "imgAlt": "透明罐裝的凍乾墨紅玫瑰花，旁邊一枝玫瑰和一杯沖開的淡紅色花茶"
     },
     {
       "active": true,
@@ -406,9 +449,105 @@
           "unit": "管"
         }
       ],
-      "featured": true,
+      "featured": false,
       "img": "images/tibetan-incense.jpg",
       "imgAlt": "兩管玻璃管裝的藏香立在藏式織毯上，旁邊有轉經輪、銅香爐與柏枝，背後是雪山和彩色經幡"
+    },
+    {
+      "active": true,
+      "id": "natural-incense",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/natural-incense.jpg",
+      "imgAlt": "白瓷盤上兩盒旅行裝線香，米白色盒子寫著「三神香」，紅色盒子寫著「療癒香」",
+      "name": "雲南天然線香 · 旅行盒",
+      "intro": "一盒二十支，收進包裡，走到哪點到哪。",
+      "story": "三款香、同一種旅行盒：療癒香、度母香、蘇合香丸，各有各的氣味。盒子細長好收，出門、旅行、放在書桌抽屜裡都方便。點一支，讓空間慢慢安靜下來。",
+      "specs": [
+        [
+          "規格",
+          "旅行盒裝・20 支／盒"
+        ],
+        [
+          "香款",
+          "療癒香・度母香・蘇合香丸"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "讀：聞不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "healing",
+          "label": "療癒香・20 支",
+          "price": 1080,
+          "unit": "盒"
+        },
+        {
+          "key": "tara",
+          "label": "度母香・20 支",
+          "price": 1080,
+          "unit": "盒"
+        },
+        {
+          "key": "suhe",
+          "label": "蘇合香丸・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "tie-dye",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "染",
+      "tone": "tea",
+      "img": "images/tie-dye.jpg",
+      "imgAlt": "木質人台上披著一條深藍底、白色斜紋花樣的紮染長圍巾",
+      "name": "雲南大理紮染",
+      "intro": "白是紮出來的，藍是一遍遍染上去的。",
+      "story": "大理白族的紮染：先用線把布一針一針紮起來，再反覆下缸染藍，拆線之後白花才露出來。手的力道、結的鬆緊都不一樣，所以沒有兩條會完全相同，邊緣化開的藍暈是手工的痕跡，不是瑕疵。前幾次請單獨冷水手洗、陰乾，別曝曬。",
+      "specs": [
+        [
+          "工藝",
+          "大理白族手工紮染"
+        ],
+        [
+          "洗滌",
+          "冷水手洗、陰乾，不用漂白劑"
+        ],
+        [
+          "產地",
+          "雲南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "讀：大理紮染，那一缸藍"
+      },
+      "variants": [
+        {
+          "key": "blue-scarf",
+          "label": "藍色紮染圍巾",
+          "price": 2580,
+          "unit": "條"
+        },
+        {
+          "key": "flower-of-life",
+          "label": "生命之花",
+          "price": 1880,
+          "unit": "條"
+        }
+      ]
     },
     {
       "active": false,
@@ -523,34 +662,6 @@
           "unit": "罐"
         }
       ]
-    },
-    {
-      "active": false,
-      "id": "baiyao-rose-tea",
-      "shelf": "season",
-      "cat": "花 · Flower",
-      "han": "玫",
-      "tone": "seal",
-      "name": "雲南白藥玫瑰花茶",
-      "intro": "",
-      "story": "",
-      "specs": [
-        [
-          "產地",
-          "雲南"
-        ]
-      ],
-      "variants": [
-        {
-          "key": "std",
-          "label": "一罐",
-          "price": 0,
-          "unit": "罐"
-        }
-      ],
-      "_待補": "資料表沒有規格與價格，補齊前不上架",
-      "img": "images/baiyao-rose-tea.jpg",
-      "imgAlt": "透明罐裝的凍乾墨紅玫瑰花，旁邊一枝玫瑰和一杯沖開的淡紅色花茶"
     },
     {
       "active": false,
