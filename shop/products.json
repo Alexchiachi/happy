@@ -455,6 +455,217 @@
     },
     {
       "active": true,
+      "id": "incense-healing",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-healing.jpg",
+      "imgAlt": "紅色紙盒寫著「療癒香」，旁邊是一只深色的旅行香盒，擺在木桌上",
+      "name": "天然線香・療癒香",
+      "intro": "紅色的小盒子，名字取得溫柔。",
+      "story": "三款旅行裝天然線香裡，紅盒的這一款。一盒 20 支、每支約 10 公分，點一支大約半小時，剛好是讀幾頁書、喝一壺茶的時間。盒子細長，出門、旅行、放在書桌抽屜裡都方便。",
+      "specs": [
+        [
+          "規格",
+          "旅行盒裝・20 支／盒"
+        ],
+        [
+          "長度",
+          "約 10 公分"
+        ],
+        [
+          "燃燒時間",
+          "每支約 30 分鐘"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "讀：聞不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "incense-tara",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-tara.jpg",
+      "imgAlt": "桌上一盒紅色的度母香與黑色旅行香盒，後方是度母像與法鈴",
+      "name": "天然線香・度母香",
+      "intro": "以度母為名的一盒香。",
+      "story": "度母是藏傳佛教裡的女性本尊，這一款以她為名。一盒 20 支、每支約 10 公分，點一支大約半小時，剛好是讀幾頁書、喝一壺茶的時間。盒子細長，出門、旅行、放在書桌抽屜裡都方便。",
+      "specs": [
+        [
+          "規格",
+          "旅行盒裝・20 支／盒"
+        ],
+        [
+          "長度",
+          "約 10 公分"
+        ],
+        [
+          "燃燒時間",
+          "每支約 30 分鐘"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "讀：聞不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "incense-suhe",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-suhe.jpg",
+      "imgAlt": "米白色長盒寫著「蘇合香丸」，旁邊散放樹脂香料、乾燥花與一只青瓷香插",
+      "name": "天然線香・蘇合香丸",
+      "intro": "蘇合香，自古就用來調香的樹脂香料。",
+      "story": "蘇合香是一種樹脂香料，很早就被拿來入香，這一款以它為名。一盒 20 支、每支約 10 公分，點一支大約半小時，剛好是讀幾頁書、喝一壺茶的時間。盒子細長，出門、旅行、放在書桌抽屜裡都方便。",
+      "specs": [
+        [
+          "規格",
+          "旅行盒裝・20 支／盒"
+        ],
+        [
+          "長度",
+          "約 10 公分"
+        ],
+        [
+          "燃燒時間",
+          "每支約 30 分鐘"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "讀：聞不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "tie-dye-scarf",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "巾",
+      "tone": "tea",
+      "img": "images/tie-dye-scarf.jpg",
+      "imgAlt": "木質人台上披著一條深藍底、白色斜紋花樣的紮染長圍巾",
+      "name": "大理紮染・藍色圍巾",
+      "intro": "白是紮出來的，藍是一遍遍染上去的。",
+      "story": "大理白族的紮染：先用線把布一針一針紮起來，再反覆下缸染藍，拆線之後白花才露出來。手的力道、結的鬆緊都不一樣，所以沒有兩條會完全相同，邊緣化開的藍暈是手工的痕跡，不是瑕疵。前幾次請單獨冷水手洗、陰乾，別曝曬。",
+      "specs": [
+        [
+          "工藝",
+          "大理白族手工紮染"
+        ],
+        [
+          "洗滌",
+          "冷水手洗、陰乾，不用漂白劑"
+        ],
+        [
+          "產地",
+          "雲南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "讀：大理紮染，那一缸藍"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一條",
+          "price": 2580,
+          "unit": "條"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "tie-dye-flower",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "布",
+      "tone": "tea",
+      "img": "images/tie-dye-flower.jpg",
+      "imgAlt": "客廳沙發上方的白牆掛著一幅深藍底、橘色樹紋的「生命之花」掛布",
+      "name": "大理紮染・生命之花掛布",
+      "intro": "一棵枝葉往上長的樹，掛在玄關或客廳。",
+      "story": "同樣是大理白族的手工紮染，做成一幅可以掛在牆上的布。一棵枝葉往上長的樹鋪滿整面，掛在玄關、客廳或書房，屋子就多了一點手作的溫度。手工染的顏色每一幅都略有不同。清洗請單獨冷水手洗、陰乾，避免長時間曝曬。",
+      "specs": [
+        [
+          "工藝",
+          "大理白族手工紮染"
+        ],
+        [
+          "用途",
+          "掛布，可掛玄關、客廳、書房"
+        ],
+        [
+          "洗滌",
+          "冷水手洗、陰乾，避免曝曬"
+        ],
+        [
+          "產地",
+          "雲南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "讀：大理紮染，那一缸藍"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一幅",
+          "price": 1880,
+          "unit": "幅"
+        }
+      ]
+    },
+    {
+      "active": false,
       "id": "natural-incense",
       "shelf": "always",
       "cat": "香 · Incense",
@@ -510,10 +721,11 @@
           "price": 1080,
           "unit": "盒"
         }
-      ]
+      ],
+      "_說明": "2026-09-29 拆成個別商品卡（incense-*、tie-dye-*），這張不再上架"
     },
     {
-      "active": true,
+      "active": false,
       "id": "tie-dye",
       "shelf": "always",
       "cat": "布 · Textile",
@@ -559,7 +771,8 @@
           "price": 1880,
           "unit": "條"
         }
-      ]
+      ],
+      "_說明": "2026-09-29 拆成個別商品卡（incense-*、tie-dye-*），這張不再上架"
     },
     {
       "active": false,
