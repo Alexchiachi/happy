@@ -97,6 +97,22 @@
     {
       "img": "images/cover-bedroom.jpg",
       "alt": "另一間臥室：木頭床架的雙人床，窗外是山景，天花板有一盞水晶吊燈"
+    },
+    {
+      "img": "images/cover-community-mountain.jpg",
+      "alt": "社區裡的林蔭大道，兩旁是歐式路燈與黃花，路的盡頭是青山和一朵大白雲，一位戴草帽的長輩慢慢走著"
+    },
+    {
+      "img": "images/cover-community-lake.jpg",
+      "alt": "從高處望出去的安寧山景：藍天白雲下連綿的綠色山巒，山腳是一片樹林和一座小湖"
+    },
+    {
+      "img": "images/cover-community-path.jpg",
+      "alt": "社區的步道與草坪，路燈和綠樹沿路排開，後面是米色的高樓，遠處看得到山"
+    },
+    {
+      "img": "images/cover-community-towers.jpg",
+      "alt": "社區花園裡的彎曲小徑與樹叢，四周是傍晚陽光照亮的米色高樓，天空湛藍"
     }
   ],
   "tripPhotos": [
