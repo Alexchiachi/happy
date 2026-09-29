@@ -184,7 +184,7 @@ p { margin: 0; }
 .card-more summary::-webkit-details-marker { display: none; }
 .card-more summary::after { content: "＋"; color: var(--seal); transition: transform .2s; }
 .card-more[open] summary::after { transform: rotate(45deg); }
-.card-more p { margin: .2rem 0 .6rem; }
+.card-more p { margin: .2rem 0 .6rem; white-space: pre-line; }
 .specs { margin: 0 0 .6rem; display: grid; gap: .2rem; }
 .specs div { display: grid; grid-template-columns: 4.2em 1fr; gap: .6rem; }
 .specs dt { color: var(--mist); }
