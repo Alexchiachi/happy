@@ -584,6 +584,49 @@
     },
     {
       "active": true,
+      "id": "incense-jiangzhen",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-jiangzhen.jpg",
+      "imgAlt": "米白色長盒寫著「降真香」，旁邊散放降真香木塊與木段，擺在老木桌上，後方有花瓶與山水畫卷",
+      "name": "天然香・降真香",
+      "intro": "又名紫藤香，自古就是合香常用的香材。",
+      "story": "降真香，又名紫藤香，自古為傳統香文化名材，是古時合香常用原料。\n原材油脂飽滿，香氣沉穩內斂，帶有溫潤木質甜韻，青煙舒緩綿長。\n適合書房、茶室、靜室品賞，燃香營造清雅靜謐的空間，是香修、獨處、閱讀時的雅玩香品。",
+      "specs": [
+        [
+          "規格",
+          "旅行盒裝・20 支／盒"
+        ],
+        [
+          "長度",
+          "約 10 公分"
+        ],
+        [
+          "燃燒時間",
+          "每支約 30 分鐘"
+        ],
+        [
+          "產地",
+          "雲南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "讀：聞不出味道的那套香具"
+      }
+    },
+    {
+      "active": true,
       "id": "tie-dye-scarf",
       "shelf": "always",
       "cat": "布 · Textile",
