@@ -26,32 +26,28 @@
   },
   "cover": [
     {
-      "img": "images/cover-jacaranda.jpg",
-      "alt": "盛開的紫色藍花楹圍繞著一座重簷古建築，庭院中央有一位撐傘的行人"
+      "img": "images/cover-ginkgo-village.jpg",
+      "alt": "山谷裡的老村落，一棵巨大的金黃銀杏樹覆在層層黑瓦屋頂之間"
     },
     {
-      "img": "images/cover-terraces.jpg",
-      "alt": "陽光穿過雲層灑在層層梯田上，水面映著天光，遠方是連綿山巒"
+      "img": "images/cover-ginkgo-lane.jpg",
+      "alt": "金黃銀杏樹下的石牆小巷，地上鋪滿落葉，盡頭是一間木造老屋"
     },
     {
-      "img": "images/cover-lake.jpg",
-      "alt": "雪山下的高原湖泊，湖邊草地上一位戴黑帽、披黑色披肩的旅人提著竹籃走向湖岸"
+      "img": "images/cover-ginkgo-pavilion.jpg",
+      "alt": "藍天下的金黃銀杏枝葉間，露出一座紅柱彩繪的重簷古亭"
     },
     {
-      "img": "images/cover-alpine-lake.jpg",
-      "alt": "雲霧繚繞的高山下一座碧藍湖泊，湖水化成小瀑布流下，岸邊開著黃色與紫色的野花"
+      "img": "images/cover-ginkgo-path.jpg",
+      "alt": "兩排銀杏樹夾著一條石板小徑，通往土黃牆與白牆的老屋，落葉在空中飄"
     },
     {
-      "img": "images/cover-lake-spring.jpg",
-      "alt": "雪山下的湛藍湖泊，湖心小島開滿粉紅花樹，岸邊是白牆村落與金黃油菜花田，一艘船劃過湖面"
+      "img": "images/cover-autumn-temple.jpg",
+      "alt": "山坡上一片金頂的藏式寺院，倒映在秋天的湖面上，湖邊是一排金黃的樹"
     },
     {
-      "img": "images/cover-erhai.jpg",
-      "alt": "藍天白雲下的寬闊湖面，水上開滿點點白色小花，遠處是青色山巒"
-    },
-    {
-      "img": "images/cover-mountain.jpg",
-      "alt": "夕陽把高原草坡染成金橘色，遠方是雪山稜線，一匹馱著貨物的騾子和一位趕路人走下山坡"
+      "img": "images/cover-ginkgo-road.jpg",
+      "alt": "藍天下的銀杏林道，地面落滿金黃葉子，路旁有幾間小屋"
     }
   ],
   "coverNote": "照片取自網路，若有侵權請告知，我們會立即下架。",
