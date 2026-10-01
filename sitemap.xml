@@ -25,6 +25,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/connect.html"/>
   </url>
   <url>
+    <loc>https://alexchiachi.github.io/happy/executive.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/executive.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/executive.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/executive.html"/>
+  </url>
+  <url>
+    <loc>https://alexchiachi.github.io/happy/zh-cn/executive.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/executive.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/executive.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/executive.html"/>
+  </url>
+  <url>
     <loc>https://alexchiachi.github.io/happy/index.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/index.html"/>
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/index.html"/>
