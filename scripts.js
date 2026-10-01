@@ -152,9 +152,39 @@
   const toggle = document.querySelector('.nav-toggle');
   const menu = document.querySelector('.nav-menu');
   if (toggle && menu) {
+    const closeMenu = () => {
+      menu.classList.remove('open');
+      if (nav) nav.classList.remove('menu-open');
+      toggle.textContent = '≡';
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+
     toggle.addEventListener('click', () => {
-      menu.classList.toggle('open');
-      toggle.textContent = menu.classList.contains('open') ? '✕' : '≡';
+      const isOpen = menu.classList.toggle('open');
+      if (nav) nav.classList.toggle('menu-open', isOpen);
+      toggle.textContent = isOpen ? '✕' : '≡';
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // 點擊選單以外的地方自動收合
+    document.addEventListener('click', (e) => {
+      if (menu.classList.contains('open') && !nav.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // 點擊任何導覽項目後自動收合
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
+
+    // 視窗拉寬時自動還原狀態
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860 && menu.classList.contains('open')) {
+        closeMenu();
+      }
     });
   }
 

@@ -232,6 +232,7 @@ def build_article_html(title: str, date_str: str, year_month: str, lede: str, bo
     <li><a href="../taiwan.html">台灣</a></li>
     <li><a href="../journal.html" class="active">幸福誌</a></li>
     <li><a href="../services.html">服務體驗</a></li>
+    <li><a href="../executive.html">高階顧問</a></li>
     <li><a href="../about.html">關於</a></li>
     <li><a href="../connect.html">連繫</a></li>
   </ul>
@@ -286,7 +287,7 @@ def build_article_html(title: str, date_str: str, year_month: str, lede: str, bo
       </div>
       <div><h2>選物</h2><ul><li><a href="../yunnan.html">雲南選物</a></li><li><a href="../taiwan.html">台灣選物</a></li></ul></div>
       <div><h2>內容</h2><ul><li><a href="../journal.html">幸福誌</a></li><li><a href="../about.html">關於</a></li></ul></div>
-      <div><h2>連繫</h2><ul><li><a href="../services.html">服務體驗</a></li><li><a href="../connect.html">寫信給我們</a></li></ul></div>
+      <div><h2>連繫</h2><ul><li><a href="../services.html">服務體驗</a></li><li><a href="../executive.html">高階顧問</a></li><li><a href="../connect.html">寫信給我們</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2026 大道至簡 · Dao is simple</p>

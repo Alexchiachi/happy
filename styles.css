@@ -184,18 +184,99 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 }
 .nav-menu a.active { color: var(--ink); }
 
+/* 中尺寸螢幕（iPad / 窄視窗桌機）：8 個項目稍微縮小間距，避免折行或碰撞 */
+@media (min-width: 861px) and (max-width: 1100px) {
+  .nav-menu { gap: 1.25rem; }
+  .nav-menu a { font-size: 0.88rem; letter-spacing: 0.08em; }
+}
+
 .nav-toggle { display: none; }
 @media (max-width: 860px) {
-  .nav-menu { display: none; position: absolute; top: 100%; left: 0; right: 0;
-    flex-direction: column; gap: var(--s-2); padding: var(--s-3) var(--gutter);
-    background: var(--paper); border-bottom: 1px solid var(--line); }
-  .nav-menu.open { display: flex; }
-  /* 「≡」本身只有 11×36，手指點不到。padding 把命中區撐到 45×44，
-     再用等量負 margin 抵銷，所以字元停在原來的位置，只有命中區變大。 */
+  .nav.menu-open,
+  .nav:has(.nav-menu.open) {
+    background: rgba(250, 246, 239, 0.98);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.25rem var(--gutter) 1.5rem;
+    background: rgba(250, 246, 239, 0.98);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--line);
+    max-height: calc(100svh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .nav-menu.open {
+    display: flex;
+  }
+  .nav-menu li {
+    list-style: none;
+    border-bottom: 1px solid rgba(217, 209, 194, 0.55);
+  }
+  .nav-menu li:last-child {
+    border-bottom: none;
+  }
+  .nav-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 12px 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+  .nav-menu a::after {
+    display: none;
+  }
+  .nav-menu a.active {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .nav-menu a.active::after {
+    display: inline-block;
+    content: "—";
+    color: var(--accent);
+    font-weight: 300;
+    position: static;
+    height: auto;
+    background: none;
+    transform: none;
+  }
+  .nav-menu .lang-switch {
+    margin-top: 6px;
+    border-bottom: none;
+  }
+  .nav-menu .lang-switch a {
+    font-size: 0.92rem;
+    color: var(--tea);
+    min-height: 44px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  /* 「≡」按鈕命中區擴大到至少 44×44，符合觸控標準 */
   .nav-toggle {
-    display: block; font-size: 1.2rem; color: var(--ink);
-    padding: 4px 17px;
-    margin: -4px -17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 1.35rem;
+    color: var(--ink);
+    padding: 0;
+    margin: -6px -10px -6px 0;
+    line-height: 1;
   }
 }
 
