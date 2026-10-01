@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=a563c04e">
+  <link rel="stylesheet" href="styles.css?v=5d21d035">
 </head>
 <body>
 <a class="skip-link" href="#main">跳到主要內容</a>
@@ -201,20 +201,85 @@
     </div>
   </section>
 
-  <!-- Narrative / Chronology -->
-  <section class="section">
-    <div class="container narrow">
+  <!-- Publications & Digital Assets -->
+  <section class="section" id="publications">
+    <div class="container">
       <header class="section-head">
-        <div class="eyebrow reveal">Narrative · 行者自述</div>
-        <h2 class="h-section reveal">從產地泥土，到系統物理學</h2>
+        <div class="eyebrow reveal">Digital Assets · 數位資產與專著</div>
+        <h2 class="h-section reveal">長尾生態：讓文字先於你抵達</h2>
+        <p class="lede reveal" style="margin: 1.2rem auto 0; text-align: center;">一人商業閉環的基石，是能夠獨立運轉、全球分發的知識產品線。以下為已正式出版之專著、國際電子書與研發中的思想體系。</p>
       </header>
 
-      <div class="prose reveal" style="margin: 0 auto; max-width: 64ch;">
-        <p>「大道至簡」不是隱逸的避世哲學，而是一門經過十四年風雨淘洗的硬核生存科學。</p>
-        <p>2012 年，我在台灣發起「稻田裡的餐桌」，在海邊、茶園、果樹下擺起長桌。那時我試圖回答一個問題：<strong>能不能做一件讓土地、農民、職人與消費者同時感到幸福的事？</strong> 這場行動走過了兩岸三地兩百多個村落，驗證了幸福可以被設計成真實的商業價值。</p>
-        <p>然而，當規模擴張、繁複的人事與體制漸增，我親身經歷了系統的無情「熵增」——組織越龐大，內耗越劇烈，創辦人的生命力越被蠶食殆盡。</p>
-        <p>在長達數年的靜默與田野實踐中，我轉向了諾貝爾獎得主普里高津的耗散結構理論、斯多噶學派的內在主權治理，以及斯賓諾莎的實體哲學。我發現：<strong>一個人不需要千軍萬馬，才能成就不凡事業。當個人的能量系統回歸開放自足、感官扎根於大地、業務支點撬動現代數位槓桿，一人便是一支自給自足、抵禦混亂的軍隊。</strong></p>
-        <p>這三階顧問服務，是我為少數準備好打破生命瓶頸的同路人，親手點亮的破局地圖。</p>
+      <div class="books-grid">
+        <!-- Book 1 -->
+        <article class="book-card reveal">
+          <div class="book-cover-wrap">
+            <img src="images/book-dao-ri-sun.jpg" alt="《我們不要就這樣算了，但也不要一直記得》書封" width="600" height="900" loading="lazy" decoding="async">
+          </div>
+          <div class="book-meta">繁體中文專著 · KOBO / READMOO</div>
+          <h3 class="book-title">《我們不要就這樣算了，但也不要一直記得》</h3>
+          <p class="book-subtitle">幸福三部曲・首部曲｜損之卷 · 清淤</p>
+          <p class="book-desc">語出《道德經》「為學日益，為道日損」。簡家旗十四年從金融投資轉身、走入泥土稻田與山林田野的心境清淤之作。面對生命與商業的繁冗執念，如何透過「日損」為心靈減熵，找回生命本來的安頓。</p>
+          <a href="https://www.kobo.com/hk/zh/ebook/qdamXwfCTjWLK_PnrEUfew" target="_blank" rel="noopener noreferrer" class="svc-cta quiet book-cta">在 Kobo 閱讀 ↗</a>
+        </article>
+
+        <!-- Book 2 -->
+        <article class="book-card reveal">
+          <div class="book-cover-wrap">
+            <picture>
+              <source srcset="images/inner-flow.webp" type="image/webp">
+              <img src="images/inner-flow.jpg" alt="《The Architecture of Inner Flow》書封" width="480" height="767" loading="lazy" decoding="async">
+            </picture>
+          </div>
+          <div class="book-meta">英文專著 · AMAZON KINDLE</div>
+          <h3 class="book-title">《The Architecture of Inner Flow》</h3>
+          <p class="book-subtitle">Dissipative Structures & Personal Order</p>
+          <p class="book-desc">以諾貝爾物理獎普里高津「耗散結構理論」為骨架，專為在高壓環境中感覺能量持續逸散、面臨職業瓶頸與心智內耗的全球創業者與高管決策者而寫。闡述如何打破封閉自耗，構建自足開放系統。</p>
+          <a href="https://www.amazon.com/dp/B0H3VZ1JH2" target="_blank" rel="noopener noreferrer" class="svc-cta quiet book-cta">在 Amazon 購買 ↗</a>
+        </article>
+
+        <!-- Book 3 -->
+        <article class="book-card reveal">
+          <div class="book-cover-wrap">
+            <div class="book-cover-placeholder">
+              <span class="cover-kicker">研發計畫 · In Development</span>
+              <div class="cover-title">開放系統<br>三部曲<em>The Open System Series</em></div>
+              <span class="cover-sig">幸福負熵計畫 · 簡家旗</span>
+            </div>
+          </div>
+          <div class="book-meta" style="color: var(--mist);">研發計畫 · IN DEVELOPMENT</div>
+          <h3 class="book-title">開放系統三部曲</h3>
+          <p class="book-subtitle">從物理負熵、感官接地到數位槓桿</p>
+          <p class="book-desc">三冊各對應一人商業閉環的核心支柱。逐步展開個人如何擺脫對龐大科層組織的依賴，成為一個自我更新、持續與世界交換能量的微型文明。現正於台灣與雲南雙基地深度研發中。</p>
+          <span class="svc-cta quiet book-cta" style="opacity: 0.6; pointer-events: none;">即將付梓 · 研發中</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative / Chronology -->
+  <section class="section" style="background: var(--paper-deep);">
+    <div class="container">
+      <div class="founder-narrative-grid">
+        <div class="founder-portrait reveal">
+          <picture>
+            <source srcset="images/founder-jianchiachi.webp" type="image/webp">
+            <img src="images/founder-jianchiachi.jpg" alt="簡家旗 Chiachi Jian" width="480" height="672" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <div>
+          <header class="section-head" style="text-align: left; margin-bottom: var(--s-3);">
+            <div class="eyebrow reveal">Narrative · 行者自述</div>
+            <h2 class="h-section reveal" style="text-align: left;">從產地泥土，到系統物理學</h2>
+          </header>
+          <div class="prose reveal">
+            <p>「大道至簡」不是隱逸的避世哲學，而是一門經過十四年風雨淘洗的硬核生存科學。</p>
+            <p>2012 年，我在台灣發起「稻田裡的餐桌」，在海邊、茶園、果樹下擺起長桌。那時我試圖回答一個問題：<strong>能不能做一件讓土地、農民、職人與消費者同時感到幸福的事？</strong> 這場行動走過了兩岸三地兩百多個村落，驗證了幸福可以被設計成真實的商業價值。</p>
+            <p>然而，當規模擴張、繁複的人事與體制漸增，我親身經歷了系統的無情「熵增」——組織越龐大，內耗越劇烈，創辦人的生命力越被蠶食殆盡。</p>
+            <p>在長達數年的靜默與田野實踐中，我轉向了諾貝爾獎得主普里高津的耗散結構理論、斯多噶學派的內在主權治理，以及斯賓諾莎的實體哲學。我發現：<strong>一個人不需要千軍萬馬，才能成就不凡事業。當個人的能量系統回歸開放自足、感官扎根於大地、業務支點撬動現代數位槓桿，一人便是一支自給自足、抵禦混亂的軍隊。</strong></p>
+            <p>這三階顧問服務，是我為少數準備好打破生命瓶頸的同路人，親手點亮的破局地圖。</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -280,7 +345,7 @@
   </div>
 </footer>
 
-<script src="styles.css?v=a563c04e"></script>
+<script src="styles.css?v=5d21d035"></script>
 <script src="scripts.js?v=590b39a0"></script>
 <!-- Cloudflare Web Analytics：不用 cookie、不追蹤個人，只統計瀏覽量（見 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
 </body>

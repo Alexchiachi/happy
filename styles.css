@@ -1693,3 +1693,144 @@ body.region-taiwan .theme-han { color: var(--accent); }
   .corp-bridge-card { grid-template-columns: 1fr; padding: var(--s-3); }
 }
 
+/* --- Published Books & Digital Assets --- */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+  align-items: stretch;
+}
+.book-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--dur-ui) var(--ease), background var(--dur-ui) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .book-card:hover { border-color: var(--accent); background: var(--paper-deep); }
+}
+.book-cover-wrap {
+  width: 100%;
+  aspect-ratio: 5 / 7.5;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  margin-bottom: var(--s-3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.book-cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.book-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  padding: var(--s-4) var(--s-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--paper-deep);
+  box-sizing: border-box;
+}
+.book-cover-placeholder .cover-kicker {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.book-cover-placeholder .cover-title {
+  font-family: var(--font-han);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+.book-cover-placeholder .cover-title em {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--mist);
+  margin-top: 0.5rem;
+}
+.book-cover-placeholder .cover-sig {
+  font-size: 0.78rem;
+  color: var(--mist);
+  letter-spacing: 0.12em;
+}
+.book-meta {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: var(--s-1);
+}
+.book-title {
+  font-family: var(--font-han);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 0.35rem;
+}
+.book-subtitle {
+  font-size: 0.88rem;
+  color: var(--mist);
+  margin-bottom: var(--s-2);
+}
+.book-desc {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.8;
+  margin-bottom: var(--s-3);
+  flex-grow: 1;
+}
+.book-cta {
+  align-self: flex-start;
+  margin-top: auto;
+}
+@media (max-width: 900px) {
+  .books-grid { grid-template-columns: 1fr; gap: var(--s-3); }
+}
+
+/* --- Founder Narrative Grid --- */
+.founder-narrative-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--s-5);
+  align-items: start;
+}
+.founder-portrait {
+  border: 1px solid var(--line);
+  background: var(--paper-deep);
+  aspect-ratio: 1060 / 1484;
+  overflow: hidden;
+}
+.founder-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (max-width: 760px) {
+  .founder-narrative-grid {
+    grid-template-columns: 1fr;
+    gap: var(--s-3);
+  }
+  .founder-portrait {
+    max-width: 200px;
+    margin: 0 auto var(--s-2);
+  }
+}
+
+
