@@ -1173,12 +1173,23 @@ a.article-card .img-placeholder { transition: transform var(--dur-ui) ease-out; 
 
 /* 文末的來源／編按，比內文再退一階 */
 .article-body .editor-note {
-  margin-top: var(--s-5);
-  padding-top: var(--s-3);
+  margin-top: var(--s-3);
+  margin-bottom: var(--s-4);
+  padding-top: var(--s-2);
   border-top: 1px solid var(--line);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   line-height: 1.9;
   color: var(--mist);
+}
+.article-body .editor-note a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  transition: border-color var(--dur-ui) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .article-body .editor-note a:hover {
+    border-bottom-color: var(--accent);
+  }
 }
 
 /* 分類篩選的篇數提示 */
