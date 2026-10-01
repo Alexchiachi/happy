@@ -1,0 +1,89 @@
+name: Publish Article from Issue
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: issue-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'publish') ||
+      startsWith(github.event.issue.title, '[發文]') ||
+      startsWith(github.event.issue.title, '[publish]') ||
+      contains(github.event.issue.title, '每日幸福新聞')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install opencc-python-reimplemented
+
+      - name: Run Publish Script
+        id: run_publish
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          python3 tools/publish_from_issue.py
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "幸福誌：自動發布 - ${{ steps.run_publish.outputs.title }}"
+            git push origin main
+          fi
+
+      - name: Comment and Close Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const slug = process.env.ARTICLE_SLUG;
+            const title = process.env.ARTICLE_TITLE;
+            const issue_number = context.issue.number;
+
+            const commentBody = `🎉 **文章已成功排版並推播上線！**\n\n` +
+              `- 📖 **文章標題**：${title}\n` +
+              `- 🇹🇼 **繁體版網址**：https://alexchiachi.github.io/happy/journal/${slug}.html\n` +
+              `- 🇨🇳 **簡體版網址**：https://alexchiachi.github.io/happy/zh-cn/journal/${slug}.html\n` +
+              `- 📚 **幸福誌列表**：https://alexchiachi.github.io/happy/journal.html\n\n` +
+              `> 💡 GitHub Pages 已自動觸發部署，約 1～2 分鐘內即可在線上閱覽。已自動為您結案！`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: commentBody
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              state: 'closed'
+            });
+        env:
+          ARTICLE_SLUG: ${{ steps.run_publish.outputs.slug }}
+          ARTICLE_TITLE: ${{ steps.run_publish.outputs.title }}

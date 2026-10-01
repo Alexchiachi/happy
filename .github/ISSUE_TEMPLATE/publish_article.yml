@@ -1,0 +1,29 @@
+name: 📝 發布新文章至幸福誌
+description: 在手機上填寫文章或貼上新聞，由 GitHub 雲端自動排版並發布上線
+title: "[發文] 每日幸福新聞 - 2026-"
+labels: ["publish"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🌿 幸福誌手機雲端發稿
+        在此填寫或貼上文章內容，送出後約 1~2 分鐘內自動完成排版、繁簡同步、資產雜湊更新並發布上線！
+  - type: input
+    id: title
+    attributes:
+      label: 文章標題
+      placeholder: "例如：每日幸福新聞 - 2026-10-02"
+    validations:
+      required: true
+  - type: textarea
+    id: lede
+    attributes:
+      label: 開場摘要／導讀（選填）
+      placeholder: "一兩句重點摘要，若留空將由正文自動擷取..."
+  - type: textarea
+    id: content
+    attributes:
+      label: 正文內容
+      placeholder: "直接在此貼上新聞、段落、來源連結或隨筆文字..."
+    validations:
+      required: true
