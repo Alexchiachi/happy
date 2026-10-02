@@ -2,6 +2,7 @@
 """
 tools/sync_products.py
 從 shop/products.json 自動同步商品資料到 yunnan.html 的「當季選物」區塊，
+包含分類標籤、商品卡片、展開/收合操作按鈕，
 並產生 shop/products.zh-cn.json 供簡體版前端即時讀取。
 """
 import json
@@ -42,9 +43,10 @@ def generate_card_html(p, shop_prefix="shop/"):
     name = p.get("name", "")
     intro = p.get("intro", p.get("origin", ""))
     price = format_price(p.get("variants", []))
+    shelf = p.get("shelf", "season")
     ask = "到選購頁 →"
 
-    return f'''        <a class="product reveal" href="{shop_prefix}">
+    return f'''        <a class="product reveal" href="{shop_prefix}" data-shelf="{shelf}">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="{webp_src}" type="image/webp">
@@ -71,10 +73,12 @@ def sync_yunnan_html():
         data = json.load(f)
 
     active_products = [p for p in data.get("products", []) if p.get("active", True)]
+    all_count = len(active_products)
+    season_count = sum(1 for p in active_products if p.get("shelf") == "season")
+    always_count = sum(1 for p in active_products if p.get("shelf") == "always")
 
     # 產生簡體版 JSON
     if converter:
-        # 只轉換文字內容，保留英文與欄位鍵名
         cn_str = converter.convert(json.dumps(data, ensure_ascii=False))
         cn_data = json.loads(cn_str)
         with open(PRODUCTS_CN_JSON, "w", encoding="utf-8") as f:
@@ -82,26 +86,47 @@ def sync_yunnan_html():
         print(f"已產出簡體版產品資料：{PRODUCTS_CN_JSON.name}")
 
     cards_html = "\n".join(generate_card_html(p) for p in active_products)
-    replacement = (
-        '      <!-- 品項與價格由 shop/products.json 自動同步；亦支援前端即時動態連動。 -->\n'
-        '      <div class="products" data-products-sync>\n'
-        f'{cards_html}\n'
-        '      </div>'
-    )
+    
+    block = f'''      <!-- PRODUCTS_START -->
+      <nav class="filters reveal" aria-label="選物分類">
+        <button type="button" class="filter active" data-shelf="all">全部 ({all_count})</button>
+        <button type="button" class="filter" data-shelf="season">節令茶食 ({season_count})</button>
+        <button type="button" class="filter" data-shelf="always">常備香染 ({always_count})</button>
+      </nav>
+
+      <!-- 品項與價格由 shop/products.json 自動同步；支援分類篩選與前端即時動態連動。 -->
+      <div class="products is-collapsed" data-products-sync>
+{cards_html}
+      </div>
+
+      <!-- 展開與選購操作（桌機與手機共用：預設呈現精選 6 款，可一鍵展開全部） -->
+      <div class="products-actions reveal">
+        <button type="button" class="svc-cta quiet btn-products-toggle" aria-expanded="false">
+          展開全部 {all_count} 款當季選物 <span class="arrow">↓</span>
+        </button>
+        <a href="shop/" class="svc-cta">到選購頁看完整規格與訂購 →</a>
+      </div>
+      <!-- PRODUCTS_END -->'''
 
     content = YUNNAN_HTML.read_text(encoding="utf-8")
-    pattern = re.compile(
-        r'(<!--\s*品項與價格[^\n]*-->\s*)?<div class="products"[^>]*>.*?</div>',
-        re.DOTALL
-    )
 
-    if not pattern.search(content):
-        print("警告：在 yunnan.html 中找不到 <div class=\"products\"> 區塊", file=sys.stderr)
-        return False
+    if "<!-- PRODUCTS_START -->" in content and "<!-- PRODUCTS_END -->" in content:
+        pattern = re.compile(r'<!-- PRODUCTS_START -->.*?<!-- PRODUCTS_END -->', re.DOTALL)
+        new_content = pattern.sub(block.strip(), content, count=1)
+    else:
+        # 第一次替換：從標頭後方替換到說明文字之前
+        pattern = re.compile(
+            r'(<header class="section-rule">\s*<h2 class="h-section reveal">當季選物</h2>\s*</header>).*?'
+            r'(<p class="lede lede-center reveal"[^>]*>以上為[^\n]*選購頁目前上架的品項)',
+            re.DOTALL
+        )
+        if not pattern.search(content):
+            print("警告：在 yunnan.html 中找不到目標區塊", file=sys.stderr)
+            return False
+        new_content = pattern.sub(rf'\1\n{block}\n      \2', content, count=1)
 
-    new_content = pattern.sub(replacement, content, count=1)
     YUNNAN_HTML.write_text(new_content, encoding="utf-8")
-    print(f"已成功同步 {len(active_products)} 項好物至 {YUNNAN_HTML.name}")
+    print(f"已成功同步 {all_count} 項好物至 {YUNNAN_HTML.name}（結構化區塊）")
     return True
 
 

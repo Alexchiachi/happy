@@ -32,7 +32,7 @@
   <!-- 字型 CSS 有 500KB（中文要切成上百段），不讓它擋住畫面：先用系統明體顯示，載完再換 -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=fd39b83a">
+  <link rel="stylesheet" href="styles.css?v=17fe8159">
 </head>
 <body class="region-yunnan">
 <a class="skip-link" href="#main">跳到主要內容</a>
@@ -119,9 +119,16 @@
       <header class="section-rule">
         <h2 class="h-section reveal">當季選物</h2>
       </header>
-                        <!-- 品項與價格由 shop/products.json 自動同步；亦支援前端即時動態連動。 -->
-      <div class="products" data-products-sync>
-        <a class="product reveal" href="shop/">
+      <!-- PRODUCTS_START -->
+      <nav class="filters reveal" aria-label="選物分類">
+        <button type="button" class="filter active" data-shelf="all">全部 (16)</button>
+        <button type="button" class="filter" data-shelf="season">節令茶食 (9)</button>
+        <button type="button" class="filter" data-shelf="always">常備香染 (7)</button>
+      </nav>
+
+      <!-- 品項與價格由 shop/products.json 自動同步；支援分類篩選與前端即時動態連動。 -->
+      <div class="products is-collapsed" data-products-sync>
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/yak-rose-pie.webp" type="image/webp">
@@ -134,7 +141,7 @@
           <p class="price">NT$ 680</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/nougat.webp" type="image/webp">
@@ -147,7 +154,7 @@
           <p class="price">NT$ 250</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/brown-sugar.webp" type="image/webp">
@@ -160,7 +167,7 @@
           <p class="price">NT$ 480</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/porcini-sauce.webp" type="image/webp">
@@ -173,7 +180,7 @@
           <p class="price">NT$ 880</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/rose-egg-yolk-pastry.webp" type="image/webp">
@@ -186,7 +193,7 @@
           <p class="price">NT$ 580</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/puer-minis.webp" type="image/webp">
@@ -199,7 +206,7 @@
           <p class="price">NT$ 1,250</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/mushroom-soup.webp" type="image/webp">
@@ -212,7 +219,7 @@
           <p class="price">NT$ 500 起</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/morel-daily.webp" type="image/webp">
@@ -225,7 +232,7 @@
           <p class="price">NT$ 780</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="season">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/baiyao-rose-tea.webp" type="image/webp">
@@ -238,7 +245,7 @@
           <p class="price">NT$ 400</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/tibetan-incense.webp" type="image/webp">
@@ -251,7 +258,7 @@
           <p class="price">NT$ 200 起</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/incense-healing.webp" type="image/webp">
@@ -264,7 +271,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/incense-tara.webp" type="image/webp">
@@ -277,7 +284,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/incense-suhe.webp" type="image/webp">
@@ -290,7 +297,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/incense-jiangzhen.webp" type="image/webp">
@@ -303,7 +310,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/tie-dye-scarf.webp" type="image/webp">
@@ -316,7 +323,7 @@
           <p class="price">NT$ 2,580</p>
           <span class="ask">到選購頁 →</span>
         </a>
-        <a class="product reveal" href="shop/">
+        <a class="product reveal" href="shop/" data-shelf="always">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="shop/images/tie-dye-flower.webp" type="image/webp">
@@ -330,612 +337,15 @@
           <span class="ask">到選購頁 →</span>
         </a>
       </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>氂牛奶玫瑰派</h3>
-          <p class="origin">高原的氂牛奶，配上雲南的玫瑰。</p>
-          <p class="price">NT$ 680</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/nougat.webp" type="image/webp">
-              <img src="shop/images/nougat.jpg" alt="白瓷碗裡盛著桃紅色糖紙包的玫瑰花生牛軋糖，旁邊有切開的牛軋糖、透明盒裝與散落的玫瑰花瓣" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>玫瑰花生牛軋糖</h3>
-          <p class="origin">花生的香、玫瑰的甜，一盒剛好分給一桌人。</p>
-          <p class="price">NT$ 250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/brown-sugar.webp" type="image/webp">
-              <img src="shop/images/brown-sugar.jpg" alt="玫瑰、紅棗、薑汁三盒紅糖並排，旁邊有木匙、一杯紅糖水、薑片與切塊的紅糖" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>雲南紅糖三味</h3>
-          <p class="origin">冬天的早晨，一匙化在熱水裡。</p>
-          <p class="price">NT$ 480</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/porcini-sauce.webp" type="image/webp">
-              <img src="shop/images/porcini-sauce.jpg" alt="紅色禮盒拉開，牛皮紙內盒裡放著三罐牛肝菌拌醬，一隻手正拿起綠色蓋子那罐" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>牛肝菌拌醬禮盒</h3>
-          <p class="origin">拌麵、拌飯、炒一盤青菜，年菜桌上的隱藏主角。</p>
-          <p class="price">NT$ 880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/rose-egg-yolk-pastry.webp" type="image/webp">
-              <img src="shop/images/rose-egg-yolk-pastry.jpg" alt="雙手捧著桃紅色的玫瑰蛋黃酥禮盒，盒面是一朵深紅玫瑰" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>玫瑰蛋黃酥</h3>
-          <p class="origin">玫瑰與蛋黃，一口酥皮裡的甜與鹹。</p>
-          <p class="price">NT$ 580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/puer-minis.webp" type="image/webp">
-              <img src="shop/images/puer-minis.jpg" alt="四顆棉紙包的迷你普洱茶餅，分別標著景邁山、南糯山、小冰島、困鹿山，旁邊是一只印著「山」字的米色棉布提袋" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">茶 · TEA</div>
-          <h3>四大山頭 mini 七子餅禮袋</h3>
-          <p class="origin">四座名山各一餅，一次喝懂普洱的山頭味。</p>
-          <p class="price">NT$ 1,250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/mushroom-soup.webp" type="image/webp">
-              <img src="shop/images/mushroom-soup.jpg" alt="透明夾鏈袋裡裝滿各種乾燥野生菌菇，袋上貼著紅色直式標籤「雲南野生菌」" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>雲南野生菌湯包</h3>
-          <p class="origin">一包燉一鍋湯，把雨季的山林味留在冬天。</p>
-          <p class="price">NT$ 500 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/morel-daily.webp" type="image/webp">
-              <img src="shop/images/morel-daily.jpg" alt="米色立袋包裝的乾燥羊肚菌，透明開窗裡可以看到一朵朵完整的羊肚菌，淨含量 100g" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>羊肚菌日常包</h3>
-          <p class="origin">不是禮盒，是自己家裡燉湯、炒菜用的份量。</p>
-          <p class="price">NT$ 780</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/baiyao-rose-tea.webp" type="image/webp">
-              <img src="shop/images/baiyao-rose-tea.jpg" alt="透明罐裝的凍乾墨紅玫瑰花，旁邊一枝玫瑰和一杯沖開的淡紅色花茶" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">花 · FLOWER</div>
-          <h3>雲南白藥玫瑰花茶</h3>
-          <p class="origin">花瓣大、顏色深，沖開是一杯溫柔的暗紅。</p>
-          <p class="price">NT$ 400</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tibetan-incense.webp" type="image/webp">
-              <img src="shop/images/tibetan-incense.jpg" alt="兩管玻璃管裝的藏香立在藏式織毯上，旁邊有轉經輪、銅香爐與柏枝，背後是雪山和彩色經幡" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>香格里拉藏香</h3>
-          <p class="origin">從煨桑的柏枝煙開始，一縷帶得走的高原。</p>
-          <p class="price">NT$ 200 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-healing.webp" type="image/webp">
-              <img src="shop/images/incense-healing.jpg" alt="紅色紙盒寫著「療癒香」，旁邊是一只深色的旅行香盒，擺在木桌上" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・療癒香</h3>
-          <p class="origin">紅色的小盒子，名字取得溫柔。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-tara.webp" type="image/webp">
-              <img src="shop/images/incense-tara.jpg" alt="桌上一盒紅色的度母香與黑色旅行香盒，後方是度母像與法鈴" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・度母香</h3>
-          <p class="origin">以度母為名的一盒香。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-suhe.webp" type="image/webp">
-              <img src="shop/images/incense-suhe.jpg" alt="米白色長盒寫著「蘇合香丸」，旁邊散放樹脂香料、乾燥花與一只青瓷香插" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・蘇合香丸</h3>
-          <p class="origin">蘇合香，自古就用來調香的樹脂香料。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-jiangzhen.webp" type="image/webp">
-              <img src="shop/images/incense-jiangzhen.jpg" alt="米白色長盒寫著「降真香」，旁邊散放降真香木塊與木段，擺在老木桌上，後方有花瓶與山水畫卷" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然香・降真香</h3>
-          <p class="origin">又名紫藤香，自古就是合香常用的香材。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-scarf.webp" type="image/webp">
-              <img src="shop/images/tie-dye-scarf.jpg" alt="木質人台上披著一條深藍底、白色斜紋花樣的紮染長圍巾" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・藍色圍巾</h3>
-          <p class="origin">白是紮出來的，藍是一遍遍染上去的。</p>
-          <p class="price">NT$ 2,580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-flower.webp" type="image/webp">
-              <img src="shop/images/tie-dye-flower.jpg" alt="客廳沙發上方的白牆掛著一幅深藍底、橘色樹紋的「生命之花」掛布" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・生命之花掛布</h3>
-          <p class="origin">一棵枝葉往上長的樹，掛在玄關或客廳。</p>
-          <p class="price">NT$ 1,880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
+
+      <!-- 展開與選購操作（桌機與手機共用：預設呈現精選 6 款，可一鍵展開全部） -->
+      <div class="products-actions reveal">
+        <button type="button" class="svc-cta quiet btn-products-toggle" aria-expanded="false">
+          展開全部 16 款當季選物 <span class="arrow">↓</span>
+        </button>
+        <a href="shop/" class="svc-cta">到選購頁看完整規格與訂購 →</a>
       </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>氂牛奶玫瑰派</h3>
-          <p class="origin">高原的氂牛奶，配上雲南的玫瑰。</p>
-          <p class="price">NT$ 680</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/nougat.webp" type="image/webp">
-              <img src="shop/images/nougat.jpg" alt="白瓷碗裡盛著桃紅色糖紙包的玫瑰花生牛軋糖，旁邊有切開的牛軋糖、透明盒裝與散落的玫瑰花瓣" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>玫瑰花生牛軋糖</h3>
-          <p class="origin">花生的香、玫瑰的甜，一盒剛好分給一桌人。</p>
-          <p class="price">NT$ 250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/brown-sugar.webp" type="image/webp">
-              <img src="shop/images/brown-sugar.jpg" alt="玫瑰、紅棗、薑汁三盒紅糖並排，旁邊有木匙、一杯紅糖水、薑片與切塊的紅糖" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>雲南紅糖三味</h3>
-          <p class="origin">冬天的早晨，一匙化在熱水裡。</p>
-          <p class="price">NT$ 480</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/porcini-sauce.webp" type="image/webp">
-              <img src="shop/images/porcini-sauce.jpg" alt="紅色禮盒拉開，牛皮紙內盒裡放著三罐牛肝菌拌醬，一隻手正拿起綠色蓋子那罐" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>牛肝菌拌醬禮盒</h3>
-          <p class="origin">拌麵、拌飯、炒一盤青菜，年菜桌上的隱藏主角。</p>
-          <p class="price">NT$ 880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/rose-egg-yolk-pastry.webp" type="image/webp">
-              <img src="shop/images/rose-egg-yolk-pastry.jpg" alt="雙手捧著桃紅色的玫瑰蛋黃酥禮盒，盒面是一朵深紅玫瑰" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>玫瑰蛋黃酥</h3>
-          <p class="origin">玫瑰與蛋黃，一口酥皮裡的甜與鹹。</p>
-          <p class="price">NT$ 580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/puer-minis.webp" type="image/webp">
-              <img src="shop/images/puer-minis.jpg" alt="四顆棉紙包的迷你普洱茶餅，分別標著景邁山、南糯山、小冰島、困鹿山，旁邊是一只印著「山」字的米色棉布提袋" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">茶 · TEA</div>
-          <h3>四大山頭 mini 七子餅禮袋</h3>
-          <p class="origin">四座名山各一餅，一次喝懂普洱的山頭味。</p>
-          <p class="price">NT$ 1,250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/mushroom-soup.webp" type="image/webp">
-              <img src="shop/images/mushroom-soup.jpg" alt="透明夾鏈袋裡裝滿各種乾燥野生菌菇，袋上貼著紅色直式標籤「雲南野生菌」" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>雲南野生菌湯包</h3>
-          <p class="origin">一包燉一鍋湯，把雨季的山林味留在冬天。</p>
-          <p class="price">NT$ 500 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/morel-daily.webp" type="image/webp">
-              <img src="shop/images/morel-daily.jpg" alt="米色立袋包裝的乾燥羊肚菌，透明開窗裡可以看到一朵朵完整的羊肚菌，淨含量 100g" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>羊肚菌日常包</h3>
-          <p class="origin">不是禮盒，是自己家裡燉湯、炒菜用的份量。</p>
-          <p class="price">NT$ 780</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/baiyao-rose-tea.webp" type="image/webp">
-              <img src="shop/images/baiyao-rose-tea.jpg" alt="透明罐裝的凍乾墨紅玫瑰花，旁邊一枝玫瑰和一杯沖開的淡紅色花茶" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">花 · FLOWER</div>
-          <h3>雲南白藥玫瑰花茶</h3>
-          <p class="origin">花瓣大、顏色深，沖開是一杯溫柔的暗紅。</p>
-          <p class="price">NT$ 400</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tibetan-incense.webp" type="image/webp">
-              <img src="shop/images/tibetan-incense.jpg" alt="兩管玻璃管裝的藏香立在藏式織毯上，旁邊有轉經輪、銅香爐與柏枝，背後是雪山和彩色經幡" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>香格里拉藏香</h3>
-          <p class="origin">從煨桑的柏枝煙開始，一縷帶得走的高原。</p>
-          <p class="price">NT$ 200 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-healing.webp" type="image/webp">
-              <img src="shop/images/incense-healing.jpg" alt="紅色紙盒寫著「療癒香」，旁邊是一只深色的旅行香盒，擺在木桌上" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・療癒香</h3>
-          <p class="origin">紅色的小盒子，名字取得溫柔。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-tara.webp" type="image/webp">
-              <img src="shop/images/incense-tara.jpg" alt="桌上一盒紅色的度母香與黑色旅行香盒，後方是度母像與法鈴" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・度母香</h3>
-          <p class="origin">以度母為名的一盒香。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-suhe.webp" type="image/webp">
-              <img src="shop/images/incense-suhe.jpg" alt="米白色長盒寫著「蘇合香丸」，旁邊散放樹脂香料、乾燥花與一只青瓷香插" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・蘇合香丸</h3>
-          <p class="origin">蘇合香，自古就用來調香的樹脂香料。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-jiangzhen.webp" type="image/webp">
-              <img src="shop/images/incense-jiangzhen.jpg" alt="米白色長盒寫著「降真香」，旁邊散放降真香木塊與木段，擺在老木桌上，後方有花瓶與山水畫卷" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然香・降真香</h3>
-          <p class="origin">又名紫藤香，自古就是合香常用的香材。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-scarf.webp" type="image/webp">
-              <img src="shop/images/tie-dye-scarf.jpg" alt="木質人台上披著一條深藍底、白色斜紋花樣的紮染長圍巾" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・藍色圍巾</h3>
-          <p class="origin">白是紮出來的，藍是一遍遍染上去的。</p>
-          <p class="price">NT$ 2,580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-flower.webp" type="image/webp">
-              <img src="shop/images/tie-dye-flower.jpg" alt="客廳沙發上方的白牆掛著一幅深藍底、橘色樹紋的「生命之花」掛布" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・生命之花掛布</h3>
-          <p class="origin">一棵枝葉往上長的樹，掛在玄關或客廳。</p>
-          <p class="price">NT$ 1,880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-      </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>氂牛奶玫瑰派</h3>
-          <p class="origin">高原的氂牛奶，配上雲南的玫瑰。</p>
-          <p class="price">NT$ 680</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/nougat.webp" type="image/webp">
-              <img src="shop/images/nougat.jpg" alt="白瓷碗裡盛著桃紅色糖紙包的玫瑰花生牛軋糖，旁邊有切開的牛軋糖、透明盒裝與散落的玫瑰花瓣" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>玫瑰花生牛軋糖</h3>
-          <p class="origin">花生的香、玫瑰的甜，一盒剛好分給一桌人。</p>
-          <p class="price">NT$ 250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/brown-sugar.webp" type="image/webp">
-              <img src="shop/images/brown-sugar.jpg" alt="玫瑰、紅棗、薑汁三盒紅糖並排，旁邊有木匙、一杯紅糖水、薑片與切塊的紅糖" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">甜 · SWEETS</div>
-          <h3>雲南紅糖三味</h3>
-          <p class="origin">冬天的早晨，一匙化在熱水裡。</p>
-          <p class="price">NT$ 480</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/porcini-sauce.webp" type="image/webp">
-              <img src="shop/images/porcini-sauce.jpg" alt="紅色禮盒拉開，牛皮紙內盒裡放著三罐牛肝菌拌醬，一隻手正拿起綠色蓋子那罐" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>牛肝菌拌醬禮盒</h3>
-          <p class="origin">拌麵、拌飯、炒一盤青菜，年菜桌上的隱藏主角。</p>
-          <p class="price">NT$ 880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/rose-egg-yolk-pastry.webp" type="image/webp">
-              <img src="shop/images/rose-egg-yolk-pastry.jpg" alt="雙手捧著桃紅色的玫瑰蛋黃酥禮盒，盒面是一朵深紅玫瑰" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">餅 · PASTRY</div>
-          <h3>玫瑰蛋黃酥</h3>
-          <p class="origin">玫瑰與蛋黃，一口酥皮裡的甜與鹹。</p>
-          <p class="price">NT$ 580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/puer-minis.webp" type="image/webp">
-              <img src="shop/images/puer-minis.jpg" alt="四顆棉紙包的迷你普洱茶餅，分別標著景邁山、南糯山、小冰島、困鹿山，旁邊是一只印著「山」字的米色棉布提袋" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">茶 · TEA</div>
-          <h3>四大山頭 mini 七子餅禮袋</h3>
-          <p class="origin">四座名山各一餅，一次喝懂普洱的山頭味。</p>
-          <p class="price">NT$ 1,250</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/mushroom-soup.webp" type="image/webp">
-              <img src="shop/images/mushroom-soup.jpg" alt="透明夾鏈袋裡裝滿各種乾燥野生菌菇，袋上貼著紅色直式標籤「雲南野生菌」" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>雲南野生菌湯包</h3>
-          <p class="origin">一包燉一鍋湯，把雨季的山林味留在冬天。</p>
-          <p class="price">NT$ 500 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/morel-daily.webp" type="image/webp">
-              <img src="shop/images/morel-daily.jpg" alt="米色立袋包裝的乾燥羊肚菌，透明開窗裡可以看到一朵朵完整的羊肚菌，淨含量 100g" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">菌 · MUSHROOM</div>
-          <h3>羊肚菌日常包</h3>
-          <p class="origin">不是禮盒，是自己家裡燉湯、炒菜用的份量。</p>
-          <p class="price">NT$ 780</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/baiyao-rose-tea.webp" type="image/webp">
-              <img src="shop/images/baiyao-rose-tea.jpg" alt="透明罐裝的凍乾墨紅玫瑰花，旁邊一枝玫瑰和一杯沖開的淡紅色花茶" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">花 · FLOWER</div>
-          <h3>雲南白藥玫瑰花茶</h3>
-          <p class="origin">花瓣大、顏色深，沖開是一杯溫柔的暗紅。</p>
-          <p class="price">NT$ 400</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tibetan-incense.webp" type="image/webp">
-              <img src="shop/images/tibetan-incense.jpg" alt="兩管玻璃管裝的藏香立在藏式織毯上，旁邊有轉經輪、銅香爐與柏枝，背後是雪山和彩色經幡" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>香格里拉藏香</h3>
-          <p class="origin">從煨桑的柏枝煙開始，一縷帶得走的高原。</p>
-          <p class="price">NT$ 200 起</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-healing.webp" type="image/webp">
-              <img src="shop/images/incense-healing.jpg" alt="紅色紙盒寫著「療癒香」，旁邊是一只深色的旅行香盒，擺在木桌上" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・療癒香</h3>
-          <p class="origin">紅色的小盒子，名字取得溫柔。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-tara.webp" type="image/webp">
-              <img src="shop/images/incense-tara.jpg" alt="桌上一盒紅色的度母香與黑色旅行香盒，後方是度母像與法鈴" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・度母香</h3>
-          <p class="origin">以度母為名的一盒香。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-suhe.webp" type="image/webp">
-              <img src="shop/images/incense-suhe.jpg" alt="米白色長盒寫著「蘇合香丸」，旁邊散放樹脂香料、乾燥花與一只青瓷香插" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然線香・蘇合香丸</h3>
-          <p class="origin">蘇合香，自古就用來調香的樹脂香料。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/incense-jiangzhen.webp" type="image/webp">
-              <img src="shop/images/incense-jiangzhen.jpg" alt="米白色長盒寫著「降真香」，旁邊散放降真香木塊與木段，擺在老木桌上，後方有花瓶與山水畫卷" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">香 · INCENSE</div>
-          <h3>天然香・降真香</h3>
-          <p class="origin">又名紫藤香，自古就是合香常用的香材。</p>
-          <p class="price">NT$ 1,080</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-scarf.webp" type="image/webp">
-              <img src="shop/images/tie-dye-scarf.jpg" alt="木質人台上披著一條深藍底、白色斜紋花樣的紮染長圍巾" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・藍色圍巾</h3>
-          <p class="origin">白是紮出來的，藍是一遍遍染上去的。</p>
-          <p class="price">NT$ 2,580</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-        <a class="product reveal" href="shop/">
-          <div class="img-placeholder tea">
-            <picture>
-              <source srcset="shop/images/tie-dye-flower.webp" type="image/webp">
-              <img src="shop/images/tie-dye-flower.jpg" alt="客廳沙發上方的白牆掛著一幅深藍底、橘色樹紋的「生命之花」掛布" width="800" height="1000" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="cat">布 · TEXTILE</div>
-          <h3>大理紮染・生命之花掛布</h3>
-          <p class="origin">一棵枝葉往上長的樹，掛在玄關或客廳。</p>
-          <p class="price">NT$ 1,880</p>
-          <span class="ask">到選購頁 →</span>
-        </a>
-      </div>
+      <!-- PRODUCTS_END -->
       <p class="lede lede-center reveal" style="margin-top: var(--s-4);">以上為雲南好物選購頁目前上架的品項。台灣選物滿 NT$ 3,000 免運。<a href="shop/" style="border-bottom: 1px solid currentColor;">到選購頁看完整說明與規格 →</a></p>
     </div>
   </section>
@@ -983,7 +393,7 @@
   </div>
 </footer>
 
-<script src="scripts.js?v=28e9ea11"></script>
+<script src="scripts.js?v=01794057"></script>
 <!-- Cloudflare Web Analytics：不用 cookie、不追蹤個人，只統計瀏覽量（見 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
 </body>
 </html>
