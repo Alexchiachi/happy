@@ -1795,6 +1795,10 @@ body.region-taiwan .theme-han { color: var(--accent); }
 .fact-list li { padding: var(--s-2) 0; border-top: 1px solid var(--line); color: var(--ink-soft); line-height: 1.8; }
 .fact-list li:last-child { border-bottom: 1px solid var(--line); }
 .fact-list b { font-weight: 400; color: var(--ink); }
+.fact-list a { color: var(--accent); border-bottom: 1px solid var(--line); transition: border-color var(--dur-ui) var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .fact-list a:hover { border-bottom-color: var(--accent); }
+}
 .turns { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-4); }
 .turn { border-top: 1px solid var(--line); padding-top: var(--s-3); }
 .turn-year { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
