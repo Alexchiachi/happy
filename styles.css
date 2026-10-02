@@ -1768,6 +1768,47 @@ body.region-taiwan .theme-han { color: var(--accent); }
   .tiers-matrix.tiers-two { grid-template-columns: 1fr; }
 }
 
+/* --- 證據數字（首頁「用證據說話」、案例與認證頁）與生命線（關於頁）--- */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+}
+.proof { border-top: 1px solid var(--line); padding-top: var(--s-3); }
+.proof-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.proof-num small { font-size: 0.45em; color: var(--accent); margin-left: 0.15em; }
+.proof-label { margin-top: var(--s-2); color: var(--ink-soft); font-size: 0.95rem; line-height: 1.8; }
+.proof-more { text-align: center; margin-top: var(--s-4); }
+.proof-big { text-align: center; padding-block: var(--s-4); }
+.proof-big .proof-num { font-size: clamp(5rem, 16vw, 9rem); color: var(--accent); }
+.proof-big .proof-label { font-size: 1.1rem; color: var(--ink); }
+.fact-list { list-style: none; margin: var(--s-3) 0 0; padding: 0; }
+.fact-list li { padding: var(--s-2) 0; border-top: 1px solid var(--line); color: var(--ink-soft); line-height: 1.8; }
+.fact-list li:last-child { border-bottom: 1px solid var(--line); }
+.fact-list b { font-weight: 400; color: var(--ink); }
+.turns { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-4); }
+.turn { border-top: 1px solid var(--line); padding-top: var(--s-3); }
+.turn-year { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.turn h3 { font-family: var(--font-han); font-weight: 400; font-size: 1.15rem; margin: var(--s-1) 0; letter-spacing: 0.04em; }
+.turn p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.8; }
+.lifeline { list-style: none; margin: var(--s-4) 0 0; padding: 0; }
+.lifeline li { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--s-2); padding: var(--s-2) 0; border-top: 1px solid var(--line); color: var(--ink-soft); line-height: 1.8; }
+.lifeline li:last-child { border-bottom: 1px solid var(--line); }
+.lifeline-year { font-family: var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+@media (max-width: 760px) {
+  .proof-grid, .turns { grid-template-columns: 1fr; gap: var(--s-3); }
+  .lifeline li { grid-template-columns: 4.2rem 1fr; }
+}
+
 /* --- Corporate Bridge Card --- */
 .corp-bridge-card {
   margin-top: var(--s-6);

@@ -33,7 +33,7 @@ jobs:
           mkdir _site
           # 大道至簡品牌站
           cp .nojekyll index.html about.html journal.html yunnan.html taiwan.html \
-             services.html executive.html connect.html privacy.html 404.html \
+             services.html executive.html cases.html connect.html privacy.html 404.html \
              robots.txt sitemap.xml styles.css scripts.js _site/
           cp -r images journal zh-cn shop anning _site/
           # 其他對外使用中的網頁：內耗熵值檢測、課程頁舊網址、永恆之子整椎中心預約系統

@@ -13,6 +13,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/about.html"/>
   </url>
   <url>
+    <loc>https://alexchiachi.github.io/happy/cases.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/cases.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/cases.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/cases.html"/>
+  </url>
+  <url>
+    <loc>https://alexchiachi.github.io/happy/zh-cn/cases.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/cases.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/cases.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/cases.html"/>
+  </url>
+  <url>
     <loc>https://alexchiachi.github.io/happy/connect.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/connect.html"/>
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/connect.html"/>
