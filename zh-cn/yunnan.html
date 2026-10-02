@@ -32,7 +32,7 @@
   <!-- 字体 CSS 有 500KB（中文要切成上百段），不让它挡住画面：先用系统明体显示，载完再换 -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="../styles.css?v=953b4bd7">
+  <link rel="stylesheet" href="../styles.css?v=7b1bc6ca">
 </head>
 <body class="region-yunnan">
 <a class="skip-link" href="#main">跳到主要内容</a>
@@ -119,91 +119,142 @@
       <header class="section-rule">
         <h2 class="h-section reveal">当季选物</h2>
       </header>
+      <!-- 品项与价格只以 shop/products.json 为准（active:true 的 16 项）；改商品时这里要一起改。 -->
       <div class="products">
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder tea">
-            <img src="../images/yunnan-puer-gift-bag.jpg" width="573" height="716" loading="lazy" decoding="async"
-                 alt="四颗棉纸包的迷你普洱茶饼，分别标着景迈山、南糯山、小冰岛、困鹿山，旁边是一只印着「山」字的米色棉布袋，底下散着茶叶，背景是云南山林的晨雾">
-          </div>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>派</span></div>
+          <div class="cat">饼 · PASTRY</div>
+          <h3>牦牛奶玫瑰派</h3>
+          <p class="origin">高原的牦牛奶，配上云南的玫瑰。</p>
+          <p class="price">NT$ 680</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>糖</span></div>
+          <div class="cat">甜 · SWEETS</div>
+          <h3>玫瑰花生牛轧糖</h3>
+          <p class="origin">花生的香、玫瑰的甜，一盒刚好分给一桌人。</p>
+          <p class="price">NT$ 250</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>暖</span></div>
+          <div class="cat">甜 · SWEETS</div>
+          <h3>云南红糖三味</h3>
+          <p class="origin">冬天的早晨，一匙化在热水里。</p>
+          <p class="price">NT$ 480</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>酱</span></div>
+          <div class="cat">菌 · MUSHROOM</div>
+          <h3>牛肝菌拌酱礼盒</h3>
+          <p class="origin">拌面、拌饭、炒一盘青菜，年菜桌上的隐藏主角。</p>
+          <p class="price">NT$ 880</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>酥</span></div>
+          <div class="cat">饼 · PASTRY</div>
+          <h3>玫瑰蛋黄酥</h3>
+          <p class="origin">玫瑰与蛋黄，一口酥皮里的甜与咸。</p>
+          <p class="price">NT$ 580</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>茶</span></div>
           <div class="cat">茶 · TEA</div>
           <h3>四大山头 mini 七子饼礼袋</h3>
-          <p class="origin">景迈山 · 南糯山 · 小冰岛 · 困鹿山</p>
-          <p class="price">NT$ 1,250 / 49g × 4</p>
-          <span class="ask">写信询问 →</span>
+          <p class="origin">四座名山各一饼，一次喝懂普洱的山头味。</p>
+          <p class="price">NT$ 1,250</p>
+          <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder tea"><span>YUNNAN</span></div>
-          <div class="cat">茶 · TEA</div>
-          <h3>易武正山 古树春茶饼</h3>
-          <p class="origin">云南西双版纳 · 2024 春</p>
-          <p class="price">NT$ 2,800 / 357g</p>
-          <span class="ask">写信询问 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder dark"><span>YUNNAN</span></div>
-          <div class="cat">茶 · TEA</div>
-          <h3>下关 老段家 30 年陈普洱</h3>
-          <p class="origin">云南大理 · 1994 年发酵</p>
-          <p class="price">NT$ 8,400 / 250g</p>
-          <span class="ask">写信询问 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder"><span>YUNNAN</span></div>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>汤</span></div>
           <div class="cat">菌 · MUSHROOM</div>
-          <h3>鸡枞菌油</h3>
-          <p class="origin">楚雄 · 雨季鲜采</p>
-          <p class="price">NT$ 680 / 200ml</p>
-          <span class="ask">写信询问 →</span>
+          <h3>云南野生菌汤包</h3>
+          <p class="origin">一包炖一锅汤，把雨季的山林味留在冬天。</p>
+          <p class="price">NT$ 500 起</p>
+          <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder tea"><span>YUNNAN</span></div>
-          <div class="cat">香 · SPICE</div>
-          <h3>德宏曼掌村咖啡豆</h3>
-          <p class="origin">德宏傣族景颇族自治州</p>
-          <p class="price">NT$ 980 / 250g</p>
-          <span class="ask">写信询问 →</span>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>菌</span></div>
+          <div class="cat">菌 · MUSHROOM</div>
+          <h3>羊肚菌日常包</h3>
+          <p class="origin">不是礼盒，是自己家里炖汤、炒菜用的份量。</p>
+          <p class="price">NT$ 780</p>
+          <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder dark"><span>YUNNAN</span></div>
-          <div class="cat">染 · TEXTILE</div>
-          <h3>大理周城 板蓝根扎染方巾</h3>
-          <p class="origin">大理白族自治州 · 手工</p>
-          <p class="price">NT$ 1,580</p>
-          <span class="ask">写信询问 →</span>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>玫</span></div>
+          <div class="cat">花 · FLOWER</div>
+          <h3>云南白药玫瑰花茶</h3>
+          <p class="origin">花瓣大、颜色深，冲开是一杯温柔的暗红。</p>
+          <p class="price">NT$ 400</p>
+          <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder"><span>YUNNAN</span></div>
-          <div class="cat">器 · SILVER</div>
-          <h3>鹤庆 纯手打银茶杯</h3>
-          <p class="origin">大理鹤庆县 · 寸氏家族</p>
-          <p class="price">NT$ 4,200</p>
-          <span class="ask">写信询问 →</span>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>香</span></div>
+          <div class="cat">香 · INCENSE</div>
+          <h3>香格里拉藏香</h3>
+          <p class="origin">从煨桑的柏枝烟开始，一缕带得走的高原。</p>
+          <p class="price">NT$ 200 起</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>香</span></div>
+          <div class="cat">香 · INCENSE</div>
+          <h3>天然线香・疗愈香</h3>
+          <p class="origin">红色的小盒子，名字取得温柔。</p>
+          <p class="price">NT$ 1,080</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>香</span></div>
+          <div class="cat">香 · INCENSE</div>
+          <h3>天然线香・度母香</h3>
+          <p class="origin">以度母为名的一盒香。</p>
+          <p class="price">NT$ 1,080</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>香</span></div>
+          <div class="cat">香 · INCENSE</div>
+          <h3>天然线香・苏合香丸</h3>
+          <p class="origin">苏合香，自古就用来调香的树脂香料。</p>
+          <p class="price">NT$ 1,080</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>香</span></div>
+          <div class="cat">香 · INCENSE</div>
+          <h3>天然香・降真香</h3>
+          <p class="origin">又名紫藤香，自古就是合香常用的香材。</p>
+          <p class="price">NT$ 1,080</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>巾</span></div>
+          <div class="cat">布 · TEXTILE</div>
+          <h3>大理扎染・蓝色围巾</h3>
+          <p class="origin">白是扎出来的，蓝是一遍遍染上去的。</p>
+          <p class="price">NT$ 2,580</p>
+          <span class="ask">到选购页 →</span>
+        </a>
+        <a class="product reveal" href="../shop/">
+          <div class="img-placeholder tea"><span>布</span></div>
+          <div class="cat">布 · TEXTILE</div>
+          <h3>大理扎染・生命之花挂布</h3>
+          <p class="origin">一棵枝叶往上长的树，挂在玄关或客厅。</p>
+          <p class="price">NT$ 1,880</p>
+          <span class="ask">到选购页 →</span>
         </a>
       </div>
+      <p class="lede lede-center reveal" style="margin-top: var(--s-4);">以上为云南好物选购页目前上架的品项。台湾选物满 NT$ 3,000 免运。<a href="../shop/" style="border-bottom: 1px solid currentColor;">到选购页看完整说明与规格 →</a></p>
     </div>
   </section>
 
-  <!-- People Portrait -->
-  <section class="section">
-    <div class="container">
-      <header class="section-head">
-        <div class="eyebrow reveal">The maker · 做事的人</div>
-        <h2 class="h-section reveal">物的背后是人</h2>
-      </header>
-      <div class="portrait reveal">
-        <div class="img-placeholder tea"><span>MAKER</span></div>
-        <div>
-          <div class="eyebrow">Yunnan · 大理</div>
-          <h3 class="name">段普明 先生</h3>
-          <p class="role">下关老段家 第三代茶人</p>
-          <blockquote>
-            爷爷从十六岁开始做茶，父亲接手了三十年，到我这代已经七十三年。茶仓里那股气息，是时间的味道，不是我能教出来的，是时间自己长出来的。
-          </blockquote>
-          <p class="note">下关老段家茶仓位于苍山西麓，海拔 2200 公尺，常年湿度恒定。三十年来只做两件事：选料、等待。</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- 做事的人：待简家旗提供真实职人与照片后再补（MOTHER-UPGRADE.md 第 3、9 节） -->
 
   <!-- Next step -->
   <section class="container">

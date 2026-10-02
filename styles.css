@@ -1755,8 +1755,17 @@ body.region-taiwan .theme-han { color: var(--accent); }
   box-sizing: border-box;
 }
 
+/* 企業方案：只有兩張卡，不套三欄 */
+.tiers-matrix.tiers-two { grid-template-columns: repeat(2, 1fr); }
+.tier-disclaimer {
+  margin-top: var(--s-3);
+  font-size: 0.85rem;
+  color: var(--mist);
+  line-height: 1.6;
+}
 @media (max-width: 960px) {
   .tiers-matrix { grid-template-columns: 1fr; gap: var(--s-3); }
+  .tiers-matrix.tiers-two { grid-template-columns: 1fr; }
 }
 
 /* --- Corporate Bridge Card --- */

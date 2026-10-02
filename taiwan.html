@@ -32,7 +32,7 @@
   <!-- 字型 CSS 有 500KB（中文要切成上百段），不讓它擋住畫面：先用系統明體顯示，載完再換 -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=953b4bd7">
+  <link rel="stylesheet" href="styles.css?v=7b1bc6ca">
 </head>
 <body class="region-taiwan">
 <a class="skip-link" href="#main">跳到主要內容</a>
@@ -88,67 +88,20 @@
   <section class="section-tight">
     <div class="container narrow">
       <p class="lede lede-center reveal">
-        台灣是一座島，但島上有山、有海、有田。從花蓮的稻、台南的鹽、坪林的茶，到南投的木工、苗栗的窯。我們從在地職人手中選回每一件能說土地故事的物。
+        台灣是一座島，但島上有山、有海、有田。田裡的稻、海邊的鹽、山上的茶，職人手裡的木與窯。我們從在地職人手中選回每一件能說土地故事的物。
       </p>
     </div>
   </section>
 
-  <!-- Product Cards -->
+  <!-- 台灣選物：品項與價格要由簡家旗提供真實資料後才列出（MOTHER-UPGRADE.md 第 3、9 節）。
+       2026-10 清掉原本的六項示意選物；之後補上時，價格請與事實表一致，不要寫沒有的東西。 -->
   <section class="section-tight" id="rice">
-    <div class="container">
+    <div class="container narrow">
       <header class="section-rule">
         <h2 class="h-section reveal">當季選物</h2>
       </header>
-      <div class="products">
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder moss"><span>TAIWAN</span></div>
-          <div class="cat moss">米 · RICE</div>
-          <h3>花蓮玉里 有機越光米</h3>
-          <p class="origin">花蓮玉里鎮 · 江漢錡先生</p>
-          <p class="price">NT$ 380 / 1.5kg</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder dark"><span>TAIWAN</span></div>
-          <div class="cat moss">鹽 · SALT</div>
-          <h3>台南七股 手工日曬海鹽</h3>
-          <p class="origin">台南七股鹽場 · 老師傅日曬</p>
-          <p class="price">NT$ 280 / 200g</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder"><span>TAIWAN</span></div>
-          <div class="cat moss">茶 · TEA</div>
-          <h3>坪林文山包種茶</h3>
-          <p class="origin">新北坪林 · 自然農法</p>
-          <p class="price">NT$ 1,200 / 150g</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder moss"><span>TAIWAN</span></div>
-          <div class="cat moss">器 · CRAFT</div>
-          <h3>苗栗 柴燒陶杯（一對）</h3>
-          <p class="origin">苗栗公館 · 林師傅柴窯</p>
-          <p class="price">NT$ 2,800</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder dark"><span>TAIWAN</span></div>
-          <div class="cat moss">器 · CRAFT</div>
-          <h3>南投 老梅木砧板</h3>
-          <p class="origin">南投埔里 · 三十年老梅</p>
-          <p class="price">NT$ 1,680</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-        <a class="product reveal" href="connect.html">
-          <div class="img-placeholder"><span>TAIWAN</span></div>
-          <div class="cat moss">農 · FARM</div>
-          <h3>宜蘭三星青蔥（季節限定）</h3>
-          <p class="origin">宜蘭三星鄉 · 友善耕作</p>
-          <p class="price">NT$ 320 / 600g</p>
-          <span class="ask">寫信詢問 →</span>
-        </a>
-      </div>
+      <p class="lede lede-center reveal">台灣選物整理中。想預訂，或想知道最近有什麼，請來信。台灣選物滿 NT$ 3,000 免運。</p>
+      <p class="lede-center reveal" style="margin-top: var(--s-3);"><a href="connect.html" class="svc-cta">寫信問問 →</a></p>
     </div>
   </section>
 
@@ -173,6 +126,7 @@
           <div class="eyebrow">Yilan · 宜蘭三星</div>
           <h3 class="name">江漢錡 先生</h3>
           <p class="role moss">三星有機米農 · 稻田裡的餐桌十四年合作夥伴</p>
+          <!-- 待本人確認：這段引言是否由江漢錡先生說過。確認前不可上線到正式網域（MOTHER-UPGRADE.md 第 3 節） -->
           <blockquote class="moss">
             一開始把餐桌擺進田裡，我覺得這些城裡人來鬧的。後來年復一年地來，我才明白他們是真的想看一下這碗米從哪裡來。看過了，米的價值就回來了。
           </blockquote>
