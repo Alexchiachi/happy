@@ -33,7 +33,7 @@ def format_price(variants):
     return f"NT$ {min_p:,}" + (" 起" if has_range else "")
 
 
-def generate_card_html(p, shop_prefix="shop/"):
+def generate_card_html(p, shop_prefix="shop/", idx=0):
     img_jpg = p.get("img", "")
     img_webp = img_jpg.replace(".jpg", ".webp") if img_jpg.endswith(".jpg") else img_jpg
     img_src = f"{shop_prefix}{img_jpg}"
@@ -46,7 +46,10 @@ def generate_card_html(p, shop_prefix="shop/"):
     shelf = p.get("shelf", "season")
     ask = "到選購頁 →"
 
-    return f'''        <a class="product reveal" href="{shop_prefix}" data-shelf="{shelf}">
+    hidden_class = " is-hidden" if idx >= 6 else ""
+    hidden_style = ' style="display: none;"' if idx >= 6 else ""
+
+    return f'''        <a class="product reveal{hidden_class}" href="{shop_prefix}" data-shelf="{shelf}"{hidden_style}>
           <div class="img-placeholder tea">
             <picture>
               <source srcset="{webp_src}" type="image/webp">
@@ -76,6 +79,7 @@ def sync_yunnan_html():
     all_count = len(active_products)
     season_count = sum(1 for p in active_products if p.get("shelf") == "season")
     always_count = sum(1 for p in active_products if p.get("shelf") == "always")
+    hidden_initial = max(0, all_count - 6)
 
     # 產生簡體版 JSON
     if converter:
@@ -85,7 +89,7 @@ def sync_yunnan_html():
             json.dump(cn_data, f, ensure_ascii=False, indent=2)
         print(f"已產出簡體版產品資料：{PRODUCTS_CN_JSON.name}")
 
-    cards_html = "\n".join(generate_card_html(p) for p in active_products)
+    cards_html = "\n".join(generate_card_html(p, idx=i) for i, p in enumerate(active_products))
     
     block = f'''      <!-- PRODUCTS_START -->
       <nav class="filters reveal" aria-label="選物分類">
@@ -102,7 +106,7 @@ def sync_yunnan_html():
       <!-- 展開與選購操作（桌機與手機共用：預設呈現精選 6 款，可一鍵展開全部） -->
       <div class="products-actions reveal">
         <button type="button" class="svc-cta quiet btn-products-toggle" aria-expanded="false">
-          展開全部 {all_count} 款當季選物 <span class="arrow">↓</span>
+          展開全部 {all_count} 款當季選物（還有 {hidden_initial} 款）<span class="arrow">↓</span>
         </button>
         <a href="shop/" class="svc-cta">到選購頁看完整規格與訂購 →</a>
       </div>

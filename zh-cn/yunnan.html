@@ -32,7 +32,7 @@
   <!-- 字体 CSS 有 500KB（中文要切成上百段），不让它挡住画面：先用系统明体显示，载完再换 -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="../styles.css?v=17fe8159">
+  <link rel="stylesheet" href="../styles.css?v=bb3a9a01">
 </head>
 <body class="region-yunnan">
 <a class="skip-link" href="#main">跳到主要内容</a>
@@ -206,7 +206,7 @@
           <p class="price">NT$ 1,250</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="season">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="season" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/mushroom-soup.webp" type="image/webp">
@@ -219,7 +219,7 @@
           <p class="price">NT$ 500 起</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="season">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="season" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/morel-daily.webp" type="image/webp">
@@ -232,7 +232,7 @@
           <p class="price">NT$ 780</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="season">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="season" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/baiyao-rose-tea.webp" type="image/webp">
@@ -245,7 +245,7 @@
           <p class="price">NT$ 400</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/tibetan-incense.webp" type="image/webp">
@@ -258,7 +258,7 @@
           <p class="price">NT$ 200 起</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/incense-healing.webp" type="image/webp">
@@ -271,7 +271,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/incense-tara.webp" type="image/webp">
@@ -284,7 +284,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/incense-suhe.webp" type="image/webp">
@@ -297,7 +297,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/incense-jiangzhen.webp" type="image/webp">
@@ -310,7 +310,7 @@
           <p class="price">NT$ 1,080</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/tie-dye-scarf.webp" type="image/webp">
@@ -323,7 +323,7 @@
           <p class="price">NT$ 2,580</p>
           <span class="ask">到选购页 →</span>
         </a>
-        <a class="product reveal" href="../shop/" data-shelf="always">
+        <a class="product reveal is-hidden" href="../shop/" data-shelf="always" style="display: none;">
           <div class="img-placeholder tea">
             <picture>
               <source srcset="../shop/images/tie-dye-flower.webp" type="image/webp">
@@ -341,7 +341,7 @@
       <!-- 展开与选购操作（桌机与手机共用：缺省呈现精选 6 款，可一键展开全部） -->
       <div class="products-actions reveal">
         <button type="button" class="svc-cta quiet btn-products-toggle" aria-expanded="false">
-          展开全部 16 款当季选物 <span class="arrow">↓</span>
+          展开全部 16 款当季选物（还有 10 款）<span class="arrow">↓</span>
         </button>
         <a href="../shop/" class="svc-cta">到选购页看完整规格与订购 →</a>
       </div>
@@ -393,7 +393,7 @@
   </div>
 </footer>
 
-<script src="../scripts.js?v=01794057"></script>
+<script src="../scripts.js?v=36aee536"></script>
 <!-- Cloudflare Web Analytics：不用 cookie、不追踪个人，只统计浏览量（见 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
 </body>
 </html>

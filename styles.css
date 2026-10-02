@@ -592,9 +592,9 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 }
 .product .price { font-family: var(--font-display); font-size: 1rem; color: var(--ink); letter-spacing: 0.05em; }
 
-/* 預設折疊超過 6 項的好物，使頁面節奏俐落（桌機與手機共用） */
-.products.is-collapsed .product:nth-child(n+7) {
-  display: none;
+/* 折疊隱藏的好物（由 JS 動態控制，支援分類與展開） */
+.product.is-hidden {
+  display: none !important;
 }
 
 .products-actions {

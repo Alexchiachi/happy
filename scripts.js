@@ -383,27 +383,35 @@
         const shelf = c.getAttribute('data-shelf') || 'season';
         const match = currentShelf === 'all' || shelf === currentShelf;
         if (!match) {
+          c.classList.add('is-hidden');
           c.style.display = 'none';
         }
       });
 
       matching.forEach((c, idx) => {
         if (!isExpanded && idx >= LIMIT) {
+          c.classList.add('is-hidden');
           c.style.display = 'none';
         } else {
-          c.style.display = '';
+          c.classList.remove('is-hidden');
+          c.classList.add('in');
+          c.style.display = 'flex';
         }
       });
+
+      syncContainer.classList.toggle('is-collapsed', !isExpanded);
 
       if (toggleBtn) {
         if (matching.length <= LIMIT) {
           toggleBtn.style.display = 'none';
         } else {
-          toggleBtn.style.display = '';
+          toggleBtn.style.display = 'inline-block';
           toggleBtn.setAttribute('aria-expanded', String(isExpanded));
           const arrow = isExpanded ? '↑' : '↓';
           if (isExpanded) {
-            toggleBtn.innerHTML = isCn ? `收起部分选物 <span class="arrow">${arrow}</span>` : `收起部分選物 <span class="arrow">${arrow}</span>`;
+            toggleBtn.innerHTML = isCn
+              ? `收起部分选物 <span class="arrow">${arrow}</span>`
+              : `收起部分選物 <span class="arrow">${arrow}</span>`;
           } else {
             const hiddenCount = matching.length - LIMIT;
             toggleBtn.innerHTML = isCn
