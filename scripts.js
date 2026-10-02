@@ -357,4 +357,81 @@
         });
     });
   }
+
+  // --- 雲南好物前端即時連動（方案 C 雙保險：自動對齊 shop/products.json）---
+  const syncContainer = document.querySelector('[data-products-sync]');
+  if (syncContainer) {
+    const isCn = LANG === 'cn';
+    const shopRoot = isCn ? '../shop/' : 'shop/';
+    const primaryJson = shopRoot + (isCn ? 'products.zh-cn.json' : 'products.json');
+    const fallbackJson = shopRoot + 'products.json';
+
+    const renderCard = (p) => {
+      const variants = (p.variants || []).filter((v) => v.active !== false);
+      const prices = variants.map((v) => v.price).filter((pr) => typeof pr === 'number');
+      const minPrice = prices.length ? Math.min(...prices) : 0;
+      const hasRange = new Set(prices).size > 1;
+      const priceText = 'NT$ ' + minPrice.toLocaleString() + (hasRange ? ' 起' : '');
+      const askText = isCn ? '到选购页 →' : '到選購頁 →';
+      const imgJpg = p.img ? (shopRoot + p.img) : '';
+      const imgWebp = imgJpg.endsWith('.jpg') ? imgJpg.replace(/\.jpg$/, '.webp') : imgJpg;
+      const alt = p.imgAlt || p.name || '';
+      const cat = (p.cat || '').toUpperCase();
+      const name = p.name || '';
+      const intro = p.intro || p.origin || '';
+
+      return (
+        `<a class="product reveal in" href="${shopRoot}">` +
+          `<div class="img-placeholder tea">` +
+            `<picture>` +
+              `<source srcset="${imgWebp}" type="image/webp">` +
+              `<img src="${imgJpg}" alt="${alt}" width="800" height="1000" loading="lazy" decoding="async">` +
+            `</picture>` +
+          `</div>` +
+          `<div class="cat">${cat}</div>` +
+          `<h3>${name}</h3>` +
+          `<p class="origin">${intro}</p>` +
+          `<p class="price">${priceText}</p>` +
+          `<span class="ask">${askText}</span>` +
+        `</a>`
+      );
+    };
+
+    const applyProducts = (products) => {
+      const active = products.filter((p) => p && p.active !== false);
+      if (!active.length) return;
+
+      const currentNames = Array.from(syncContainer.querySelectorAll('h3'))
+        .map((h) => h.textContent.trim())
+        .join('|');
+      const newNames = active.map((p) => (p.name || '').trim()).join('|');
+      const currentPrices = Array.from(syncContainer.querySelectorAll('.price'))
+        .map((pr) => pr.textContent.trim())
+        .join('|');
+      const newPrices = active.map((p) => {
+        const variants = (p.variants || []).filter((v) => v.active !== false);
+        const prices = variants.map((v) => v.price).filter((pr) => typeof pr === 'number');
+        const minPrice = prices.length ? Math.min(...prices) : 0;
+        const hasRange = new Set(prices).size > 1;
+        return 'NT$ ' + minPrice.toLocaleString() + (hasRange ? ' 起' : '');
+      }).join('|');
+
+      // 資料若有變更，才進行 DOM 重新繪製
+      if (currentNames !== newNames || currentPrices !== newPrices) {
+        syncContainer.innerHTML = active.map(renderCard).join('');
+        syncContainer.querySelectorAll('.img-placeholder img').forEach((img) => {
+          const drop = () => (img.closest('picture') || img).remove();
+          if (img.complete && img.naturalWidth === 0) drop();
+          else img.addEventListener('error', drop, { once: true });
+        });
+      }
+    };
+
+    fetch(primaryJson)
+      .then((res) => (res.ok ? res.json() : fetch(fallbackJson).then((r) => r.json())))
+      .then((data) => {
+        if (data && Array.isArray(data.products)) applyProducts(data.products);
+      })
+      .catch(() => {});
+  }
 })();
