@@ -79,6 +79,13 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --flow-l:       12rem;   /* 192px */
 }
 
+/* 簡體頁（lang=zh-Hans）改用 Noto Serif SC 與簡體系統字型 */
+:root:lang(zh-Hans) {
+  --font-display: "Cormorant Garamond", "Noto Serif SC", serif;
+  --font-body:    "Noto Serif SC", "Songti SC", "PingFang SC", serif;
+  --font-han:     "Noto Serif SC", "Songti SC", "PingFang SC", serif;
+}
+
 /* --- Type Scale --- */
 .eyebrow {
   font-family: var(--font-display);

@@ -208,6 +208,9 @@ def main():
                          "繁體版改過之後，tools/build_zhcn.py 的 OVERRIDES 也要跟著改。" % (rel, old))
             cn = cn.replace(old, new)
 
+        # 簡體頁改載 Noto Serif SC（字形與字集都是簡體專用，避免 TC 字型缺字時混用後備字體）
+        cn = cn.replace("Noto+Serif+TC", "Noto+Serif+SC")
+
         # 轉換文字。OpenCC 只動中日韓字元，class 名稱、網址、檔名都是 ASCII，不受影響。
         cn = CC.convert(cn)
         # 切換鈕上的「繁體」被轉成「繁体」是對的（給簡體讀者看），保留。
