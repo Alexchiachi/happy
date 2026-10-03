@@ -119,6 +119,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   font-weight: 500;
 }
 h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
+/* 標題與引言不留標點：逗號、頓號、冒號改成一格留白（.gap），句子之間換行。
+   留白放在普通空格上，斷行時會自動收掉，置中不會偏。 */
+.gap { word-spacing: 0.6em; }
+h1, h2, .pull-quote q { text-wrap: balance; }
 .h-display {
   font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 6.5rem);
