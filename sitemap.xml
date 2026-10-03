@@ -337,6 +337,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/taiwan.html"/>
   </url>
   <url>
+    <loc>https://alexchiachi.github.io/happy/windy-place.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/windy-place.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/windy-place.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/windy-place.html"/>
+  </url>
+  <url>
+    <loc>https://alexchiachi.github.io/happy/zh-cn/windy-place.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/windy-place.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/windy-place.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alexchiachi.github.io/happy/windy-place.html"/>
+  </url>
+  <url>
     <loc>https://alexchiachi.github.io/happy/yunnan.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://alexchiachi.github.io/happy/yunnan.html"/>
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://alexchiachi.github.io/happy/zh-cn/yunnan.html"/>

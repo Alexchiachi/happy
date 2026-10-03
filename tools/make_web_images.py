@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-替 shop/images/、anning/images/ 的照片產生較小的網頁格式，網頁優先載入，JPG 留作退路。
+替 shop/images/、anning/images/、images/windy-place/ 的照片產生較小的網頁格式，網頁優先載入，JPG 留作退路。
 
 為什麼：PageSpeed 的「提升圖片傳送效能」。
 - 商品照 name.jpg → name.webp（同尺寸 800×1000，約小 40%）
@@ -28,7 +28,7 @@ if not features.check("avif"):
     sys.exit("這版 Pillow 不支援 AVIF：pip install -U pillow")
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-IMAGES = [ROOT / "shop" / "images", ROOT / "anning" / "images"]
+IMAGES = [ROOT / "shop" / "images", ROOT / "anning" / "images", ROOT / "images" / "windy-place"]
 # 收款碼放在確認信裡，信件只用 JPG；微信 QR Code 與療心卡在網頁直接用 JPG（QR 要保持清晰）
 SKIP = {"linepay-qr.jpg", "wechat-qr.jpg", "healing-card.jpg"}
 
@@ -38,7 +38,7 @@ def main():
     for jpg in sorted(p for d in IMAGES for p in d.glob("*.jpg")):
         if jpg.name in SKIP:
             continue
-        if jpg.name.startswith("cover-"):
+        if jpg.name.startswith("cover-") or jpg.parent.name == "windy-place":
             out, fmt, opts = jpg.with_suffix(".avif"), "AVIF", {"quality": 50}
         else:
             out, fmt, opts = jpg.with_suffix(".webp"), "WEBP", {"quality": 78, "method": 6}
