@@ -34,7 +34,7 @@
 
 | 倉庫 | 公開？ | 放什麼 |
 | --- | --- | --- |
-| `Alexchiachi/happy` | 公開 | 所有對外網頁：大道至簡品牌站、`shop/`、`anning/`、`inner-flow/`、`eternitychildbooking/`（永恆之子整椎中心預約系統，仍在收預約）、`executive-table/`（含 Worker，Cloudflare 從這裡自動部署）、網站工具 |
+| `Alexchiachi/happy` | 公開 | 所有對外網頁：大道至簡品牌站、`shop/`、`anning/`、`inner-flow/`、`eternitychildbooking/`（永恆之子整椎中心預約系統，仍在收預約）、`executive-table/`（含 Worker，由 GitHub Actions 部署到 Cloudflare）、網站工具 |
 | `Alexchiachi/happychiachi` | **私人** | 電子書書稿（`book/`）、天麻白皮書、天麻計畫 README、`docs/` 內部文件、`epubqa/` 與測試、「幸福生活哲學」寫作技能，以及 2026-09 以前的完整歷史 |
 
 - `happy` 是 2026-09-24 用全新歷史重建的；舊歷史只在 `happychiachi`。**不要把私人倉庫的檔案或歷史推進 `happy`。**
