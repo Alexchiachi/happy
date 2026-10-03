@@ -168,6 +168,7 @@ components:
 - **中文字距放開**：標題 0.05–0.15em，按鈕 0.15–0.25em，eyebrow 0.4em。這是「慢」在字上的樣子。
 - **行高寬鬆**：內文 1.85，文章 2.05。不要低於 1.75。
 - **標題 `text-wrap: balance`，段落 `pretty`**：避免一行只剩一個字。
+- **標題與引言不留標點**：h1、h2 和 `.pull-quote q` 裡的逗號、頓號、分號、冒號改成留白 `<i class="gap"> </i>`（不要用 `<span>`，`.img-placeholder span` 會把它當浮水印），句號刪掉；引言每個句子一行，用 `<br>` 分。問號、驚嘆號、書名號、引號保留。內文與卡片小標題照常用標點。`:has(.gap)` 的標題只在留白處斷行。`<title>`、meta、og 文字不動，維持可讀的標點。
 - **置中的 eyebrow 要補負 margin**：`letter-spacing` 會讓最後一個字後面多一格，`margin-right: -0.4em` 抵銷。
 
 ## Layout 版面
