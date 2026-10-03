@@ -86,6 +86,27 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   --font-han:     "Noto Serif SC", "Songti SC", "PingFang SC", serif;
 }
 
+/* 簡體排版微調：字面比繁體小而疏，字級放大一點、字距收緊、細字重上調；標點用全角規範 */
+:root:lang(zh-Hans) body {
+  font-size: 18px;
+  line-height: 1.9;
+  font-feature-settings: "kern";      /* palt 會把全角標點擠成靠左的窄標點，簡體不用 */
+  line-break: strict;                 /* 標點不出現在行首 */
+  text-spacing-trim: space-first;
+  text-wrap: pretty;                  /* 避免段末孤字 */
+}
+:root:lang(zh-Hans) :is(h1, h2, h3, h4, .pull-quote q, .hero-title) { text-wrap: balance; }
+:root:lang(zh-Hans) .hero-title { font-weight: 300; letter-spacing: 0.06em; }
+:root:lang(zh-Hans) .hero-title .accent { font-weight: 400; }
+:root:lang(zh-Hans) .door-title { font-weight: 300; letter-spacing: 0.05em; }
+:root:lang(zh-Hans) .pull-quote q { letter-spacing: 0.05em; }
+:root:lang(zh-Hans) .h-han-display { letter-spacing: 0.025em; }
+:root:lang(zh-Hans) .h-section { letter-spacing: 0.04em; }
+:root:lang(zh-Hans) .h-card,
+:root:lang(zh-Hans) .article-card h3,
+:root:lang(zh-Hans) .article-feature h2,
+:root:lang(zh-Hans) .service-title { letter-spacing: 0.02em; }
+
 /* --- Type Scale --- */
 .eyebrow {
   font-family: var(--font-display);
