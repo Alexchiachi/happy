@@ -3,18 +3,18 @@
 給在 Alexchiachi/happy 倉庫工作的 Claude Code 與其他 AI。
 目標：在**現有**品牌站上升級，讓它成為 daoissimple.com 的母體網站，取代 Bluehost 上的 WordPress。不重寫、不換技術、不換設計。
 
-最後更新：2026-10-02　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
+最後更新：2026-10-03　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
 
 > 這份檔案與 Google 文件「MOTHER-UPGRADE.md」是同一份標準的兩個副本，讓不同的人、不同的 AI 都讀到一樣的內容。
 > 兩邊以 Google 文件為準：<https://docs.google.com/document/d/1LiMWpeURkv9ibVPb4JbR3RJUTN9WTv7bAilVnmJzRmY/edit>。
 > 改了其中一份，要同步另一份，並更新上面的「最後更新」日期。
 
-## 進度（更新於 2026-10-02）
+## 進度（更新於 2026-10-03）
 
 - 階段 0 盤點：已完成。
 - 階段 1 內容真實性清理（第 3 節）：已完成並發布。
 - 階段 2 價格與服務頁（4.4、4.5）：已完成並發布。
-- 階段 3 新頁與新段落（4.1、4.2、4.3、4.7）：已完成並發布；待補素材見第 9 節。
+- 階段 3 新頁與新段落（4.1、4.2、4.3、4.7）：已完成並發布。另新增 windy-place.html（去有風的地方，2026-10-03 發布）。
 - 階段 4 觀察期：進行中，約一週。
 - 階段 5 切換到 daoissimple.com（第 5 節）：尚未開始，每一步需簡家旗同意。
 - 階段 6 搬 WordPress 文章（第 6 節）：尚未開始。
@@ -103,7 +103,7 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 - 加進 .github/workflows/pages.yml 白名單、sitemap.xml、簡體版。
 - 頁尾與關於頁加連結。
 
-### 4.3 關於 about.html（已完成，內文待補）
+### 4.3 關於 about.html（已完成）
 
 保留現有的宣言、道情物、我們不做的事、主理人。新增兩段（文字取自 daoissimple.com/guanyuzhenshidewo/）：
 
