@@ -1872,6 +1872,7 @@ body.region-taiwan .theme-han { color: var(--accent); }
 .photo-row.photo-row-4 { grid-template-columns: repeat(4, 1fr); }
 .photo-row figure { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-deep); }
 .photo-row picture, .photo-row img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.svc-img .photo-row { grid-template-columns: repeat(2, 1fr); margin-bottom: var(--s-1); }
 .turns.two { grid-template-columns: repeat(2, 1fr); }
 .turns .fact-list { margin-top: var(--s-2); }
 .article-body p { color: var(--ink-soft); line-height: 2.05; margin-bottom: var(--s-3); }
