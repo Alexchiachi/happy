@@ -135,6 +135,14 @@ def main():
             else:
                 child.unlink()
 
+    # 自動從 shop/products.json 同步商品資料到 yunnan.html 與簡體 products.zh-cn.json
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import sync_products
+        sync_products.sync_yunnan_html()
+    except Exception as e:
+        print(f"提醒：商品同步失敗（{e}），跳過繼續建置", file=sys.stderr)
+
     n_zh, n_cn = 0, 0
     rels = []
     for src in pages():

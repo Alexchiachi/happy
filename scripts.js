@@ -357,4 +357,172 @@
         });
     });
   }
+
+  // --- 雲南好物前端即時連動與折疊/篩選（方案 C 雙保險：桌機與手機共用）---
+  const syncContainer = document.querySelector('[data-products-sync]');
+  if (syncContainer) {
+    const isCn = LANG === 'cn';
+    const shopRoot = isCn ? '../shop/' : 'shop/';
+    const primaryJson = shopRoot + (isCn ? 'products.zh-cn.json' : 'products.json');
+    const fallbackJson = shopRoot + 'products.json';
+    const toggleBtn = document.querySelector('.btn-products-toggle');
+    const filterBtns = document.querySelectorAll('.filters [data-shelf]');
+    const LIMIT = 6;
+
+    let currentShelf = 'all';
+    let isExpanded = false;
+
+    const updateVisibility = () => {
+      const cards = Array.from(syncContainer.querySelectorAll('.product'));
+      const matching = cards.filter((c) => {
+        const shelf = c.getAttribute('data-shelf') || 'season';
+        return currentShelf === 'all' || shelf === currentShelf;
+      });
+
+      cards.forEach((c) => {
+        const shelf = c.getAttribute('data-shelf') || 'season';
+        const match = currentShelf === 'all' || shelf === currentShelf;
+        if (!match) {
+          c.classList.add('is-hidden');
+          c.style.display = 'none';
+        }
+      });
+
+      matching.forEach((c, idx) => {
+        if (!isExpanded && idx >= LIMIT) {
+          c.classList.add('is-hidden');
+          c.style.display = 'none';
+        } else {
+          c.classList.remove('is-hidden');
+          c.classList.add('in');
+          c.style.display = 'flex';
+        }
+      });
+
+      syncContainer.classList.toggle('is-collapsed', !isExpanded);
+
+      if (toggleBtn) {
+        if (matching.length <= LIMIT) {
+          toggleBtn.style.display = 'none';
+        } else {
+          toggleBtn.style.display = 'inline-block';
+          toggleBtn.setAttribute('aria-expanded', String(isExpanded));
+          const arrow = isExpanded ? '↑' : '↓';
+          if (isExpanded) {
+            toggleBtn.innerHTML = isCn
+              ? `收起部分选物 <span class="arrow">${arrow}</span>`
+              : `收起部分選物 <span class="arrow">${arrow}</span>`;
+          } else {
+            const hiddenCount = matching.length - LIMIT;
+            toggleBtn.innerHTML = isCn
+              ? `展开全部 ${matching.length} 款选物（还有 ${hiddenCount} 款）<span class="arrow">${arrow}</span>`
+              : `展開全部 ${matching.length} 款選物（還有 ${hiddenCount} 款）<span class="arrow">${arrow}</span>`;
+          }
+        }
+      }
+    };
+
+    const renderCard = (p) => {
+      const variants = (p.variants || []).filter((v) => v.active !== false);
+      const prices = variants.map((v) => v.price).filter((pr) => typeof pr === 'number');
+      const minPrice = prices.length ? Math.min(...prices) : 0;
+      const hasRange = new Set(prices).size > 1;
+      const priceText = 'NT$ ' + minPrice.toLocaleString() + (hasRange ? ' 起' : '');
+      const askText = isCn ? '到选购页 →' : '到選購頁 →';
+      const imgJpg = p.img ? (shopRoot + p.img) : '';
+      const imgWebp = imgJpg.endsWith('.jpg') ? imgJpg.replace(/\.jpg$/, '.webp') : imgJpg;
+      const alt = p.imgAlt || p.name || '';
+      const cat = (p.cat || '').toUpperCase();
+      const name = p.name || '';
+      const intro = p.intro || p.origin || '';
+      const shelf = p.shelf || 'season';
+
+      return (
+        `<a class="product reveal in" href="${shopRoot}" data-shelf="${shelf}">` +
+          `<div class="img-placeholder tea">` +
+            `<picture>` +
+              `<source srcset="${imgWebp}" type="image/webp">` +
+              `<img src="${imgJpg}" alt="${alt}" width="800" height="1000" loading="lazy" decoding="async">` +
+            `</picture>` +
+          `</div>` +
+          `<div class="cat">${cat}</div>` +
+          `<h3>${name}</h3>` +
+          `<p class="origin">${intro}</p>` +
+          `<p class="price">${priceText}</p>` +
+          `<span class="ask">${askText}</span>` +
+        `</a>`
+      );
+    };
+
+    const applyProducts = (products) => {
+      const active = products.filter((p) => p && p.active !== false);
+      if (!active.length) return;
+
+      const currentNames = Array.from(syncContainer.querySelectorAll('h3'))
+        .map((h) => h.textContent.trim())
+        .join('|');
+      const newNames = active.map((p) => (p.name || '').trim()).join('|');
+      const currentPrices = Array.from(syncContainer.querySelectorAll('.price'))
+        .map((pr) => pr.textContent.trim())
+        .join('|');
+      const newPrices = active.map((p) => {
+        const variants = (p.variants || []).filter((v) => v.active !== false);
+        const prices = variants.map((v) => v.price).filter((pr) => typeof pr === 'number');
+        const minPrice = prices.length ? Math.min(...prices) : 0;
+        const hasRange = new Set(prices).size > 1;
+        return 'NT$ ' + minPrice.toLocaleString() + (hasRange ? ' 起' : '');
+      }).join('|');
+
+      // 資料若有變更，才進行 DOM 重新繪製
+      if (currentNames !== newNames || currentPrices !== newPrices) {
+        syncContainer.innerHTML = active.map(renderCard).join('');
+        syncContainer.querySelectorAll('.img-placeholder img').forEach((img) => {
+          const drop = () => (img.closest('picture') || img).remove();
+          if (img.complete && img.naturalWidth === 0) drop();
+          else img.addEventListener('error', drop, { once: true });
+        });
+        updateVisibility();
+      }
+    };
+
+    // 註冊分類篩選事件
+    if (filterBtns.length) {
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+          currentShelf = btn.getAttribute('data-shelf') || 'all';
+          isExpanded = false;
+          updateVisibility();
+        });
+      });
+    }
+
+    // 註冊展開/收合事件
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        updateVisibility();
+        if (!isExpanded) {
+          const header = document.getElementById('tea') || syncContainer;
+          header.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // 初始執行一次能即刻設定可見性
+    updateVisibility();
+
+    // 接著非同步抓取 JSON 做雙保險同步
+    fetch(primaryJson)
+      .then((res) => (res.ok ? res.json() : fetch(fallbackJson).then((r) => r.json())))
+      .then((data) => {
+        if (data && Array.isArray(data.products)) applyProducts(data.products);
+      })
+      .catch(() => {});
+  }
 })();

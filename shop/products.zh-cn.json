@@ -1,0 +1,1044 @@
+{
+  "_说明": "云南好物的商品与档期设置。网页（shop.js）和 Worker（executive-table/worker/orders.js）共用这一份：金额由 Worker 依这里重算。商品 id 与规格 key 上线后不要改，旧订单会对不上；要下架改 active:false。",
+  "season": {
+    "name": "秋收・光辉十月",
+    "deadline": "2026-10-25T23:59:59+08:00",
+    "deadlineText": "2026 年 10 月 25 日",
+    "ship": "10 月底陆续寄出",
+    "note": "限期收单，截止后统一向产地叫货，10 月底陆续寄出。"
+  },
+  "shipping": {
+    "free": 3000,
+    "home": 80,
+    "cvs": 80,
+    "meet": 0
+  },
+  "payment": {
+    "bank": "合作金库 草屯分行（银行代号 006）\n帐号 5573717-232117\n户名 嘉礼慕华舖",
+    "linepay": "收款帐号：嘉礼慕华\n用 LINE 扫描收款码（手机上可直接点「打开 LINE Pay 付款」），输入订单金额后付款。",
+    "linepayImage": "images/linepay-qr.jpg",
+    "linepayUrl": "https://qrcodepay.line.me/qr/payment/%252BGglGp22MnGMT9HMIGb66InRjQTS3MFLyxdw6FU4QP7b6TrIEx9OWYX8PpKeUPG4"
+  },
+  "contact": {
+    "line": "@617aipgs",
+    "lineUrl": "https://line.me/R/ti/p/@617aipgs",
+    "facebook": "https://www.facebook.com/profile.php?id=100075746177370"
+  },
+  "cover": [
+    {
+      "img": "images/cover-ginkgo-village.jpg",
+      "alt": "山谷里的老村落，一棵巨大的金黄银杏树覆在层层黑瓦屋顶之间"
+    },
+    {
+      "img": "images/cover-ginkgo-lane.jpg",
+      "alt": "金黄银杏树下的石墙小巷，地上铺满落叶，尽头是一间木造老屋"
+    },
+    {
+      "img": "images/cover-ginkgo-pavilion.jpg",
+      "alt": "蓝天下的金黄银杏枝叶间，露出一座红柱彩绘的重檐古亭"
+    },
+    {
+      "img": "images/cover-ginkgo-path.jpg",
+      "alt": "两排银杏树夹着一条石板小径，通往土黄墙与白墙的老屋，落叶在空中飘"
+    },
+    {
+      "img": "images/cover-autumn-temple.jpg",
+      "alt": "山坡上一片金顶的藏式寺院，倒映在秋天的湖面上，湖边是一排金黄的树"
+    },
+    {
+      "img": "images/cover-ginkgo-road.jpg",
+      "alt": "蓝天下的银杏林道，地面落满金黄叶子，路旁有几间小屋"
+    }
+  ],
+  "coverNote": "照片取自网络，若有侵权请告知，我们会立即下架。",
+  "products": [
+    {
+      "active": true,
+      "id": "yak-rose-pie",
+      "shelf": "season",
+      "featured": true,
+      "badge": "中秋回购",
+      "cat": "饼 · Pastry",
+      "han": "派",
+      "tone": "sugar",
+      "name": "牦牛奶玫瑰派",
+      "intro": "高原的牦牛奶，配上云南的玫瑰。",
+      "story": "奶渣是新鲜牦牛奶自然发酵后，再经过几道工序做成的；和滇红玫瑰一起做成内馅。乳香浓，带一点微酸——那是奶渣本来的味道。",
+      "specs": [
+        [
+          "内容量",
+          "6 枚（50g × 6）"
+        ],
+        [
+          "内馅",
+          "牦牛奶渣、滇红玫瑰"
+        ],
+        [
+          "保存",
+          "常温 25 天"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一盒 6 枚",
+          "price": 680,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/yak-rose-pie.jpg",
+      "imgAlt": "两盒粉白水彩纹的牦牛奶渣玫瑰派礼盒，靠在高原阳光下的老木头上"
+    },
+    {
+      "active": true,
+      "id": "nougat",
+      "shelf": "season",
+      "badge": "中秋热卖",
+      "cat": "甜 · Sweets",
+      "han": "糖",
+      "tone": "sugar",
+      "name": "玫瑰花生牛轧糖",
+      "intro": "花生的香、玫瑰的甜，一盒刚好分给一桌人。",
+      "story": "年节桌上摆一盒，客人来了随手就能招待。价格轻，适合搭配礼盒一起寄，也是凑免运的好选择。",
+      "specs": [
+        [
+          "内容量",
+          "120g，独立包装"
+        ],
+        [
+          "风味",
+          "云南高原重瓣玫瑰、花生仁、奶香"
+        ],
+        [
+          "保存",
+          "常温 45 天"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一盒 120g",
+          "price": 250,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/nougat.jpg",
+      "imgAlt": "白瓷碗里盛着桃红色糖纸包的玫瑰花生牛轧糖，旁边有切开的牛轧糖、透明盒装与散落的玫瑰花瓣"
+    },
+    {
+      "active": true,
+      "id": "brown-sugar",
+      "shelf": "season",
+      "cat": "甜 · Sweets",
+      "han": "暖",
+      "tone": "sugar",
+      "name": "云南红糖三味",
+      "intro": "冬天的早晨，一匙化在热水里。",
+      "story": "玫瑰、红枣、姜汁三种口味，都是冬天会想喝一杯的味道。三盒一起买，一天换一种。",
+      "specs": [
+        [
+          "规格",
+          "玫瑰 225g／红枣 230g／姜汁 270g（每盒）"
+        ],
+        [
+          "原料",
+          "滇南甘蔗汁熬煮"
+        ],
+        [
+          "保存",
+          "18 个月"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "rose",
+          "label": "玫瑰红糖 225g",
+          "price": 480,
+          "unit": "盒"
+        },
+        {
+          "key": "date",
+          "label": "红枣红糖 230g",
+          "price": 480,
+          "unit": "盒"
+        },
+        {
+          "key": "ginger",
+          "label": "姜汁红糖 270g",
+          "price": 480,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/brown-sugar.jpg",
+      "imgAlt": "玫瑰、红枣、姜汁三盒红糖并排，旁边有木匙、一杯红糖水、姜片与切块的红糖"
+    },
+    {
+      "active": true,
+      "id": "porcini-sauce",
+      "shelf": "season",
+      "cat": "菌 · Mushroom",
+      "han": "酱",
+      "tone": "moss",
+      "name": "牛肝菌拌酱礼盒",
+      "intro": "拌面、拌饭、炒一盘青菜，年菜桌上的隐藏主角。",
+      "story": "一组三罐，用云南楚雄的牛肝菌做成。A 组偏香辣，B 组偏椒麻，两组都有葱油牛肝菌和牛肝菌白酱。",
+      "specs": [
+        [
+          "内容量",
+          "100g × 3 罐"
+        ],
+        [
+          "A 组",
+          "香辣＋葱油＋白酱"
+        ],
+        [
+          "B 组",
+          "椒麻＋葱油＋白酱"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "a",
+          "label": "A 组 · 香辣",
+          "price": 880,
+          "unit": "组"
+        },
+        {
+          "key": "b",
+          "label": "B 组 · 椒麻",
+          "price": 880,
+          "unit": "组"
+        }
+      ],
+      "img": "images/porcini-sauce.jpg",
+      "imgAlt": "红色礼盒拉开，牛皮纸内盒里放着三罐牛肝菌拌酱，一只手正拿起绿色盖子那罐"
+    },
+    {
+      "active": true,
+      "id": "rose-egg-yolk-pastry",
+      "shelf": "season",
+      "cat": "饼 · Pastry",
+      "han": "酥",
+      "tone": "seal",
+      "name": "玫瑰蛋黄酥",
+      "intro": "玫瑰与蛋黄，一口酥皮里的甜与咸。",
+      "story": "最外层是酥皮，里面依序包着麻糬、重瓣玫瑰花馅和一颗咸蛋黄。酥、糯、香、润，一口吃到四种口感。",
+      "specs": [
+        [
+          "内容量",
+          "6 枚（50g × 6）"
+        ],
+        [
+          "内馅",
+          "麻糬、重瓣玫瑰花馅、咸蛋黄"
+        ],
+        [
+          "保存",
+          "常温 30 天"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一盒 6 枚",
+          "price": 580,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/rose-egg-yolk-pastry.jpg",
+      "imgAlt": "双手捧着桃红色的玫瑰蛋黄酥礼盒，盒面是一朵深红玫瑰"
+    },
+    {
+      "active": true,
+      "id": "puer-minis",
+      "shelf": "season",
+      "cat": "茶 · Tea",
+      "han": "茶",
+      "tone": "tea",
+      "img": "images/puer-minis.jpg",
+      "imgAlt": "四颗棉纸包的迷你普洱茶饼，分别标着景迈山、南糯山、小冰岛、困鹿山，旁边是一只印着「山」字的米色棉布提袋",
+      "name": "四大山头 mini 七子饼礼袋",
+      "intro": "四座名山各一饼，一次喝懂普洱的山头味。",
+      "story": "景迈山、南糯山、小冰岛、困鹿山，一袋四饼。适合刚开始喝普洱、想比较不同山头的朋友，也适合送礼。",
+      "specs": [
+        [
+          "规格",
+          "49g × 4 饼"
+        ],
+        [
+          "山头",
+          "景迈山 · 南糯山 · 小冰岛 · 困鹿山"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-yunnan-puer-basics.html",
+        "text": "读：普洱入门"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一袋四饼",
+          "price": 1250,
+          "unit": "袋"
+        }
+      ],
+      "featured": false
+    },
+    {
+      "active": true,
+      "id": "mushroom-soup",
+      "shelf": "season",
+      "cat": "菌 · Mushroom",
+      "han": "汤",
+      "tone": "moss",
+      "name": "云南野生菌汤包",
+      "intro": "一包炖一锅汤，把雨季的山林味留在冬天。",
+      "story": "多种云南菌菇配好的汤包，用来煮汤、炖鸡汤都好。使用前先用温水泡 20–30 分钟，泡软再下锅。",
+      "specs": [
+        [
+          "菌菇",
+          "羊肚菌、虫草菌、姬松茸、鸡油菌等"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "one",
+          "label": "单包",
+          "price": 500,
+          "unit": "包"
+        },
+        {
+          "key": "four",
+          "label": "四包组（省 200）",
+          "price": 1800,
+          "unit": "组"
+        }
+      ],
+      "img": "images/mushroom-soup.jpg",
+      "imgAlt": "透明夹链袋里装满各种干燥野生菌菇，袋上贴着红色直式标签「云南野生菌」"
+    },
+    {
+      "active": true,
+      "id": "morel-daily",
+      "shelf": "season",
+      "cat": "菌 · Mushroom",
+      "han": "菌",
+      "tone": "moss",
+      "name": "羊肚菌日常包",
+      "intro": "不是礼盒，是自己家里炖汤、炒菜用的份量。",
+      "story": "和礼盒同样的干燥羊肚菌，改用简单的袋装，价格更轻。",
+      "specs": [
+        [
+          "规格",
+          "100g／包"
+        ],
+        [
+          "大小",
+          "3–5 cm"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一包 100g",
+          "price": 780,
+          "unit": "包"
+        }
+      ],
+      "img": "images/morel-daily.jpg",
+      "imgAlt": "米色立袋包装的干燥羊肚菌，透明开窗里可以看到一朵朵完整的羊肚菌，净含量 100g"
+    },
+    {
+      "active": true,
+      "id": "baiyao-rose-tea",
+      "shelf": "season",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "name": "云南白药玫瑰花茶",
+      "intro": "花瓣大、颜色深，冲开是一杯温柔的暗红。",
+      "story": "墨红玫瑰原产法国，是云南种植的食用玫瑰品种之一，重瓣、每朵 30–35 枚花瓣。这一罐是冻干的整朵花，花型完整、颜色深紫。热水冲泡就能喝，也可以加进红茶或红糖水里。",
+      "specs": [
+        [
+          "内容量",
+          "冻干墨红玫瑰 30g／罐"
+        ],
+        [
+          "保存",
+          "常温干燥处 12 个月"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 30g",
+          "price": 400,
+          "unit": "罐"
+        }
+      ],
+      "img": "images/baiyao-rose-tea.jpg",
+      "imgAlt": "透明罐装的冻干墨红玫瑰花，旁边一枝玫瑰和一杯冲开的淡红色花茶"
+    },
+    {
+      "active": true,
+      "id": "tibetan-incense",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "name": "香格里拉藏香",
+      "intro": "从煨桑的柏枝烟开始，一缕带得走的高原。",
+      "story": "藏香的源头是煨桑时烧的柏枝。长支适合静坐、读书时慢慢点；短支份量轻，适合刚开始用香的朋友。",
+      "specs": [
+        [
+          "产地",
+          "云南迪庆 · 香格里拉"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-shangrila-tibetan-incense.html",
+        "text": "读：香格里拉藏香"
+      },
+      "variants": [
+        {
+          "key": "long",
+          "label": "长支・1 管",
+          "price": 350,
+          "unit": "管"
+        },
+        {
+          "key": "short",
+          "label": "短支・1 管",
+          "price": 200,
+          "unit": "管"
+        }
+      ],
+      "featured": false,
+      "img": "images/tibetan-incense.jpg",
+      "imgAlt": "两管玻璃管装的藏香立在藏式织毯上，旁边有转经轮、铜香炉与柏枝，背后是雪山和彩色经幡"
+    },
+    {
+      "active": true,
+      "id": "incense-healing",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-healing.jpg",
+      "imgAlt": "红色纸盒写着「疗愈香」，旁边是一只深色的旅行香盒，摆在木桌上",
+      "name": "天然线香・疗愈香",
+      "intro": "红色的小盒子，名字取得温柔。",
+      "story": "三款旅行装天然线香里，红盒的这一款。一盒 20 支、每支约 10 公分，点一支大约半小时，刚好是读几页书、喝一壶茶的时间。盒子细长，出门、旅行、放在书桌抽屉里都方便。",
+      "specs": [
+        [
+          "规格",
+          "旅行盒装・20 支／盒"
+        ],
+        [
+          "长度",
+          "约 10 公分"
+        ],
+        [
+          "燃烧时间",
+          "每支约 30 分钟"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "读：闻不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "incense-tara",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-tara.jpg",
+      "imgAlt": "桌上一盒红色的度母香与黑色旅行香盒，后方是度母像与法铃",
+      "name": "天然线香・度母香",
+      "intro": "以度母为名的一盒香。",
+      "story": "度母是藏传佛教里的女性本尊，这一款以她为名。一盒 20 支、每支约 10 公分，点一支大约半小时，刚好是读几页书、喝一壶茶的时间。盒子细长，出门、旅行、放在书桌抽屉里都方便。",
+      "specs": [
+        [
+          "规格",
+          "旅行盒装・20 支／盒"
+        ],
+        [
+          "长度",
+          "约 10 公分"
+        ],
+        [
+          "燃烧时间",
+          "每支约 30 分钟"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "读：闻不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "incense-suhe",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-suhe.jpg",
+      "imgAlt": "米白色长盒写着「苏合香丸」，旁边散放树脂香料、干燥花与一只青瓷香插",
+      "name": "天然线香・苏合香丸",
+      "intro": "苏合香，自古就用来调香的树脂香料。",
+      "story": "香方参照古方配伍，甄选苏合香搭配天然香材手工合制。\n苏合香自带温润树脂甜香，香韵醇厚柔和，层次细腻。\n静室点燃，青烟轻扬，香气缓缓弥散，适合茶室、书房、卧室品赏，营造安宁雅致的空间，是中式香道日常雅玩。",
+      "specs": [
+        [
+          "规格",
+          "旅行盒装・20 支／盒"
+        ],
+        [
+          "长度",
+          "约 10 公分"
+        ],
+        [
+          "燃烧时间",
+          "每支约 30 分钟"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "读：闻不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "incense-jiangzhen",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/incense-jiangzhen.jpg",
+      "imgAlt": "米白色长盒写着「降真香」，旁边散放降真香木块与木段，摆在老木桌上，后方有花瓶与山水画卷",
+      "name": "天然香・降真香",
+      "intro": "又名紫藤香，自古就是合香常用的香材。",
+      "story": "降真香，又名紫藤香，自古为传统香文化名材，是古时合香常用原料。\n原材油脂饱满，香气沉稳内敛，带有温润木质甜韵，青烟舒缓绵长。\n适合书房、茶室、静室品赏，燃香营造清雅静谧的空间，是香修、独处、阅读时的雅玩香品。",
+      "specs": [
+        [
+          "规格",
+          "旅行盒装・20 支／盒"
+        ],
+        [
+          "长度",
+          "约 10 公分"
+        ],
+        [
+          "燃烧时间",
+          "每支约 30 分钟"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "旅行盒・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "读：闻不出味道的那套香具"
+      }
+    },
+    {
+      "active": true,
+      "id": "tie-dye-scarf",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "巾",
+      "tone": "tea",
+      "img": "images/tie-dye-scarf.jpg",
+      "imgAlt": "木质人台上披着一条深蓝底、白色斜纹花样的扎染长围巾",
+      "name": "大理扎染・蓝色围巾",
+      "intro": "白是扎出来的，蓝是一遍遍染上去的。",
+      "story": "大理白族的扎染：先用线把布一针一针扎起来，再反复下缸染蓝，拆线之后白花才露出来。手的力道、结的松紧都不一样，所以没有两条会完全相同，边缘化开的蓝晕是手工的痕迹，不是瑕疵。前几次请单独冷水手洗、阴干，别曝晒。",
+      "specs": [
+        [
+          "工艺",
+          "大理白族手工扎染"
+        ],
+        [
+          "洗涤",
+          "冷水手洗、阴干，不用漂白剂"
+        ],
+        [
+          "产地",
+          "云南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "读：大理扎染，那一缸蓝"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一条",
+          "price": 2580,
+          "unit": "条"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "tie-dye-flower",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "布",
+      "tone": "tea",
+      "img": "images/tie-dye-flower.jpg",
+      "imgAlt": "客厅沙发上方的白墙挂着一幅深蓝底、橘色树纹的「生命之花」挂布",
+      "name": "大理扎染・生命之花挂布",
+      "intro": "一棵枝叶往上长的树，挂在玄关或客厅。",
+      "story": "同样是大理白族的手工扎染，做成一幅可以挂在墙上的布。一棵枝叶往上长的树铺满整面，挂在玄关、客厅或书房，屋子就多了一点手作的温度。手工染的颜色每一幅都略有不同。清洗请单独冷水手洗、阴干，避免长时间曝晒。",
+      "specs": [
+        [
+          "工艺",
+          "大理白族手工扎染"
+        ],
+        [
+          "用途",
+          "挂布，可挂玄关、客厅、书房"
+        ],
+        [
+          "洗涤",
+          "冷水手洗、阴干，避免曝晒"
+        ],
+        [
+          "产地",
+          "云南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "读：大理扎染，那一缸蓝"
+      },
+      "variants": [
+        {
+          "key": "std",
+          "label": "一幅",
+          "price": 1880,
+          "unit": "幅"
+        }
+      ]
+    },
+    {
+      "active": false,
+      "id": "natural-incense",
+      "shelf": "always",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "smoke",
+      "img": "images/natural-incense.jpg",
+      "imgAlt": "白瓷盘上两盒旅行装线香，米白色盒子写着「三神香」，红色盒子写着「疗愈香」",
+      "name": "云南天然线香 · 旅行盒",
+      "intro": "一盒二十支，收进包里，走到哪点到哪。",
+      "story": "三款香、同一种旅行盒：疗愈香、度母香、苏合香丸，各有各的气味。每支约 10 公分、点一支大约半小时，刚好是读几页书、喝一壶茶的时间。盒子细长好收，出门、旅行、放在书桌抽屉里都方便。",
+      "specs": [
+        [
+          "规格",
+          "旅行盒装・20 支／盒"
+        ],
+        [
+          "长度",
+          "约 10 公分"
+        ],
+        [
+          "燃烧时间",
+          "每支约 30 分钟"
+        ],
+        [
+          "香款",
+          "疗愈香・度母香・苏合香丸"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-09-appreciating-natural-incense.html",
+        "text": "读：闻不出味道的那套香具"
+      },
+      "variants": [
+        {
+          "key": "healing",
+          "label": "疗愈香・20 支",
+          "price": 1080,
+          "unit": "盒"
+        },
+        {
+          "key": "tara",
+          "label": "度母香・20 支",
+          "price": 1080,
+          "unit": "盒"
+        },
+        {
+          "key": "suhe",
+          "label": "苏合香丸・20 支",
+          "price": 1080,
+          "unit": "盒"
+        }
+      ],
+      "_说明": "2026-09-29 拆成个别商品卡（incense-*、tie-dye-*），这张不再上架"
+    },
+    {
+      "active": false,
+      "id": "tie-dye",
+      "shelf": "always",
+      "cat": "布 · Textile",
+      "han": "染",
+      "tone": "tea",
+      "img": "images/tie-dye.jpg",
+      "imgAlt": "木质人台上披着一条深蓝底、白色斜纹花样的扎染长围巾",
+      "name": "云南大理扎染",
+      "intro": "白是扎出来的，蓝是一遍遍染上去的。围在身上，也挂在墙上。",
+      "story": "大理白族的扎染：先用线把布一针一针扎起来，再反复下缸染蓝，拆线之后白花才露出来。这一档有两款：蓝色扎染围巾，和一幅可以挂在玄关、客厅的「生命之花」挂布。手的力道、结的松紧都不一样，所以没有两件会完全相同，边缘化开的蓝晕是手工的痕迹，不是瑕疵。前几次请单独冷水手洗、阴干，别曝晒。",
+      "specs": [
+        [
+          "品项",
+          "蓝色扎染围巾／生命之花挂布"
+        ],
+        [
+          "工艺",
+          "大理白族手工扎染"
+        ],
+        [
+          "洗涤",
+          "冷水手洗、阴干，不用漂白剂"
+        ],
+        [
+          "产地",
+          "云南大理"
+        ]
+      ],
+      "read": {
+        "href": "../journal/2026-08-dali-bai-tie-dye.html",
+        "text": "读：大理扎染，那一缸蓝"
+      },
+      "variants": [
+        {
+          "key": "blue-scarf",
+          "label": "蓝色扎染围巾",
+          "price": 2580,
+          "unit": "条"
+        },
+        {
+          "key": "flower-of-life",
+          "label": "生命之花・挂布",
+          "price": 1880,
+          "unit": "条"
+        }
+      ],
+      "_说明": "2026-09-29 拆成个别商品卡（incense-*、tie-dye-*），这张不再上架"
+    },
+    {
+      "active": false,
+      "id": "rose-cake",
+      "shelf": "season",
+      "badge": "上一档卖最好",
+      "cat": "饼 · Pastry",
+      "han": "饼",
+      "tone": "seal",
+      "name": "玫瑰花饼礼盒",
+      "intro": "云南人过节一定要有的那一口，酥皮里包着满满的玫瑰花酱。",
+      "story": "两款礼盒同价：「暴美」是经典玫瑰花饼配玫瑰花松仁饼，一次吃两种口感；「暴富」是 12 枚经典玫瑰花饼，名字讨喜，最适合送长辈。",
+      "specs": [
+        [
+          "内容",
+          "暴美：花饼＋松仁饼各 6 枚／暴富：花饼 12 枚"
+        ],
+        [
+          "每枚",
+          "50g"
+        ],
+        [
+          "保存",
+          "常温 30 天"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "mei",
+          "label": "暴美 · 花饼＋松仁饼各 6 枚",
+          "price": 650,
+          "unit": "盒"
+        },
+        {
+          "key": "fu",
+          "label": "暴富 · 经典花饼 12 枚",
+          "price": 650,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/rose-cake.jpg",
+      "imgAlt": "一只手提着蓝粉色的「暴美」玫瑰花饼礼盒，盒面是缤纷的吉祥图案，下方是切开的玫瑰花饼"
+    },
+    {
+      "active": false,
+      "id": "morel-gift",
+      "shelf": "season",
+      "badge": "一盒即免运",
+      "cat": "菌 · Mushroom",
+      "han": "菌",
+      "tone": "moss",
+      "name": "羊肚菌礼盒",
+      "intro": "菌中的珍品，一盒就是一份体面的年礼。",
+      "story": "深山采收、脱水干制的羊肚菌，严选 7–9 公分的大朵。泡发后炖汤、炖鸡都好。礼盒附提袋，适合送给懂吃的朋友。",
+      "specs": [
+        [
+          "规格",
+          "160g，附提袋"
+        ],
+        [
+          "大小",
+          "严选 7–9 cm"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "160g 礼盒",
+          "price": 2480,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/morel-gift.jpg",
+      "imgAlt": "黄绿色礼盒透明开窗里整齐排着大朵干燥羊肚菌，侧边标着「羊肚菌」"
+    },
+    {
+      "active": false,
+      "id": "rose-tea",
+      "shelf": "always",
+      "badge": "两档都有人回购",
+      "cat": "花 · Flower",
+      "han": "玫",
+      "tone": "seal",
+      "img": "images/rose-tea.jpg",
+      "imgAlt": "两罐透明罐装的墨红玫瑰干燥花瓣，贴着手写「墨红玫瑰」的米色标签",
+      "name": "墨红玫瑰花茶",
+      "intro": "花瓣大、颜色深，冲开是一杯温柔的暗红。",
+      "story": "墨红玫瑰原产法国，是云南种植的食用玫瑰品种之一，重瓣、每朵 30–35 枚花瓣。干燥花瓣热水冲泡就能喝，也可以加进红茶或红糖水里。",
+      "specs": [
+        [
+          "规格",
+          "20g／罐"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 20g",
+          "price": 400,
+          "unit": "罐"
+        }
+      ]
+    },
+    {
+      "active": false,
+      "id": "golden-ear",
+      "shelf": "always",
+      "cat": "菌 · Mushroom",
+      "han": "耳",
+      "tone": "sugar",
+      "name": "云南金耳菌",
+      "intro": "色如金箔、胶质绵密，炖汤煮甜品都软糯Ｑ弹。",
+      "story": "干货，建议用清水或温水泡发 3–4 小时。可以凉拌、炒蛋，或和莲子、红枣一起炖。",
+      "specs": [
+        [
+          "规格",
+          "干货 250g／包"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一包 250g",
+          "price": 500,
+          "unit": "包"
+        }
+      ],
+      "img": "images/golden-ear.jpg",
+      "imgAlt": "白瓷盘上堆着两大朵金黄色、皱褶层层的干燥金耳"
+    },
+    {
+      "active": false,
+      "id": "dianhong-toffee",
+      "shelf": "season",
+      "cat": "甜 · Sweets",
+      "han": "糖",
+      "tone": "tea",
+      "name": "滇红太妃糖",
+      "intro": "滇红茶香裹在杏仁太妃糖里。",
+      "story": "加入滇红原叶茶，杏仁果含量 38%，单颗包装。",
+      "specs": [
+        [
+          "内容量",
+          "80g，单颗包装"
+        ],
+        [
+          "保存",
+          "常温 30 天"
+        ],
+        [
+          "产地",
+          "云南"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一包 80g",
+          "price": 280,
+          "unit": "包"
+        }
+      ],
+      "_待补": "2026 中秋表单 PDF 有这一样；要不要列入本档待用户决定",
+      "img": "images/dianhong-toffee.jpg",
+      "imgAlt": "米白色「太妃糖・滇红茶味」纸盒，前面是两块切开、嵌着整颗杏仁的太妃糖"
+    },
+    {
+      "active": false,
+      "id": "matsutake-cookie",
+      "shelf": "season",
+      "cat": "饼 · Pastry",
+      "han": "茸",
+      "tone": "moss",
+      "name": "松茸饼干",
+      "intro": "香格里拉的松茸，烤进一片咸香饼干。",
+      "story": "用香格里拉的出口级松茸，配奶油、全蛋与一点黑胡椒烤成。",
+      "specs": [
+        [
+          "内容量",
+          "100g（10g × 10 片）"
+        ],
+        [
+          "成分",
+          "小麦粉、奶油、全蛋液、冻干松茸、盐、黑胡椒"
+        ],
+        [
+          "保存",
+          "常温 180 天"
+        ],
+        [
+          "产地",
+          "云南香格里拉"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "box",
+          "label": "一盒 10 片",
+          "price": 380,
+          "unit": "盒"
+        },
+        {
+          "key": "gift",
+          "label": "礼盒 30 片・附提袋",
+          "price": 1050,
+          "unit": "盒"
+        }
+      ],
+      "_待补": "2026 中秋表单 PDF 有这一样；要不要列入本档待用户决定",
+      "img": "images/matsutake-cookie.jpg",
+      "imgAlt": "两盒红色松茸饼干直放在米色桌面上，周围散着饼干、单片包装与新鲜松茸"
+    }
+  ]
+}

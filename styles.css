@@ -559,15 +559,68 @@ h1, h2, h3, h4 { font-weight: 400; line-height: 1.25; color: var(--ink); }
 /* ============================================================
    Product Cards
    ============================================================ */
-.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--flow-s) 0 0; }
+.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); padding: var(--s-3) 0 0; }
 .product { background: var(--paper); }
 .product .img-placeholder { aspect-ratio: 4/5; margin-bottom: var(--s-2); }
 .product .cat { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--tea); text-transform: uppercase; margin-bottom: 6px; }
 .product .cat.moss { color: var(--moss); }
-.product h3 { font-family: var(--font-han); font-size: 1.2rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 6px; }
-.product .origin { font-size: 0.85rem; color: var(--mist); margin-bottom: var(--s-2); font-family: var(--font-display); font-style: italic; }
+.product h3 {
+  font-family: var(--font-han);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  line-height: 1.35;
+  min-height: 2.7em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product .origin {
+  font-size: 0.85rem;
+  color: var(--mist);
+  margin-bottom: var(--s-2);
+  font-family: var(--font-display);
+  font-style: italic;
+  line-height: 1.45;
+  min-height: 2.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .product .price { font-family: var(--font-display); font-size: 1rem; color: var(--ink); letter-spacing: 0.05em; }
-@media (max-width: 760px) { .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); } }
+
+/* 折疊隱藏的好物（由 JS 動態控制，支援分類與展開） */
+.product.is-hidden {
+  display: none !important;
+}
+
+.products-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+  flex-wrap: wrap;
+}
+.btn-products-toggle {
+  cursor: pointer;
+  background: transparent;
+}
+.btn-products-toggle .arrow {
+  display: inline-block;
+  transition: transform var(--dur-ui) ease;
+}
+
+@media (max-width: 760px) {
+  .products { grid-template-columns: 1fr 1fr; gap: var(--s-3); padding-top: var(--s-2); }
+  .product h3 { font-size: 1.05rem; min-height: 2.7em; }
+  .product .origin { font-size: 0.8rem; line-height: 1.4; min-height: 2.8em; }
+  .products-actions { flex-direction: column; gap: var(--s-2); }
+  .products-actions .svc-cta { width: 100%; text-align: center; }
+}
 
 /* Sub-themes (yunnan/taiwan large characters) */
 .themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); margin: var(--flow-s) 0 0; }
@@ -1795,6 +1848,10 @@ body.region-taiwan .theme-han { color: var(--accent); }
 .fact-list li { padding: var(--s-2) 0; border-top: 1px solid var(--line); color: var(--ink-soft); line-height: 1.8; }
 .fact-list li:last-child { border-bottom: 1px solid var(--line); }
 .fact-list b { font-weight: 400; color: var(--ink); }
+.fact-list a { color: var(--accent); border-bottom: 1px solid var(--line); transition: border-color var(--dur-ui) var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .fact-list a:hover { border-bottom-color: var(--accent); }
+}
 .turns { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-4); }
 .turn { border-top: 1px solid var(--line); padding-top: var(--s-3); }
 .turn-year { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
