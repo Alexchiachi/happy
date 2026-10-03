@@ -6,7 +6,7 @@
 ## 1. 一句話
 
 簡家旗的一人公司「幸福餐桌」的課程銷售頁＋極簡後台。
-靜態 HTML 放在 GitHub（`alexchiachi/happy` 的 `executive-table/`），由 Cloudflare Workers 從 GitHub 自動部署；
+靜態 HTML 放在 GitHub（`alexchiachi/happy` 的 `executive-table/`），合併到 `main` 後由 GitHub Actions 部署到 Cloudflare Workers；
 表單、寄信、照片、管理頁全部在同一支 Worker 裡，沒有其他服務。
 這支 Worker 也負責收**大道至簡品牌站**（倉庫根目錄的 `connect.html`，GitHub Pages）的「連繫」來信，
 以及品牌站**雲南好物選購頁**（`shop/`）的訂單、**安寧幸福之家**（`anning/`）的入住預約。
@@ -136,7 +136,7 @@ Cloudflare 後台的 Secrets（使用者已設好，**不要寫進倉庫**）：
      `npx wrangler deploy --dry-run --outdir <暫存>` 可確認打包（含 `shop/products.json`、`anning/stay.json`）成功。
    - 容器連不到 `workers.dev`，正式站請使用者實測。
 5. commit（訊息用繁體中文，加 session 要求的署名行）→ push → 用 GitHub MCP 開 PR → squash 合併
-   → 把分支重設到新的 `origin/main`。使用者習慣直接合併，Cloudflare 合併後一兩分鐘自動上線（PR 也會有預覽網址）。
+   → 把分支重設到新的 `origin/main`。使用者習慣直接合併，合併後由 GitHub Actions「Deploy Worker to Cloudflare」部署（PR 沒有預覽網址，見第 7 節）。
 6. 回覆使用者：改了什麼、哪些同名處刻意沒改（問要不要改）、請他上線後確認哪裡。
 
 ## 7. 其他注意

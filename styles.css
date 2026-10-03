@@ -1885,6 +1885,66 @@ body.region-taiwan .theme-han { color: var(--accent); }
 @media (hover: hover) and (pointer: fine) {
   .fact-list a:hover { border-bottom-color: var(--accent); }
 }
+.press-quote {
+  border-left: 2px solid var(--accent);
+  padding: var(--s-2) 0 var(--s-2) var(--s-3);
+  margin: var(--s-4) 0;
+}
+.press-quote blockquote {
+  font-family: var(--font-han);
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: var(--ink);
+  font-weight: 300;
+  margin: 0;
+}
+.press-quote cite {
+  display: block;
+  margin-top: var(--s-1);
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--mist);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+.press-group {
+  margin-top: var(--s-5);
+}
+.press-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--s-1);
+  margin-bottom: var(--s-1);
+}
+.press-group h3 {
+  font-family: var(--font-han);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin: 0;
+}
+.press-group .press-group-en {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--mist);
+  letter-spacing: 0.05em;
+}
+.press-group .fact-list {
+  margin-top: 0;
+}
+.press-group .fact-list li:first-child {
+  border-top: none;
+}
+@media (max-width: 760px) {
+  .press-group-head {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
 .turns { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-4); }
 .turn { border-top: 1px solid var(--line); padding-top: var(--s-3); }
 .turn-year { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
