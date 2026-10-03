@@ -98,8 +98,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 :root:lang(zh-Hans) :is(h1, h2, h3, h4, .pull-quote q, .hero-title) { text-wrap: balance; }
 :root:lang(zh-Hans) .hero-title { letter-spacing: 0.06em; }
 :root:lang(zh-Hans) .door-title { letter-spacing: 0.05em; }
-/* 竖排標籤：SC 字型在竖排混排下字會疊在一起，改直立排列 */
-:root:lang(zh-Hans) .sticky-label { text-orientation: upright; letter-spacing: 0.2em; }
 :root:lang(zh-Hans) .pull-quote q { letter-spacing: 0.05em; }
 :root:lang(zh-Hans) .h-han-display { letter-spacing: 0.025em; }
 :root:lang(zh-Hans) .h-section { letter-spacing: 0.04em; }

@@ -191,6 +191,7 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 | 2026-10-02 | 照片素材庫建在 Google 雲端硬碟根目錄「大道至簡｜網站素材」，規則寫入第 0 節第 4 點 |
 | 2026-10-03 | 新增「去有風的地方」深入介紹頁 windy-place.html（九日行程，內容取自簡家旗提供的原文）；頁面照片一律取自網路，頁面放版權宣告（權利人來信即下架），沿用雲南頁的寫法；不使用影視劇照與肖像類照片 |
 | 2026-10-03 | 簡體頁字型：zh-cn 頁改載 Noto Serif SC（`build_zhcn.py` 換字型網址；`styles.css` 的 `:root:lang(zh-Hans)` 覆寫字型變數），不再用 TC 字型顯示簡體字。Google Fonts 以 unicode-range 切片，下載量不變 |
+| 2026-10-03 | 簡體頁排版微調：關閉 `palt`（全角標點不再被擠成靠左的窄標點）、`line-break: strict`、內文 18px／行高 1.9、標題字距減半、`text-wrap: pretty／balance`；標題字重維持原樣。僅作用於 `:root:lang(zh-Hans)`，繁體頁與下載量不變 |
 
 新決定加在表格最下方，並同步更新第 2 節事實表。
 
