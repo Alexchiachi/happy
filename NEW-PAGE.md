@@ -150,6 +150,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 - [ ] hover 包在 `@media (hover: hover) and (pointer: fine)`；補 `:active`；有 `prefers-reduced-motion` 版本
 - [ ] 按鈕、連結的可見文字就是名稱，不另寫不一致的 `aria-label`
 - [ ] 表單送到 Worker：伺服器端驗證、限流、重算金額（`security-and-hardening` 技能）
+- [ ] 短說明（導言、卡片說明、常見問題回答）一句一段、長句在逗號處斷行，不斷在詞中間：跑 `tools/format_short_text.py`（規則見 `DESIGN.md`）
 - [ ] 改了 `styles.css`／`scripts.js` 跑 `tools/bump_assets.py`；改了繁體頁跑 `tools/build_zhcn.py`
 
 **交出去之前**
@@ -166,6 +167,7 @@ jq '.categories.performance.score, .audits["largest-contentful-paint"].displayVa
 | 工具 | 什麼時候跑 |
 | --- | --- |
 | `tools/build_zhcn.py` | 改了任何品牌站繁體頁（重建 `zh-cn/`、sitemap、hreflang） |
+| `tools/format_short_text.py` | 新增或改了短說明段落（把短說明排成一句一段、長句斷行；先試跑，加 `--write` 才寫入） |
 | `tools/bump_assets.py` | 改了 `styles.css` 或 `scripts.js`（更新快取版本號） |
 | `tools/make_web_images.py` | 新增或換了 `shop/images/` 的照片 |
 | `tools/subset_fonts.py` | 改了 `shop/`、`anning/` 的文案、`products.json`、`stay.json`；或改了 `executive-table/` 的文案（加引數 `executive-table` 只做那組） |
