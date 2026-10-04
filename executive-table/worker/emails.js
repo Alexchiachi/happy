@@ -106,7 +106,7 @@ function guestEmailHtml_(f) {
     + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EAEFE6;border-radius:6px;"><tr><td style="padding:20px 24px;">'
     + '<div style="font-family:' + SERIF + ';font-size:13px;letter-spacing:2px;color:' + C.moss + ';">等待的時候</div>'
     + '<div style="margin-top:6px;font-family:' + SERIF + ';font-size:17px;line-height:1.8;color:' + C.ink + ';">也可以先預約線上一小時，先嚐一口。</div>'
-    + '<div style="margin-top:4px;font-family:' + SERIF + ';font-size:14px;line-height:1.8;color:' + C.soft + ';">每人 NT$15,000，進入全程時可全額折抵。直接回覆這封信就能安排。</div>'
+    + '<div style="margin-top:4px;font-family:' + SERIF + ';font-size:14px;line-height:1.8;color:' + C.soft + ';">每人 NT$50,000，進入全程時可全額折抵。直接回覆這封信就能安排。</div>'
     + '</td></tr></table></td></tr>';
 
   const inner = masthead_('Received')
@@ -163,7 +163,7 @@ function guestEmailText_(f) {
     f.name + '，日期一公布，就先通知你。',
     '',
     '首期工作坊日期與報名截止日確定後，我們會第一時間寫信到這個信箱。',
-    '等待的時候，也可以先預約線上一小時（每人 NT$15,000，可全額折抵全程），直接回覆這封信即可。',
+    '等待的時候，也可以先預約線上一小時（每人 NT$50,000，可全額折抵全程），直接回覆這封信即可。',
     '',
     '簡家旗｜幸福餐桌',
     PAGE_URL
