@@ -335,6 +335,7 @@ html { -webkit-tap-highlight-color: transparent; }
 .lines { display: grid; gap: 0.45rem; font-size: 0.95rem; }
 .lines div { display: flex; justify-content: space-between; gap: 1rem; font-variant-numeric: tabular-nums; }
 .lines div span:first-child { color: var(--ink-soft); }
+.lines .credit span:last-child { color: var(--seal); }
 .total { display: grid; gap: 0.1rem; padding-top: 0.9rem; border-top: 1px solid var(--line); }
 .total .lbl { font-size: 0.85rem; letter-spacing: 0.12em; color: var(--mist); }
 .total .num { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 2.8rem); font-weight: 500; font-variant-numeric: tabular-nums lining-nums; letter-spacing: 0.01em; line-height: 1.15; }
@@ -667,7 +668,7 @@ footer { border-top: 0; }
       <li><a href="#outcomes"><b>成效</b><span>前後問卷對照</span></a></li>
       <li><a href="#host"><b>主持人</b><span>簡家旗</span></a></li>
       <li><a href="#pricing"><b>費用與試算</b><span>NT$50,000 起</span></a></li>
-      <li><a href="#faq"><b>常見問題</b><span>交通、日期</span></a></li>
+      <li><a href="#faq"><b>常見問題</b><span>交通、折抵、日期</span></a></li>
     </ul>
     <div class="menu-foot">
       <a class="btn" href="#next">預約線上一小時</a>
@@ -688,7 +689,7 @@ footer { border-top: 0; }
           <a class="btn" href="#next">預約線上一小時</a>
           <a class="text-link" href="#stages">看三個階段</a>
         </div>
-        <p class="hero-note">線上一小時每人 NT$50,000，統一收費。</p>
+        <p class="hero-note">線上一小時每人 NT$50,000，進入全程時可全額折抵。</p>
       </div>
 
       <figure class="table-fig">
@@ -798,7 +799,7 @@ footer { border-top: 0; }
           </div>
           <div style="display:grid; gap:1rem; align-content:start;">
             <div class="note"><b>課前準備</b><span>一道菜，或一個食材。帶著它的故事來。</span></div>
-            <div class="note"><b>費用</b><span>每人 NT$50,000，統一收費。</span></div>
+            <div class="note"><b>費用</b><span>每人 NT$50,000，可全額折抵全程費用。</span></div>
           </div>
         </div>
       </div>
@@ -889,7 +890,7 @@ footer { border-top: 0; }
           <tbody>
             <tr data-plan="cohort"><td>高管小班・全程</td><td>三階段完整參與，每期 8 人</td><td>每人 NT$380,000 起</td></tr>
             <tr data-plan="company"><td>企業包班・全程</td><td>同一團隊 10 人以內，三階段完整參與</td><td>NT$3,000,000 起</td></tr>
-            <tr data-plan="taster"><td>第一階段單獨參加</td><td>線上一小時</td><td>每人 NT$50,000，統一收費</td></tr>
+            <tr data-plan="taster"><td>第一階段單獨參加</td><td>線上一小時</td><td>每人 NT$50,000，可全額折抵全程費用</td></tr>
           </tbody>
         </table>
       </div>
@@ -914,6 +915,7 @@ footer { border-top: 0; }
             </div>
             <span class="fine" id="headHint">小班每期 8 人，同一公司可派 1 至數位參加。</span>
           </div>
+          <label class="toggle" id="creditWrap"><input type="checkbox" id="credit">這些人已先參加第一階段（每人 NT$50,000 全額折抵）</label>
         </div>
         <div class="calc-out" aria-live="polite">
           <div class="lines" id="lines"></div>
@@ -938,7 +940,7 @@ footer { border-top: 0; }
       <div class="faq">
         <details><summary>小班和包班，我該選哪一種？</summary><p>想在沒有上下級關係的桌邊說真話，選跨公司小班（每期 8 人，首期採用此形式）。整個經營團隊正在轉型、接班或重組，選企業包班（10 人以內）。</p></details>
         <details><summary>可以只參加第三階段的八週陪伴嗎？</summary><p>不行。陪伴必須接在工作坊之後才有意義，所以第三階段不單獨販售。</p></details>
-        <details><summary>先參加第一階段，之後的費用怎麼算？</summary><p>第一階段每人 NT$50,000，統一收費。全程費用見上方費用表。</p></details>
+        <details><summary>先參加第一階段，之後的費用怎麼算？</summary><p>第一階段每人 NT$50,000，決定進入全程時可全額折抵全程費用。</p></details>
         <details><summary>費用包含哪些？</summary><p>全程費用含工作坊兩晚食宿、在地食材與八週陪伴，不含往返南投交通。</p></details>
         <details><summary>課程會評分或考核參加者嗎？</summary><p>不會。每場餐桌的紀錄由同學彼此見證，不評分。成效只用課程前後各一次、少於十題的簡短問卷來看。</p></details>
         <details><summary>首期什麼時候開始？</summary><p>首期工作坊日期與報名截止日待定。建議先安排第一階段線上一小時，屆時會優先通知。</p></details>
@@ -1027,7 +1029,7 @@ footer { border-top: 0; }
 </main>
 
 <div class="dock" id="dock" aria-hidden="true">
-  <div class="dock-info"><b>線上一小時</b><span>每人 NT$50,000，統一收費</span></div>
+  <div class="dock-info"><b>線上一小時</b><span>每人 NT$50,000，可全額折抵全程</span></div>
   <a class="btn small" href="#next" tabindex="-1">預約線上一小時</a>
 </div>
 
@@ -1223,6 +1225,8 @@ footer { border-top: 0; }
     $("#heads").textContent = heads + " 人";
     $("#minus").disabled = heads <= lo;
     $("#plus").disabled = heads >= hi;
+    $("#creditWrap").hidden = plan === "taster";
+    const credit = plan !== "taster" && $("#credit").checked;
     const lines = $("#lines"); lines.textContent = "";
     let total, suffix = "起";
     if (plan === "cohort") {
@@ -1238,9 +1242,15 @@ footer { border-top: 0; }
       total = PRICE.taster * heads; suffix = "";
       $("#headHint").textContent = "建議由一至兩位決策者親身參加。";
     }
-    $("#totalLbl").textContent = plan === "taster" ? "第一階段應付" : "全程應付";
+    if (credit) {
+      const c = PRICE.taster * heads;
+      lines.append(line("第一階段折抵", "− " + fmt(c), "credit"));
+      total -= c;
+    }
+    $("#totalLbl").textContent = plan === "taster" ? "第一階段應付" : (credit ? "折抵後全程應付" : "全程應付");
     tweenTotal(total, suffix);
-    $("#perPerson").textContent = plan === "company" ? "平均每人約 " + fmt(Math.round(total / heads)) + (heads < 10 ? "；10 人時約 " + fmt(Math.round(total / 10)) : "") : "";
+    $("#perPerson").textContent = plan === "company" ? "平均每人約 " + fmt(Math.round(total / heads)) + (heads < 10 ? "；10 人時約 " + fmt(Math.round(total / 10)) : "") :
+      plan === "taster" ? "日後進入全程時，這筆費用可全額折抵。" : "";
     $$("#priceTable tbody tr").forEach(r => r.classList.toggle("hl", r.dataset.plan === plan));
   }
   $$('input[name="plan"]').forEach(r => r.addEventListener("change", () => {
@@ -1252,6 +1262,7 @@ footer { border-top: 0; }
   }));
   $("#minus").addEventListener("click", () => { heads--; clampHeads(); renderCalc(); });
   $("#plus").addEventListener("click", () => { heads++; clampHeads(); renderCalc(); });
+  $("#credit").addEventListener("change", renderCalc);
   renderCalc();
 
   /* ---------- Inquiry form ---------- */
