@@ -439,6 +439,7 @@ h1, h2, .pull-quote q { text-wrap: balance; }
   margin-bottom: var(--s-3);
 }
 .door-desc { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: var(--s-4); }
+@media (min-width: 861px) { .door-desc { min-height: calc(3 * 1.8em + 0.5em); } }  /* 三張卡的說明行數不同，留同樣高度，標題與按鈕才對得齊 */
 .door-cta {
   font-family: var(--font-han);
   font-size: 0.85rem;
@@ -689,6 +690,9 @@ h1, h2, .pull-quote q { text-wrap: balance; }
 /* 道情物說明：一句一段，句內在逗號處換行，不讓詞被斷在中間 */
 .triad-text span { display: block; }
 .triad-text span + span { margin-top: 0.7em; }
+/* 短說明段落：一句一段（span.s），長句在逗號處用 <br> 換行；pretty 讓折行時不留單字 */
+.s { display: block; text-wrap: pretty; }
+.s + .s { margin-top: 0.5em; }
 @media (max-width: 760px) { .triad { grid-template-columns: 1fr; } }
 
 .negation { padding: var(--s-6) 0; max-width: 720px; margin: 0 auto; }
