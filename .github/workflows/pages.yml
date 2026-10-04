@@ -36,6 +36,9 @@ jobs:
              services.html windy-place.html executive.html cases.html connect.html privacy.html 404.html \
              robots.txt sitemap.xml styles.css scripts.js _site/
           cp -r images journal zh-cn shop anning _site/
+          # 幸福餐桌專欄：只發布網頁（README 記照片來源，不上網站）
+          mkdir _site/happytable
+          cp happytable/*.html _site/happytable/
           # 其他對外使用中的網頁：內耗熵值檢測、課程頁舊網址、永恆之子整椎中心預約系統
           cp -r inner-flow executive-table eternitychildbooking _site/
           cp inner-flow.html _site/
