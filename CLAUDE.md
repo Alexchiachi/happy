@@ -6,6 +6,7 @@
 - **把品牌站升級成 daoissimple.com 母體網站，先讀 [`MOTHER-UPGRADE.md`](MOTHER-UPGRADE.md)**：事實表（數字與價格的唯一來源）、
   分階段步驟與進度、決定紀錄、還沒決定的事。Google 文件版是正本，改一邊要同步另一邊。
 - 品牌站的視覺規範（色票、字體、元件、語氣、該做與不該做）在 [`DESIGN.md`](DESIGN.md)，做新頁面或改樣式前先讀它。
+- **短說明文字一律「一句一段、長句在逗號處斷行」，文字不動只改排版**：規則在 [`DESIGN.md`](DESIGN.md)「短說明段落：一句一段」，工具是 `tools/format_short_text.py`。
 - **做新網頁或改網頁效能前，先讀 [`NEW-PAGE.md`](NEW-PAGE.md)**：踩過的坑（中文字型、JS 才出現的開場、輪播、照片格式）、怎麼量才準、檢查清單與工具。
 - 幸福餐桌專欄（`happytable/`）的寫作規則、照片來源與待辦在 [`happytable/README.md`](happytable/README.md)；專欄文字不用「我」與「我們」。
 - 雲南好物選購頁（`shop/`）的素材流程與架構在 [`shop/README.md`](shop/README.md)。
