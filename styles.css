@@ -686,6 +686,9 @@ h1, h2, .pull-quote q { text-wrap: balance; }
 .triad-cell:nth-child(3) .triad-han { color: var(--moss); }
 .triad-en { font-family: var(--font-display); font-style: italic; font-size: 0.9rem; color: var(--mist); letter-spacing: 0.15em; margin-bottom: var(--s-3); text-transform: uppercase; }
 .triad-text { color: var(--ink-soft); line-height: 1.85; }
+/* 道情物說明：一句一段，句內在逗號處換行，不讓詞被斷在中間 */
+.triad-text span { display: block; }
+.triad-text span + span { margin-top: 0.7em; }
 @media (max-width: 760px) { .triad { grid-template-columns: 1fr; } }
 
 .negation { padding: var(--s-6) 0; max-width: 720px; margin: 0 auto; }
