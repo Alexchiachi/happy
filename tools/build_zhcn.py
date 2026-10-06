@@ -44,7 +44,12 @@ SKIP_FILES = {"inner-flow.html", "404.html"}
 # 只有繁體版的頁面：不產生 zh-cn 副本、不加 hreflang 與「简体」切換，sitemap 只列繁體一個網址。
 # 幸福誌卡片（journal.html）在簡體版會被拿掉，免得連到不存在的頁。
 # 簡家旗要求這批「餐桌種回土地」系列只出繁體版（2026-10）。
-TW_ONLY = {"journal/2026-10-yibin-happy-table.html"}
+TW_ONLY = {
+    "journal/2026-10-yibin-happy-table.html",
+    "journal/2026-10-yuanyang-terraces.html",
+    "journal/2026-10-puer-ancient-tea.html",
+    "journal/2026-10-mengzi-crossing-bridge-noodles.html",
+}
 
 # zh-cn/ 底下不由這支腳本產生、重建時要保留的項目。
 KEEP_IN_OUT = {"executive-table"}
