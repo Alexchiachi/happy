@@ -41,6 +41,11 @@ SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
 # （會在任意深度的網址上被提供），不能讓這支腳本按相對路徑改寫。
 SKIP_FILES = {"inner-flow.html", "404.html"}
 
+# 只有繁體版的頁面：不產生 zh-cn 副本、不加 hreflang 與「简体」切換，sitemap 只列繁體一個網址。
+# 幸福誌卡片（journal.html）在簡體版會被拿掉，免得連到不存在的頁。
+# 簡家旗要求這批「餐桌種回土地」系列只出繁體版（2026-10）。
+TW_ONLY = {"journal/2026-10-yibin-happy-table.html"}
+
 # zh-cn/ 底下不由這支腳本產生、重建時要保留的項目。
 KEEP_IN_OUT = {"executive-table"}
 
@@ -111,6 +116,11 @@ def sitemap(rels):
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
            ' xmlns:xhtml="http://www.w3.org/1999/xhtml">']
     for rel in rels:
+        if rel in TW_ONLY:
+            out.append("  <url>")
+            out.append("    <loc>%s%s</loc>" % (BASE, rel))
+            out.append("  </url>")
+            continue
         for loc in (BASE + rel, BASE + "zh-cn/" + rel):
             out.append("  <url>")
             out.append("    <loc>%s</loc>" % loc)
@@ -154,6 +164,11 @@ def main():
         html = src.read_text(encoding="utf-8")
         html = strip_lang_switch(html)
         html = strip_alternates(html)
+
+        if rel in TW_ONLY:                # 只有繁體：保持乾淨，不加 hreflang、不加切換、不產簡體版
+            src.write_text(html, encoding="utf-8")
+            n_zh += 1
+            continue
 
         # ── 繁體版：加 hreflang 與「简体」切換 ──────────────────
         zh = html.replace('<link rel="canonical"',
@@ -210,6 +225,10 @@ def main():
 
         # 簡體頁改載 Noto Serif SC（字形與字集都是簡體專用，避免 TC 字型缺字時混用後備字體）
         cn = cn.replace("Noto+Serif+TC", "Noto+Serif+SC")
+
+        # 只有繁體版的文章，簡體版幸福誌不放它的卡片
+        for tw in TW_ONLY:
+            cn = re.sub(r'\s*<a href="%s"[^>]*>.*?</a>' % re.escape(tw), "", cn, flags=re.S)
 
         # 轉換文字。OpenCC 只動中日韓字元，class 名稱、網址、檔名都是 ASCII，不受影響。
         cn = CC.convert(cn)
