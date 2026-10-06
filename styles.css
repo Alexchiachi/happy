@@ -1124,9 +1124,9 @@ p, li, blockquote { text-wrap: pretty; }
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center,
-              rgba(42, 37, 32, 0.46) 0%,
-              rgba(42, 37, 32, 0.26) 62%,
-              rgba(42, 37, 32, 0.15) 100%);
+              rgba(42, 37, 32, 0.64) 0%,
+              rgba(42, 37, 32, 0.46) 62%,
+              rgba(42, 37, 32, 0.26) 100%);
 }
 .img-placeholder.cover-title .cover-inner,
 .img-placeholder.has-title .cover-inner {
@@ -1153,6 +1153,21 @@ p, li, blockquote { text-wrap: pretty; }
   text-shadow: 0 1px 20px rgba(42, 37, 32, 0.4);
   text-wrap: balance;
 }
+
+/* 有照片的封面：照片亮度不一（白桌巾、天空、夕陽），預設的淡暗罩壓不住，
+   標題會跟背景混在一起。有 <picture> 時改用較深、中央最深的暗罩，
+   讓白字在最亮的照片上也有 4.5:1 以上的對比（用 tools 量過最亮處）。 */
+.img-placeholder.cover-title:has(> picture)::after,
+.img-placeholder.has-title:has(> picture)::after {
+  background: radial-gradient(ellipse at center,
+              rgba(42, 37, 32, 0.72) 0%,
+              rgba(42, 37, 32, 0.66) 60%,
+              rgba(42, 37, 32, 0.54) 100%);
+}
+.img-placeholder.cover-title:has(> picture) .meta,
+.img-placeholder.has-title:has(> picture) .meta { color: rgba(250, 246, 239, 0.92); }
+.img-placeholder.cover-title:has(> picture) h1,
+.img-placeholder.has-title:has(> picture) h3 { text-shadow: 0 1px 3px rgba(42, 37, 32, 0.6), 0 1px 20px rgba(42, 37, 32, 0.5); }
 
 /* 列表卡片：色塊小，字級跟著縮 */
 .article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
