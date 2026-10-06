@@ -1188,6 +1188,32 @@ a:active > .img-placeholder.has-title h2 { color: #F2D27A; }
   .img-placeholder.has-title h3 { transition: none; }
 }
 
+/* 標題不折出單獨一個字：每個標題由 HTML 標一個 --n（最長詞組約幾個字），
+   字級取「原本的字級」與「讓最長詞組剛好排得進封面寬度」兩者較小的那個。
+   封面寬度用 container query 量，所以手機、平板、桌面都不用另外調。
+   （1.1 是每個字的寬度含字距 0.08em 再留一點餘裕。） */
+.article-cover.cover-title,
+.article-card .img-placeholder.has-title,
+.article-feature .img-placeholder.has-title { container-type: inline-size; }
+.article-cover.cover-title h1[style*="--n"] {
+  --fit: calc((100cqw - 2 * clamp(1.75rem, 6vw, 4rem)) / (var(--n) * 1.1));
+  font-size: min(clamp(1.7rem, 4.6vw, 2.9rem), var(--fit));
+}
+.article-cover.cover-title h1.t-xl[style*="--n"] { font-size: min(clamp(2.0rem, 6.0vw, 3.9rem), var(--fit)); }
+.article-cover.cover-title h1.t-lg[style*="--n"] { font-size: min(clamp(1.85rem, 5.2vw, 3.3rem), var(--fit)); }
+.article-cover.cover-title h1.t-md[style*="--n"] { font-size: min(clamp(1.65rem, 4.5vw, 2.8rem), var(--fit)); }
+.article-cover.cover-title h1.t-sm[style*="--n"] { font-size: min(clamp(1.4rem, 3.7vw, 2.3rem), var(--fit)); }
+.article-card .img-placeholder.has-title h3[style*="--n"] {
+  --fit: calc((100cqw - 2 * clamp(1rem, 3vw, 1.75rem)) / (var(--n) * 1.1));
+  font-size: min(clamp(1.05rem, 2.2vw, 1.4rem), var(--fit));
+  max-width: 100%;
+}
+.article-feature .img-placeholder.has-title h2[style*="--n"] {
+  --fit: calc((100cqw - 2 * clamp(1.5rem, 4vw, 2.5rem)) / (var(--n) * 1.1));
+  font-size: min(clamp(1.5rem, 3.2vw, 2.3rem), var(--fit));
+  max-width: 100%;
+}
+
 /* 列表卡片：色塊小，字級跟著縮 */
 .article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
 .article-card .img-placeholder.has-title .meta { margin-bottom: var(--s-2); }
