@@ -26,6 +26,7 @@
     formFail2:    { tw: '，或稍後再試一次。',        cn: '，或稍后再试一次。' },
     countAll:     { tw: ' 篇文章',                 cn: ' 篇文章' },
     countOne:     { tw: ' 篇',                    cn: ' 篇' },
+    countNone:    { tw: '：文章整理中，之後陸續放進來。', cn: '：文章整理中，之后陆续放进来。' },
     carouselPause:{ tw: '暫停輪播',                 cn: '暂停轮播' },
     carouselPlay: { tw: '繼續輪播',                 cn: '继续轮播' },
     copied:       { tw: '已複製，到微信搜尋貼上',    cn: '已复制，到微信搜索粘贴' },
@@ -260,7 +261,9 @@
         if (status) {
           status.textContent = want === '全部'
             ? shown + T('countAll')
-            : want + '：' + shown + T('countOne');
+            : shown === 0
+              ? want + T('countNone')
+              : want + '：' + shown + T('countOne');
         }
       });
     });
@@ -269,6 +272,21 @@
     const status0 = document.querySelector('.filter-status');
     if (status0) status0.textContent = cards.length + T('countAll');
     filters.forEach((x) => x.setAttribute('aria-pressed', String(x.classList.contains('active'))));
+
+    // 網址帶分類就直接篩選：journal.html#幸福餐桌
+    // （專欄首頁的「文章」入口用這個；沒有 JS 時就是看全部文章）
+    const wanted = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (wanted) {
+      const target = [...filters].find((x) => x.dataset.cat === wanted);
+      if (target) {
+        target.click();
+        const bar = document.querySelector('.filters');
+        if (bar) {
+          const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          bar.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
+        }
+      }
+    }
   }
 
   // --- 商品卡帶著商品名去寫信 ---
