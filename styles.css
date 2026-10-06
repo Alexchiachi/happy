@@ -1167,7 +1167,26 @@ p, li, blockquote { text-wrap: pretty; }
 .img-placeholder.cover-title:has(> picture) .meta,
 .img-placeholder.has-title:has(> picture) .meta { color: rgba(250, 246, 239, 0.92); }
 .img-placeholder.cover-title:has(> picture) h1,
-.img-placeholder.has-title:has(> picture) h3 { color: #F2D27A; text-shadow: 0 1px 3px rgba(42, 37, 32, 0.6), 0 1px 20px rgba(42, 37, 32, 0.5); }
+.img-placeholder.has-title:has(> picture) h3 { text-shadow: 0 1px 3px rgba(42, 37, 32, 0.6), 0 1px 20px rgba(42, 37, 32, 0.5); }
+
+/* 滑鼠移到（或手指按住、鍵盤聚焦）標題時，白字變亮金色，提示這裡可以點。
+   平常維持白色：白字的對比最高。 */
+.img-placeholder.cover-title h1,
+.img-placeholder.has-title h2,
+.img-placeholder.has-title h3 { transition: color var(--dur-chrome, .2s) var(--ease, ease); }
+.img-placeholder.cover-title h1:hover,
+.img-placeholder.has-title h2:hover,
+.article-card:hover .img-placeholder.has-title h3,
+.article-card:focus-visible .img-placeholder.has-title h3,
+.article-card:active .img-placeholder.has-title h3,
+a:hover > .img-placeholder.has-title h2,
+a:focus-visible > .img-placeholder.has-title h2,
+a:active > .img-placeholder.has-title h2 { color: #F2D27A; }
+@media (prefers-reduced-motion: reduce) {
+  .img-placeholder.cover-title h1,
+  .img-placeholder.has-title h2,
+  .img-placeholder.has-title h3 { transition: none; }
+}
 
 /* 列表卡片：色塊小，字級跟著縮 */
 .article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
