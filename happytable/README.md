@@ -10,6 +10,7 @@
 - 「稻田裡的餐桌」名稱保留（組織名與 SROI 認證對象）；幸福餐桌是它的延伸：一棵樹與一片森林。
 - 宜蘭第一張餐桌不點名合作農民。
 - 標題與引言去標點（見 `DESIGN.md`）；樣式沿用 `styles.css` 既有元件（`.page-hero`、`.pull-quote`、`.article-body`、`.fact-list`、`.proof-grid`、`.photo-row`），沒有新增 CSS。
+- **簡體版照常自動產生，不擋**（簡家旗 2026-10-06 決定）：這個網頁主要給台灣與大陸以外的讀者看，大陸另有專屬網頁或小程序。幸福誌的幸福餐桌文章（宜賓、元陽、普洱、蒙自）都有簡體版；`tools/build_zhcn.py` 的 `TW_ONLY` 預設為空，只有簡家旗明說某頁不要簡體時才加。
 - 發布：`.github/workflows/pages.yml` 只複製 `happytable/*.html`，這份 README 不上網站。
 
 ## 照片
