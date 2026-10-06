@@ -1167,7 +1167,7 @@ p, li, blockquote { text-wrap: pretty; }
 .img-placeholder.cover-title:has(> picture) .meta,
 .img-placeholder.has-title:has(> picture) .meta { color: rgba(250, 246, 239, 0.92); }
 .img-placeholder.cover-title:has(> picture) h1,
-.img-placeholder.has-title:has(> picture) h3 { text-shadow: 0 1px 3px rgba(42, 37, 32, 0.6), 0 1px 20px rgba(42, 37, 32, 0.5); }
+.img-placeholder.has-title:has(> picture) h3 { color: #F2D27A; text-shadow: 0 1px 3px rgba(42, 37, 32, 0.6), 0 1px 20px rgba(42, 37, 32, 0.5); }
 
 /* 列表卡片：色塊小，字級跟著縮 */
 .article-card .img-placeholder.has-title { padding: clamp(1rem, 3vw, 1.75rem); }
