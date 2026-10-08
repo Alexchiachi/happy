@@ -2,10 +2,10 @@
   "_說明": "雲南好物的商品與檔期設定。網頁（shop.js）和 Worker（executive-table/worker/orders.js）共用這一份：金額由 Worker 依這裡重算。商品 id 與規格 key 上線後不要改，舊訂單會對不上；要下架改 active:false。",
   "season": {
     "name": "秋收・光輝十月",
-    "deadline": "2026-10-25T23:59:59+08:00",
-    "deadlineText": "2026 年 10 月 25 日",
-    "ship": "10 月底陸續寄出",
-    "note": "限期收單，截止後統一向產地叫貨，10 月底陸續寄出。"
+    "deadline": "2026-11-11T23:59:59+08:00",
+    "deadlineText": "2026 年 11 月 11 日",
+    "ship": "10 月底陸續出貨",
+    "note": "限期收單至 11 月 11 日，10 月底陸續出貨。"
   },
   "shipping": {
     "free": 3000,
