@@ -74,6 +74,8 @@
     不另開資料表與管理頁：直接寫進 `letters` 表，在 `/admin` 的「大道至簡來信」分頁用通關碼搜尋；`subject` 格式 `[問道之鏡] DAO-123456 意向` 或 `[花瓣預約] DAO-123456 信物`，
     `page` 欄固定 `daoissimple:mirror` 或 `daoissimple:petal`，`email` 留空。通關碼在 Worker 內產生並回傳網頁，通知寄 `LETTER_NOTIFY_EMAIL`，因為沒有客人 email 所以不寄確認信。
     限流、蜜罐、大小限制與 `/api/letter` 同一套（共用 `letters.ip_hash`）。
+    **寄信在回應前等結果**（逾時 12 秒、失敗重試一次），回傳 `{ ok, code, mailed }`；`mailed:false` 代表資料已存進 `letters` 但通知信沒寄出，網頁會如實告知客人改用 LINE 回傳通關碼，
+    原因寫在該筆的 `mail_status` 欄（`owner failed: …; retry failed: …`）。通知信沒到信箱時，先到 `/admin`「大道至簡來信」搜通關碼看這一欄。
 15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。
     這是**旅居方案（短期租賃居住）**，不是旅行社行程，文案不要寫成跟團、套裝行程。
     三種房型（雙人套房 8,888、雙人雅房 6,666、單人雅房 3,666，都是 7 天 6 夜）各一間，可複選；

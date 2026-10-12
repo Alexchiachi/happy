@@ -77,13 +77,21 @@ export async function handleDao(request, env, ctx, url) {
      VALUES (datetime('now'), ?, '', ?, ?, ?, ?, ?) RETURNING id, created_at`
   ).bind(isMirror ? '問道之鏡訪客' : f.name, subject, message, 'daoissimple:' + f.type, f.lang, ipHash).first();
 
-  // 資料已經存好；寄信放到回應之後，不讓客人等
-  ctx.waitUntil(notify(env, url, { id: row.id, at: formatTaipei(row.created_at), code, subject, message, f }));
-  return json({ ok: true, code });
+  // 資料已經存好。寄信在回應前等結果（最多約 25 秒），失敗會重試一次，
+  // 讓網頁能如實告訴客人「通知信有沒有寄出」，而不是只因為存檔成功就說已送達。
+  // 沒寄出時資料仍在 /admin「大道至簡來信」，mail_status 欄會寫明原因。
+  const mailed = await notify(env, url, { id: row.id, at: formatTaipei(row.created_at), code, subject, message, f });
+  return json({ ok: true, code, mailed });
 }
 
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// SMTP 連線沒有內建逾時，卡住時會一直等；包一層逾時，讓重試與回應都不被拖住
+function withTimeout(promise, ms) {
+  return Promise.race([promise, new Promise(resolve => setTimeout(() => resolve('failed: timeout'), ms))]);
+}
+
+// 回傳 true 代表通知信確實寄出；寄信結果（含重試）寫進 letters.mail_status 供管理頁查看
 async function notify(env, url, n) {
   const to = env.LETTER_NOTIFY_EMAIL || DEFAULT_NOTIFY;
   const adminUrl = url.origin + '/admin#letters';
@@ -95,12 +103,22 @@ async function notify(env, url, n) {
     + '<p style="color:#736C63;margin-top:20px">客人會憑通關碼從 LINE、信箱或微信聯繫，請以通關碼對照。'
     + '到 <a href="' + esc(adminUrl) + '">管理頁</a> 搜尋通關碼，處理完標記狀態。</p></div>';
   const text = [n.code + '　' + n.at, '', n.message, '', '客人會憑通關碼聯繫，請以通關碼對照。管理頁：' + adminUrl].join('\n');
-  const status = await sendMail(env, {
+  const msg = {
     to,
     subject: '[大道至簡] ' + n.subject,
     html, text,
     fromName: env.LETTER_FROM_NAME || '大道至簡 · Dao is simple',
     gmail: env.LETTER_GMAIL_APP_PASSWORD ? { user: to, pass: env.LETTER_GMAIL_APP_PASSWORD } : null
-  });
-  await env.DB.prepare('UPDATE letters SET mail_status = ? WHERE id = ?').bind('owner ' + status, n.id).run();
+  };
+
+  let status = await withTimeout(sendMail(env, msg), 12000);
+  const log = ['owner ' + status];
+  if (String(status).startsWith('failed')) {
+    status = await withTimeout(sendMail(env, msg), 12000);
+    log.push('retry ' + status);
+  }
+  try {
+    await env.DB.prepare('UPDATE letters SET mail_status = ? WHERE id = ?').bind(log.join('; ').slice(0, 300), n.id).run();
+  } catch (e) { /* 狀態欄寫不進去不影響回應 */ }
+  return status === 'sent';
 }
