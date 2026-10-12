@@ -69,6 +69,11 @@
     renachien1@gmail.com（`SHOP_NOTIFY_EMAIL`），客人收到訂單確認＋付款資訊。付款仍是 LINE Pay／匯款＋後台手動改狀態。
     之後加上：送禮（收件人、卡片、不附價格明細）、後台填物流與追蹤號碼、改「已付款」「已出貨」時寄信通知客人。
     `orders` 表後加的欄位在 `ensureOrderSchema` 裡用 `ALTER TABLE ... ADD COLUMN` 補（重複欄位的錯誤略過）。
+15a. **大道至簡門戶的問道之鏡與花瓣預約**（2026-10-12）：`/api/dao`（`worker/dao.js`），給 `Alexchiachi/daoissimple` 門戶用。
+    這兩個表單**不收 email**（客人多用 LINE 或微信），所以不能用要求 email 的 `/api/letter`。
+    不另開資料表與管理頁：直接寫進 `letters` 表，在 `/admin` 的「大道至簡來信」分頁用通關碼搜尋；`subject` 格式 `[問道之鏡] DAO-123456 意向` 或 `[花瓣預約] DAO-123456 信物`，
+    `page` 欄固定 `daoissimple:mirror` 或 `daoissimple:petal`，`email` 留空。通關碼在 Worker 內產生並回傳網頁，通知寄 `LETTER_NOTIFY_EMAIL`，因為沒有客人 email 所以不寄確認信。
+    限流、蜜罐、大小限制與 `/api/letter` 同一套（共用 `letters.ip_hash`）。
 15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。
     這是**旅居方案（短期租賃居住）**，不是旅行社行程，文案不要寫成跟團、套裝行程。
     三種房型（雙人套房 8,888、雙人雅房 6,666、單人雅房 3,666，都是 7 天 6 夜）各一間，可複選；
@@ -88,6 +93,7 @@
             └─ run_worker_first：/api/*、/admin、/admin/*、/photos/* → executive-table/worker/index.js
                  ├─ POST /api/inquiry     存 D1 inquiries → Gmail SMTP 寄 2 封 HTML 信（通知主理人、確認給預約者）
                  ├─ POST /api/letter      大道至簡品牌站來信 → D1 letters → 通知 dadaoissimple@gmail.com＋收信確認
+                 ├─ POST /api/dao         大道至簡門戶 (daoissimple) 的問道之鏡與花瓣預約 → D1 letters（無 email）→ 通知 dadaoissimple@gmail.com
                  ├─ POST /api/order       雲南好物訂單 → 依 shop/products.json 重算 → D1 orders → 通知 SHOP_NOTIFY_EMAIL＋訂單確認
                  ├─ POST /api/stay        安寧幸福之家預約 → 依 anning/stay.json 重算 → D1 stays → 通知 SHOP_NOTIFY_EMAIL＋預約確認
                  ├─ GET  /api/photos      公開照片清單；GET /photos/<id>-<ver>.<ext> 照片本身

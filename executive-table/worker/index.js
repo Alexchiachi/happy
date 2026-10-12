@@ -11,6 +11,7 @@
  *   GET  /api/admin/export.csv   匯出 CSV（Excel 可直接開）
  *   GET  /api/photos、/photos/*  幻燈片照片（管理頁上傳；見 photos.js）
  *   POST /api/letter             大道至簡品牌站「連繫」表單（見 letters.js）
+ *   POST /api/dao                大道至簡門戶 (daoissimple) 的問道之鏡與花瓣預約，寫進來信資料表（見 dao.js）
  *   POST /api/order              雲南好物選購頁（品牌站 shop/）的訂單（見 orders.js）
  *   POST /api/stay               雲南安寧幸福之家（品牌站 anning/）的入住預約（見 stays.js）
  *   POST /api/happiness          幸福影響力記帳本的存入，代為開 GitHub Issue（見 happiness.js）
@@ -30,6 +31,7 @@ import { verifyAccess } from './access.js';
 import { sendMail } from './mail.js';
 import { json, hashIp, formatTaipei } from './util.js';
 import { handleLetter, handleAdminLetters, LETTER_STATUSES } from './letters.js';
+import { handleDao } from './dao.js';
 import { handleOrder, handleAdminOrders, ORDER_STATUSES } from './orders.js';
 import { handleStay, handleAdminStays, STAY_STATUSES } from './stays.js';
 import { handleHappiness, handleAdminHappiness } from './happiness.js';
@@ -55,6 +57,11 @@ export default {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
         if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
         return cors(request, env, await handleLetter(request, env, ctx, url));
+      }
+      if (path === '/api/dao') {
+        if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
+        if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
+        return cors(request, env, await handleDao(request, env, ctx, url));
       }
       if (path === '/api/order') {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
