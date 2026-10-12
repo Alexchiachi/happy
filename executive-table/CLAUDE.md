@@ -74,6 +74,10 @@
     不另開資料表與管理頁：直接寫進 `letters` 表，在 `/admin` 的「大道至簡來信」分頁用通關碼搜尋；`subject` 格式 `[問道之鏡] DAO-123456 意向` 或 `[花瓣預約] DAO-123456 信物`，
     `page` 欄固定 `daoissimple:mirror` 或 `daoissimple:petal`，`email` 留空。通關碼在 Worker 內產生並回傳網頁，通知寄 `LETTER_NOTIFY_EMAIL`，因為沒有客人 email 所以不寄確認信。
     限流、蜜罐、大小限制與 `/api/letter` 同一套（共用 `letters.ip_hash`）。
+    **保存期限自動執行**：`purgeExpiredDao`（`dao.js`）由 Cron Trigger 每天跑一次（`wrangler.jsonc` 的 `triggers.crons`，UTC 19:17），
+    刪除送出超過 `DAO_RETENTION_DAYS`（730 天）、且 `page` 為 `daoissimple:mirror` 或 `daoissimple:petal` 的列，分批 500 筆；**一般來信與其他表單不受影響**。
+    隱私權政策第五節對外承諾「兩年、自動刪除」，改 `DAO_RETENTION_DAYS` 時 `privacy.html` 要一起改，再執行 `tools/build_zhcn.py`。
+    寄到主理人信箱的通知信副本不在自動刪除範圍（政策已寫明，需要時依請求刪除）。
     **寄信在回應前等結果**（逾時 12 秒、失敗重試一次），回傳 `{ ok, code, mailed }`；`mailed:false` 代表資料已存進 `letters` 但通知信沒寄出，網頁會如實告知客人改用 LINE 回傳通關碼，
     原因寫在該筆的 `mail_status` 欄（`owner failed: …; retry failed: …`）。通知信沒到信箱時，先到 `/admin`「大道至簡來信」搜通關碼看這一欄。
 15. **安寧幸福之家預約**（2026-09-25）：`/api/stay`、D1 `stays` 表、管理頁「幸福之家預約」分頁。

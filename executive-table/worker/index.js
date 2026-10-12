@@ -31,7 +31,7 @@ import { verifyAccess } from './access.js';
 import { sendMail } from './mail.js';
 import { json, hashIp, formatTaipei } from './util.js';
 import { handleLetter, handleAdminLetters, LETTER_STATUSES } from './letters.js';
-import { handleDao } from './dao.js';
+import { handleDao, purgeExpiredDao } from './dao.js';
 import { handleOrder, handleAdminOrders, ORDER_STATUSES } from './orders.js';
 import { handleStay, handleAdminStays, STAY_STATUSES } from './stays.js';
 import { handleHappiness, handleAdminHappiness } from './happiness.js';
@@ -44,6 +44,11 @@ const RATE_WINDOW_MIN = 10;
 const RATE_MAX = 5;
 
 export default {
+  // 每日排程（wrangler.jsonc 的 triggers.crons）：自動刪除逾期的問道之鏡與花瓣預約，不靠人工
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(purgeExpiredDao(env).catch(err => console.error('dao purge failed', err && err.stack || err)));
+  },
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;

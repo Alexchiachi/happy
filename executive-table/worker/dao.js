@@ -20,6 +20,13 @@ const RATE_WINDOW_MIN = 10;
 const RATE_MAX = 5;
 const DEFAULT_NOTIFY = 'dadaoissimple@gmail.com';
 
+// 保存期限：自送出日起算，期滿由每日排程自動刪除（見 purgeExpiredDao 與 wrangler.jsonc 的 triggers）。
+// 隱私權政策（privacy.html 第五節）對外承諾「兩年」，改這個數字時兩邊要一起改。
+export const DAO_RETENTION_DAYS = 730;
+const DAO_PAGES = ['daoissimple:mirror', 'daoissimple:petal'];
+const PURGE_BATCH = 500;
+const PURGE_MAX_ROUNDS = 10;
+
 function newCode() {
   const n = new Uint32Array(1);
   crypto.getRandomValues(n);
@@ -121,4 +128,29 @@ async function notify(env, url, n) {
     await env.DB.prepare('UPDATE letters SET mail_status = ? WHERE id = ?').bind(log.join('; ').slice(0, 300), n.id).run();
   } catch (e) { /* 狀態欄寫不進去不影響回應 */ }
   return status === 'sent';
+}
+
+/**
+ * 每日排程：刪除超過保存期限的問道之鏡與花瓣預約。
+ * 只動 page 為 daoissimple:mirror / daoissimple:petal 的列；一般來信與其他表單的資料不受影響。
+ * 分批刪除（每批 PURGE_BATCH 列），避免單次語句過大。回傳這次刪掉的總列數，也寫進 log。
+ * 注意：寄到主理人信箱的通知信副本不在這裡，信箱是主理人自己的信件，見隱私權政策說明。
+ */
+export async function purgeExpiredDao(env) {
+  await ensureLetterSchema(env);
+  const marks = DAO_PAGES.map(() => '?').join(', ');
+  const cutoff = `-${DAO_RETENTION_DAYS} days`;
+  let total = 0;
+  for (let i = 0; i < PURGE_MAX_ROUNDS; i++) {
+    const res = await env.DB.prepare(
+      `DELETE FROM letters WHERE id IN (
+         SELECT id FROM letters WHERE page IN (${marks}) AND created_at < datetime('now', ?) LIMIT ${PURGE_BATCH}
+       )`
+    ).bind(...DAO_PAGES, cutoff).run();
+    const n = (res && res.meta && res.meta.changes) || 0;
+    total += n;
+    if (n < PURGE_BATCH) break;
+  }
+  console.log(`dao purge: deleted ${total} row(s) older than ${DAO_RETENTION_DAYS} days`);
+  return total;
 }
