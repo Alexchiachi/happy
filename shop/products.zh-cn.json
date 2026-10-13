@@ -2,10 +2,9 @@
   "_说明": "云南好物的商品与档期设置。网页（shop.js）和 Worker（executive-table/worker/orders.js）共用这一份：金额由 Worker 依这里重算。商品 id 与规格 key 上线后不要改，旧订单会对不上；要下架改 active:false。",
   "season": {
     "name": "秋收・光辉十月",
-    "deadline": "2026-10-25T23:59:59+08:00",
-    "deadlineText": "2026 年 10 月 25 日",
-    "ship": "10 月底陆续寄出",
-    "note": "限期收单，截止后统一向产地叫货，10 月底陆续寄出。"
+    "deadline": "2026-11-11T23:59:59+08:00",
+    "ship": "依下单顺序陆续出货",
+    "note": "限期收单至 {deadline}，依下单顺序陆续出货。"
   },
   "shipping": {
     "free": 3000,

@@ -15,7 +15,11 @@
 改 `products.json` 的規矩：
 - 商品 `id`、規格 `key` 上線後不要改（舊訂單會對不上）；要下架設 `"active": false`。
 - `shelf`：`season`（本檔預購，截止日後 Worker 拒收）或 `always`（常備）。
-- 換檔期：改 `season` 的 `name`、`deadline`（含 `+08:00`）、`deadlineText`、`ship`，再換 `season` 商品。
+- 換檔期：改 `season` 的 `name`、`deadline`（含 `+08:00`）、`ship`，再換 `season` 商品。
+  **截止日只寫 `deadline` 這一處**：頁面上的日期文字（「2026 年 11 月 11 日」）由它自動推出，不要另外寫 `deadlineText`；
+  `note` 裡要放日期時寫 `{deadline}`（會換成「11 月 11 日」）。改完執行 `python3 tools/build_zhcn.py`，
+  它會同步 `index.html` 裡沒有 JS 時的備用日期，並重新產生簡體的 `products.zh-cn.json`（不要手改）。
+  忘了執行時，PR 上的「檢查編譯結果」會變紅提醒你。
 - 付款資訊（`payment.bank`、`payment.linepay`、`payment.linepayImage` 收款碼圖片、`payment.linepayUrl` 收款碼解出來的手機付款連結）會出現在完成畫面與確認信。
   換收款碼時用 OpenCV 的 `QRCodeDetector` 解出連結，確認裁切後的圖還掃得到。
 - 封面輪播（`cover`：`img`、`alt`）：開場右邊（手機在最上面）的直式照片，每 5.5 秒換一張，有暫停鍵、可左右滑。

@@ -22,6 +22,15 @@
       });
     });
 
+  // 'YYYY-MM-DDTHH:mm:ss+08:00' → { full: '2026 年 11 月 11 日', short: '11 月 11 日' }，一律以台灣時間換算
+  // 與 tools/sync_products.py 的 season_dates() 格式必須一致（沒有 JS 時的備用文字由它寫進 index.html）
+  function seasonDates(iso) {
+    var o = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', year: 'numeric', month: 'numeric', day: 'numeric' })
+      .formatToParts(new Date(iso)).forEach(function (x) { o[x.type] = x.value; });
+    return { full: o.year + ' 年 ' + o.month + ' 月 ' + o.day + ' 日', short: o.month + ' 月 ' + o.day + ' 日' };
+  }
+
   function start(data) {
     DATA = data;
     PRODUCTS = data.products.filter(function (p) { return p.active !== false; });
@@ -31,9 +40,11 @@
 
     // 檔期資訊
     document.querySelectorAll('[data-season-name]').forEach(function (el) { el.textContent = data.season.name; });
-    document.querySelectorAll('[data-deadline-text]').forEach(function (el) { el.textContent = data.season.deadlineText; });
+    // 截止日只寫一處：season.deadline。顯示用的日期文字一律由它推出（台灣時間），不另存 deadlineText
+    var dates = seasonDates(data.season.deadline);
+    document.querySelectorAll('[data-deadline-text]').forEach(function (el) { el.textContent = data.season.deadlineText || dates.full; });
     document.querySelectorAll('[data-ship-text]').forEach(function (el) { el.textContent = data.season.ship; });
-    document.querySelectorAll('[data-season-note]').forEach(function (el) { if (data.season.note) el.textContent = data.season.note; });
+    document.querySelectorAll('[data-season-note]').forEach(function (el) { if (data.season.note) el.textContent = data.season.note.replace('{deadline}', dates.short); });
     var s = data.shipping;
     document.querySelectorAll('[data-free]').forEach(function (el) { el.textContent = money(s.free); });
     document.querySelectorAll('[data-fee-home]').forEach(function (el) { el.textContent = s.home; });
