@@ -1,0 +1,32 @@
+name: 檢查編譯結果
+
+# 簡體版（zh-cn/）、products.zh-cn.json、sitemap、yunnan.html 的商品區塊、選購頁的備用日期，
+# 都是由 tools/build_zhcn.py 從繁體正本產生。改了正本卻忘了重新執行，就會出現「繁體改了、簡體還是舊的」。
+# 這個檢查在 PR 上重新建置一次，若結果與已提交的檔案不同就失敗，並列出是哪些檔案。
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install opencc-python-reimplemented
+      - name: 重新建置
+        run: python tools/build_zhcn.py
+      - name: 確認編譯結果已提交
+        run: |
+          out="$(git status --porcelain)"
+          if [ -n "$out" ]; then
+            echo "$out"
+            echo "::error::編譯結果與已提交的檔案不一致。請在本機執行 python3 tools/build_zhcn.py，並提交上面列出的檔案"
+            exit 1
+          fi

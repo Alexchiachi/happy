@@ -9,12 +9,15 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PRODUCTS_JSON = ROOT / "shop" / "products.json"
 PRODUCTS_CN_JSON = ROOT / "shop" / "products.zh-cn.json"
 YUNNAN_HTML = ROOT / "yunnan.html"
+SHOP_HTML = ROOT / "shop" / "index.html"
+TAIPEI = timezone(timedelta(hours=8))   # 台灣沒有日光節約時間，固定 +8，不依賴系統時區資料庫
 
 try:
     from opencc import OpenCC
@@ -62,6 +65,32 @@ def generate_card_html(p, shop_prefix="shop/", idx=0):
           <p class="price">{price}</p>
           <span class="ask">{ask}</span>
         </a>'''
+
+
+def season_dates(iso):
+    """'2026-11-11T23:59:59+08:00' → ('2026 年 11 月 11 日', '11 月 11 日')，以台灣時間換算。
+    格式必須與 shop/shop.js 的 seasonDates() 一致。"""
+    dt = datetime.fromisoformat(iso).astimezone(TAIPEI)
+    return f"{dt.year} 年 {dt.month} 月 {dt.day} 日", f"{dt.month} 月 {dt.day} 日"
+
+
+def sync_shop_fallback():
+    """截止日只在 shop/products.json 的 season.deadline 寫一處。
+    這裡把由它推出的日期文字，寫進 shop/index.html 裡「沒有 JS 時」與「載入前」顯示的備用文字，
+    避免兩邊各寫一份而不一致。有 JS 時 shop.js 會用同一個公式覆寫，結果相同。"""
+    if not (PRODUCTS_JSON.exists() and SHOP_HTML.exists()):
+        return False
+    season = json.loads(PRODUCTS_JSON.read_text(encoding="utf-8"))["season"]
+    full, short = season_dates(season["deadline"])
+    note = season.get("note", "").replace("{deadline}", short)
+    html = SHOP_HTML.read_text(encoding="utf-8")
+    new = re.sub(r"(<dd data-deadline-text>)[^<]*(</dd>)", lambda m: m.group(1) + full + m.group(2), html)
+    if note:
+        new = re.sub(r"(<p class=\"shelf-note\" data-season-note>)[^<]*(</p>)", lambda m: m.group(1) + note + m.group(2), new)
+    if new != html:
+        SHOP_HTML.write_text(new, encoding="utf-8")
+        print(f"已同步選購頁備用日期：收單至 {full}")
+    return True
 
 
 def sync_yunnan_html():
