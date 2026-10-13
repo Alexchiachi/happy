@@ -40,6 +40,8 @@
     "HAPPINESS_REPO": "Alexchiachi/happiness-ledger"
   },
   // 保留在 Cloudflare 後台設定的變數（ACCESS_TEAM_DOMAIN、ACCESS_AUD），部署時不要清掉
+  // 每天一次（UTC 19:17 = 台灣凌晨 03:17）自動刪除逾期的問道之鏡與花瓣預約，見 executive-table/worker/dao.js
+  "triggers": { "crons": ["17 19 * * *"] },
   "keep_vars": true,
   "observability": { "enabled": true },
   "workers_dev": true,
