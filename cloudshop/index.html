@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無人商店雲端小舖 · 嘉禮慕華</title>
+  <meta name="description" content="嘉禮慕華無人商店的線上小舖：先在網路上挑好、付款，再到店自取或宅配到家。">
+  <!-- 設計稿階段：商品與門市資料還是示範，先不讓搜尋引擎收錄，正式上線時拿掉 -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#137A75">
+  <link rel="icon" href="../images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+  <!-- 中文字型共用 shop/ 的子集（tools/subset_fonts.py 產生，本頁已加進它的 TARGETS），等 load 之後才載入。
+       理由見 NEW-PAGE.md 第二節第 1 點。 -->
+  <script>addEventListener('load', function () { var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = '../shop/fonts/fonts.css'; document.head.appendChild(l); });</script>
+  <noscript><link rel="stylesheet" href="../shop/fonts/fonts.css"></noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap"></noscript>
+  <link rel="stylesheet" href="cloudshop.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要內容</a>
+
+<header class="bar">
+  <a class="brand" href="./">
+    <span class="brand-seal" aria-hidden="true">舖</span>
+    <span class="brand-text">雲端小舖<small>嘉禮慕華 · Flower to Table</small></span>
+  </a>
+  <a class="bar-bag" href="#checkout">
+    訂單 <span class="bag-count" data-count>0</span>
+  </a>
+</header>
+
+<p class="demo-note" data-demo-note>設計稿：商品、價格與門市地址都是示範，正式資料到齊後換上。</p>
+
+<main id="main" tabindex="-1">
+
+  <!-- 一、開場：墨綠底＋線描枝葉，右邊是品牌圖（第一屏最大的圖，直接寫在 HTML） -->
+  <section class="hero">
+    <svg class="hero-vine" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <path d="M20 390 C 60 300, 40 220, 110 150 S 210 60, 260 10"/>
+        <path d="M70 280 c -30 -10 -55 -35 -60 -70 c 35 5 58 32 60 70z"/>
+        <path d="M95 200 c 10 -35 40 -58 78 -60 c -8 36 -40 58 -78 60z"/>
+        <path d="M150 128 c -25 -22 -35 -55 -28 -88 c 28 20 38 54 28 88z"/>
+        <path d="M205 70 c 20 -18 48 -24 74 -16 c -18 20 -46 26 -74 16z"/>
+        <path d="M110 150 l 40 -12 m -40 12 l 10 -40 m 30 28 l 22 -18 m -22 18 l 18 10"/>
+        <circle cx="172" cy="120" r="4"/><circle cx="120" cy="108" r="4"/><circle cx="190" cy="148" r="4"/>
+      </g>
+    </svg>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Cloud shop · 無人商店</p>
+        <h1>無人商店<br>雲端小舖</h1>
+        <p class="lede"><span class="s">店裡沒有人顧，<br>東西一樣用心挑。</span><span class="s">先在這裡選好、付款，<br>再到店自取或寄到家。</span></p>
+        <div class="hero-actions">
+          <a class="btn btn-cream" href="#week">看本週預訂 ↓</a>
+          <a class="btn btn-line-ghost" href="#always">店內常備</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <picture><source type="image/webp" srcset="images/brand.webp"><img src="images/brand.jpg" alt="嘉禮慕華 Flower to Table 字標，四周是墨綠底的線描花草" width="800" height="800" decoding="async" fetchpriority="high"></picture>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 二、怎麼買：三步驟＋門市資訊 -->
+  <section class="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 id="how-title" class="visually-hidden">怎麼買</h2>
+      <ol class="steps">
+        <li><span class="step-no">01</span><b>線上挑選</b><p>每週預訂限期收單，<br>常備好物隨時可訂。</p></li>
+        <li><span class="step-no">02</span><b>付款確認</b><p>LINE Pay 或匯款，<br>送出後畫面會附上收款資訊。</p></li>
+        <li><span class="step-no">03</span><b>自取或寄送</b><p>到店輸入訂單編號末四碼取貨，<br>也可以宅配、超商取貨。</p></li>
+      </ol>
+      <dl class="store-info">
+        <div><dt>門市</dt><dd data-store-name>嘉禮慕華 · 無人商店</dd></div>
+        <div><dt>地址</dt><dd data-store-address>門市地址（待補）</dd></div>
+        <div><dt>時間</dt><dd data-store-hours>24 小時開放，自助結帳</dd></div>
+        <div><dt>運費</dt><dd>到店自取免運；滿 <span data-free>NT$1,500</span> 免運，未滿宅配 <span data-fee-home>120</span>、超商 <span data-fee-cvs>70</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 三、本週預訂 -->
+  <section id="week" class="shelf shelf-week">
+    <div class="wrap">
+      <header class="shelf-head">
+        <p class="eyebrow">This week · 本週預訂</p>
+        <h2 data-week-name>本週預訂</h2>
+        <div class="week-meta">
+          <p class="shelf-note" data-week-note>收單至 10 月 23 日晚上 8 點，到貨後用 LINE 通知取貨。</p>
+          <p class="countdown" data-countdown aria-live="polite"></p>
+        </div>
+      </header>
+      <div class="grid" data-shelf="week"></div>
+    </div>
+  </section>
+
+  <!-- 四、店內常備 -->
+  <section id="always" class="shelf shelf-always">
+    <div class="wrap">
+      <header class="shelf-head">
+        <p class="eyebrow">Always · 店內常備</p>
+        <h2>店裡一直都有</h2>
+        <div class="week-meta"><p class="shelf-note">全年可訂。<br>到店自取最快，當天就能拿。</p></div>
+      </header>
+      <div class="grid" data-shelf="always"></div>
+    </div>
+  </section>
+
+  <!-- 五、結帳 -->
+  <section id="checkout" class="checkout">
+    <div class="wrap checkout-grid">
+      <div class="summary" aria-labelledby="summary-title">
+        <p class="eyebrow">Your order · 你的訂單</p>
+        <h2 id="summary-title">訂單明細</h2>
+        <ul class="lines" data-lines></ul>
+        <p class="empty" data-empty>還沒有選任何東西。往上挑一兩樣吧。</p>
+        <dl class="totals">
+          <div><dt>商品小計</dt><dd data-subtotal>NT$0</dd></div>
+          <div><dt>運費</dt><dd data-shipping>—</dd></div>
+          <div class="grand"><dt>合計</dt><dd data-total>NT$0</dd></div>
+        </dl>
+        <div class="freeship" data-freeship>
+          <div class="meter"><span data-meter></span></div>
+          <p data-freeship-text>到店自取免運</p>
+        </div>
+      </div>
+
+      <form class="order-form" data-form novalidate>
+        <p class="eyebrow">Details · 取貨資料</p>
+        <h2>怎麼拿到</h2>
+
+        <fieldset class="choice">
+          <legend>取貨方式</legend>
+          <label><input type="radio" name="delivery" value="pickup" checked> 到店自取</label>
+          <label><input type="radio" name="delivery" value="home"> 宅配</label>
+          <label><input type="radio" name="delivery" value="711"> 7-11</label>
+          <label><input type="radio" name="delivery" value="family"> 全家</label>
+        </fieldset>
+        <p class="hint" data-when="pickup" data-store-pickup>到店後在取貨櫃輸入訂單編號末四碼取貨。</p>
+
+        <div class="field-row">
+          <label class="field"><span>姓名</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span>手機</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}" required></label>
+        </div>
+        <label class="field" data-when="home" hidden><span>宅配地址</span><input name="address" autocomplete="street-address"></label>
+        <label class="field" data-when="711 family" hidden><span>門市名稱</span><input name="store" placeholder="例：7-11 龍辰門市"></label>
+
+        <fieldset class="choice">
+          <legend>付款方式</legend>
+          <label><input type="radio" name="pay" value="linepay" checked> LINE Pay</label>
+          <label><input type="radio" name="pay" value="bank"> 匯款</label>
+        </fieldset>
+
+        <!-- 擋機器人：真人看不到這一欄 -->
+        <label class="hp" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label>
+
+        <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="想交代的事，例如取貨日期……"></textarea></label>
+
+        <p class="privacy-note">個資說明：你填的姓名、手機與地址，只用在這張訂單的確認、取貨與寄送；寄送時提供給物流業者，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 告訴我們。<a href="../privacy.html">完整隱私權政策</a></p>
+        <button class="btn btn-solid" type="submit">送出訂單</button>
+        <p class="form-msg" data-form-msg role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- 送出後：目前沒有接後台，訂單用 LINE 傳給我們才算成立 -->
+  <section class="done" data-done hidden tabindex="-1">
+    <div class="wrap done-card">
+      <span class="done-seal" aria-hidden="true">謝</span>
+      <h2>還差一步</h2>
+      <p>訂單編號 <b data-order-no></b>，合計 <b data-order-total></b>。</p>
+      <ol class="done-steps">
+        <li>
+          <b>把訂單傳給我們</b>
+          <p class="muted small">按下面的按鈕，LINE 會帶入訂單內容，按「傳送」才算完成。</p>
+          <a class="btn btn-line" data-send-line target="_blank" rel="noopener">用 LINE 傳送訂單</a>
+          <button type="button" class="btn btn-ghost btn-small" data-copy>複製訂單內容</button>
+          <p class="muted small" data-copy-msg role="status"></p>
+        </li>
+        <li>
+          <b>付款</b>
+          <div class="pay-box">
+            <div data-pay-box="linepay"><h3>LINE Pay</h3><img class="qr" data-pay-qr alt="LINE Pay 收款碼（嘉禮慕華）" width="180" height="180" hidden><a class="btn btn-line" data-pay-link target="_blank" rel="noopener" hidden>開啟 LINE Pay 付款</a><p data-pay-linepay></p></div>
+            <div data-pay-box="bank"><h3>匯款</h3><p data-pay-bank></p><p class="muted small">匯款後在 LINE 告訴我們帳號末五碼。</p></div>
+          </div>
+        </li>
+      </ol>
+      <p class="muted small">確認收款後，到貨會用 LINE 通知你取貨或寄出。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <p class="foot-brand">嘉禮慕華 · Flower to Table<br><span>無人商店雲端小舖</span></p>
+    <div>
+      <p><a href="../shop/">雲南好物</a> · <a href="../anning/">安寧幸福之家</a> · <a href="../privacy.html">隱私權政策</a></p>
+      <p class="foot-contact">與我們聯繫：LINE 官方 <a data-contact-line href="https://line.me/R/ti/p/@617aipgs" target="_blank" rel="noopener">@617aipgs</a> · <a data-contact-fb href="https://www.facebook.com/profile.php?id=100075746177370" target="_blank" rel="noopener">Facebook</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- 手機：固定在底部的小計列 -->
+<div class="dock" data-dock hidden>
+  <div class="dock-text"><b data-dock-total>NT$0</b><span data-dock-hint></span></div>
+  <a class="btn btn-solid" href="#checkout">結帳</a>
+</div>
+
+<script src="cloudshop.js" defer></script>
+<!-- Cloudflare Web Analytics：不用 cookie、不追蹤個人，只統計瀏覽量（見 privacy.html）--><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbab4131ad864cc59ac6bdd0c4707adb"}'></script>
+</body>
+</html>

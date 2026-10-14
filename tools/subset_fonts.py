@@ -43,10 +43,10 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TARGETS = [
     {
-        "out": "shop/fonts", "label": "shop/、anning/",
-        "pages": ["shop/", "anning/"],
+        "out": "shop/fonts", "label": "shop/、anning/、cloudshop/",
+        "pages": ["shop/", "anning/", "cloudshop/"],
         # 動態出現的文字（錯誤訊息、完成畫面、合計）不一定在畫面上，直接把原始檔的字都算進 400
-        "extra": ["shop/shop.js", "shop/products.json", "anning/anning.js", "anning/stay.json"],
+        "extra": ["shop/shop.js", "shop/products.json", "anning/anning.js", "anning/stay.json", "cloudshop/cloudshop.js", "cloudshop/products.json"],
         "hashed": False,
     },
     {

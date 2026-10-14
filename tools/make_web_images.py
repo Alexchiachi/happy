@@ -28,7 +28,7 @@ if not features.check("avif"):
     sys.exit("這版 Pillow 不支援 AVIF：pip install -U pillow")
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-IMAGES = [ROOT / "shop" / "images", ROOT / "anning" / "images", ROOT / "images" / "windy-place", ROOT / "images" / "services"]
+IMAGES = [ROOT / "shop" / "images", ROOT / "anning" / "images", ROOT / "images" / "windy-place", ROOT / "images" / "services", ROOT / "cloudshop" / "images"]
 # 收款碼放在確認信裡，信件只用 JPG；微信 QR Code 與療心卡在網頁直接用 JPG（QR 要保持清晰）
 SKIP = {"linepay-qr.jpg", "wechat-qr.jpg", "healing-card.jpg"}
 
