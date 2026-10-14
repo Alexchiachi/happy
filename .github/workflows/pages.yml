@@ -35,7 +35,7 @@ jobs:
           cp .nojekyll index.html about.html journal.html yunnan.html taiwan.html \
              services.html windy-place.html executive.html cases.html connect.html privacy.html 404.html \
              robots.txt sitemap.xml styles.css scripts.js _site/
-          cp -r images journal zh-cn shop anning _site/
+          cp -r images journal zh-cn shop anning cloudshop _site/
           # 幸福餐桌專欄：只發布網頁（README 記照片來源，不上網站）
           mkdir _site/happytable
           cp happytable/*.html _site/happytable/

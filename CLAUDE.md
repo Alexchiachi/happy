@@ -12,6 +12,7 @@
 - 幸福餐桌專欄（`happytable/`）的寫作規則、照片來源與待辦在 [`happytable/README.md`](happytable/README.md)；專欄文字不用「我」與「我們」。
 - 雲南好物選購頁（`shop/`）的素材流程與架構在 [`shop/README.md`](shop/README.md)。
 - 雲南安寧幸福之家說明與預約頁（`anning/`）在 [`anning/README.md`](anning/README.md)。
+- 無人商店雲端小舖（`cloudshop/`，嘉禮慕華，架構照 `shop/`、墨綠米白配色）在 [`cloudshop/README.md`](cloudshop/README.md)。
 - LINE 官方帳號**刻意分成兩個**，不要統一：品牌站（`connect.html`）用 `@473nnjul`；
   雲南好物與安寧幸福之家（`shop/`、`anning/`、確認信）用 `@617aipgs`。
 

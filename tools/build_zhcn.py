@@ -34,7 +34,7 @@ CC = OpenCC("tw2sp")
 # inner-flow（內耗熵值檢測）自己就有一套五語系切換。
 SKIP_DIRS = ("book", "epubqa", "whitepaper", "node_modules", "zh-cn",
              "eternitychildbooking", "inner-flow", "docs", "tools", "tests",
-             "images", "google", "executive-table", "shop", "anning")  # shop、anning：選購頁與預約頁不做簡體版（noindex、相對路徑讀 products.json、stay.json）；課程頁有自己的簡體建置（executive-table/build_zh_cn.py）
+             "images", "google", "executive-table", "shop", "anning", "cloudshop")  # shop、anning、cloudshop：選購頁與預約頁不做簡體版（noindex、相對路徑讀 products.json、stay.json）；課程頁有自己的簡體建置（executive-table/build_zh_cn.py）
 
 # 舊網址的轉址殼，不做簡體版。
 # 404.html 同理：GitHub Pages 只認根目錄那一份，而且它必須用絕對路徑
@@ -53,7 +53,7 @@ KEEP_IN_OUT = {"executive-table"}
 # 這些東西只有根目錄那一份，兩種語系共用。簡體頁在 zh-cn/ 底下，
 # 所以路徑都要多退一層，否則會去找 zh-cn/ 底下不存在的檔案。
 SHARED = ("styles.css", "scripts.js", "images/", "inner-flow/", "inner-flow.html",
-          "shop/", "anning/")  # 選購頁與預約頁只有繁體一份，簡體頁連過去（含雲南頁輪播借用的 shop/images/）也要退一層
+          "shop/", "anning/", "cloudshop/")  # 選購頁與預約頁只有繁體一份，簡體頁連過去（含雲南頁輪播借用的 shop/images/）也要退一層
 
 # 同一個網域上、但不屬於本站的獨立專案。各自有自己的 sitemap，
 # 由 robots.txt 一起指出去——搜尋引擎照樣找得到，收錄卻是分開的。

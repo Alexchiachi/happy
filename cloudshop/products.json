@@ -1,0 +1,134 @@
+{
+  "_說明": "無人商店雲端小舖的商品與取貨設定。網頁（cloudshop.js）讀這一份。目前商品、價格、門市資料都是示範（demo: true），等使用者提供資料後換上。商品 id 與規格 key 上線後不要改；要下架改 active:false。",
+  "demo": true,
+  "week": {
+    "name": "本週預訂",
+    "deadline": "2026-10-23T20:00:00+08:00",
+    "pickup": "10 月 25 日（六）起到店自取",
+    "note": "收單至 {deadline} 晚上 8 點，到貨後用 LINE 通知取貨。"
+  },
+  "store": {
+    "name": "嘉禮慕華 · 無人商店",
+    "address": "門市地址（待補）",
+    "hours": "24 小時開放，自助結帳",
+    "pickup": "到店後在取貨櫃輸入訂單編號末四碼取貨"
+  },
+  "shipping": {
+    "free": 1500,
+    "home": 120,
+    "cvs": 70,
+    "pickup": 0
+  },
+  "payment": {
+    "bank": "合作金庫 草屯分行（銀行代號 006）\n帳號 5573717-232117\n戶名 嘉禮慕華舖",
+    "linepay": "收款帳號：嘉禮慕華\n用 LINE 掃描收款碼（手機上可直接點「開啟 LINE Pay 付款」），輸入訂單金額後付款。",
+    "linepayImage": "../shop/images/linepay-qr.jpg",
+    "linepayUrl": "https://qrcodepay.line.me/qr/payment/%252BGglGp22MnGMT9HMIGb66InRjQTS3MFLyxdw6FU4QP7b6TrIEx9OWYX8PpKeUPG4"
+  },
+  "contact": {
+    "line": "@617aipgs",
+    "lineUrl": "https://line.me/R/ti/p/@617aipgs",
+    "lineMessage": "https://line.me/R/oaMessage/@617aipgs/?",
+    "facebook": "https://www.facebook.com/profile.php?id=100075746177370"
+  },
+  "products": [
+    {
+      "active": true,
+      "id": "rose-tea",
+      "shelf": "week",
+      "badge": "示範",
+      "cat": "花草茶 · Tea",
+      "han": "茶",
+      "tone": "jade",
+      "name": "玫瑰花草茶",
+      "intro": "一小撮花瓣，一壺熱水，下午就慢下來了。",
+      "story": "示範文字：商品介紹放這裡，兩三句講清楚它是什麼、適合什麼時候用。",
+      "specs": [["內容量", "待補"], ["保存", "待補"], ["產地", "待補"]],
+      "variants": [
+        { "key": "std", "label": "一包", "price": 280, "unit": "包" },
+        { "key": "box", "label": "禮盒 3 包", "price": 780, "unit": "盒" }
+      ]
+    },
+    {
+      "active": true,
+      "id": "flower-cake",
+      "shelf": "week",
+      "badge": "示範",
+      "cat": "點心 · Sweets",
+      "han": "餅",
+      "tone": "petal",
+      "name": "手作花餅",
+      "intro": "每週現做，數量不多，預訂才留得到。",
+      "story": "示範文字：商品介紹放這裡。",
+      "specs": [["內容量", "待補"], ["保存", "待補"]],
+      "variants": [
+        { "key": "std", "label": "一盒 6 入", "price": 360, "unit": "盒" }
+      ]
+    },
+    {
+      "active": true,
+      "id": "bouquet",
+      "shelf": "week",
+      "badge": "示範",
+      "cat": "鮮花 · Flowers",
+      "han": "花",
+      "tone": "leaf",
+      "name": "當季小花束",
+      "intro": "放在餐桌一角，桌子就有了季節。",
+      "story": "示範文字：花材依當週到貨調整。",
+      "specs": [["尺寸", "待補"], ["保存", "待補"]],
+      "variants": [
+        { "key": "s", "label": "小束", "price": 450, "unit": "束" },
+        { "key": "m", "label": "中束", "price": 750, "unit": "束" }
+      ]
+    },
+    {
+      "active": true,
+      "id": "honey",
+      "shelf": "always",
+      "badge": "示範",
+      "cat": "蜜 · Honey",
+      "han": "蜜",
+      "tone": "honey",
+      "name": "百花蜜",
+      "intro": "早上一匙，泡在溫水裡。",
+      "story": "示範文字：商品介紹放這裡。",
+      "specs": [["內容量", "待補"], ["保存", "待補"]],
+      "variants": [
+        { "key": "std", "label": "一罐", "price": 420, "unit": "罐" }
+      ]
+    },
+    {
+      "active": true,
+      "id": "dried-wreath",
+      "shelf": "always",
+      "badge": "示範",
+      "cat": "乾燥花 · Dried",
+      "han": "圈",
+      "tone": "moss",
+      "name": "乾燥花圈",
+      "intro": "掛在門上，一整季都不用照顧。",
+      "story": "示範文字：商品介紹放這裡。",
+      "specs": [["尺寸", "待補"]],
+      "variants": [
+        { "key": "std", "label": "直徑約 20 公分", "price": 880, "unit": "個" }
+      ]
+    },
+    {
+      "active": true,
+      "id": "herb-salt",
+      "shelf": "always",
+      "badge": "示範",
+      "cat": "調味 · Pantry",
+      "han": "鹽",
+      "tone": "stone",
+      "name": "香草海鹽",
+      "intro": "煎蛋、烤菜、一盤沙拉，撒一點就夠。",
+      "story": "示範文字：商品介紹放這裡。",
+      "specs": [["內容量", "待補"], ["保存", "待補"]],
+      "variants": [
+        { "key": "std", "label": "一罐", "price": 180, "unit": "罐" }
+      ]
+    }
+  ]
+}
