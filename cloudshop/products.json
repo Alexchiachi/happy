@@ -52,8 +52,14 @@
           "8 歲以下兒童請在大人陪同下使用"
         ]
       ],
-      "variants": [],
-      "priceNote": "價格確認中",
+      "variants": [
+        {
+          "key": "box32",
+          "label": "整盒 32 袋",
+          "price": 320,
+          "unit": "盒"
+        }
+      ],
       "img": "images/blind-turtle.jpg",
       "imgAlt": "烏龜對對碰盲袋的展示盒與單包盲袋，旁邊是粉紅、黃、藍等顏色的小烏龜公仔"
     },
@@ -73,8 +79,14 @@
           "單盒約 7 × 7 × 12 公分"
         ]
       ],
-      "variants": [],
-      "priceNote": "價格確認中",
+      "variants": [
+        {
+          "key": "box6",
+          "label": "整盒 6 入",
+          "price": 300,
+          "unit": "盒"
+        }
+      ],
       "img": "images/blind-gugu.jpg",
       "imgAlt": "六個穿著黑貓、柯基、企鵝連身衣的娃娃公仔，排成兩排"
     },
@@ -98,8 +110,14 @@
           "一中盒 12 個"
         ]
       ],
-      "variants": [],
-      "priceNote": "價格確認中",
+      "variants": [
+        {
+          "key": "single",
+          "label": "單個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
       "img": "images/blind-bronze-burner.jpg",
       "imgAlt": "十幾個青綠色與古銅色的青銅面具造型小香薰爐，排在石階上"
     },
@@ -125,5 +143,5 @@
       "imgAlt": "喵喵叫國術館的包裝盒，盒上與盒前站著拿竹籤、扇子、拐杖等道具的貓咪公仔"
     }
   ],
-  "demoNote": "試營運：盲盒系列先上架，價格確認中，想買請用 LINE 詢問。"
+  "demoNote": "試營運：盲盒系列上架中，喵喵叫國術館價格確認中，可用 LINE 詢問。"
 }
