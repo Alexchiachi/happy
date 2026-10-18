@@ -175,6 +175,10 @@ p { margin: 0; text-wrap: pretty; }
 .v-price { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; white-space: nowrap; }
 .v-price small { font-family: var(--font-body); font-size: .72rem; color: var(--mist); }
 .v-closed { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
+.variant-ask { grid-template-columns: 1fr auto; }
+.variant-ask .v-label { color: var(--mist); letter-spacing: .1em; }
+.ask { color: var(--jade-deep); font-size: .88rem; letter-spacing: .08em; text-decoration: none; border-bottom: 1px solid currentColor; padding: .5rem 0 .15rem; }
+@media (hover: hover) and (pointer: fine) { .ask:hover { color: var(--jade); } }
 .stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); }
 .stepper button {
   width: 40px; height: 40px; border: 0; background: none; font: inherit; font-size: 1.05rem; cursor: pointer; color: var(--ink);
