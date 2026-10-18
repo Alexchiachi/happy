@@ -1,20 +1,24 @@
-/* 無人商店雲端小舖：版面與互動照 shop/shop.css。頁面主色是墨綠＋米白；開場主視覺 2026-10-18 改成孩子園藝（CH GARDEN）的粉米底與棕字。
-   對比（對 --paper #FAF7EE）：--ink 11:1、--jade-ink 6.0:1、--mist 4.9:1；米白字壓在 --jade 上 4.9:1 */
+/* 無人商店雲端小舖：版面與互動照 shop/shop.css。2026-10-18 整頁改成孩子園藝（CH GARDEN）配色：
+   取自標誌——棕色字、紅黃橘薄荷四色葉子、粉米與淺薄荷底。變數名稱沿用舊的（--jade 等），值換成孩子園藝的顏色。
+   對比（對 --paper #FFFAF5）：--ink 12:1、--ink-soft 7.7:1、--mist 5.2:1、--jade-deep 6.1:1、--petal 5.2:1；
+   米白字壓在 --jade（棕）上 9.8:1。四色葉子只當裝飾色條，不拿來放字。 */
 :root {
-  --paper: #FAF7EE;
-  --paper-deep: #EEF0E6;
-  --card: #FFFEF9;
-  --ink: #1F3B38;
-  --ink-soft: #3C534F;
-  --mist: #5E6F6B;
-  --line: #CFD8D0;
-  --jade: #137A75;       /* 品牌圖的底色（#15827D 再壓深一點，讓米白小字過 4.5:1） */
-  --jade-deep: #0F6A65;  /* 文字、細線用的墨綠 */
-  --jade-pale: #DCEBE6;
-  --cream: #FBF8EF;
-  --garden-brown: #603813;      /* 孩子園藝標誌的棕色，開場文字與按鈕 */
+  --paper: #FFFAF5;
+  --paper-deep: #F8ECE5;  /* 粉米：標誌底的粉色人字紋 */
+  --card: #FFFFFF;
+  --ink: #4A2C12;
+  --ink-soft: #6A4A30;
+  --mist: #7A6656;
+  --line: #EBDCD2;
+  --jade: #603813;        /* 主色：標誌的棕（實心按鈕、印章、選中狀態、頁尾底） */
+  --jade-deep: #276A62;   /* 點綴字色：薄荷葉壓深（英文小標、連結、規格標籤） */
+  --jade-pale: #E3F0EE;   /* 淺薄荷：提示列、選中規格的底 */
+  --cream: #FFFAF5;
+  --garden-brown: #603813;
   --garden-brown-soft: #6E4A2C;
-  --petal: #A8543A;      /* 只給錯誤訊息與倒數，跟品牌站的朱紅同一個 */
+  --petal: #B5462F;       /* 錯誤訊息與倒數 */
+  --leaf-red: #E0465E; --leaf-yellow: #F2C14E; --leaf-orange: #F0782D; --leaf-mint: #7FD3C7;
+  --leaves: linear-gradient(90deg, var(--leaf-red) 0 25%, var(--leaf-yellow) 25% 50%, var(--leaf-orange) 50% 75%, var(--leaf-mint) 75% 100%);
   --font-display: "Cormorant Garamond", "Noto Serif TC", serif;
   --font-body: "Noto Serif TC", "Songti TC", "PingFang TC", serif;
   --wrap: 1180px;
@@ -48,11 +52,13 @@ p { margin: 0; text-wrap: pretty; }
 .demo-note { background: var(--jade-pale); color: var(--jade-deep); font-size: .82rem; text-align: center; padding: .45rem var(--gutter); letter-spacing: .06em; }
 
 /* ---------- 頂列 ---------- */
+.bar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--leaves); }
+.foot::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--leaves); }
 .bar {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
   padding: .7rem var(--gutter);
-  background: rgba(250, 247, 238, .92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 250, 245, .92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
@@ -200,7 +206,8 @@ p { margin: 0; text-wrap: pretty; }
 .checkout { padding: clamp(3.5rem, 8vw, 6rem) 0; border-top: 1px solid var(--line); }
 .checkout-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
 .checkout h2 { font-size: 1.6rem; letter-spacing: .16em; margin-bottom: 1.4rem; }
-.summary { position: sticky; top: 84px; background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--jade); padding: 1.8rem; }
+.summary { position: sticky; top: 84px; background: var(--card); border: 1px solid var(--line); border-top: 0; padding: 1.8rem; }
+.summary::before { content: ""; display: block; height: 4px; margin: -1.8rem -1.8rem 1.5rem; background: var(--leaves); }
 .lines { list-style: none; margin: 0; padding: 0; }
 .lines li { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; border-bottom: 1px dashed var(--line); font-size: .93rem; }
 .lines small { display: block; color: var(--mist); font-size: .8rem; }
@@ -268,10 +275,10 @@ p { margin: 0; text-wrap: pretty; }
 @media (hover: hover) and (pointer: fine) { .btn-line:hover { background: #05a647; border-color: #05a647; } }
 
 /* ---------- 頁尾：回到墨綠 ---------- */
-.foot { background: var(--jade-deep); color: rgba(251, 248, 239, .9); padding: 2.5rem 0 3rem; font-size: .88rem; }
+.foot { position: relative; background: var(--jade); color: rgba(255, 250, 245, .92); padding: 2.5rem 0 3rem; font-size: .88rem; }
 .foot-grid { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
 .foot-brand { letter-spacing: .1em; font-family: var(--font-display); font-size: 1rem; }
-.foot-brand span { font-family: var(--font-body); font-size: .88rem; color: #CFE9E4; letter-spacing: .06em; }
+.foot-brand span { font-family: var(--font-body); font-size: .88rem; color: #D6EDE8; letter-spacing: .06em; }
 .foot a { text-decoration: none; border-bottom: 1px solid rgba(251, 248, 239, .35); }
 @media (hover: hover) and (pointer: fine) { .foot a:hover { border-color: var(--cream); } }
 .foot-contact { margin-top: .4rem; }
@@ -318,13 +325,14 @@ p { margin: 0; text-wrap: pretty; }
   .order-form .btn-solid { width: 100%; }
   .pay-box { grid-template-columns: 1fr; }
   .summary { padding: 1.3rem; }
+  .summary::before { margin: -1.3rem -1.3rem 1.2rem; }
   .done-steps > li { padding-left: 1.2rem; padding-top: 3.2rem; }
 
   .dock:not([hidden]) {
     display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
     align-items: center; justify-content: space-between; gap: 1rem;
     padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-    background: rgba(255, 254, 249, .86); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%);
+    background: rgba(255, 255, 255, .88); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%);
     border-top: 1px solid var(--line);
   }
   .dock-text { display: grid; line-height: 1.3; }
@@ -342,6 +350,6 @@ p { margin: 0; text-wrap: pretty; }
   .bar, .dock:not([hidden]) { background: var(--card); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 @media (prefers-contrast: more) {
-  :root { --line: #8FA39E; --mist: #44524F; }
+  :root { --line: #A88F7C; --mist: #5A4636; }
   .stepper, .card, .field input, .field textarea, .choice label { border-color: var(--ink); }
 }
