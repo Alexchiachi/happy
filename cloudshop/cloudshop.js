@@ -39,7 +39,9 @@
     try { cart = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { cart = {}; }
     Object.keys(cart).forEach(function (k) { if (!find(k) || !(cart[k] > 0)) delete cart[k]; });
 
-    $('[data-demo-note]').hidden = !data.demo;
+    var demo = $('[data-demo-note]');
+    demo.hidden = !data.demo;
+    if (data.demoNote) demo.textContent = data.demoNote;
     var w = data.week;
     all('[data-week-name]', function (el) { el.textContent = w.name; });
     all('[data-week-note]', function (el) { el.textContent = w.note.replace('{deadline}', shortDate(w.deadline)); });
@@ -63,8 +65,11 @@
 
     all('[data-shelf]', function (el) {
       var shelf = el.dataset.shelf;
-      el.innerHTML = PRODUCTS.filter(function (p) { return p.shelf === shelf; })
-        .map(function (p) { return cardHTML(p, closed && shelf === 'week'); }).join('');
+      var list = PRODUCTS.filter(function (p) { return p.shelf === shelf; });
+      el.innerHTML = list.map(function (p) { return cardHTML(p, closed && shelf === 'week'); }).join('');
+      // 這一區還沒有商品：整區收起來，開場連到這一區的按鈕也一起收
+      el.closest('.shelf').hidden = !list.length;
+      if (!list.length) all('a[href="#' + el.closest('.shelf').id + '"]', function (a) { a.hidden = true; });
     });
     // 截止後購物車裡的本週商品也拿掉
     if (closed) Object.keys(cart).forEach(function (k) { if (find(k).p.shelf === 'week') delete cart[k]; });
@@ -85,8 +90,12 @@
     var visual = p.img
       ? '<picture><source type="image/webp" srcset="' + p.img.replace(/\.jpg$/, '.webp') + '"><img src="' + p.img + '" alt="' + esc(p.imgAlt || p.name) + '" loading="lazy" decoding="async" width="800" height="1000"></picture>'
       : '<div class="ph tone-' + p.tone + '" role="img" aria-label="' + esc(p.name) + '（照片準備中）"><span class="ph-han">' + esc(p.han) + '</span><span class="ph-note">照片準備中</span></div>';
-    var from = Math.min.apply(null, p.variants.map(function (v) { return v.price; }));
-    var rows = p.variants.map(function (v) {
+    // 價格還沒定（資料表價格欄空白）的商品：variants 留空，卡片顯示「價格確認中」並請客人用 LINE 詢問，不能放進購物車
+    var priced = p.variants.length > 0;
+    var from = priced ? Math.min.apply(null, p.variants.map(function (v) { return v.price; })) : 0;
+    var rows = !priced ? '<li class="variant variant-ask"><span class="v-label">' + esc(p.priceNote || '價格確認中') + '</span>' +
+        '<a class="ask" href="' + DATA.contact.lineUrl + '" target="_blank" rel="noopener">LINE 詢問 →</a></li>' :
+      p.variants.map(function (v) {
       var k = p.id + '|' + v.key;
       return '<li class="variant">' +
         '<span class="v-label">' + esc(v.label) + '</span>' +
@@ -104,7 +113,7 @@
       '<div class="card-body">' +
         '<p class="card-cat">' + esc(p.cat) + '</p>' +
         '<h3 class="card-name">' + esc(p.name) + '</h3>' +
-        '<p class="card-price">' + (p.variants.length > 1 ? '<small>自</small> ' : '') + money(from) + '</p>' +
+        (priced ? '<p class="card-price">' + (p.variants.length > 1 ? '<small>自</small> ' : '') + money(from) + '</p>' : '') +
         '<p class="card-intro">' + esc(p.intro) + '</p>' +
         '<details class="card-more"><summary>介紹與規格</summary>' +
           (p.story ? '<p>' + esc(p.story) + '</p>' : '') + '<dl class="specs">' + specs + '</dl>' +

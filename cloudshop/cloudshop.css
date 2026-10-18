@@ -1,4 +1,4 @@
-/* 無人商店雲端小舖：版面與互動照 shop/shop.css，色彩換成嘉禮慕華的墨綠＋米白（取自品牌圖）。
+/* 無人商店雲端小舖：版面與互動照 shop/shop.css。頁面主色是墨綠＋米白；開場主視覺 2026-10-18 改成孩子園藝（CH GARDEN）的粉米底與棕字。
    對比（對 --paper #FAF7EE）：--ink 11:1、--jade-ink 6.0:1、--mist 4.9:1；米白字壓在 --jade 上 4.9:1 */
 :root {
   --paper: #FAF7EE;
@@ -12,6 +12,8 @@
   --jade-deep: #0F6A65;  /* 文字、細線用的墨綠 */
   --jade-pale: #DCEBE6;
   --cream: #FBF8EF;
+  --garden-brown: #603813;      /* 孩子園藝標誌的棕色，開場文字與按鈕 */
+  --garden-brown-soft: #6E4A2C;
   --petal: #A8543A;      /* 只給錯誤訊息與倒數，跟品牌站的朱紅同一個 */
   --font-display: "Cormorant Garamond", "Noto Serif TC", serif;
   --font-body: "Noto Serif TC", "Songti TC", "PingFang TC", serif;
@@ -69,16 +71,16 @@ p { margin: 0; text-wrap: pretty; }
 .bag-count.bump { animation: bump 320ms cubic-bezier(.2, .9, .3, 1.2); }
 @keyframes bump { 40% { transform: scale(1.28); background: var(--jade-deep); } }
 
-/* ---------- 開場：墨綠底、米白字、線描枝葉 ---------- */
-.hero { position: relative; overflow: hidden; background: var(--jade); color: var(--cream); padding: clamp(3rem, 8vw, 6rem) 0; }
-.hero-vine { position: absolute; left: -40px; bottom: -30px; width: min(46vw, 420px); height: auto; color: rgba(251, 248, 239, .28); pointer-events: none; }
+/* ---------- 開場：孩子園藝（CH GARDEN）主視覺。粉米底、標誌的棕色字（#603813，對底 8.3:1 以上），枝葉線描改淡綠 ---------- */
+.hero { position: relative; overflow: hidden; background: linear-gradient(160deg, #FBF4EE 0%, #F6E6DE 55%, #E4EFEC 100%); color: var(--garden-brown); padding: clamp(3rem, 8vw, 6rem) 0; }
+.hero-vine { position: absolute; left: -40px; bottom: -30px; width: min(46vw, 420px); height: auto; color: rgba(19, 122, 117, .22); pointer-events: none; }
 .hero-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
-.hero .eyebrow { color: #CFE9E4; }
+.hero .eyebrow { color: var(--jade-deep); }
 .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 300; letter-spacing: .16em; line-height: 1.4; }
-.lede { margin-top: 1.5rem; max-width: 26em; font-size: 1.05rem; color: rgba(251, 248, 239, .92); }
+.lede { margin-top: 1.5rem; max-width: 26em; font-size: 1.05rem; color: var(--garden-brown-soft); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
 .hero-art { margin: 0; justify-self: end; width: min(100%, 480px); }
-.hero-art img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.hero-art img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border: 1px solid rgba(96, 56, 19, .15); }
 
 /* ---------- 按鈕（直角） ---------- */
 .btn {
@@ -87,14 +89,16 @@ p { margin: 0; text-wrap: pretty; }
   text-decoration: none; cursor: pointer; border-radius: 0; transition: background .18s, color .18s, border-color .18s;
 }
 .btn:active { transform: scale(.97); transition: transform 100ms ease-out; }
-.btn-cream { border: 1px solid var(--cream); background: var(--cream); color: var(--jade-deep); }
-.btn-line-ghost { border: 1px solid rgba(251, 248, 239, .7); background: transparent; color: var(--cream); }
+.btn-cream { border: 1px solid var(--garden-brown); background: var(--garden-brown); color: var(--cream); }
+.btn-line-ghost { border: 1px solid var(--garden-brown); background: transparent; color: var(--garden-brown); }
+/* 本週預訂沒有商品時第一顆按鈕會被藏起來，剩下這顆改成實心當主要按鈕 */
+.hero-actions [hidden] + .btn-line-ghost { background: var(--garden-brown); color: var(--cream); }
 .btn-ghost { border: 1px solid var(--jade-deep); background: transparent; color: var(--jade-deep); }
 .btn-solid { border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
 .btn-small { min-height: 40px; padding: 0 1rem; font-size: .85rem; }
 @media (hover: hover) and (pointer: fine) {
-  .btn-cream:hover { background: transparent; color: var(--cream); }
-  .btn-line-ghost:hover { border-color: var(--cream); background: rgba(251, 248, 239, .1); }
+  .btn-cream:hover { background: transparent; color: var(--garden-brown); }
+  .btn-line-ghost:hover { background: rgba(96, 56, 19, .08); }
   .btn-ghost:hover { background: var(--jade-deep); color: var(--cream); }
   .btn-solid:hover { background: var(--jade); border-color: var(--jade); }
 }
@@ -175,6 +179,10 @@ p { margin: 0; text-wrap: pretty; }
 .v-price { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; white-space: nowrap; }
 .v-price small { font-family: var(--font-body); font-size: .72rem; color: var(--mist); }
 .v-closed { font-size: .8rem; color: var(--mist); letter-spacing: .1em; }
+.variant-ask { grid-template-columns: 1fr auto; }
+.variant-ask .v-label { color: var(--mist); letter-spacing: .1em; }
+.ask { color: var(--jade-deep); font-size: .88rem; letter-spacing: .08em; text-decoration: none; border-bottom: 1px solid currentColor; padding: .5rem 0 .15rem; }
+@media (hover: hover) and (pointer: fine) { .ask:hover { color: var(--jade); } }
 .stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--card); }
 .stepper button {
   width: 40px; height: 40px; border: 0; background: none; font: inherit; font-size: 1.05rem; cursor: pointer; color: var(--ink);

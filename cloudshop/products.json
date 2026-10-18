@@ -1,5 +1,5 @@
 {
-  "_說明": "無人商店雲端小舖的商品與取貨設定。網頁（cloudshop.js）讀這一份。目前商品、價格、門市資料都是示範（demo: true），等使用者提供資料後換上。商品 id 與規格 key 上線後不要改；要下架改 active:false。",
+  "_說明": "無人商店雲端小舖的商品與取貨設定。網頁（cloudshop.js）讀這一份；資料來源是雲端硬碟「雲端小舖｜商品資料表」。商品 id 與規格 key 上線後不要改；要下架改 active:false。variants 留空＝價格還沒定，卡片顯示 priceNote 並請客人用 LINE 詢問。",
   "demo": true,
   "week": {
     "name": "本週預訂",
@@ -8,7 +8,7 @@
     "note": "收單至 {deadline} 晚上 8 點，到貨後用 LINE 通知取貨。"
   },
   "store": {
-    "name": "嘉禮慕華 · 無人商店",
+    "name": "孩子園藝 · 無人商店",
     "address": "門市地址（待補）",
     "hours": "24 小時開放，自助結帳",
     "pickup": "到店後在取貨櫃輸入訂單編號末四碼取貨"
@@ -34,101 +34,96 @@
   "products": [
     {
       "active": true,
-      "id": "rose-tea",
-      "shelf": "week",
-      "badge": "示範",
-      "cat": "花草茶 · Tea",
-      "han": "茶",
+      "id": "blind-turtle",
+      "shelf": "always",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "龜",
       "tone": "jade",
-      "name": "玫瑰花草茶",
-      "intro": "一小撮花瓣，一壺熱水，下午就慢下來了。",
-      "story": "示範文字：商品介紹放這裡，兩三句講清楚它是什麼、適合什麼時候用。",
-      "specs": [["內容量", "待補"], ["保存", "待補"], ["產地", "待補"]],
-      "variants": [
-        { "key": "std", "label": "一包", "price": 280, "unit": "包" },
-        { "key": "box", "label": "禮盒 3 包", "price": 780, "unit": "盒" }
-      ]
+      "name": "烏龜對對碰 公仔盲袋",
+      "intro": "拆開才知道是哪一隻，夜光版關燈會亮。",
+      "specs": [
+        [
+          "尺寸",
+          "公仔約 3.6 × 5 公分，盲袋 8 × 10 公分"
+        ],
+        [
+          "提醒",
+          "8 歲以下兒童請在大人陪同下使用"
+        ]
+      ],
+      "variants": [],
+      "priceNote": "價格確認中",
+      "img": "images/blind-turtle.jpg",
+      "imgAlt": "烏龜對對碰盲袋的展示盒與單包盲袋，旁邊是粉紅、黃、藍等顏色的小烏龜公仔"
     },
     {
       "active": true,
-      "id": "flower-cake",
-      "shelf": "week",
-      "badge": "示範",
-      "cat": "點心 · Sweets",
-      "han": "餅",
+      "id": "blind-gugu",
+      "shelf": "always",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "娃",
       "tone": "petal",
-      "name": "手作花餅",
-      "intro": "每週現做，數量不多，預訂才留得到。",
-      "story": "示範文字：商品介紹放這裡。",
-      "specs": [["內容量", "待補"], ["保存", "待補"]],
-      "variants": [
-        { "key": "std", "label": "一盒 6 入", "price": 360, "unit": "盒" }
-      ]
+      "name": "咕咕嘎嘎 手辦公仔",
+      "intro": "穿著小動物連身衣的娃娃，貓、柯基、企鵝，還有隱藏款。",
+      "specs": [
+        [
+          "尺寸",
+          "單盒約 7 × 7 × 12 公分"
+        ]
+      ],
+      "variants": [],
+      "priceNote": "價格確認中",
+      "img": "images/blind-gugu.jpg",
+      "imgAlt": "六個穿著黑貓、柯基、企鵝連身衣的娃娃公仔，排成兩排"
     },
     {
       "active": true,
-      "id": "bouquet",
-      "shelf": "week",
-      "badge": "示範",
-      "cat": "鮮花 · Flowers",
-      "han": "花",
-      "tone": "leaf",
-      "name": "當季小花束",
-      "intro": "放在餐桌一角，桌子就有了季節。",
-      "story": "示範文字：花材依當週到貨調整。",
-      "specs": [["尺寸", "待補"], ["保存", "待補"]],
-      "variants": [
-        { "key": "s", "label": "小束", "price": 450, "unit": "束" },
-        { "key": "m", "label": "中束", "price": 750, "unit": "束" }
-      ]
-    },
-    {
-      "active": true,
-      "id": "honey",
+      "id": "blind-bronze-burner",
       "shelf": "always",
-      "badge": "示範",
-      "cat": "蜜 · Honey",
-      "han": "蜜",
-      "tone": "honey",
-      "name": "百花蜜",
-      "intro": "早上一匙，泡在溫水裡。",
-      "story": "示範文字：商品介紹放這裡。",
-      "specs": [["內容量", "待補"], ["保存", "待補"]],
-      "variants": [
-        { "key": "std", "label": "一罐", "price": 420, "unit": "罐" }
-      ]
-    },
-    {
-      "active": true,
-      "id": "dried-wreath",
-      "shelf": "always",
-      "badge": "示範",
-      "cat": "乾燥花 · Dried",
-      "han": "圈",
-      "tone": "moss",
-      "name": "乾燥花圈",
-      "intro": "掛在門上，一整季都不用照顧。",
-      "story": "示範文字：商品介紹放這裡。",
-      "specs": [["尺寸", "待補"]],
-      "variants": [
-        { "key": "std", "label": "直徑約 20 公分", "price": 880, "unit": "個" }
-      ]
-    },
-    {
-      "active": true,
-      "id": "herb-salt",
-      "shelf": "always",
-      "badge": "示範",
-      "cat": "調味 · Pantry",
-      "han": "鹽",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "爐",
       "tone": "stone",
-      "name": "香草海鹽",
-      "intro": "煎蛋、烤菜、一盤沙拉，撒一點就夠。",
-      "story": "示範文字：商品介紹放這裡。",
-      "specs": [["內容量", "待補"], ["保存", "待補"]],
-      "variants": [
-        { "key": "std", "label": "一罐", "price": 180, "unit": "罐" }
-      ]
+      "name": "青堆堆香薰爐 國風青銅系列",
+      "intro": "青銅面具造型的小香薰爐，不點香時就是桌上的擺件。",
+      "specs": [
+        [
+          "尺寸",
+          "單盒 7.3 × 6.1 × 8.1 公分"
+        ],
+        [
+          "包裝",
+          "一中盒 12 個"
+        ]
+      ],
+      "variants": [],
+      "priceNote": "價格確認中",
+      "img": "images/blind-bronze-burner.jpg",
+      "imgAlt": "十幾個青綠色與古銅色的青銅面具造型小香薰爐，排在石階上"
+    },
+    {
+      "active": true,
+      "id": "blind-meow-kungfu",
+      "shelf": "always",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "喵",
+      "tone": "honey",
+      "name": "喵喵叫 國術館",
+      "intro": "六隻練功夫的貓，各有各的架勢。",
+      "specs": [
+        [
+          "款式",
+          "全 6 種"
+        ]
+      ],
+      "variants": [],
+      "priceNote": "價格確認中",
+      "img": "images/blind-meow-kungfu.jpg",
+      "imgAlt": "喵喵叫國術館的包裝盒，盒上與盒前站著拿竹籤、扇子、拐杖等道具的貓咪公仔"
     }
-  ]
+  ],
+  "demoNote": "試營運：盲盒系列先上架，價格確認中，想買請用 LINE 詢問。"
 }
