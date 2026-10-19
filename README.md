@@ -16,3 +16,11 @@
 - 表單、訂單、寄信與管理頁在 Cloudflare Workers（`executive-table/worker/`，設定在 `wrangler.jsonc`）。
 
 © 大道至簡 · 簡家旗
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+© Copyright (c) 2026 CHIA CHI CHIEN
