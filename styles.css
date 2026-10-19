@@ -368,6 +368,83 @@ h1, h2, .pull-quote q { text-wrap: balance; }
   color: var(--mist); writing-mode: vertical-rl; padding-left: 2px;
 }
 
+/* ------------------------------------------------------------
+   Hero 開場（只有首頁 .hero-intro）
+   ------------------------------------------------------------
+   像翻開一本書：紙與字一開始就在，一條細線畫開、字一個一個落定、
+   「道」由墨轉茶，最後蓋上一方朱印。全長約 2.4 秒，只用 CSS。
+   - 大字不從 opacity:0 開始（見 NEW-PAGE.md：LCP 會被自己的動畫綁住）；
+     字從淡墨（mist）到濃墨，只動 transform 與 color，不動字距，所以 CLS 是 0。
+   - 動畫只寫 from，結束值就是元件原本的樣式；關掉動畫（intro-done、
+     減少動態）等於直接看到完成的畫面。
+   - 朱印是唯一從 opacity:0 起的：它是「蓋上去」的，蓋之前本來就不在紙上。
+   - 開場的「簡家旗印」是署名，頁尾的「大道至簡」是收尾，兩方印各有用途。 */
+.hero-signed {
+  display: flex; align-items: flex-end; flex-wrap: wrap;
+  gap: 0 clamp(0.75rem, 2.5vw, 1.75rem);
+  margin-bottom: var(--s-3);
+}
+.hero-signed .hero-title { margin-bottom: 0; }
+.hero-title .ch { display: inline-block; }
+.hero-seal {
+  --seal-size: clamp(40px, 5.6vw, 66px);
+  width: var(--seal-size); height: var(--seal-size);
+  /* 對齊大字的字身底部，不是行高的底部 */
+  margin-bottom: 0.1em;
+  font-size: clamp(3.2rem, 9vw, 7rem);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 2px solid var(--seal);
+  background: rgba(168, 84, 58, 0.04);
+  color: var(--seal);
+  font-family: var(--font-han);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+.hero-seal span { display: block; font-size: calc(var(--seal-size) * 0.3); }
+.hero-rule {
+  display: block;
+  width: min(22rem, 70%);
+  height: 1px;
+  background: var(--line);
+  margin-bottom: var(--s-4);
+  transform-origin: left center;
+}
+
+.hero-intro .hero-eyebrow { animation: hero-rise var(--dur) var(--ease) backwards; }
+.hero-intro .hero-rule    { animation: hero-rule 900ms var(--ease) 100ms backwards; }
+.hero-intro .hero-title .ch {
+  animation: hero-ch 900ms var(--ease) backwards;
+  animation-delay: calc(200ms + var(--i) * 110ms);
+}
+.hero-intro .hero-title .accent { animation: hero-tea 900ms ease-in-out 900ms backwards; }
+.hero-intro .hero-tagline { animation: hero-rise var(--dur) var(--ease) 1300ms backwards; }
+.hero-intro .hero-meta    { animation: hero-rise var(--dur) var(--ease) 1450ms backwards; }
+.hero-intro .hero-seal    { animation: hero-stamp 460ms cubic-bezier(0.2, 0.9, 0.3, 1) 1900ms backwards; }
+.hero-intro .hero-scroll  { animation: hero-fade var(--dur) ease-out 2100ms backwards; }
+
+/* 淡墨落定：稍微偏左、偏下，顏色從 mist 到原本的 ink */
+@keyframes hero-ch {
+  from { transform: translate(calc(var(--i) * -0.08em), 0.14em); color: var(--mist); }
+}
+/* 「道」先是墨色，再慢慢暈成茶褐 */
+@keyframes hero-tea { from { color: var(--ink); } }
+@keyframes hero-rule { from { transform: scaleX(0); } }
+@keyframes hero-rise { from { transform: translateY(14px); color: var(--line); } }
+@keyframes hero-fade { from { opacity: 0; } }
+/* 蓋印：從上方壓下來，略微壓過頭再回彈；剛蓋的印泥比較濃 */
+@keyframes hero-stamp {
+  0%   { opacity: 0; transform: scale(1.6) rotate(-6deg); background-color: rgba(168, 84, 58, 0); }
+  60%  { opacity: 1; transform: scale(0.94) rotate(0deg); background-color: rgba(168, 84, 58, 0.18); }
+  100% { transform: scale(1); }
+}
+
+.intro-done .hero-intro,
+.intro-done .hero-intro * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro, .hero-intro * { animation: none !important; }
+}
+
 /* ============================================================
    Pull Quote
    ============================================================ */

@@ -32,7 +32,22 @@
   <!-- 字型 CSS 有 500KB（中文要切成上百段），不讓它擋住畫面：先用系統明體顯示，載完再換 -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Serif+TC:wght@200;300;400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="styles.css?v=dd34f131">
+  <link rel="stylesheet" href="styles.css?v=d6ecf91e">
+  <!-- 首頁開場：同一次瀏覽只播一次；開場中點一下、按鍵或捲動，就直接跳到完成的畫面。
+       放在 <head> 而不是 scripts.js，是因為要在第一次繪製前就決定播不播，才不會閃一下。 -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        if (sessionStorage.getItem('dao-intro')) root.classList.add('intro-done');
+        else sessionStorage.setItem('dao-intro', '1');
+      } catch (e) {}
+      function skip() { root.classList.add('intro-done'); }
+      ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (t) {
+        addEventListener(t, skip, { once: true, passive: true });
+      });
+    })();
+  </script>
 </head>
 <body>
 <a class="skip-link" href="#main">跳到主要內容</a>
@@ -59,14 +74,20 @@
 <main id="main" tabindex="-1" class="main-flush">
 
 <!-- Hero -->
-<section class="hero">
+<!-- 開場動畫：只有 CSS（styles.css「Hero 開場」），字一開始就看得見，動的只有位置與墨色；
+     最後蓋上一方「簡家旗印」。同一次瀏覽只播一次、點一下就跳到結尾，由 <head> 那段小程式負責。 -->
+<section class="hero hero-intro">
   <div class="container">
-    <div class="eyebrow hero-eyebrow reveal">Dao is simple · 簡家旗</div>
-    <h1 class="hero-title reveal">
-      大<span class="accent">道</span>至簡
-    </h1>
-    <p class="hero-tagline reveal">做幸福的事，讓幸福變成有價值的事。</p>
-    <div class="hero-meta reveal">
+    <div class="eyebrow hero-eyebrow">Dao is simple · 簡家旗</div>
+    <div class="hero-signed">
+      <h1 class="hero-title">
+        <span class="ch" style="--i:0">大</span><span class="accent"><span class="ch" style="--i:1">道</span></span><span class="ch" style="--i:2">至</span><span class="ch" style="--i:3">簡</span>
+      </h1>
+      <span class="hero-seal" role="img" aria-label="簡家旗印"><span>簡家</span><span>旗印</span></span>
+    </div>
+    <span class="hero-rule" aria-hidden="true"></span>
+    <p class="hero-tagline">做幸福的事，讓幸福變成有價值的事。</p>
+    <div class="hero-meta">
       <span>雲南</span>
       <span>台灣</span>
       <span>幸福</span>
