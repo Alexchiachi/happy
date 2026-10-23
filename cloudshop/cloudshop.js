@@ -66,7 +66,13 @@
     all('[data-shelf]', function (el) {
       var shelf = el.dataset.shelf;
       var list = PRODUCTS.filter(function (p) { return p.shelf === shelf; });
-      el.innerHTML = list.map(function (p) { return cardHTML(p, closed && shelf === 'week'); }).join('');
+      // 商品有 group（例：盲盒系列、玩具系列）時，同組排在一起，組名當小標題，跨滿整排
+      var lastGroup = null;
+      el.innerHTML = list.map(function (p) {
+        var head = '';
+        if (p.group && p.group !== lastGroup) { head = '<h3 class="group-title" id="g-' + esc(p.groupId || '') + '">' + esc(p.group) + '</h3>'; lastGroup = p.group; }
+        return head + cardHTML(p, closed && shelf === 'week');
+      }).join('');
       // 這一區還沒有商品：整區收起來，開場連到這一區的按鈕也一起收
       el.closest('.shelf').hidden = !list.length;
       if (!list.length) all('a[href="#' + el.closest('.shelf').id + '"]', function (a) { a.hidden = true; });

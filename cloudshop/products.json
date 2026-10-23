@@ -61,7 +61,9 @@
         }
       ],
       "img": "images/blind-turtle.jpg",
-      "imgAlt": "烏龜對對碰盲袋的展示盒與單包盲袋，旁邊是粉紅、黃、藍等顏色的小烏龜公仔"
+      "imgAlt": "烏龜對對碰盲袋的展示盒與單包盲袋，旁邊是粉紅、黃、藍等顏色的小烏龜公仔",
+      "group": "盲盒系列",
+      "groupId": "blind"
     },
     {
       "active": true,
@@ -88,7 +90,9 @@
         }
       ],
       "img": "images/blind-gugu.jpg",
-      "imgAlt": "六個穿著黑貓、柯基、企鵝連身衣的娃娃公仔，排成兩排"
+      "imgAlt": "六個穿著黑貓、柯基、企鵝連身衣的娃娃公仔，排成兩排",
+      "group": "盲盒系列",
+      "groupId": "blind"
     },
     {
       "active": true,
@@ -119,7 +123,9 @@
         }
       ],
       "img": "images/blind-bronze-burner.jpg",
-      "imgAlt": "十幾個青綠色與古銅色的青銅面具造型小香薰爐，排在石階上"
+      "imgAlt": "十幾個青綠色與古銅色的青銅面具造型小香薰爐，排在石階上",
+      "group": "盲盒系列",
+      "groupId": "blind"
     },
     {
       "active": true,
@@ -137,11 +143,418 @@
           "全 6 種"
         ]
       ],
-      "variants": [],
-      "priceNote": "價格確認中",
+      "variants": [
+        {
+          "key": "single",
+          "label": "單個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
       "img": "images/blind-meow-kungfu.jpg",
-      "imgAlt": "喵喵叫國術館的包裝盒，盒上與盒前站著拿竹籤、扇子、拐杖等道具的貓咪公仔"
+      "imgAlt": "喵喵叫國術館的包裝盒，盒上與盒前站著拿竹籤、扇子、拐杖等道具的貓咪公仔",
+      "group": "盲盒系列",
+      "groupId": "blind"
+    },
+    {
+      "active": true,
+      "id": "blind-meng-mao-pal",
+      "shelf": "always",
+      "group": "盲盒系列",
+      "groupId": "blind",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "貓",
+      "tone": "petal",
+      "name": "萌貓PAL 心願集",
+      "intro": "貓貓陪你收集每一個小心願，拆開才知道是哪一隻。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "single",
+          "label": "單個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/blind-meng-mao-pal.jpg",
+      "imgAlt": "萌貓PAL心願集的盒子與幾隻戴帽子、披斗篷的粉色小貓公仔"
+    },
+    {
+      "active": true,
+      "id": "toy-bucket-4",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "沙灘 · Beach",
+      "han": "桶",
+      "tone": "jade",
+      "name": "沙灘桶 4 件組",
+      "intro": "小桶、鏟子、湯匙、耙子，帶去沙灘剛好。",
+      "specs": [
+        [
+          "內容",
+          "桶、鏟、湯匙、耙子"
+        ],
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一組（顏色隨機）",
+          "price": 50,
+          "unit": "組"
+        }
+      ],
+      "img": "images/toy-bucket-4.jpg",
+      "imgAlt": "網袋裝的綠色小沙灘桶，旁邊是小桶、橘色鏟子、藍色湯匙與綠色耙子"
+    },
+    {
+      "active": true,
+      "id": "toy-bucket-8",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "沙灘 · Beach",
+      "han": "桶",
+      "tone": "jade",
+      "name": "沙灘桶 8 件組",
+      "intro": "桶子、鏟耙，再加四個海洋動物沙模。",
+      "specs": [
+        [
+          "內容",
+          "桶、鏟、湯匙、耙子、沙模 4 個"
+        ],
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一組（顏色隨機）",
+          "price": 80,
+          "unit": "組"
+        }
+      ],
+      "img": "images/toy-bucket-8.jpg",
+      "imgAlt": "沙堆上的粉色小桶、鏟子、湯匙、耙子，與海龜、鯨魚、海星、螃蟹沙模"
+    },
+    {
+      "active": true,
+      "id": "toy-fold-bucket",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "沙灘 · Beach",
+      "han": "桶",
+      "tone": "jade",
+      "name": "沙灘折疊桶",
+      "intro": "可以壓扁收起來的沙灘桶，出門不佔位子。",
+      "specs": [
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（顏色隨機）",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/toy-fold-bucket.jpg",
+      "imgAlt": "四袋網袋裝的粉、橘、藍、綠色折疊沙灘桶，附小鏟耙與沙模"
+    },
+    {
+      "active": true,
+      "id": "toy-cart-6",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "沙灘 · Beach",
+      "han": "車",
+      "tone": "jade",
+      "name": "沙灘推車 6 件組",
+      "intro": "小推車載著鏟子、耙子和小桶，一路推著玩。",
+      "specs": [
+        [
+          "內容",
+          "推車、鏟、耙、小桶、沙模"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一組",
+          "price": 100,
+          "unit": "組"
+        }
+      ],
+      "img": "images/toy-cart-6.jpg",
+      "imgAlt": "沙灘上的藍綠色小推車，旁邊有紅色鏟子、耙子、小桶、小狗與章魚沙模"
+    },
+    {
+      "active": true,
+      "id": "toy-hourglass-18",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "玩具 · Toys",
+      "han": "玩",
+      "tone": "honey",
+      "name": "沙灘沙漏 18 件組",
+      "intro": "沙漏轉輪、桶子和一整排小工具，蓋城堡的一套。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一組",
+          "price": 200,
+          "unit": "組"
+        }
+      ],
+      "img": "images/toy-hourglass-18.jpg",
+      "imgAlt": "藍綠色沙灘桶與沙漏轉輪，前面排著一整排彩色鏟子、耙子與小沙模"
+    },
+    {
+      "active": true,
+      "id": "toy-tool-bag-11",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "沙灘 · Beach",
+      "han": "袋",
+      "tone": "jade",
+      "name": "沙灘工具附包 11 件套",
+      "intro": "附網袋，玩完沙抖一抖就能裝走。",
+      "specs": [
+        [
+          "內容",
+          "網袋＋沙灘工具"
+        ],
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一套（顏色隨機）",
+          "price": 250,
+          "unit": "套"
+        }
+      ],
+      "img": "images/toy-tool-bag-11.jpg",
+      "imgAlt": "黃色網袋與奶油色系的灑水壺、鏟子、甜點造型沙模"
+    },
+    {
+      "active": true,
+      "id": "toy-water-cannon",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "水槍 · Water",
+      "han": "水",
+      "tone": "jade",
+      "name": "大容量水炮水槍",
+      "intro": "加特林造型，抽拉式裝水，水量大。",
+      "specs": [
+        [
+          "長度",
+          "約 53 公分"
+        ],
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支（顏色隨機）",
+          "price": 100,
+          "unit": "支"
+        }
+      ],
+      "img": "images/toy-water-cannon.jpg",
+      "imgAlt": "藍白與橘色兩支加特林造型的大水槍，背景是泳池"
+    },
+    {
+      "active": true,
+      "id": "toy-firework-gun",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "水槍 · Water",
+      "han": "水",
+      "tone": "jade",
+      "name": "煙花水槍",
+      "intro": "多孔一起噴，水花像煙火一樣散開。",
+      "specs": [
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支（顏色隨機）",
+          "price": 100,
+          "unit": "支"
+        }
+      ],
+      "img": "images/toy-firework-gun.jpg",
+      "imgAlt": "粉色透明管身的抽拉式水槍，從多個孔噴出散開的水花"
+    },
+    {
+      "active": true,
+      "id": "toy-five-hole-gun",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "水槍 · Water",
+      "han": "水",
+      "tone": "jade",
+      "name": "五孔水槍",
+      "intro": "五個孔一起噴，抽拉式裝水。",
+      "specs": [
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支（顏色隨機）",
+          "price": 100,
+          "unit": "支"
+        }
+      ],
+      "img": "images/toy-five-hole-gun.jpg",
+      "imgAlt": "藍色透明管身的抽拉式五孔水槍，五道水柱往上噴"
+    },
+    {
+      "active": true,
+      "id": "toy-bean-sticker-book",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "手作本 · Craft",
+      "han": "貼",
+      "tone": "petal",
+      "name": "小麻薯變身計劃 豆豆貼紙本",
+      "intro": "一顆顆貼上去，娃娃就換了一身打扮。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一本（款式隨機）",
+          "price": 70,
+          "unit": "本"
+        }
+      ],
+      "img": "images/toy-bean-sticker-book.jpg",
+      "imgAlt": "變身豆豆本貼紙書的封面，四種顏色的娃娃換裝款"
+    },
+    {
+      "active": true,
+      "id": "toy-slime",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "玩具 · Toys",
+      "han": "瓶",
+      "tone": "petal",
+      "name": "葫蘆瓶裝假水史萊姆",
+      "intro": "葫蘆瓶裡裝著彩色的史萊姆，捏著玩。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一瓶（款式隨機）",
+          "price": 80,
+          "unit": "瓶"
+        }
+      ],
+      "img": "images/toy-slime.jpg",
+      "imgAlt": "粉紅展示盒裡排著黃、紫、藍、粉色的葫蘆瓶史萊姆"
+    },
+    {
+      "active": true,
+      "id": "toy-relic-book",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "手作本 · Craft",
+      "han": "貼",
+      "tone": "petal",
+      "name": "文物修復本",
+      "intro": "照著圖貼上貼紙，把一件件古文物「修」回原樣。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一本（款式隨機）",
+          "price": 150,
+          "unit": "本"
+        }
+      ],
+      "img": "images/toy-relic-book.jpg",
+      "imgAlt": "文物篇修復貼紙本，翻開是瓷瓶、香爐等文物圖樣"
+    },
+    {
+      "active": true,
+      "id": "toy-recipe-book",
+      "shelf": "always",
+      "group": "玩具系列",
+      "groupId": "toys",
+      "cat": "手作本 · Craft",
+      "han": "貼",
+      "tone": "petal",
+      "name": "提拉多 菜譜素材本",
+      "intro": "手帳素材本，每頁一道家常菜，邊貼邊認識怎麼做。",
+      "specs": [
+        [
+          "頁數",
+          "66 頁"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一本",
+          "price": 150,
+          "unit": "本"
+        }
+      ],
+      "img": "images/toy-recipe-book.jpg",
+      "imgAlt": "提拉多菜譜素材本，內頁是四喜丸子的食材與步驟插畫"
     }
   ],
-  "demoNote": "試營運：盲盒系列上架中，喵喵叫國術館價格確認中，可用 LINE 詢問。"
+  "demoNote": "試營運：盲盒與玩具系列上架中，門市地址確認中。"
 }
