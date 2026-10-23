@@ -34,6 +34,88 @@
   "products": [
     {
       "active": true,
+      "id": "season-ghost-candle",
+      "shelf": "always",
+      "group": "季節商品",
+      "groupId": "season",
+      "cat": "萬聖節 · Halloween",
+      "han": "燭",
+      "tone": "stone",
+      "name": "萬聖節幽靈燭台",
+      "intro": "放一顆小蠟燭，幽靈的嘴就亮起來。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/season-ghost-candle.jpg",
+      "imgAlt": "白色陶瓷幽靈造型燭台，張開的嘴裡點著一顆小蠟燭",
+      "badge": "萬聖節"
+    },
+    {
+      "active": true,
+      "id": "season-pumpkin-lantern",
+      "shelf": "always",
+      "group": "季節商品",
+      "groupId": "season",
+      "cat": "萬聖節 · Halloween",
+      "han": "燈",
+      "tone": "honey",
+      "name": "南瓜燈擺件",
+      "intro": "小小的復古提燈，裡面是會發光的南瓜臉。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（款式隨機）",
+          "price": 50,
+          "unit": "個"
+        }
+      ],
+      "img": "images/season-pumpkin-lantern.jpg",
+      "imgAlt": "三個炫彩外框的小提燈，燈罩上是南瓜鬼臉",
+      "badge": "萬聖節"
+    },
+    {
+      "active": true,
+      "id": "season-ghost-cats",
+      "shelf": "always",
+      "group": "季節商品",
+      "groupId": "season",
+      "cat": "萬聖節 · Halloween",
+      "han": "貓",
+      "tone": "petal",
+      "name": "萬聖節可愛阿飄貓公仔",
+      "intro": "披著床單、扮成小怪獸的貓咪，提著南瓜燈出門。",
+      "specs": [
+        [
+          "販售",
+          "整組售"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "set",
+          "label": "整組",
+          "price": 400,
+          "unit": "組"
+        }
+      ],
+      "img": "images/season-ghost-cats.jpg",
+      "imgAlt": "四隻扮成幽靈、綠色怪獸、蝙蝠的小貓公仔，手上提著南瓜燈",
+      "badge": "萬聖節"
+    },
+    {
+      "active": true,
       "id": "blind-turtle",
       "shelf": "always",
       "badge": "盲盒",
@@ -554,7 +636,1199 @@
       ],
       "img": "images/toy-recipe-book.jpg",
       "imgAlt": "提拉多菜譜素材本，內頁是四喜丸子的食材與步驟插畫"
+    },
+    {
+      "active": true,
+      "id": "stat-popsicle-eraser",
+      "shelf": "always",
+      "group": "文具系列",
+      "groupId": "stationery",
+      "cat": "文具 · Stationery",
+      "han": "擦",
+      "tone": "jade",
+      "name": "冰棒橡皮擦",
+      "intro": "冰棒造型的橡皮擦，每支表情都不一樣。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（款式隨機）",
+          "price": 20,
+          "unit": "個"
+        }
+      ],
+      "img": "images/stat-popsicle-eraser.jpg",
+      "imgAlt": "三支漸層色冰棒造型橡皮擦，各有不同表情"
+    },
+    {
+      "active": true,
+      "id": "stat-bread-pen",
+      "shelf": "always",
+      "group": "文具系列",
+      "groupId": "stationery",
+      "cat": "文具 · Stationery",
+      "han": "筆",
+      "tone": "jade",
+      "name": "麵包掛飾原子筆",
+      "intro": "筆上掛著毛茸茸的可頌、起司小麵包。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支（款式隨機）",
+          "price": 50,
+          "unit": "支"
+        }
+      ],
+      "img": "images/stat-bread-pen.jpg",
+      "imgAlt": "四支掛著可頌、起司、法國麵包絨毛吊飾的原子筆"
+    },
+    {
+      "active": true,
+      "id": "stat-skewer-pen",
+      "shelf": "always",
+      "group": "文具系列",
+      "groupId": "stationery",
+      "cat": "文具 · Stationery",
+      "han": "筆",
+      "tone": "jade",
+      "name": "串串香掛飾原子筆",
+      "intro": "筆身像一串關東煮，章魚、玉米、小魚任你挑。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支（款式隨機）",
+          "price": 60,
+          "unit": "支"
+        }
+      ],
+      "img": "images/stat-skewer-pen.jpg",
+      "imgAlt": "陶碗裡放著幾支串串造型原子筆，掛著章魚、玉米、魚的吊飾"
+    },
+    {
+      "active": true,
+      "id": "life-daisy-6",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "盤",
+      "tone": "leaf",
+      "name": "小雛菊 6 吋骨盤",
+      "intro": "花邊白盤上畫著小雛菊，放骨頭、小點心都好。",
+      "specs": [
+        [
+          "尺寸",
+          "直徑約 15 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-daisy-6.jpg",
+      "imgAlt": "花瓣形白瓷盤，盤緣畫著小雛菊與綠葉"
+    },
+    {
+      "active": true,
+      "id": "life-daisy-85",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "盤",
+      "tone": "leaf",
+      "name": "小雛菊 8.5 吋淺盤",
+      "intro": "淺盤裝早餐、切水果，花邊讓桌面柔和一點。",
+      "specs": [
+        [
+          "尺寸",
+          "直徑約 21.5 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-daisy-85.jpg",
+      "imgAlt": "花瓣形白瓷淺盤，盤緣畫著一圈小雛菊與綠葉"
+    },
+    {
+      "active": true,
+      "id": "life-daisy-8",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "盤",
+      "tone": "leaf",
+      "name": "小雛菊 8 吋深盤",
+      "intro": "有一點深度，盛燉菜、義大利麵都不怕溢出來。",
+      "specs": [
+        [
+          "尺寸",
+          "直徑約 20.3 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-daisy-8.jpg",
+      "imgAlt": "花瓣形白瓷深盤，盤緣畫著小雛菊與綠葉"
+    },
+    {
+      "active": true,
+      "id": "life-begonia-plate",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "盤",
+      "tone": "leaf",
+      "name": "法式復古海棠花盤",
+      "intro": "盤底壓著海棠花紋，素白的盤子也有細節。",
+      "specs": [
+        [
+          "尺寸",
+          "直徑約 15.5 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-begonia-plate.jpg",
+      "imgAlt": "白色圓盤，盤底有一格格的海棠花浮紋"
+    },
+    {
+      "active": true,
+      "id": "life-duck-sauce",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "碟",
+      "tone": "leaf",
+      "name": "喝水鴨子醬料碟",
+      "intro": "鴨子造型的小醬料碟。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 80,
+          "unit": "個"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "life-duck-spoon",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "匙",
+      "tone": "leaf",
+      "name": "鴨子造型湯匙",
+      "intro": "握柄頂端是一顆黃嘴小鴨頭。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支",
+          "price": 60,
+          "unit": "支"
+        }
+      ],
+      "img": "images/life-duck-cutlery.jpg",
+      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
+    },
+    {
+      "active": true,
+      "id": "life-duck-fork",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "叉",
+      "tone": "leaf",
+      "name": "鴨子造型叉子",
+      "intro": "和鴨子湯匙一對，吃水果、甜點剛好。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支",
+          "price": 60,
+          "unit": "支"
+        }
+      ],
+      "img": "images/life-duck-cutlery.jpg",
+      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
+    },
+    {
+      "active": true,
+      "id": "life-feather-spoon",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "匙",
+      "tone": "leaf",
+      "name": "羽毛造型湯匙",
+      "intro": "握柄是一根銀色羽毛。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支",
+          "price": 60,
+          "unit": "支"
+        }
+      ],
+      "img": "images/life-feather-spoon.jpg",
+      "imgAlt": "銀色羽毛造型握柄的小湯匙"
+    },
+    {
+      "active": true,
+      "id": "life-feather-fork",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "叉",
+      "tone": "leaf",
+      "name": "羽毛造型叉子",
+      "intro": "握柄是一根銀色羽毛，和羽毛湯匙一對。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一支",
+          "price": 60,
+          "unit": "支"
+        }
+      ],
+      "img": "images/life-feather-fork.jpg",
+      "imgAlt": "銀色羽毛造型握柄的小叉子"
+    },
+    {
+      "active": true,
+      "id": "life-sponge",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "綿",
+      "tone": "leaf",
+      "name": "洗碗海綿（木漿棉）",
+      "intro": "小狗、小熊造型的木漿棉，洗碗也可愛。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（款式隨機）",
+          "price": 30,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-sponge.jpg",
+      "imgAlt": "一桌小狗、小熊造型的木漿棉洗碗海綿"
+    },
+    {
+      "active": true,
+      "id": "life-leaf-coaster",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "葉",
+      "tone": "leaf",
+      "name": "熱帶植物杯墊",
+      "intro": "一片熱帶葉子形狀的杯墊。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（款式隨機）",
+          "price": 80,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-leaf-coaster.jpg",
+      "imgAlt": "白綠斑紋的龜背芋葉子造型杯墊"
+    },
+    {
+      "active": true,
+      "id": "life-leaf-magnet",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "葉",
+      "tone": "leaf",
+      "name": "熱帶植物磁鐵",
+      "intro": "冰箱上貼一片葉子。",
+      "specs": [
+        [
+          "款式",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（款式隨機）",
+          "price": 50,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-leaf-magnet.jpg",
+      "imgAlt": "一排熱帶植物葉子造型的冰箱磁鐵，各自放在卡片上"
+    },
+    {
+      "active": true,
+      "id": "life-banana-bag",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "包",
+      "tone": "leaf",
+      "name": "香蕉手提包",
+      "intro": "鮮黃色小提包，裝手機、錢包剛好。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-banana-bag.jpg",
+      "imgAlt": "鮮黃色帆布手提包，側邊有一個小笑臉"
+    },
+    {
+      "active": true,
+      "id": "life-apple-bag",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "包",
+      "tone": "leaf",
+      "name": "蘋果網包",
+      "intro": "紅色網布蘋果造型提袋，裡面放什麼一眼看得到。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-apple-bag.jpg",
+      "imgAlt": "紅色網布蘋果造型提袋，袋上有被咬一口的蘋果圖案"
+    },
+    {
+      "active": true,
+      "id": "life-reversible-bag",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "包",
+      "tone": "leaf",
+      "name": "雙面兩用包",
+      "intro": "正反兩面都能用，一個包換兩種心情。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "yellow",
+          "label": "黃色",
+          "price": 150,
+          "unit": "個"
+        },
+        {
+          "key": "pink",
+          "label": "粉色",
+          "price": 150,
+          "unit": "個"
+        },
+        {
+          "key": "blue",
+          "label": "藍色",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-reversible-bag.jpg",
+      "imgAlt": "粉色點點與米白色的布提包，旁邊坐著一隻兔子玩偶"
+    },
+    {
+      "active": true,
+      "id": "life-phone-wrist",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "掛",
+      "tone": "leaf",
+      "name": "手機手腕掛飾",
+      "intro": "格紋布圈手機掛飾，掛在手腕上不怕滑掉。",
+      "specs": [
+        [
+          "顏色",
+          "隨機出貨"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個（顏色隨機）",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/life-phone-wrist.jpg",
+      "imgAlt": "紅白格紋布圈的手機手腕掛飾，連著手機夾片"
+    },
+    {
+      "active": true,
+      "id": "life-phone-strap",
+      "shelf": "always",
+      "group": "生活雜貨",
+      "groupId": "life",
+      "cat": "生活 · Living",
+      "han": "鏈",
+      "tone": "leaf",
+      "name": "長手機鏈",
+      "intro": "斜背的長手機鏈，出門雙手空出來。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "grey",
+          "label": "藍灰色",
+          "price": 300,
+          "unit": "條"
+        },
+        {
+          "key": "petal",
+          "label": "花瓣背帶款",
+          "price": 300,
+          "unit": "條"
+        }
+      ],
+      "img": "images/life-phone-strap.jpg",
+      "imgAlt": "藍灰色編織長手機鏈，附金屬扣與手機夾片"
+    },
+    {
+      "active": true,
+      "id": "inc-short-burner",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "爐",
+      "tone": "stone",
+      "name": "短香爐",
+      "intro": "鏤空木盒臥香爐，煙從花窗裡慢慢透出來。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "suanzhi",
+          "label": "酸枝木",
+          "price": 200,
+          "unit": "個"
+        },
+        {
+          "key": "zitan",
+          "label": "紫光檀",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-short-burner.jpg",
+      "imgAlt": "四款雕著心經、祥雲、窗花、臘梅的長條木製臥香爐"
+    },
+    {
+      "active": true,
+      "id": "inc-heart-sutra-small",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "爐",
+      "tone": "stone",
+      "name": "心經香爐（小）",
+      "intro": "刻滿心經的小方爐，掌心大小。",
+      "specs": [
+        [
+          "尺寸",
+          "約長 3.5 × 寬 3.5 × 高 6 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-heart-sutra-small.jpg",
+      "imgAlt": "古銅色刻滿經文的小四方香爐，上方飄著一縷煙"
+    },
+    {
+      "active": true,
+      "id": "inc-heart-sutra",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "爐",
+      "tone": "stone",
+      "name": "心經香爐",
+      "intro": "刻滿心經的高方塔香爐，煙從頂端緩緩升起。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-heart-sutra.jpg",
+      "imgAlt": "古銅色方塔形香爐，四面浮雕心經文字"
+    },
+    {
+      "active": true,
+      "id": "inc-cat-holder",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "貓",
+      "tone": "stone",
+      "name": "小貓香插",
+      "intro": "白色小貓抱著線香，坐在一片木板上。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-cat-holder.jpg",
+      "imgAlt": "白色小貓陶瓷香插，插著一支點燃的線香，放在木板上"
+    },
+    {
+      "active": true,
+      "id": "inc-rabbit-holder",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "兔",
+      "tone": "stone",
+      "name": "玉兔香插",
+      "intro": "垂耳小白兔捧著元寶，線香插在元寶上。",
+      "specs": [
+        [
+          "尺寸",
+          "約長 6.7 × 高 6.4 公分"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-rabbit-holder.jpg",
+      "imgAlt": "白色垂耳兔陶瓷香插，捧著金色元寶，上面插著線香"
+    },
+    {
+      "active": true,
+      "id": "inc-round-holder",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "盤",
+      "tone": "stone",
+      "name": "圓盤香插",
+      "intro": "一只白色圓盤，接得住香灰，也好清理。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-round-holder.jpg",
+      "imgAlt": "白色圓形淺盤香插，中央插著一支點燃的線香"
+    },
+    {
+      "active": true,
+      "id": "inc-shaped-burner",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "鶴",
+      "tone": "stone",
+      "name": "造型香爐",
+      "intro": "仙鶴、圓扇、狀元帽三種造型，選一個放在書桌上。",
+      "specs": [
+        [
+          "款式",
+          "仙鶴／圓扇／狀元帽"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "crane",
+          "label": "仙鶴",
+          "price": 200,
+          "unit": "個"
+        },
+        {
+          "key": "fan",
+          "label": "圓扇",
+          "price": 200,
+          "unit": "個"
+        },
+        {
+          "key": "hat",
+          "label": "狀元帽",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-shaped-burner.jpg",
+      "imgAlt": "金色仙鶴站在荷葉上，嘴裡吊著一只蓮花小香爐"
+    },
+    {
+      "active": true,
+      "id": "inc-steamer-burner",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "爐",
+      "tone": "stone",
+      "name": "蒸籠香爐",
+      "intro": "像一籠小蒸籠，掀開蓋子放盤香。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 350,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-steamer-burner.jpg",
+      "imgAlt": "竹編蒸籠造型的陶瓷香爐，手正掀起蓋子，裡面是盤香"
+    },
+    {
+      "active": true,
+      "id": "inc-dunhuang-fan",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "扇",
+      "tone": "stone",
+      "name": "敦煌飛天扇子香爐",
+      "intro": "團扇造型的金屬香插，扇面是仙鶴與山水。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "bronze",
+          "label": "古銅色",
+          "price": 250,
+          "unit": "個"
+        },
+        {
+          "key": "verdigris",
+          "label": "青銅色",
+          "price": 250,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-dunhuang-fan.jpg",
+      "imgAlt": "圓形團扇造型的金屬香插，扇面有仙鶴、青山與紅日"
+    },
+    {
+      "active": true,
+      "id": "inc-buddha-hand",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "手",
+      "tone": "stone",
+      "name": "佛手香插",
+      "intro": "白瓷佛手，輕輕托著一支線香。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 50,
+          "unit": "個"
+        }
+      ],
+      "img": "images/inc-buddha-hand.jpg",
+      "imgAlt": "白色瓷製佛手造型香插，插著一支線香"
+    },
+    {
+      "active": true,
+      "id": "inc-short-sticks",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "stone",
+      "name": "短線香／祥雲香片",
+      "intro": "一管一種香味，短短一支，點完剛好。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "sticks",
+          "label": "短線香",
+          "price": 100,
+          "unit": "管"
+        },
+        {
+          "key": "cloud",
+          "label": "祥雲香片",
+          "price": 100,
+          "unit": "份"
+        }
+      ],
+      "img": "images/inc-short-sticks.jpg",
+      "imgAlt": "一排透明管裝短線香，標籤寫著雪中春信、老山檀香、海南沉香等"
+    },
+    {
+      "active": true,
+      "id": "inc-coil",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "香",
+      "tone": "stone",
+      "name": "妍真盤香",
+      "intro": "一罐盤香，鵝梨帳中香或海南沉香。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "pear",
+          "label": "鵝梨帳中香",
+          "price": 150,
+          "unit": "罐"
+        },
+        {
+          "key": "hainan",
+          "label": "海南沉香",
+          "price": 150,
+          "unit": "罐"
+        }
+      ],
+      "img": "images/inc-coil.jpg",
+      "imgAlt": "六個不同顏色的圓筒罐盤香，旁邊放著一圈盤香"
+    },
+    {
+      "active": true,
+      "id": "inc-tibetan-short",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "藏",
+      "tone": "stone",
+      "name": "短款藏香",
+      "intro": "短款藏香，一次點一小段。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一份",
+          "price": 100,
+          "unit": "份"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "inc-woods",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "木",
+      "tone": "stone",
+      "name": "雪松／秘魯聖木／霸王線香",
+      "intro": "三種木質調線香，選一種喜歡的味道。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "cedar",
+          "label": "雪松",
+          "price": 150,
+          "unit": "份"
+        },
+        {
+          "key": "palo",
+          "label": "秘魯聖木",
+          "price": 150,
+          "unit": "份"
+        },
+        {
+          "key": "bawang",
+          "label": "霸王",
+          "price": 150,
+          "unit": "份"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "inc-moxa",
+      "shelf": "always",
+      "group": "線香器皿",
+      "groupId": "incense",
+      "cat": "香 · Incense",
+      "han": "艾",
+      "tone": "stone",
+      "name": "艾柱 37 入",
+      "intro": "一罐 37 入的艾柱。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一罐 37 入",
+          "price": 200,
+          "unit": "罐"
+        }
+      ],
+      "img": "images/inc-moxa.jpg",
+      "imgAlt": "透明罐裝的白色艾柱，罐上貼著「艾柱」標籤"
+    },
+    {
+      "active": true,
+      "id": "bud-thinking",
+      "shelf": "always",
+      "group": "佛系小物",
+      "groupId": "buddha",
+      "cat": "佛 · Buddha",
+      "han": "佛",
+      "tone": "stone",
+      "name": "沉思佛",
+      "intro": "青砂石小佛像，托著臉頰靜靜想事情。",
+      "specs": [
+        [
+          "尺寸",
+          "約長 6 × 寬 4.5 × 高 7 公分"
+        ],
+        [
+          "材質",
+          "青砂石"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 200,
+          "unit": "個"
+        }
+      ],
+      "img": "images/bud-thinking.jpg",
+      "imgAlt": "灰色青砂石小佛像，屈膝坐著、一手托著臉頰沉思"
+    },
+    {
+      "active": true,
+      "id": "bud-reclining",
+      "shelf": "always",
+      "group": "佛系小物",
+      "groupId": "buddha",
+      "cat": "佛 · Buddha",
+      "han": "佛",
+      "tone": "stone",
+      "name": "臥佛",
+      "intro": "側臥的小佛像。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "bud-little-buddhas",
+      "shelf": "always",
+      "group": "佛系小物",
+      "groupId": "buddha",
+      "cat": "佛 · Buddha",
+      "han": "佛",
+      "tone": "stone",
+      "name": "小佛像",
+      "intro": "青砂石小如來，禪定、無畏、祈三種手印。",
+      "specs": [
+        [
+          "尺寸",
+          "約長 4.5 × 寬 4.5 × 高 7.2 公分"
+        ],
+        [
+          "材質",
+          "青砂石"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "chan",
+          "label": "禪定",
+          "price": 150,
+          "unit": "個"
+        },
+        {
+          "key": "wuwei",
+          "label": "無畏",
+          "price": 150,
+          "unit": "個"
+        },
+        {
+          "key": "qi",
+          "label": "祈",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/bud-little-buddhas.jpg",
+      "imgAlt": "木架上並排的三尊灰色青砂石小佛像，手印各不相同"
+    },
+    {
+      "active": true,
+      "id": "cal-todo",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "曆",
+      "tone": "petal",
+      "name": "2027 年每日計劃書 To Do List",
+      "intro": "每天一頁待辦清單，把一年的小事好好排進去。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "red",
+          "label": "紅色",
+          "price": 250,
+          "unit": "本"
+        },
+        {
+          "key": "blue",
+          "label": "藍色",
+          "price": 250,
+          "unit": "本"
+        },
+        {
+          "key": "yellow",
+          "label": "黃色",
+          "price": 250,
+          "unit": "本"
+        }
+      ],
+      "img": "images/cal-todo.jpg",
+      "imgAlt": "紅色封面、畫滿彩色花草的 2027 To Do List 計劃書"
+    },
+    {
+      "active": true,
+      "id": "cal-rose",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "曆",
+      "tone": "petal",
+      "name": "2027 年立體玫瑰月曆",
+      "intro": "一束立體玫瑰立在木座上，每個月翻一頁。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "red",
+          "label": "紅色",
+          "price": 100,
+          "unit": "個"
+        },
+        {
+          "key": "white",
+          "label": "白色",
+          "price": 100,
+          "unit": "個"
+        }
+      ],
+      "img": "images/cal-rose.jpg",
+      "imgAlt": "紅、白兩款立體玫瑰造型桌曆，插在木頭底座上"
+    },
+    {
+      "active": true,
+      "id": "cal-spring-autumn",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "曆",
+      "tone": "petal",
+      "name": "2027 年春花秋月日曆",
+      "intro": "2027 年日曆。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一本",
+          "price": 350,
+          "unit": "本"
+        }
+      ]
+    },
+    {
+      "active": true,
+      "id": "cal-sheep",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "曆",
+      "tone": "petal",
+      "name": "2027 年卡通小羊塗鴉日曆",
+      "intro": "塗鴉風的小羊陪你過一年，每天撕一頁。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "color",
+          "label": "彩色小羊",
+          "price": 350,
+          "unit": "本"
+        },
+        {
+          "key": "pink",
+          "label": "粉色小羊",
+          "price": 350,
+          "unit": "本"
+        }
+      ],
+      "img": "images/cal-sheep.jpg",
+      "imgAlt": "Year of the Sheep 塗鴉風日曆，盒子與翻開的日曆頁畫著小羊和餐桌"
+    },
+    {
+      "active": true,
+      "id": "cal-emperor",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "曆",
+      "tone": "petal",
+      "name": "朕的一天 2027 月曆",
+      "intro": "皇帝風格的桌曆，月份頁寫著「如朕親臨」「朕日理萬機」。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一個",
+          "price": 150,
+          "unit": "個"
+        }
+      ],
+      "img": "images/cal-emperor.jpg",
+      "imgAlt": "黃色封面寫著「朕的一天」的直立式桌曆，放在紅色背景前"
+    },
+    {
+      "active": true,
+      "id": "cal-diamond-sutra",
+      "shelf": "always",
+      "group": "年曆系列",
+      "groupId": "calendar",
+      "cat": "2027 · Calendar",
+      "han": "經",
+      "tone": "petal",
+      "name": "2027 年金剛經日曆",
+      "intro": "以金剛經為主題的 2027 年日曆，附外盒。",
+      "specs": [],
+      "variants": [
+        {
+          "key": "std",
+          "label": "一本",
+          "price": 1080,
+          "unit": "本"
+        }
+      ],
+      "img": "images/cal-diamond-sutra.jpg",
+      "imgAlt": "米白色封面燙金字的金剛經日曆，掛在綠色立架上，旁邊是外盒"
     }
   ],
-  "demoNote": "試營運：盲盒與玩具系列上架中，門市地址確認中。"
+  "demoNote": "試營運：門市地址確認中；部分商品照片準備中。"
 }

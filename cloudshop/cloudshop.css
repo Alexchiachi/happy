@@ -133,6 +133,11 @@ p { margin: 0; text-wrap: pretty; }
 .countdown:empty { display: none; }
 
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2.2vw, 1.75rem); }
+.group-nav { display: flex; flex-wrap: wrap; gap: .5rem; margin: -1rem 0 2rem; }
+.group-nav a { font-size: .88rem; letter-spacing: .1em; text-decoration: none; color: var(--ink); border: 1px solid var(--line); background: var(--card); padding: .45rem .9rem; min-height: 40px; display: inline-flex; align-items: center; }
+@media (hover: hover) and (pointer: fine) { .group-nav a:hover { border-color: var(--jade); color: var(--jade); } }
+.group-nav a:active { background: var(--paper-deep); }
+.group-title { scroll-margin-top: 80px; }
 .group-title { grid-column: 1 / -1; display: flex; align-items: center; gap: .8rem; font-size: 1.15rem; letter-spacing: .2em; color: var(--ink); padding-top: .8rem; }
 .group-title:first-child { padding-top: 0; }
 .group-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
