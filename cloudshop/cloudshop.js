@@ -75,6 +75,14 @@
       }).join('');
       // 這一區還沒有商品：整區收起來，開場連到這一區的按鈕也一起收
       el.closest('.shelf').hidden = !list.length;
+      // 分類跳轉列：店內常備裡有兩組以上時才出現
+      var nav = el.closest('.shelf').querySelector('[data-group-nav]');
+      if (nav) {
+        var groups = [];
+        list.forEach(function (p) { if (p.group && groups.every(function (g) { return g.id !== p.groupId; })) groups.push({ id: p.groupId, name: p.group }); });
+        nav.innerHTML = groups.map(function (g) { return '<a href="#g-' + esc(g.id) + '">' + esc(g.name) + '</a>'; }).join('');
+        nav.hidden = groups.length < 2;
+      }
       if (!list.length) all('a[href="#' + el.closest('.shelf').id + '"]', function (a) { a.hidden = true; });
     });
     // 截止後購物車裡的本週商品也拿掉
@@ -119,7 +127,7 @@
       '<div class="card-body">' +
         '<p class="card-cat">' + esc(p.cat) + '</p>' +
         '<h3 class="card-name">' + esc(p.name) + '</h3>' +
-        (priced ? '<p class="card-price">' + (p.variants.length > 1 ? '<small>自</small> ' : '') + money(from) + '</p>' : '') +
+        (priced ? '<p class="card-price">' + (p.variants.some(function (v) { return v.price !== from; }) ? '<small>自</small> ' : '') + money(from) + '</p>' : '') +
         '<p class="card-intro">' + esc(p.intro) + '</p>' +
         '<details class="card-more"><summary>介紹與規格</summary>' +
           (p.story ? '<p>' + esc(p.story) + '</p>' : '') + '<dl class="specs">' + specs + '</dl>' +
