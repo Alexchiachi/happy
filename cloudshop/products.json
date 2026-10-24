@@ -1177,7 +1177,7 @@
       "cat": "香 · Incense",
       "han": "爐",
       "tone": "stone",
-      "name": "短香爐",
+      "name": "短香爐（錢母款）",
       "intro": "鏤空木盒臥香爐，煙從花窗裡慢慢透出來。",
       "specs": [],
       "variants": [
@@ -1189,7 +1189,7 @@
         },
         {
           "key": "zitan",
-          "label": "紫光檀",
+          "label": "黑檀紫光檀",
           "price": 200,
           "unit": "個"
         }
@@ -1447,18 +1447,30 @@
       "han": "香",
       "tone": "stone",
       "name": "短線香／祥雲香片",
-      "intro": "一管一種香味，短短一支，點完剛好。",
+      "intro": "一管一種香味，短短一支，點完剛好。四種香味任選。",
       "specs": [],
       "variants": [
         {
-          "key": "sticks",
-          "label": "短線香",
+          "key": "pear",
+          "label": "鵝梨帳中香",
           "price": 100,
-          "unit": "管"
+          "unit": "份"
         },
         {
-          "key": "cloud",
-          "label": "祥雲香片",
+          "key": "laoshan",
+          "label": "老山檀香",
+          "price": 100,
+          "unit": "份"
+        },
+        {
+          "key": "osmanthus",
+          "label": "桂花香",
+          "price": 100,
+          "unit": "份"
+        },
+        {
+          "key": "hainan",
+          "label": "海南沉香",
           "price": 100,
           "unit": "份"
         }
