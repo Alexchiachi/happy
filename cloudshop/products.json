@@ -149,6 +149,39 @@
     },
     {
       "active": true,
+      "id": "blind-dunzai-drinks",
+      "shelf": "always",
+      "badge": "盲盒",
+      "cat": "盲盒 · Blind box",
+      "han": "瓶",
+      "tone": "jade",
+      "name": "吨崽飲料手辦",
+      "intro": "飲料瓶造型的小公仔，拆開才知道是哪一瓶。",
+      "specs": [
+        [
+          "尺寸",
+          "單盒約 4.5 × 5.2 × 5.5 公分"
+        ],
+        [
+          "提醒",
+          "適合 8 歲以上"
+        ]
+      ],
+      "variants": [
+        {
+          "key": "box24",
+          "label": "整盒 24 入",
+          "price": 480,
+          "unit": "盒"
+        }
+      ],
+      "img": "images/blind-dunzai-drinks.jpg",
+      "imgAlt": "一排飲料瓶造型的大頭娃娃公仔與展示盒",
+      "group": "盲盒系列",
+      "groupId": "blind"
+    },
+    {
+      "active": true,
       "id": "blind-gugu",
       "shelf": "always",
       "badge": "盲盒",
@@ -745,9 +778,7 @@
           "price": 100,
           "unit": "個"
         }
-      ],
-      "img": "images/life-daisy-6.jpg",
-      "imgAlt": "花瓣形白瓷盤，盤緣畫著小雛菊與綠葉"
+      ]
     },
     {
       "active": true,
@@ -773,9 +804,7 @@
           "price": 150,
           "unit": "個"
         }
-      ],
-      "img": "images/life-daisy-85.jpg",
-      "imgAlt": "花瓣形白瓷淺盤，盤緣畫著一圈小雛菊與綠葉"
+      ]
     },
     {
       "active": true,
@@ -801,9 +830,7 @@
           "price": 150,
           "unit": "個"
         }
-      ],
-      "img": "images/life-daisy-8.jpg",
-      "imgAlt": "花瓣形白瓷深盤，盤緣畫著小雛菊與綠葉"
+      ]
     },
     {
       "active": true,
@@ -852,7 +879,9 @@
           "price": 80,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/life-duck-sauce.jpg",
+      "imgAlt": "白瓷小鴨造型醬料碟，黃色鴨嘴與鴨腳"
     },
     {
       "active": true,
@@ -873,9 +902,7 @@
           "price": 60,
           "unit": "支"
         }
-      ],
-      "img": "images/life-duck-cutlery.jpg",
-      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
+      ]
     },
     {
       "active": true,
@@ -896,9 +923,7 @@
           "price": 60,
           "unit": "支"
         }
-      ],
-      "img": "images/life-duck-cutlery.jpg",
-      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
+      ]
     },
     {
       "active": true,
@@ -970,9 +995,7 @@
           "price": 30,
           "unit": "個"
         }
-      ],
-      "img": "images/life-sponge.jpg",
-      "imgAlt": "一桌小狗、小熊造型的木漿棉洗碗海綿"
+      ]
     },
     {
       "active": true,
@@ -1074,7 +1097,7 @@
         }
       ],
       "img": "images/life-apple-bag.jpg",
-      "imgAlt": "紅色網布蘋果造型提袋，袋上有被咬一口的蘋果圖案"
+      "imgAlt": "紅色網布蘋果造型提袋，袋上有咬過的蘋果與笑臉圖案"
     },
     {
       "active": true,
@@ -1164,9 +1187,7 @@
           "price": 300,
           "unit": "條"
         }
-      ],
-      "img": "images/life-phone-strap.jpg",
-      "imgAlt": "藍灰色編織長手機鏈，附金屬扣與手機夾片"
+      ]
     },
     {
       "active": true,
@@ -1178,7 +1199,7 @@
       "han": "爐",
       "tone": "stone",
       "name": "短香爐（錢母款）",
-      "intro": "鏤空木盒臥香爐，煙從花窗裡慢慢透出來。",
+      "intro": "鏤空木盒臥香爐，盒面嵌一枚銅錢，煙從花格裡慢慢透出來。",
       "specs": [],
       "variants": [
         {
@@ -1195,7 +1216,7 @@
         }
       ],
       "img": "images/inc-short-burner.jpg",
-      "imgAlt": "四款雕著心經、祥雲、窗花、臘梅的長條木製臥香爐"
+      "imgAlt": "黑檀與酸枝木兩款長條臥香爐，盒面鏤空花格，中間嵌一枚銅錢"
     },
     {
       "active": true,
@@ -1395,8 +1416,17 @@
       "han": "扇",
       "tone": "stone",
       "name": "敦煌飛天扇子香爐",
-      "intro": "團扇造型的金屬香插，扇面是仙鶴與山水。",
-      "specs": [],
+      "intro": "團扇造型的香爐，扇面彩繪敦煌飛天，扇柄垂著流蘇。",
+      "specs": [
+        [
+          "尺寸",
+          "約 13.5 × 9.8 × 2.8 公分"
+        ],
+        [
+          "附件",
+          "附香網架"
+        ]
+      ],
       "variants": [
         {
           "key": "bronze",
@@ -1412,7 +1442,7 @@
         }
       ],
       "img": "images/inc-dunhuang-fan.jpg",
-      "imgAlt": "圓形團扇造型的金屬香插，扇面有仙鶴、青山與紅日"
+      "imgAlt": "古銅色與青銅色兩個團扇造型香爐，扇面是彩繪敦煌飛天，扇柄垂著湖水綠流蘇"
     },
     {
       "active": true,
@@ -1517,7 +1547,7 @@
       "han": "藏",
       "tone": "stone",
       "name": "短款藏香",
-      "intro": "短款藏香，一次點一小段。",
+      "intro": "香格里拉藏香，短支裝在玻璃管裡。",
       "specs": [],
       "variants": [
         {
@@ -1526,7 +1556,9 @@
           "price": 100,
           "unit": "份"
         }
-      ]
+      ],
+      "img": "images/inc-tibetan-short.jpg",
+      "imgAlt": "三支軟木塞封口的玻璃管，裝著香格里拉藏香"
     },
     {
       "active": true,
@@ -1559,7 +1591,9 @@
           "price": 150,
           "unit": "份"
         }
-      ]
+      ],
+      "img": "images/inc-woods.jpg",
+      "imgAlt": "三支玻璃管線香，標籤寫著大西洋雪松、秘魯聖木、霸王香"
     },
     {
       "active": true,
@@ -1626,7 +1660,7 @@
       "han": "佛",
       "tone": "stone",
       "name": "臥佛",
-      "intro": "側臥的小佛像。",
+      "intro": "側臥的小佛像，一手枕著頭。",
       "specs": [],
       "variants": [
         {
@@ -1635,7 +1669,9 @@
           "price": 150,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/bud-reclining.jpg",
+      "imgAlt": "灰色石紋的側臥佛像，一手枕著頭"
     },
     {
       "active": true,
@@ -1755,8 +1791,17 @@
       "han": "曆",
       "tone": "petal",
       "name": "2027 年春花秋月日曆",
-      "intro": "2027 年日曆。",
-      "specs": [],
+      "intro": "每天一頁的翻頁桌曆，封面畫著黃色小花。",
+      "specs": [
+        [
+          "內頁",
+          "封面 1 頁＋365 頁日曆"
+        ],
+        [
+          "日期",
+          "2027 年 1 月至 12 月"
+        ]
+      ],
       "variants": [
         {
           "key": "std",
@@ -1764,7 +1809,9 @@
           "price": 350,
           "unit": "本"
         }
-      ]
+      ],
+      "img": "images/cal-spring-autumn.jpg",
+      "imgAlt": "翻頁桌曆，封面寫著「春花秋月」，畫著黃色小花"
     },
     {
       "active": true,
