@@ -3,21 +3,21 @@
 給在 Alexchiachi/happy 倉庫工作的 Claude Code 與其他 AI。
 目標：在**現有**品牌站上升級，讓它成為 daoissimple.com 的母體網站，取代 Bluehost 上的 WordPress。不重寫、不換技術、不換設計。
 
-最後更新：2026-10-06　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
+最後更新：2026-10-25　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
 
 > 這份檔案與 Google 文件「MOTHER-UPGRADE.md」是同一份標準的兩個副本，讓不同的人、不同的 AI 都讀到一樣的內容。
 > 兩邊以 Google 文件為準：<https://docs.google.com/document/d/1LiMWpeURkv9ibVPb4JbR3RJUTN9WTv7bAilVnmJzRmY/edit>。
 > 改了其中一份，要同步另一份，並更新上面的「最後更新」日期。
 
-## 進度（更新於 2026-10-06）
+## 進度（更新於 2026-10-25）
 
 - 階段 0 盤點：已完成。
 - 階段 1 內容真實性清理（第 3 節）：已完成並發布。
 - 階段 2 價格與服務頁（4.4、4.5）：已完成並發布。
 - 階段 3 新頁與新段落（4.1、4.2、4.3、4.7）：已完成並發布。另新增 windy-place.html（去有風的地方，2026-10-03 發布）；cases.html 媒體報導區升級三向度與創辦人專訪引言（2026-10-03 發布）。
 - 幸福誌「幸福餐桌」分類已上架 12 篇系列文章（繁簡雙版），並定下文章排版與封面標題規則（見第 8 節 2026-10-06）。
-- 階段 4 觀察期：進行中，約一週。
-- 階段 5 切換到 daoissimple.com（第 5 節）：尚未開始，每一步需簡家旗同意。
+- 階段 4 觀察期：已結束（2026-10-25 記錄）。
+- 階段 5 切換到 daoissimple.com（第 5 節）：尚未開始，每一步需簡家旗同意。2026-10-25 起做法改為 Cloudflare Workers（daoissimple-site），取代原本的 GitHub Pages 綁網域。
 - 階段 6 搬 WordPress 文章（第 6 節）：尚未開始。
 
 ---
@@ -137,25 +137,168 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 - 加「案例與認證」連結。
 - 加一行「幸福對話智能體研發中」。
 
-## 5. 第二階段：網站搬到 daoissimple.com
+## 5. 第二階段：網站搬到 daoissimple.com（Cloudflare）
 
-建議最簡單的做法：**繼續用 GitHub Pages，綁自訂網域 daoissimple.com**，DNS 已在 Cloudflare。
+**決定：網站由 Cloudflare Workers 提供，原始碼留在 GitHub。**
+網域、DNS、表單 Worker、D1 都已經在 Cloudflare；品牌站加進同一套機制。GitHub Pages 在切換完成前照常運作。
 
-步驟（每一步先取得簡家旗同意）：
+每一步做完先停下，等簡家旗確認再做下一步。會動到網域或 DNS 的步驟（5.8、5.9、5.10）必須由她本人在場同意。
 
-1. 搜尋全站寫死的 /happy/ 路徑、alexchiachi.github.io 網址、canonical、hreflang、sitemap.xml，以及簡體轉換工具裡的網站根網址，全部改成 daoissimple.com 的根路徑。
-2. Worker 設定 wrangler.jsonc：
-   - ALLOWED_ORIGINS 加入 https://daoissimple.com（保留原本的 github.io，過渡期兩個都要）。不改的話，連繫表單、雲南訂單、安寧預約都會被擋。
-   - BRAND_SITE_URL 改成 https://daoissimple.com/。
-3. 新增舊 WordPress 必須保留的網址：
-   - /privacy-policy/、/terms-of-service/：Paddle 審核過，網址不可變。現有 privacy.html 的內容放到這個路徑，並補一份服務條款。
-   - /anli-yu-renzheng/、/guanyuzhenshidewo/、/lianluowo/、/consulting/ 等舊網址，用含 canonical 的轉址頁，或用 Cloudflare 的 Redirect Rules，指到新頁面。
-4. 在 GitHub Pages 設定填入自訂網域（會產生 CNAME 檔，記得加進白名單），並在 Cloudflare DNS 把 daoissimple.com 指向 GitHub Pages。GitHub 簽發 HTTPS 憑證前，該紀錄先設為「僅 DNS」。
-5. **不要動** mail.daoissimple.com 相關的 DNS 紀錄（Worker 用它寄信），也不要動 MX、SPF、DKIM。
-6. 切換後，alexchiachi.github.io/happy/ 會由 GitHub 自動轉到自訂網域；實際測一次確認。
-7. Bluehost 上的 WordPress 留到 2027-02-26 當備援，出問題時把 DNS 指回去即可。
+### 5.1 目標架構
 
-切換當天的檢查清單：首頁與每個選單頁、連繫表單送出（後台 /admin 看得到）、shop/ 下單、anning/ 預約、簡體版、/privacy-policy/ 與 /terms-of-service/、舊網址轉址、手機寬度不橫向捲動。容器連不到正式網址時，請簡家旗本人實測。
+```
+瀏覽器 → daoissimple.com
+          │
+   daoissimple-site（新 Worker，靜態資源 _site/）
+          ├─ /api/*、/admin、/admin/*、/photos/* → 轉給 executive-table（Service binding，同一個請求原封不動）
+          └─ 其他路徑 → 靜態頁面；舊 WordPress 網址由 _site/_redirects 做 301
+```
+
+- executive-table Worker 與 D1 完全不動，只多一個呼叫它的入口。
+- 好處：品牌站和表單同網域，不必依賴跨網域設定；每次推分支都有預覽網址。
+
+### 5.2 把白名單抽成共用的組站腳本
+
+現在 `.github/workflows/pages.yml` 裡寫著要發布哪些檔案。把這份清單搬到 `tools/build_site.sh`（輸出到 `_site/`），`pages.yml` 和新的部署流程都呼叫它，避免兩份清單各自漂移。
+
+- 腳本結尾把 `_redirects` 複製進 `_site/`（見 5.5）。
+- `_site/` 加進 `.gitignore`。
+- 改完後先確認 `pages.yml` 產出的網站和改之前一模一樣，再往下做。
+
+### 5.3 新增網站 Worker
+
+新增 `site/wrangler.jsonc`（**不要改根目錄那份**，那是 executive-table 的）：
+
+```jsonc
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "daoissimple-site",
+  "main": "./worker.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "../_site",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*", "/admin", "/admin/*", "/photos/*"]
+  },
+  "services": [{ "binding": "EXEC", "service": "executive-table" }],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true }
+}
+```
+
+新增 `site/worker.js`：
+
+```js
+export default {
+  async fetch(request, env) {
+    const path = new URL(request.url).pathname;
+    if (path.startsWith('/api/') || path === '/admin' || path.startsWith('/admin/') || path.startsWith('/photos/')) {
+      return env.EXEC.fetch(request);
+    }
+    return env.ASSETS.fetch(request);
+  },
+};
+```
+
+- 這一步先不要設 routes 或自訂網域，只部署到 workers.dev 測試。
+- 執行 `npx wrangler deploy --config site/wrangler.jsonc` 前，先跑 `tools/build_site.sh`。
+
+### 5.4 網址改成根路徑
+
+網站會從 `/happy/` 子路徑搬到網域根目錄。全站搜尋並修改：
+
+- 寫死的 `/happy/` 路徑、alexchiachi.github.io 網址。
+- 每頁的 canonical、hreflang、Open Graph 網址，以及 `sitemap.xml`、`robots.txt`。
+- 簡體轉換工具與 sitemap 產生工具裡的網站根網址（不要手改工具產出的檔案，改工具再重跑）。
+
+改完後，GitHub Pages 上的舊站會暫時出現路徑錯誤。所以這一步要和 5.9 在同一天上線，或用一個開關讓工具同時產出兩種根網址。建議做開關：`SITE_BASE=/happy/`（GitHub Pages）與 `SITE_BASE=/`（Cloudflare）。
+
+### 5.5 舊 WordPress 網址轉址
+
+在倉庫建立 `_redirects`（由 5.2 的腳本複製進 `_site/`）。格式一行一條：`舊路徑 新路徑 301`。
+
+```
+/guanyuzhenshidewo/   /about               301
+/anli-yu-renzheng/    /cases               301
+/lianluowo/           /connect             301
+/xingfufuwu/          /services            301
+/consulting/          /services#advisory   301
+/zuopinji/            /about               301
+/about-us/            /about               301
+/yunnandexiangqi/     /shop/               301
+/blog/                /journal             301
+```
+
+- 目標寫不帶 `.html` 的路徑：`html_handling: auto-trailing-slash` 會把 `/about.html` 自動導到 `/about`，直接寫 `/about` 可少轉一次。
+- WordPress 舊網址結尾有 `/`。若實測發現不帶 `/` 的版本沒被轉址，就兩種寫法各加一條。
+- 上限 2,000 條靜態轉址，夠用。
+- 第三階段搬進來的文章沿用原路徑，不需要轉址。
+- `_redirects` 只作用在靜態頁，不會影響 `/api/*`。
+- 完整清單以 Claude Docs「daoissimple.com 頁面去向表」為準；表上標「待查」的 8 個頁面，先不加。
+
+### 5.6 Paddle 審核過的網址
+
+`/privacy-policy/` 與 `/terms-of-service/` 必須回應 200，**不能是轉址**。
+
+- 建立 `privacy-policy/index.html` 與 `terms-of-service/index.html`（內容以現行 WordPress 版本為底，付款說明改成實際做法：台灣轉帳、貨到付款、LINE；國際 Gumroad；軟體訂閱 Paddle）。
+- 加進組站白名單。
+
+### 5.7 自動部署與預覽網址
+
+新增 `.github/workflows/site.yml`，沿用 `worker.yml` 已有的 `CLOUDFLARE_API_TOKEN` 與帳戶 ID：
+
+- 推到 main：跑 `tools/build_site.sh`，再 `npx wrangler deploy --config site/wrangler.jsonc`。
+- 推到其他分支：跑組站腳本，再 `npx wrangler versions upload --config site/wrangler.jsonc --preview-alias <分支名>`。產生的預覽網址是 `<分支名>-daoissimple-site.<帳號子網域>.workers.dev`，把它交給簡家旗看。
+- 分支名只能用小寫英文、數字、連字號。
+
+預覽網址上的表單會被 executive-table 的來源檢查擋下，這是正常的；表單請在 5.8 的 new.daoissimple.com 測。
+
+### 5.8 先用 new.daoissimple.com 實測
+
+1. 在 `wrangler.jsonc`（根目錄那份）的 `ALLOWED_ORIGINS` 加入 `https://daoissimple.com,https://new.daoissimple.com`，保留原本的 github.io。部署 executive-table。
+2. 在 `site/wrangler.jsonc` 加上：
+   `"routes": [{ "pattern": "new.daoissimple.com", "custom_domain": true }]`
+   部署後 Cloudflare 會自動建立 DNS 紀錄與憑證。
+3. 簡家旗在手機與電腦逐項測試（見 5.11 清單）。容器連不到正式網址時，由她本人測。
+
+### 5.9 正式切換（簡家旗在場）
+
+1. 在 Cloudflare DNS 記下 daoissimple.com 與 www 目前指向 Bluehost 的紀錄（類型、內容、代理狀態），寫進 `docs/rollback.md`。
+2. 選離峰時段刪除這兩筆紀錄（從刪除到新網域生效會有幾分鐘空窗）。**只刪這兩筆**，MX、TXT（SPF、DKIM、DMARC）、mail.daoissimple.com 相關紀錄一律不動。
+3. 在 `site/wrangler.jsonc` 的 routes 加入 daoissimple.com（`custom_domain`），部署。
+4. www.daoissimple.com：新增一筆代理中的 DNS 紀錄，再用 Cloudflare「Redirect Rules」把 www 301 到 `https://daoissimple.com`，保留路徑。
+5. 根目錄 `wrangler.jsonc` 的 `BRAND_SITE_URL` 改成 `https://daoissimple.com/`，部署 executive-table。
+6. 在 Cloudflare Web Analytics 加入 daoissimple.com。
+
+### 5.10 回退方法
+
+出問題時，在 10 分鐘內恢復舊站：
+
+1. 從 `site/wrangler.jsonc` 移除 daoissimple.com 的 route，重新部署（或在 Cloudflare 後台的 Worker 設定移除自訂網域）。
+2. 依 `docs/rollback.md` 重建指向 Bluehost 的兩筆 DNS 紀錄。
+
+Bluehost 保留到 2027-02-26，這段期間隨時可以回退。
+
+### 5.11 切換檢查清單
+
+- 首頁、雲南、台灣、幸福誌、服務體驗、高階顧問、關於、案例與認證、連繫，各開一次。
+- 連繫表單送出 → 後台 `/admin` 看得到來信。
+- `shop/` 下一張測試訂單 → 收到通知信 → 後台取消該單。
+- `anning/` 送一筆測試預約 → 後台取消。
+- 簡體版各頁可開。
+- `/privacy-policy/`、`/terms-of-service/` 回應 200。
+- `_redirects` 每一條舊網址都 301 到正確頁面。
+- `http://` 自動轉 `https://`；www 轉到不帶 www。
+- 手機 390px 寬不橫向捲動。
+- 信件照常寄出（mail.daoissimple.com 未受影響）。
+
+### 5.12 切換後的 GitHub Pages
+
+- 觀察兩週無誤後，把 `pages.yml` 改成只發布一組轉址頁：每個舊頁面一個小檔，含 canonical 指向 daoissimple.com 同路徑，並立即導向。
+- 倉庫仍是唯一原始碼，GitHub Actions 繼續負責部署 Cloudflare。
 
 ## 6. 第三階段：搬 WordPress 文章到幸福誌
 
@@ -211,6 +354,7 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 | 2026-10-06 | 系列稿的事實修正（簡家旗確認）：騰衝改寫為「米與石磨」（餌絲是米做的，舊稿說「石頭磨的」與事實不符）；普洱依景邁山古茶林史實改為樹是人種下的、林下茶，標題與開場改為「爺爺種下的茶樹、孫子採下」，拿掉「四十年」「1960 年種、2000 年採」與「根往上長」；蒙自刪去未經查證的「過橋」名稱由來與提到騰衝篇的比較；回顧篇同步改成一致說法，並把「八篇每篇都有誠實一節」改為七篇（元陽沒有）。**待簡家旗把關**：建水汽鍋與烤豆腐的細節、宣威「頭八個月不能吃」的說法，尚未查到出處。 |
 | 2026-10-06 | 文章內文排版規則定案（`DESIGN.md`「文章內文：短中長的節奏」）：段落短、中、長交錯，不連續三段以上同一種長度，每篇 3 至 6 句金句用引言樣式單獨成行，重點用粗體，結尾用短句收。元陽、普洱、蒙自與雲南系列六篇都比照宜賓篇重排，文字不動。 |
 | 2026-10-06 | 封面標題三項規則（`DESIGN.md`、`journal/_template.html`）：一、壓在照片上的標題用較深的暗罩，標題區最亮處對比要在 4.5:1 以上（全站量過，最差 4.83:1）；二、標題平常白色，滑鼠移上、手指按住或鍵盤聚焦時變亮金色 `#F2D27A`（簡家旗決定），整站共用；三、標題字級依封面寬度自動縮，不折出單獨一個字，每個標題帶 `--n`，新增文章後執行 `python3 tools/set_title_fit.py --write` 再跑 `tools/build_zhcn.py`。 |
+| 2026-10-25 | 第 5 節改為 Cloudflare 做法：網站由 Cloudflare Workers（daoissimple-site）提供，原始碼留在 GitHub；表單與後台經 Service binding 轉給 executive-table，同網域；舊 WordPress 網址用 `_redirects` 做 301；分支推送產生預覽網址。取代原本的 GitHub Pages 綁網域。觀察期結束。 |
 
 新決定加在表格最下方，並同步更新第 2 節事實表。
 
