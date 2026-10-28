@@ -35,6 +35,8 @@
     "SHOP_FROM_NAME": "大道至簡・雲南好物",
     // 安寧幸福之家（anning/）預約：通知一樣寄到 SHOP_NOTIFY_EMAIL；寄件人名稱（見 worker/stays.js）
     "STAY_FROM_NAME": "大道至簡・安寧幸福之家",
+    // 無人商店雲端小舖（cloudshop/）訂單：通知一樣寄到 SHOP_NOTIFY_EMAIL；寄件人名稱（見 worker/cloudshop.js）
+    "CLOUDSHOP_FROM_NAME": "孩子園藝・雲端小舖",
     // 幸福影響力記帳本：代為開 Issue 的 repo（見 worker/happiness.js）。
     // 權杖是 Secret HAPPINESS_GITHUB_TOKEN，不寫在這裡。
     "HAPPINESS_REPO": "Alexchiachi/happiness-ledger"

@@ -14,6 +14,7 @@
  *   POST /api/dao                大道至簡門戶 (daoissimple) 的問道之鏡與花瓣預約，寫進來信資料表（見 dao.js）
  *   POST /api/order              雲南好物選購頁（品牌站 shop/）的訂單（見 orders.js）
  *   POST /api/stay               雲南安寧幸福之家（品牌站 anning/）的入住預約（見 stays.js）
+ *   POST /api/cloudshop-order    無人商店雲端小舖（品牌站 cloudshop/）的訂單（見 cloudshop.js）
  *   POST /api/happiness          幸福影響力記帳本的存入，代為開 GitHub Issue（見 happiness.js）
  *
  * 需要的設定（Cloudflare 專案 → Settings → Variables and Secrets）：
@@ -34,6 +35,7 @@ import { handleLetter, handleAdminLetters, LETTER_STATUSES } from './letters.js'
 import { handleDao, purgeExpiredDao } from './dao.js';
 import { handleOrder, handleAdminOrders, ORDER_STATUSES } from './orders.js';
 import { handleStay, handleAdminStays, STAY_STATUSES } from './stays.js';
+import { handleCloudshopOrder, handleAdminCloudshop, CLOUDSHOP_STATUSES } from './cloudshop.js';
 import { handleHappiness, handleAdminHappiness } from './happiness.js';
 import { listPublic, servePhoto, handleAdminPhotos } from './photos.js';
 import { adminPage, adminSetupPage } from './admin.js';
@@ -77,6 +79,11 @@ export default {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
         if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
         return cors(request, env, await handleStay(request, env, ctx, url));
+      }
+      if (path === '/api/cloudshop-order') {
+        if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
+        if (request.method !== 'POST') return json({ ok: false, code: 'method_not_allowed' }, 405);
+        return cors(request, env, await handleCloudshopOrder(request, env, ctx, url));
       }
       if (path === '/api/happiness') {
         if (request.method === 'OPTIONS') return cors(request, env, new Response(null, { status: 204 }));
@@ -204,13 +211,16 @@ async function handleAdmin(request, env, url, path) {
   if (who.error) return json({ ok: false, code: 'unauthorized' }, 401);
 
   await ensureSchema(env);
-  if (path === '/admin' || path === '/admin/') return html(adminPage(who.email, STATUSES, PLAN_LABEL, LETTER_STATUSES, ORDER_STATUSES, STAY_STATUSES));
+  if (path === '/admin' || path === '/admin/') return html(adminPage(who.email, STATUSES, PLAN_LABEL, LETTER_STATUSES, ORDER_STATUSES, STAY_STATUSES, CLOUDSHOP_STATUSES));
 
   const letterRes = await handleAdminLetters(request, env, url, path);
   if (letterRes) return letterRes;
 
   const orderRes = await handleAdminOrders(request, env, url, path);
   if (orderRes) return orderRes;
+
+  const cloudshopRes = await handleAdminCloudshop(request, env, url, path);
+  if (cloudshopRes) return cloudshopRes;
 
   const stayRes = await handleAdminStays(request, env, url, path);
   if (stayRes) return stayRes;

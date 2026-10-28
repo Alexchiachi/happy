@@ -1,14 +1,14 @@
 // 無人商店雲端小舖：商品卡、購物車、運費與送出訂單
 // 商品、價格、運費、門市都在 products.json。寫法照 shop/shop.js（雲南好物）。
-// 目前還沒接 Worker：送出後在前端產生訂單編號，請客人用 LINE 把訂單內容傳給官方帳號，訂單才算成立。
-// 之後要接後台時，比照 shop/shop.js 的送出流程與 executive-table/worker/orders.js（Worker 重算金額、存 D1、寄信）。
+// 送出訂單到 Worker（executive-table/worker/cloudshop.js）：Worker 依同一份 products.json 重算金額、存 D1、寄信，
+// 回傳訂單編號（末四碼＝到店取貨碼）。管理頁在 /admin 的「雲端小舖訂單」分頁。
 (function () {
   'use strict';
 
+  var ORDER_ENDPOINT = 'https://executive-table.jianchiachi.workers.dev/api/cloudshop-order';
+
   var STORE_KEY = 'cloudshop-cart';
   var DELIVERY_FEE = { pickup: 'pickup', home: 'home', '711': 'cvs', family: 'cvs' };
-  var DELIVERY_LABEL = { pickup: '到店自取', home: '宅配', '711': '7-11', family: '全家' };
-  var PAY_LABEL = { linepay: 'LINE Pay', bank: '匯款' };
 
   var DATA = null, PRODUCTS = [], byId = {}, cart = {};
 
@@ -215,7 +215,8 @@
     name: '請填姓名',
     phone: '手機格式是 09 開頭共 10 碼，例如 0912-345-678',
     address: '請填宅配地址',
-    store: '請填門市名稱，例如 7-11 龍辰門市'
+    store: '請填門市名稱，例如 7-11 龍辰門市',
+    email: 'Email 格式不對，例如 name@gmail.com；不想留可以空白'
   };
   function checkField(input, show) {
     var field = input.closest('.field');
@@ -249,61 +250,75 @@
   form.addEventListener('input', function (e) { if (e.target.closest('.field.invalid')) checkField(e.target, true); });
 
   // ---------- 送出訂單 ----------
-  var FIELD_LABEL = { name: '姓名', phone: '手機', address: '宅配地址', store: '門市名稱' };
-
-  // 訂單編號：CS + 台北日期 + 4 位亂數（沒有後台時由前端產生；接上 Worker 後改用 Worker 回傳的編號）
-  function orderNo() {
-    var o = {};
-    new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' })
-      .formatToParts(new Date()).forEach(function (x) { o[x.type] = x.value; });
-    return 'CS' + o.year + o.month + o.day + '-' + String(Math.floor(1000 + Math.random() * 9000));
-  }
-
-  function orderText(no, fd, t) {
-    var lines = ['【雲端小舖訂單】' + no, ''];
-    Object.keys(cart).forEach(function (k) {
-      var f = find(k);
-      lines.push('・' + f.p.name + '（' + f.v.label + '）× ' + cart[k] + '　' + money(f.v.price * cart[k]));
-    });
-    lines.push('', '小計 ' + money(t.sub) + '　運費 ' + (t.ship ? money(t.ship) : '免運'), '合計 ' + money(t.total), '');
-    lines.push('姓名：' + fd.get('name'), '手機：' + fd.get('phone'), '取貨：' + DELIVERY_LABEL[t.d]);
-    if (t.d === 'home') lines.push('地址：' + fd.get('address'));
-    if (t.d === '711' || t.d === 'family') lines.push('門市：' + fd.get('store'));
-    lines.push('付款：' + PAY_LABEL[fd.get('pay')]);
-    if (fd.get('note')) lines.push('備註：' + fd.get('note'));
-    return lines.join('\n');
-  }
+  var FIELD_LABEL = { name: '姓名', phone: '手機', email: 'Email', address: '宅配地址', store: '門市名稱', delivery: '取貨方式', pay: '付款方式' };
+  var ERRORS = {
+    empty_cart: '還沒有選商品喔。',
+    unknown_item: '有商品已經下架，請重新整理頁面再選一次。',
+    bad_qty: '數量有誤，請重新整理頁面再試一次。',
+    week_closed: '本週預訂已經截止，請把本週商品移除後再送出。',
+    rate_limited: '短時間內送出太多次了，請十分鐘後再試。'
+  };
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!DATA) return;
     var msg = $('[data-form-msg]');
+    var btn = form.querySelector('button[type=submit]');
     var t = calc();
-    if (!t.count) { msg.textContent = '還沒有選商品喔。'; return; }
-    var bad = Array.prototype.filter.call(form.querySelectorAll('input[required]'), function (i) { return !checkField(i, true); });
+    if (!t.count) { msg.textContent = ERRORS.empty_cart; return; }
+    var bad = Array.prototype.filter.call(form.querySelectorAll('.field input'), function (i) { return !checkField(i, true); });
     if (bad.length) {
       msg.textContent = '還有 ' + bad.length + ' 個欄位要確認：' + bad.map(function (i) { return FIELD_LABEL[i.name] || i.name; }).join('、');
       bad[0].focus();
       return;
     }
     var fd = new FormData(form);
-    if (fd.get('website')) return; // 機器人
+    var body = {
+      items: Object.keys(cart).map(function (k) { var p = k.split('|'); return { id: p[0], variant: p[1], qty: cart[k] }; }),
+      name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'), line: fd.get('line'),
+      delivery: t.d, address: fd.get('address'), store: fd.get('store'),
+      pay: fd.get('pay'), note: fd.get('note'), website: fd.get('website')
+    };
     msg.textContent = '';
-    var no = orderNo();
-    showDone(no, t, fd.get('pay'), orderText(no, fd, t));
+    btn.disabled = true;
+    btn.textContent = '送出中…';
+    // 20 秒沒回應就放棄，免得按鈕一直卡在送出中
+    var ctrl = 'AbortController' in window ? new AbortController() : null;
+    var timer = ctrl && setTimeout(function () { ctrl.abort(); }, 20000);
+    fetch(ORDER_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, code: 'http_' + r.status }; }); })
+      .then(function (out) {
+        if (!out.ok) {
+          var text = ERRORS[out.code];
+          if (out.code === 'invalid' && out.fields) text = '請確認：' + out.fields.map(function (f) { return FIELD_LABEL[f] || f; }).join('、');
+          if (out.code === 'week_closed' && out.item) text = '「' + out.item + '」' + ERRORS.week_closed.replace('本週預訂', '所屬的本週預訂');
+          var err = new Error(text || '沒有送出成功（' + out.code + '），請稍後再試，或用 LINE 告訴我們。');
+          err.shown = true;
+          throw err;
+        }
+        showDone(out, body);
+      })
+      .catch(function (err) {
+        // 瀏覽器的連線錯誤（Chrome「Failed to fetch」、Safari「Load failed」、逾時）一律換成中文說明
+        msg.textContent = err && err.shown ? err.message
+          : '沒有連上訂單系統，這張訂單還沒有送出。請稍後再按一次「送出訂單」；一直失敗的話，請用 LINE 官方帳號 ' + DATA.contact.line + ' 告訴我們。';
+      })
+      .then(function () { clearTimeout(timer); btn.disabled = false; btn.textContent = '送出訂單'; });
   });
 
-  function showDone(no, t, pay, text) {
-    $('[data-order-no]').textContent = no;
-    $('[data-order-total]').textContent = money(t.total);
-    $('[data-send-line]').href = DATA.contact.lineMessage + encodeURIComponent(text);
-    var copyBtn = $('[data-copy]'), copyMsg = $('[data-copy-msg]');
-    copyMsg.textContent = '';
-    copyBtn.onclick = function () {
-      var ok = function () { copyMsg.textContent = '已複製，貼到 LINE 傳給 ' + DATA.contact.line + ' 即可。'; };
-      if (navigator.clipboard) navigator.clipboard.writeText(text).then(ok, function () { copyMsg.textContent = text; });
-      else copyMsg.textContent = text;
-    };
+  function showDone(out, body) {
+    $('[data-order-no]').textContent = out.orderNo;
+    $('[data-order-total]').textContent = money(out.total);
+    $('[data-done-mail]').textContent = out.emailed
+      ? '訂單確認與付款資訊也寄到 ' + body.email + ' 了。'
+      : '沒有留 Email，請截圖或記下訂單編號。';
+    var paid = '【雲端小舖】訂單 ' + out.orderNo + ' 已付款 ' + money(out.total) + '，姓名 ' + body.name
+      + (body.pay === 'bank' ? '，匯款帳號末五碼：' : '');
+    $('[data-send-line]').href = DATA.contact.lineMessage + encodeURIComponent(paid);
+    var pickup = body.delivery === 'pickup';
+    $('[data-pickup-step]').hidden = !pickup;
+    $('[data-pickup-code]').textContent = out.pickupCode || String(out.orderNo).slice(-4);
+    $('[data-ship-note]').hidden = pickup;
     var p = DATA.payment;
     $('[data-pay-bank]').textContent = p.bank;
     $('[data-pay-linepay]').textContent = p.linepay;
@@ -311,7 +326,7 @@
     if (p.linepayImage) { qr.src = p.linepayImage; qr.hidden = false; }
     var link = $('[data-pay-link]');
     if (p.linepayUrl) { link.href = p.linepayUrl; link.hidden = false; }
-    all('[data-pay-box]', function (el) { el.classList.toggle('chosen', el.dataset.payBox === pay); });
+    all('[data-pay-box]', function (el) { el.classList.toggle('chosen', el.dataset.payBox === body.pay); });
 
     var done = $('[data-done]');
     done.hidden = false;

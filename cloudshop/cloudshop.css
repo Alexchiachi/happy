@@ -361,3 +361,6 @@ p { margin: 0; text-wrap: pretty; }
   :root { --line: #A88F7C; --mist: #5A4636; }
   .stepper, .card, .field input, .field textarea, .choice label { border-color: var(--ink); }
 }
+
+/* 送出後的取貨碼 */
+.pickup-code { font-size: 1.5rem; font-weight: 500; letter-spacing: .2em; font-variant-numeric: lining-nums tabular-nums; color: var(--jade); }

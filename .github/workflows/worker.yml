@@ -14,6 +14,7 @@ on:
       - 'executive-table/**'
       - 'shop/products.json'
       - 'anning/stay.json'
+      - 'cloudshop/products.json'
       - 'wrangler.jsonc'
       - '.github/workflows/worker.yml'
   workflow_dispatch:
