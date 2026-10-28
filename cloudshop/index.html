@@ -148,6 +148,10 @@
           <label class="field"><span>姓名</span><input name="name" autocomplete="name" required></label>
           <label class="field"><span>手機</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx-xxx-xxx" pattern="09\d{2}-?\d{3}-?\d{3}" required></label>
         </div>
+        <div class="field-row">
+          <label class="field"><span>Email <em>選填</em></span><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="留了會收到訂單確認與取貨通知"></label>
+          <label class="field"><span>LINE ID <em>選填</em></span><input name="line" autocomplete="off" placeholder="方便我們用 LINE 聯絡你"></label>
+        </div>
         <label class="field" data-when="home" hidden><span>宅配地址</span><input name="address" autocomplete="street-address"></label>
         <label class="field" data-when="711 family" hidden><span>門市名稱</span><input name="store" placeholder="例：7-11 龍辰門市"></label>
 
@@ -162,36 +166,40 @@
 
         <label class="field"><span>備註 <em>選填</em></span><textarea name="note" rows="3" placeholder="想交代的事，例如取貨日期……"></textarea></label>
 
-        <p class="privacy-note">個資說明：你填的姓名、手機與地址，只用在這張訂單的確認、取貨與寄送；寄送時提供給物流業者，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 告訴我們。<a href="../privacy.html">完整隱私權政策</a></p>
+        <p class="privacy-note">個資說明：你填的姓名、手機、Email、LINE ID 與地址，只用在這張訂單的確認、取貨與寄送；寄送時提供給物流業者，不做行銷、不提供給其他人。想查詢或刪除，用 LINE 告訴我們。<a href="../privacy.html#cloudshop">完整隱私權政策</a></p>
         <button class="btn btn-solid" type="submit">送出訂單</button>
         <p class="form-msg" data-form-msg role="status"></p>
       </form>
     </div>
   </section>
 
-  <!-- 送出後：目前沒有接後台，訂單用 LINE 傳給我們才算成立 -->
+  <!-- 送出後：訂單已經存進後台（Worker），這裡顯示訂單編號、付款資訊與取貨碼 -->
   <section class="done" data-done hidden tabindex="-1">
     <div class="wrap done-card">
       <span class="done-seal" aria-hidden="true">謝</span>
-      <h2>還差一步</h2>
+      <h2>訂單收到了</h2>
       <p>訂單編號 <b data-order-no></b>，合計 <b data-order-total></b>。</p>
+      <p class="muted small" data-done-mail></p>
       <ol class="done-steps">
-        <li>
-          <b>把訂單傳給我們</b>
-          <p class="muted small">按下面的按鈕，LINE 會帶入訂單內容，按「傳送」才算完成。</p>
-          <a class="btn btn-line" data-send-line target="_blank" rel="noopener">用 LINE 傳送訂單</a>
-          <button type="button" class="btn btn-ghost btn-small" data-copy>複製訂單內容</button>
-          <p class="muted small" data-copy-msg role="status"></p>
-        </li>
         <li>
           <b>付款</b>
           <div class="pay-box">
             <div data-pay-box="linepay"><h3>LINE Pay</h3><img class="qr" data-pay-qr alt="LINE Pay 收款碼（嘉禮慕華）" width="180" height="180" hidden><a class="btn btn-line" data-pay-link target="_blank" rel="noopener" hidden>開啟 LINE Pay 付款</a><p data-pay-linepay></p></div>
-            <div data-pay-box="bank"><h3>匯款</h3><p data-pay-bank></p><p class="muted small">匯款後在 LINE 告訴我們帳號末五碼。</p></div>
+            <div data-pay-box="bank"><h3>匯款</h3><p data-pay-bank></p><p class="muted small">匯款後告訴我們帳號末五碼。</p></div>
           </div>
         </li>
+        <li>
+          <b>付款後告訴我們</b>
+          <p class="muted small">按下面的按鈕，LINE 會帶入訂單編號，按「傳送」就好；我們核對後開始備貨。</p>
+          <a class="btn btn-line" data-send-line target="_blank" rel="noopener">用 LINE 告訴我們已付款</a>
+        </li>
+        <li data-pickup-step hidden>
+          <b>到店取貨</b>
+          <p>你的取貨碼是 <b class="pickup-code" data-pickup-code></b>（訂單編號末四碼）。</p>
+          <p class="muted small">備好後我們會通知你，到店在取貨櫃輸入取貨碼就能取貨。</p>
+        </li>
       </ol>
-      <p class="muted small">確認收款後，到貨會用 LINE 通知你取貨或寄出。</p>
+      <p class="muted small" data-ship-note hidden>寄出時會通知你物流追蹤號碼。</p>
     </div>
   </section>
 

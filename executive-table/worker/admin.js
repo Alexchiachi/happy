@@ -1,5 +1,5 @@
 /**
- * 管理頁：幸福餐桌預約清單、大道至簡來信、雲南好物訂單、安寧幸福之家預約（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
+ * 管理頁：幸福餐桌預約清單、大道至簡來信、雲南好物訂單、雲端小舖訂單、安寧幸福之家預約（改處理狀態、匯出 CSV）與幻燈片照片（上傳、說明、排序、上下架）。
  * 只有輸入管理頁密碼、或通過 Cloudflare Access 登入的人看得到（見 index.js adminIdentity）。
  */
 
@@ -31,7 +31,7 @@ const STYLE = `
   select.status[data-v="新進"] { border-color: var(--seal); color: var(--seal); }
   .empty, .err { padding: 2rem 0; color: var(--mist); }
   .err { color: var(--seal); }
-  .tabs { display: flex; gap: 1.6rem; margin-top: 1.4rem; border-bottom: 1px solid var(--line); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 0 1.6rem; margin-top: 1.4rem; border-bottom: 1px solid var(--line); }
   .tabs button { font: inherit; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: .5rem 0; color: var(--mist); cursor: pointer; letter-spacing: .06em; }
   .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--moss); }
   .drop { display: block; margin: 1.6rem 0 1rem; border: 1px dashed var(--line); border-radius: 6px; padding: 1.6rem; text-align: center; color: var(--mist); cursor: pointer; transition: border-color .15s, background .15s; }
@@ -70,13 +70,15 @@ const STYLE = `
   .notify-opt { display: inline-flex; gap: .4rem; align-items: center; font-size: .9rem; color: var(--soft); cursor: pointer; }
   select.status[data-v="待確認"] { border-color: var(--seal); color: var(--seal); }
   .ship input.total { width: 8rem; }
+  select.status[data-v="可取貨"] { border-color: var(--moss); color: var(--moss); }
+  .pickup-code { font-size: 1.05rem; letter-spacing: .15em; color: var(--ink); }
 `;
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-export function adminPage(email, statuses, planLabels, letterStatuses, orderStatuses, stayStatuses) {
+export function adminPage(email, statuses, planLabels, letterStatuses, orderStatuses, stayStatuses, cloudshopStatuses) {
   return `<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -94,6 +96,7 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
     <button type="button" role="tab" id="tabBtnInq" aria-selected="true" data-tab="inq">幸福餐桌預約</button>
     <button type="button" role="tab" id="tabBtnLet" aria-selected="false" data-tab="let">大道至簡來信<span class="badge" id="letBadge"></span></button>
     <button type="button" role="tab" id="tabBtnOrd" aria-selected="false" data-tab="ord">雲南訂單<span class="badge" id="ordBadge"></span></button>
+    <button type="button" role="tab" id="tabBtnCs" aria-selected="false" data-tab="cs">雲端小舖訂單<span class="badge" id="csBadge"></span></button>
     <button type="button" role="tab" id="tabBtnStay" aria-selected="false" data-tab="stay">幸福之家預約<span class="badge" id="stayBadge"></span></button>
     <button type="button" role="tab" id="tabBtnHap" aria-selected="false" data-tab="hap">幸福記帳本<span class="badge" id="hapBadge"></span></button>
     <button type="button" role="tab" id="tabBtnPh" aria-selected="false" data-tab="ph">幻燈片照片</button>
@@ -136,6 +139,21 @@ export function adminPage(email, statuses, planLabels, letterStatuses, orderStat
   <p class="hint">訂單來自大道至簡品牌站的雲南好物選購頁（shop/）。每張訂單都會寄通知給你們，並寄訂單確認與付款資訊給客人。
   收到款項改「已付款」（客人會收到款項確認信）；寄出後先填物流與追蹤號碼，再改「已出貨」（客人會收到附追蹤號碼的出貨通知）。
   送禮訂單會標出收件人、卡片內容與「不附價格明細」。金額由系統依商品表重算；同一支電話在同一檔重複下單會標出來，方便合併寄送。</p>
+  </section>
+  <section id="tab-cs" hidden>
+  <div class="bar">
+    <div class="filters">
+      <select id="cStatus" aria-label="依狀態篩選"><option value="">全部狀態</option>${cloudshopStatuses.map(s => `<option>${esc(s)}</option>`).join('')}</select>
+      <input id="cText" type="search" placeholder="搜尋訂單編號、取貨碼、姓名、電話、商品" aria-label="搜尋雲端小舖訂單">
+      <label class="notify-opt"><input type="checkbox" id="cNotify" checked> 改成已付款／可取貨／已出貨時寄信通知客人</label>
+    </div>
+    <a class="btn" href="/api/admin/cloudshop.csv">匯出 CSV</a>
+  </div>
+  <div class="count" id="cCount"></div>
+  <div id="cList"><p class="empty">載入中…</p></div>
+  <p class="hint">訂單來自大道至簡品牌站的無人商店雲端小舖（cloudshop/，孩子園藝）。每張訂單都會寄通知給你們；客人有留 Email 才會收到訂單確認與後續通知（沒留的請用 LINE 或電話聯絡）。
+  收到款項改「已付款」。到店自取：放進取貨櫃後改「可取貨」，客人憑訂單編號末四碼（取貨碼）取貨，取走後改「已完成」。
+  宅配與超商：寄出後先填物流與追蹤號碼，再改「已出貨」。金額由系統依商品表重算；同一支電話還有沒完成的訂單會標出來。</p>
   </section>
   <section id="tab-stay" hidden>
   <div class="bar">
@@ -180,6 +198,7 @@ const STATUSES = ${JSON.stringify(statuses)};
 const LSTATUSES = ${JSON.stringify(letterStatuses)};
 const OSTATUSES = ${JSON.stringify(orderStatuses)};
 const SSTATUSES = ${JSON.stringify(stayStatuses)};
+const CSTATUSES = ${JSON.stringify(cloudshopStatuses)};
 const PLAN = ${JSON.stringify(planLabels)};
 let rows = [];
 const $ = s => document.querySelector(s);
@@ -307,10 +326,10 @@ $('#hStatus').addEventListener('change', renderHappiness);
 $('#hText').addEventListener('input', renderHappiness);
 
 /* ---------------- 分頁 ---------------- */
-const HASH = { inq: '#', let: '#letters', ord: '#orders', stay: '#stays', hap: '#happiness', ph: '#photos' };
+const HASH = { inq: '#', let: '#letters', ord: '#orders', cs: '#cloudshop', stay: '#stays', hap: '#happiness', ph: '#photos' };
 function showTab(t) {
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
-  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-stay').hidden = t !== 'stay'; $('#tab-hap').hidden = t !== 'hap'; $('#tab-ph').hidden = t !== 'ph';
+  $('#tab-inq').hidden = t !== 'inq'; $('#tab-let').hidden = t !== 'let'; $('#tab-ord').hidden = t !== 'ord'; $('#tab-cs').hidden = t !== 'cs'; $('#tab-stay').hidden = t !== 'stay'; $('#tab-hap').hidden = t !== 'hap'; $('#tab-ph').hidden = t !== 'ph';
   history.replaceState(null, '', HASH[t]);
   if (t === 'ph' && !photosLoaded) loadPhotos();
 }
@@ -491,6 +510,122 @@ async function saveOrder(r, body, ctl) {
 $('#oStatus').addEventListener('change', renderOrders);
 $('#oText').addEventListener('input', renderOrders);
 
+/* ---------------- 雲端小舖訂單 ---------------- */
+let csOrders = [], CDELIVERY = {}, CPAY = {}, CCARRIERS = [];
+async function loadCloudshop() {
+  try {
+    const res = await fetch('/api/admin/cloudshop', { cache: 'no-store' });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.code);
+    csOrders = out.orders; CDELIVERY = out.delivery; CPAY = out.pay; CCARRIERS = out.carriers || []; renderCloudshop();
+  } catch (e) {
+    $('#cList').innerHTML = ''; $('#cList').append(el('p', 'err', '讀不到訂單（' + e.message + '）。重新整理頁面再試一次。'));
+  }
+}
+function renderCloudshop() {
+  const st = $('#cStatus').value, q = $('#cText').value.trim().toLowerCase();
+  const shown = csOrders.filter(r => (!st || r.status === st) &&
+    (!q || [r.order_no, r.name, r.phone, r.email, r.line, r.items, r.tracking_no].join(' ').toLowerCase().includes(q)));
+  const unpaid = csOrders.filter(r => r.status === '待付款').length;
+  const waiting = csOrders.filter(r => r.status === '可取貨').length;
+  $('#csBadge').textContent = unpaid ? String(unpaid) : '';
+  const open = csOrders.filter(r => r.status !== '取消');
+  $('#cCount').textContent = '共 ' + csOrders.length + ' 張，顯示 ' + shown.length + ' 張' + (unpaid ? '，' + unpaid + ' 張待付款' : '') + (waiting ? '，' + waiting + ' 張在取貨櫃等人拿' : '')
+    + '・未取消合計 ' + money(open.reduce((a, r) => a + r.total, 0));
+  const list = $('#cList'); list.innerHTML = '';
+  if (!shown.length) { list.append(el('p', 'empty', csOrders.length ? '沒有符合條件的訂單。' : '目前還沒有訂單。')); return; }
+  for (const r of shown) {
+    const pickup = r.delivery === 'pickup';
+    const item = el('div', 'item');
+    const top = el('div', 'top');
+    const name = el('div', 'name', r.order_no || ('#' + r.id)); name.append(el('small', '', r.name));
+    const sel = el('select', 'status'); sel.setAttribute('aria-label', (r.order_no || r.id) + ' 的狀態');
+    // 可取貨只給到店自取、已出貨只給寄送的訂單
+    for (const s of CSTATUSES) {
+      if ((s === '可取貨' && !pickup) || (s === '已出貨' && pickup)) continue;
+      const o = el('option', '', s); if (s === r.status) o.selected = true; sel.append(o);
+    }
+    sel.dataset.v = r.status;
+    top.append(name, sel);
+    const meta = el('div', 'meta');
+    meta.append(fmt(r.created_at) + '・' + r.phone);
+    if (r.email) { meta.append('・'); const mail = el('a', '', r.email); mail.href = 'mailto:' + r.email + '?subject=' + encodeURIComponent('你的訂單 ' + (r.order_no || '')); meta.append(mail); }
+    if (r.line) meta.append('・LINE ' + r.line);
+    const chips = el('div');
+    chips.append(el('span', 'chip', CPAY[r.pay] || r.pay), el('span', 'chip', CDELIVERY[r.delivery] || r.delivery));
+    if (!r.email) chips.append(el('span', 'chip', '沒留 Email'));
+    const ul = el('ul', 'lines');
+    for (const l of itemsOf(r)) { const li = el('li'); li.append(el('span', '', l.name + '（' + l.label + '）× ' + l.qty), el('span', '', money(l.amount))); ul.append(li); }
+    const sum = el('div', 'sum'); sum.append('小計 ' + money(r.subtotal) + '・運費 ' + (r.shipping ? money(r.shipping) : '免運') + '・合計 ');
+    sum.append(el('b', '', money(r.total)));
+    const where = el('div', 'meta');
+    if (pickup) { where.append('到店自取・取貨碼 '); where.append(el('b', 'pickup-code', (r.order_no || '').slice(-4))); }
+    else where.append('寄送：' + (r.delivery === 'home' ? r.address : r.store));
+    item.append(top, meta, chips, where, ul, sum);
+    const car = el('select'), trk = el('input');
+    if (!pickup) {
+      // 物流與追蹤號碼
+      const ship = el('div', 'ship');
+      car.setAttribute('aria-label', (r.order_no || r.id) + ' 的物流');
+      car.append(el('option', '', '選物流')); car.options[0].value = '';
+      const carNow = r.carrier || (r.status !== '已出貨' && DEFAULT_CARRIER[r.delivery]) || '';
+      for (const c of CCARRIERS) { const o = el('option', '', c); if (c === carNow) o.selected = true; car.append(o); }
+      trk.placeholder = '追蹤號碼'; trk.value = r.tracking_no || '';
+      trk.setAttribute('aria-label', (r.order_no || r.id) + ' 的追蹤號碼');
+      const saveBtn = el('button', '', '儲存物流'); saveBtn.type = 'button';
+      saveBtn.addEventListener('click', () => saveCloudshop(r, { status: r.status, carrier: car.value, tracking: trk.value.trim(), notify: false }, saveBtn));
+      ship.append('出貨：', car, trk, saveBtn);
+      if (r.status === '已出貨' && r.email) {
+        const again = el('button', '', '重寄出貨通知'); again.type = 'button';
+        again.addEventListener('click', () => {
+          if (confirm('用目前的物流與追蹤號碼，再寄一次出貨通知給 ' + r.email + '？'))
+            saveCloudshop(r, { status: r.status, carrier: car.value, tracking: trk.value.trim(), notify: true, resend: true }, again);
+        });
+        ship.append(again);
+      }
+      if (r.shipped_at) ship.append(el('span', 'meta', '出貨時間 ' + fmt(r.shipped_at)));
+      item.append(ship);
+    } else if (r.shipped_at) item.append(el('div', 'meta', '放進取貨櫃 ' + fmt(r.shipped_at)));
+    sel.addEventListener('change', () => {
+      const notify = $('#cNotify').checked;
+      if (sel.value === '已出貨' && notify && r.email && !trk.value.trim()) {
+        sel.value = r.status; trk.focus();
+        alert('先填追蹤號碼，再改成「已出貨」——出貨通知信會附上這個號碼。\\n（不想寄信的話，把上方「寄信通知客人」取消勾選。）');
+        return;
+      }
+      saveCloudshop(r, { status: sel.value, carrier: car.value || '', tracking: (trk.value || '').trim(), notify }, sel);
+    });
+    if (r.same_phone) item.append(el('div', 'flag', '同一支電話還有沒完成的訂單：' + r.same_phone + '（可合併取貨或寄送，運費請手動調整）'));
+    if (r.note) item.append(el('div', 'msg', r.note));
+    const ms = r.mail_status || '';
+    const zh = ms ? ms.replace(/owner/g, '通知信').replace(/guest/g, '確認信').replace(/paid/g, '款項確認信').replace(/ready/g, '取貨通知').replace(/shipped/g, '出貨通知')
+      .replace(/ sent/g, ' 已寄出').replace(/ skipped: no email/g, ' 沒寄（客人沒留 Email）').replace(/ skipped:?/g, ' 未寄出：').replace(/ failed:?/g, ' 失敗：').replace(/; /g, '，') : '寄送中或尚無紀錄';
+    item.append(el('div', 'mail' + (/failed/.test(ms) ? ' bad' : ''), '寄信：' + zh));
+    list.append(item);
+  }
+}
+const CS_SAVE_ERR = { need_tracking: '要寄出貨通知，請先填追蹤號碼。', invalid_carrier: '物流選項不對，請重新整理頁面。', not_pickup: '這張不是到店自取，請改用「已出貨」。', is_pickup: '這張是到店自取，請改用「可取貨」。' };
+async function saveCloudshop(r, body, ctl) {
+  const prev = r.status; ctl.disabled = true;
+  try {
+    const res = await fetch('/api/admin/cloudshop/' + r.id + '/status', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const out = await res.json(); if (!out.ok) throw new Error(CS_SAVE_ERR[out.code] || out.code);
+    r.status = body.status; r.carrier = body.carrier; r.tracking_no = body.tracking;
+    if ((body.status === '已出貨' || body.status === '可取貨') && !r.shipped_at) r.shipped_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const tag = { '已付款': 'paid ', '可取貨': 'ready ', '已出貨': 'shipped ' }[body.status];
+    if (out.mail && tag) r.mail_status = [r.mail_status, tag + out.mail].filter(Boolean).join('; ');
+    renderCloudshop();
+    if (out.mail && out.mail !== 'sent' && !/no email/.test(out.mail)) alert('狀態已存，但通知信沒有寄出（' + out.mail + '）。');
+  } catch (e) {
+    if (ctl.tagName === 'SELECT') ctl.value = prev;
+    alert('沒有存到（' + e.message + '），請再試一次。');
+  } finally { ctl.disabled = false; }
+}
+$('#cStatus').addEventListener('change', renderCloudshop);
+$('#cText').addEventListener('input', renderCloudshop);
+
 /* ---------------- 安寧幸福之家預約 ---------------- */
 let stays = [], SPAY = {};
 async function loadStays() {
@@ -667,6 +802,7 @@ drop.addEventListener('drop', e => uploadFiles(e.dataTransfer.files));
 if (location.hash === '#photos') showTab('ph');
 if (location.hash === '#letters') showTab('let');
 if (location.hash === '#orders') showTab('ord');
+if (location.hash === '#cloudshop') showTab('cs');
 if (location.hash === '#stays') showTab('stay');
 if (location.hash === '#happiness') showTab('hap');
 
@@ -675,6 +811,7 @@ $('#fText').addEventListener('input', render);
 load();
 loadLetters();
 loadOrders();
+loadCloudshop();
 loadStays();
 loadHappiness();
 </script>
