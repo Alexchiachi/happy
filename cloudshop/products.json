@@ -424,19 +424,19 @@
       "cat": "玩具 · Toys",
       "han": "玩",
       "tone": "honey",
-      "name": "沙灘沙漏 18 件組",
-      "intro": "沙漏轉輪、桶子和一整排小工具，蓋城堡的一套。",
+      "name": "沙灘沙漏 5 件組",
+      "intro": "沙漏轉輪、鏟子、耙子，再加星星和小魚兩個沙模。",
       "specs": [],
       "variants": [
         {
           "key": "std",
           "label": "一組",
-          "price": 200,
+          "price": 100,
           "unit": "組"
         }
       ],
       "img": "images/toy-hourglass-18.jpg",
-      "imgAlt": "藍綠色沙灘桶與沙漏轉輪，前面排著一整排彩色鏟子、耙子與小沙模"
+      "imgAlt": "藍綠色沙漏轉輪、鏟子、紅色耙子、星星與小魚沙模，放在沙灘上"
     },
     {
       "active": true,
@@ -778,7 +778,9 @@
           "price": 100,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/life-daisy-6.jpg",
+      "imgAlt": "花瓣形小白瓷盤，盤緣畫著小雛菊、小花與綠葉"
     },
     {
       "active": true,
@@ -804,7 +806,9 @@
           "price": 150,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/life-daisy-85.jpg",
+      "imgAlt": "花瓣形白瓷淺盤，盤緣一圈小雛菊、黃色小花與綠葉"
     },
     {
       "active": true,
@@ -830,7 +834,9 @@
           "price": 150,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/life-daisy-8.jpg",
+      "imgAlt": "花瓣形白瓷深盤，盤緣畫著小雛菊與一枝枝綠葉"
     },
     {
       "active": true,
@@ -881,7 +887,7 @@
         }
       ],
       "img": "images/life-duck-sauce.jpg",
-      "imgAlt": "白瓷小鴨造型醬料碟，黃色鴨嘴與鴨腳"
+      "imgAlt": "兩個白瓷小鴨造型醬料碟，黃色鴨嘴與鴨腳"
     },
     {
       "active": true,
@@ -902,7 +908,9 @@
           "price": 60,
           "unit": "支"
         }
-      ]
+      ],
+      "img": "images/life-duck-cutlery.jpg",
+      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
     },
     {
       "active": true,
@@ -923,7 +931,9 @@
           "price": 60,
           "unit": "支"
         }
-      ]
+      ],
+      "img": "images/life-duck-cutlery.jpg",
+      "imgAlt": "白色握柄、頂端是黃嘴小鴨的湯匙與叉子"
     },
     {
       "active": true,
@@ -995,7 +1005,9 @@
           "price": 30,
           "unit": "個"
         }
-      ]
+      ],
+      "img": "images/life-sponge.jpg",
+      "imgAlt": "一桌小狗、小熊造型的木漿棉洗碗海綿"
     },
     {
       "active": true,
@@ -1187,7 +1199,9 @@
           "price": 300,
           "unit": "條"
         }
-      ]
+      ],
+      "img": "images/life-phone-strap.jpg",
+      "imgAlt": "上：藍灰色編織長手機鏈；下：米色背帶接花瓣圖案織帶的款式"
     },
     {
       "active": true,
