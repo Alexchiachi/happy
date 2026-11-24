@@ -10,7 +10,7 @@
     "html_handling": "auto-trailing-slash",
     "run_worker_first": ["/api/*", "/photos/*"]
   },
-  "vars": { "API_ORIGIN": "https://executive-table.jianchiachi.workers.dev" },
+  "services": [{ "binding": "API", "service": "executive-table" }],
   "workers_dev": true,
   "preview_urls": true,
   "observability": { "enabled": true }

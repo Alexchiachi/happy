@@ -3,13 +3,13 @@
 給在 Alexchiachi/happy 倉庫工作的 Claude Code 與其他 AI。
 目標：在**現有**品牌站上升級，讓它成為 daoissimple.com 的母體網站，取代 Bluehost 上的 WordPress。不重寫、不換技術、不換設計。
 
-最後更新：2026-11-23　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
+最後更新：2026-11-24　｜　主理人：簡家旗　｜　放置位置：倉庫根目錄（不在 Pages 白名單內，不會上網站）
 
 > 這份檔案與 Google 文件「MOTHER-UPGRADE.md」是同一份標準的兩個副本，讓不同的人、不同的 AI 都讀到一樣的內容。
 > 兩邊以 Google 文件為準：<https://docs.google.com/document/d/1LiMWpeURkv9ibVPb4JbR3RJUTN9WTv7bAilVnmJzRmY/edit>。
 > 改了其中一份，要同步另一份，並更新上面的「最後更新」日期。
 
-## 進度（更新於 2026-11-23）
+## 進度（更新於 2026-11-24）
 
 - 階段 0 盤點：已完成。
 - 階段 1 內容真實性清理（第 3 節）：已完成並發布。
@@ -20,6 +20,7 @@
 - 階段 5 切換到 daoissimple.com（第 5 節）：尚未開始，每一步需簡家旗同意。網域已於 2026-11-23 轉入 Cloudflare Registrar（Dadaoissimple 帳號，到期 2028-03-01）。同日第 5 節改為跨帳號轉送做法（見 5.0、5.3b）。
 - 5.3b IP 修正已上線（2026-11-24），PROXY_SECRET 尚未設定。
 - 5.2、5.4、5.5 已完成（2026-11-24），尚未部署到 Cloudflare。5.6 的兩頁法律文字待取得 WordPress 原文。
+- 2026-11-24 決定合併為 Jianchiachi 單一帳號，第 5 節改為 Service binding 版；網域移轉排在 2026-12-04（5.13）。
 - 階段 6 搬 WordPress 文章（第 6 節）：尚未開始。
 
 ---
@@ -143,46 +144,37 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 
 決定：網站由 Cloudflare Workers 提供，原始碼留在 GitHub。GitHub Pages 在切換完成前照常運作。
 
-每一步做完先停下，等簡家旗確認再做下一步。會動到網域或 DNS 的步驟（5.8、5.9、5.10）必須由她本人在場同意。
+每一步做完先停下，等簡家旗確認再做下一步。會動到網域或 DNS 的步驟（5.0、5.8、5.9、5.10）必須由她本人在場同意。
 
-### 5.0 兩個 Cloudflare 帳號（先讀）
+### 5.0 單一帳號：網域併入 Jianchiachi 帳號（2026-11-24 決定）
 
-簡家旗有兩個 Cloudflare 帳號，東西分在兩邊：
+所有東西放在同一個 Cloudflare 帳號：Jianchiachi@gmail.com（帳號 ID d7c0634ee5825ea8844019177d108e2f）。裡面已有 executive-table Worker、D1、後台與 Access 設定。
 
-| 帳號 | 帳號 ID | 裡面有什麼 |
-| --- | --- | --- |
-| Dadaoissimple@gmail.com | 230a6d184640b74e6c2e1cc19530126e | daoissimple.com 網域與 DNS（2026-11-23 起由 Cloudflare Registrar 註冊，到期 2028-03-01） |
-| Jianchiachi@gmail.com | d7c0634ee5825ea8844019177d108e2f | executive-table Worker 與 D1（表單、訂單、預約、後台） |
+daoissimple.com 目前在 Dadaoissimple@gmail.com 帳號（230a6d184640b74e6c2e1cc19530126e），2026-11-23 由 Cloudflare Registrar 註冊，到期 2028-03-01。用 Cloudflare 的「帳號間移轉網域」併過來，最早 2026-12-04 可做（網域需在原帳號滿 10 天），步驟見 5.13。
 
-新網站 Worker 要掛 daoissimple.com，必須建在 **Dadaoissimple 帳號**。Service binding 不能跨帳號，所以 /api 等請求改用 fetch 轉送到 executive-table 的公開網址。executive-table 與 D1 留在原帳號，不搬。
+原因：簡家旗平常用 jianchiachi@gmail.com 登入，在 Dadaoissimple 帳號只有網域層級的成員身分，建不出能建立 Worker 的 Token（2026-11-24 部署失敗：No access to the specified resource）。分成兩個帳號也迫使表單走公開網址轉送、另設密鑰與 IP 修正。合併後這些都不需要。
+
+網域移轉完成前：網站 Worker 可以先部署到 jianchiachi.workers.dev 預覽，但不設 routes、不掛 daoissimple.com。
 
 ### 5.1 目標架構
 
 ```
 瀏覽器 → daoissimple.com
           │
-   daoissimple-site（Dadaoissimple 帳號，靜態資源 _site/）
-          ├─ /api/*（/api/admin/* 除外）、/photos/* → fetch 轉送到 https://executive-table.jianchiachi.workers.dev（Jianchiachi 帳號）
+   daoissimple-site（Jianchiachi 帳號，靜態資源 _site/）
+          ├─ /api/*（/api/admin/* 除外）、/photos/* → Service binding → executive-table（同帳號）
           └─ 其他路徑 → 靜態頁面；舊 WordPress 網址由 _site/_redirects 做 301
 ```
 
-好處：品牌站和表單同網域，瀏覽器只看到 daoissimple.com；每次推分支都有預覽網址。代價：多一次轉送，以及 5.3b 的 IP 修正。後台不經過轉送，照舊從 https://executive-table.jianchiachi.workers.dev/admin 登入；這樣後台的登入與同源檢查都不用改。
+Service binding 直接把原始請求交給 executive-table，訪客的 CF-Connecting-IP 與 Origin 都原封不動，限流與來源檢查照常運作。後台暫時照舊從 https://executive-table.jianchiachi.workers.dev/admin 登入；要不要搬到 daoissimple.com/admin，切換穩定後再決定。
 
-### 5.2 把白名單抽成共用的組站腳本
+### 5.2 組站腳本（已完成 2026-11-24）
 
-現在 .github/workflows/pages.yml 裡寫著要發布哪些檔案。把這份清單搬到 tools/build_site.sh（輸出到 _site/），pages.yml 和新的部署流程都呼叫它，避免兩份清單各自漂移。
+tools/build_site.sh 收一個參數：pages 產出給 GitHub Pages 的 _site/（與原本 diff -r 無差異）；cloudflare 另做 5.4 的網址改寫並複製 _redirects。pages.yml 已改為呼叫它，_site/ 已加進 .gitignore。
 
-**已完成（2026-11-24）。** 腳本收一個參數：
+### 5.3 網站 Worker
 
-- `tools/build_site.sh pages`：給 GitHub Pages，內容與搬家前完全相同。
-- `tools/build_site.sh cloudflare`：額外做 5.4 的網址改寫，並把 _redirects 複製進 _site/。
-
-pages.yml 已改成呼叫 `tools/build_site.sh pages`，_site/ 已加進 .gitignore。
-驗收：用舊做法與新腳本各產出一份，`diff -r` 比對 651 個檔案完全相同。
-
-### 5.3 新增網站 Worker
-
-新增 site/wrangler.jsonc（不要改根目錄那份，那是 executive-table 的）：
+site/wrangler.jsonc（不要改根目錄那份，那是 executive-table 的）：
 
 ```
 {
@@ -197,14 +189,14 @@ pages.yml 已改成呼叫 `tools/build_site.sh pages`，_site/ 已加進 .gitign
     "html_handling": "auto-trailing-slash",
     "run_worker_first": ["/api/*", "/photos/*"]
   },
-  "vars": { "API_ORIGIN": "https://executive-table.jianchiachi.workers.dev" },
+  "services": [{ "binding": "API", "service": "executive-table" }],
   "workers_dev": true,
   "preview_urls": true,
   "observability": { "enabled": true }
 }
 ```
 
-新增 site/worker.js：
+site/worker.js：
 
 ```
 export default {
@@ -212,13 +204,7 @@ export default {
     const url = new URL(request.url);
     const p = url.pathname;
     if (p.startsWith('/api/admin/')) return new Response('Not found', { status: 404 });
-    if (p.startsWith('/api/') || p.startsWith('/photos/')) {
-      const target = new URL(p + url.search, env.API_ORIGIN);
-      const proxied = new Request(target, request);
-      proxied.headers.set('X-Client-IP', request.headers.get('CF-Connecting-IP') || '');
-      proxied.headers.set('X-Proxy-Secret', env.PROXY_SECRET);
-      return fetch(proxied);
-    }
+    if (p.startsWith('/api/') || p.startsWith('/photos/')) return env.API.fetch(request);
     const res = await env.ASSETS.fetch(request);
     if (url.hostname.endsWith('.workers.dev')) {
       const r = new Response(res.body, res);
@@ -230,136 +216,67 @@ export default {
 };
 ```
 
-- 從 workers.dev（正式的 daoissimple-site.dadaoissimple.workers.dev 與分支預覽）來的頁面加上 `X-Robots-Tag: noindex`，避免搜尋引擎把預覽站當成正式站收錄。daoissimple.com 與 new.daoissimple.com 不受影響。
+不需要 API_ORIGIN、PROXY_SECRET。workers.dev 上的頁面加 noindex，避免預覽站被搜尋引擎收錄。
 
-- PROXY_SECRET 是密鑰，不寫進檔案。產生一串 32 字以上的亂數，用 npx wrangler secret put PROXY_SECRET --config site/wrangler.jsonc 設定（Dadaoissimple 帳號），同一串也設給 executive-table（見 5.3b）。
-- 這一步先不要設 routes 或自訂網域，只部署到 workers.dev 測試。
-- 執行 npx wrangler deploy --config site/wrangler.jsonc 前，先跑 tools/build_site.sh，並確認 wrangler 登入的是 Dadaoissimple 帳號（或設 CLOUDFLARE_ACCOUNT_ID=230a6d184640b74e6c2e1cc19530126e）。
+### 5.3b executive-table 的 IP 修正（已上線 2026-11-24）
 
-### 5.3b executive-table 的 IP 修正（必做，否則表單會被誤擋）
+executive-table 的七個表單端點改用 clientIp(request, env)：帶正確 X-Proxy-Secret 時採信 X-Client-IP，否則用 CF-Connecting-IP。改走 Service binding 後不會再帶密鑰，行為等同原本。程式碼保留無害；PROXY_SECRET 在 5.13 清理時刪除。
 
-executive-table 的來信、訂單、預約等端點，用 CF-Connecting-IP 做限流：同一 IP 十分鐘內最多 5 次（目前有 7 處）。經過 5.3 轉送後，所有訪客的 CF-Connecting-IP 都會變成網站 Worker 的出口，等於全站共用 5 次額度。
+### 5.4 網址改成根路徑（已完成 2026-11-24）
 
-修法：
+原始檔不動，只在 cloudflare 模式改寫 _site/ 裡的副本：https://alexchiachi.github.io/happy/ 換成 https://daoissimple.com/，屬性值開頭的 /happy/ 換成 /。簡體轉換與 sitemap 工具讀 SITE_ORIGIN，預設維持 github.io。
 
-1. 在 executive-table/worker/util.js 新增：
-   ```
-   export function clientIp(request, env) {
-     const secret = env.PROXY_SECRET;
-     if (secret && request.headers.get('X-Proxy-Secret') === secret) {
-       return request.headers.get('X-Client-IP') || '';
-     }
-     return request.headers.get('CF-Connecting-IP') || '';
-   }
-   ```
-2. 把所有 hashIp(request.headers.get('CF-Connecting-IP') || '') 改成 hashIp(clientIp(request, env))。先 grep CF-Connecting-IP，列出全部出現處再改。
-3. 用 npx wrangler secret put PROXY_SECRET 在 Jianchiachi 帳號設定同一串密鑰，再由既有的 worker.yml 部署。
-4. 沒有密鑰的請求（例如直接打 workers.dev）照舊用 CF-Connecting-IP，行為不變。
-5. 後台不經過轉送（見 5.1），所以後台的同源檢查（Origin 必須等於 url.origin）不用改。
+待補（2026-11-24 交代）：cloudflare 模式下，站內連結、canonical、hreflang、og:url、sitemap.xml 的 .html 去掉，每頁 canonical 與 sitemap 網址都要直接回 200、不經轉址；eternitychildbooking/manual.html 與 inner-flow/index.html 兩處顯示用的舊網址一併改寫。
 
-### 5.4 網址改成根路徑
+### 5.5 舊 WordPress 網址轉址（已完成 2026-11-24）
 
-網站會從 /happy/ 子路徑搬到網域根目錄。
-
-**已完成（2026-11-24），做法與原本的構想不同**：不改原始檔，只在 `cloudflare`
-模式下改寫 _site/ 裡的副本（tools/rewrite_site_urls.py）。這樣現在的 GitHub Pages
-網站完全不受影響，也不必和 5.9 排在同一天，更不需要 SITE_BASE 開關。
-
-兩條規則，都只針對網址，不碰正文：
-
-1. 絕對網址 `https://alexchiachi.github.io/happy/…` → `https://daoissimple.com/…`
-2. 屬性值開頭的 `/happy/`（href、src、content、action、data-src、poster）→ `/`
-3. 去掉 `.html`：`a.html` → `a`、`x/index.html` → `x/`、`index.html` → `./`。
-   涵蓋站內連結、canonical、hreflang、og:url、JSON-LD 與 sitemap.xml。
-   不這樣做的話，站內每一次點擊都會被 `html_handling: auto-trailing-slash`
-   多轉一次（`/about.html` → `/about`）。舊的 `.html` 網址仍然會 307 導到新網址，
-   所以已經流通出去的連結不會壞。
-
-規則 1 連純文字顯示的網址一起換（eternitychildbooking/manual.html 的連結文字、
-inner-flow/index.html 頁尾的網址字串），避免文字與連結不一致。
-
-改寫範圍限 .html、.xml、.txt、.json、.webmanifest、.css、.js；executive-table/
-整個跳過（它有自己的 Worker 與網址，切換是 5.9 當天的事，BRAND_SITE_URL 也不在這步動）。
-
-驗收（wrangler dev）：60 頁的 canonical 與 sitemap 的 85 個網址全部**直接**回 200，
-不經轉址；爬 18 頁的 176 個站內資源，沒有壞掉的連結，也沒有任何連結需要多轉一次。
-
-簡體轉換工具 tools/build_zhcn.py 與 tools/publish_from_issue.py 的根網址改讀環境變數
-SITE_ORIGIN，預設值維持現在的 github.io，所以原始檔產出不變。
-
-### 5.5 舊 WordPress 網址轉址
-
-在倉庫建立 _redirects（由 5.2 的腳本複製進 _site/）。格式一行一條：舊路徑 新路徑 301。
+_redirects 只在 cloudflare 模式複製進 _site/：
 
 ```
-/guanyuzhenshidewo/   /about               301
-/anli-yu-renzheng/    /cases               301
-/lianluowo/           /connect             301
-/xingfufuwu/          /services            301
-/consulting/          /services#advisory   301
-/zuopinji/            /about               301
-/about-us/            /about               301
-/yunnandexiangqi/     /shop/               301
-/blog/                /journal             301
+/guanyuzhenshidewo/   /about                 301
+/anli-yu-renzheng/    /cases                 301
+/lianluowo/           /connect               301
+/xingfufuwu/          /services              301
+/consulting/          /services#consulting   301
+/zuopinji/            /about                 301
+/about-us/            /about                 301
+/yunnandexiangqi/     /shop/                 301
+/blog/                /journal               301
 ```
 
-- 目標寫不帶 .html 的路徑：html_handling: auto-trailing-slash 會把 /about.html 自動導到 /about，直接寫 /about 可少轉一次。
-- WordPress 舊網址結尾有 /。若實測發現不帶 / 的版本沒被轉址，就兩種寫法各加一條。
-- 上限 2,000 條靜態轉址，夠用。
-- 第三階段搬進來的文章沿用原路徑，不需要轉址。
-- _redirects 只作用在靜態頁，不會影響 /api/*。
-- 完整清單以 Claude Docs「daoissimple.com 頁面去向表」為準；表上標「待查」的 8 個頁面，先不加。
+/consulting/ 那條於 2026-11-24 決定導到 services.html 的 id="consulting"；若尚未加入，與 5.4 待補一起做。頁面去向表上「待查」的 8 個頁面先不加。
 
-**已完成（2026-11-24），九條。** `/consulting/` 的目標由簡家旗定為
-`/services#consulting`（services.html 沒有 `id="advisory"`，只有 `id="consulting"`）。
-wrangler dev 實測九條都回 301，`/consulting/` 的 Location 確實帶著 `#consulting`。
+### 5.6 Paddle 審核過的網址（待做）
 
-### 5.6 Paddle 審核過的網址
-
-/privacy-policy/ 與 /terms-of-service/ 必須回應 200，不能是轉址。
-
-- 建立 privacy-policy/index.html 與 terms-of-service/index.html（內容以現行 WordPress 版本為底，付款說明改成實際做法：台灣轉帳、貨到付款、LINE；國際 Gumroad；軟體訂閱 Paddle）。
-- 加進組站白名單。
+/privacy-policy/ 與 /terms-of-service/ 必須回應 200，不能是轉址。以 WordPress 現行原文為底建立兩頁，只改付款說明（台灣轉帳、貨到付款、LINE；國際 Gumroad；軟體訂閱 Paddle）；原文沒寫的不補，疑問用 HTML 註解標出，由簡家旗逐段確認。需用「happy（大道至簡網站）」環境才讀得到原文。
 
 ### 5.7 自動部署與預覽網址
 
-新增 .github/workflows/site.yml。它部署到 **Dadaoissimple 帳號**，所以要用另一組 GitHub Secrets，不要沿用 worker.yml 那組（那組屬於 Jianchiachi 帳號）：
+.github/workflows/site.yml，部署到 Jianchiachi 帳號：
 
-- SITE_CLOUDFLARE_API_TOKEN：在 Dadaoissimple 帳號建立 API Token，權限用「Edit Cloudflare Workers」範本，並限定 daoissimple.com 這個 Zone。由簡家旗本人建立並貼進 GitHub Secrets，不經過對話。
-- SITE_CLOUDFLARE_ACCOUNT_ID：230a6d184640b74e6c2e1cc19530126e。
+- 推到 main：tools/build_site.sh cloudflare，再 npx wrangler deploy --config site/wrangler.jsonc。
+- 推到其他分支：組站後 npx wrangler versions upload --config site/wrangler.jsonc --preview-alias <別名>。預覽網址 <別名>-daoissimple-site.jianchiachi.workers.dev。
+- Token：先沿用 worker.yml 部署 executive-table 的那組 Secrets（同帳號）。若權限不足（例如不能建立新 Worker），由簡家旗在 Jianchiachi 帳號用「Edit Cloudflare Workers」範本另建一把，帳戶資源選 Jianchiachi 帳號。
+- 預覽網址上的表單會被 executive-table 的來源檢查擋下，屬正常；表單在 5.8 的 new.daoissimple.com 測。
 
-流程：
+### 5.8 先用 new.daoissimple.com 實測（需 5.13 網域移轉完成）
 
-- PROXY_SECRET：從 GitHub Secret `PROXY_SECRET` 用 `--secrets-file` 隨版本一起上傳（deploy 與 versions upload 都支援）。步驟裡用 jq 從環境變數寫成 `$RUNNER_TEMP` 下的暫存 JSON（umask 077），`trap` 保證步驟結束一定刪除；值不出現在指令列、log 與倉庫。選它而不用部署後再 `wrangler secret put`，是因為程式與密鑰同一個版本上線，沒有「新版本已上線、密鑰還沒設」的空窗，分支預覽版本也帶得到密鑰而不影響正式版本。檔案裡沒列的密鑰會保留，不會被刪。
-- 推到 main：跑 tools/build_site.sh cloudflare，再 npx wrangler deploy --config site/wrangler.jsonc --secrets-file <暫存檔>。
-- 推到其他分支：跑組站腳本，再 npx wrangler versions upload --config site/wrangler.jsonc --secrets-file <暫存檔> --preview-alias <別名>。預覽網址是 <別名>-daoissimple-site.dadaoissimple.workers.dev，印在 workflow 的 Summary，把它交給簡家旗看。
-- 別名由分支名自動轉成：小寫、非英數字元換成 -（連續的併成一個）、頭尾不留 -；不是字母開頭就補 `b-`（Cloudflare 規定別名以小寫字母開頭）；「別名-daoissimple-site」超過 63 字元就截短別名。
-- 分支上的第一次 versions upload 會因為 Worker 還不存在而失敗，這是預期的；合併到 main、第一次 deploy 之後就正常。
-
-預覽網址上的表單會被 executive-table 的來源檢查擋下，這是正常的；表單請在 5.8 的 new.daoissimple.com 測。
-
-### 5.8 先用 new.daoissimple.com 實測
-
-1. 根目錄 wrangler.jsonc 的 ALLOWED_ORIGINS 加入 https://daoissimple.com,https://new.daoissimple.com，保留原本的 github.io。連同 5.3b 一起由 worker.yml 部署 executive-table（Jianchiachi 帳號）。
-2. 在 site/wrangler.jsonc 加上：
-   "routes": [{ "pattern": "new.daoissimple.com", "custom_domain": true }]
-   部署後 Cloudflare 會在 Dadaoissimple 帳號自動建立 DNS 紀錄與憑證。
-3. 簡家旗在手機與電腦逐項測試（見 5.11 清單）。另外連續送出 6 次測試來信，確認不會被限流擋下（驗證 5.3b）。容器連不到正式網址時，由她本人測。
+1. 根目錄 wrangler.jsonc 的 ALLOWED_ORIGINS 加入 https://daoissimple.com,https://new.daoissimple.com，保留 github.io，由 worker.yml 部署 executive-table。
+2. site/wrangler.jsonc 加上 "routes": [{ "pattern": "new.daoissimple.com", "custom_domain": true }]，部署後 Cloudflare 自動建立 DNS 紀錄與憑證。
+3. 簡家旗在手機與電腦逐項測試（5.11 清單），另外連續送出 6 次測試來信，確認不會被限流擋下。
 
 ### 5.9 正式切換（簡家旗在場）
 
-1. 在 Dadaoissimple 帳號的 DNS 記下 daoissimple.com 與 www 目前指向 Bluehost 的紀錄（類型、內容、代理狀態），寫進 docs/rollback.md。
-2. 選離峰時段刪除這兩筆紀錄（從刪除到新網域生效會有幾分鐘空窗）。只刪這兩筆，MX、TXT（SPF、DKIM、DMARC）、mail.daoissimple.com 相關紀錄一律不動。
+1. 在 Jianchiachi 帳號的 DNS 記下 daoissimple.com 與 www 目前指向 Bluehost 的紀錄（類型、內容、代理狀態），寫進 docs/rollback.md。
+2. 選離峰時段刪除這兩筆紀錄。只刪這兩筆，其他紀錄不動。
 3. 在 site/wrangler.jsonc 的 routes 加入 daoissimple.com（custom_domain），部署。
-4. www.daoissimple.com：新增一筆代理中的 DNS 紀錄，再用 Cloudflare「Redirect Rules」把 www 301 到 https://daoissimple.com，保留路徑。
+4. www.daoissimple.com：新增一筆代理中的 DNS 紀錄，再用 Redirect Rules 把 www 301 到 https://daoissimple.com，保留路徑。
 5. 根目錄 wrangler.jsonc 的 BRAND_SITE_URL 改成 https://daoissimple.com/，部署 executive-table。
-6. 在 Cloudflare Web Analytics（Dadaoissimple 帳號）加入 daoissimple.com。
+6. 在 Cloudflare Web Analytics 加入 daoissimple.com。
 
 ### 5.10 回退方法
 
-出問題時，在 10 分鐘內恢復舊站：
-
-1. 從 site/wrangler.jsonc 移除 daoissimple.com 的 route，重新部署（或在 Dadaoissimple 帳號的 Worker 設定移除自訂網域）。
+1. 從 site/wrangler.jsonc 移除 daoissimple.com 的 route，重新部署（或在 Worker 設定移除自訂網域）。
 2. 依 docs/rollback.md 重建指向 Bluehost 的兩筆 DNS 紀錄。
 
 Bluehost 保留到 2027-02-26，這段期間隨時可以回退。
@@ -367,25 +284,28 @@ Bluehost 保留到 2027-02-26，這段期間隨時可以回退。
 ### 5.11 切換檢查清單
 
 - 首頁、雲南、台灣、幸福誌、服務體驗、高階顧問、關於、案例與認證、連繫，各開一次。
-- 連繫表單送出 → 後台 /admin 看得到來信。
-- 後台照舊從 https://executive-table.jianchiachi.workers.dev/admin 登入；daoissimple.com/api/admin/ 回應 404。
+- 連繫表單送出 → 後台看得到來信（後台照舊從 executive-table.jianchiachi.workers.dev/admin 登入）。
 - shop/ 下一張測試訂單 → 收到通知信 → 後台取消該單。
 - anning/ 送一筆測試預約 → 後台取消。
 - 簡體版各頁可開。
 - /privacy-policy/、/terms-of-service/ 回應 200。
-- _redirects 每一條舊網址都 301 到正確頁面。
+- _redirects 每一條舊網址都 301 到正確頁面；canonical 與 sitemap 網址直接回 200。
 - http:// 自動轉 https://；www 轉到不帶 www。
 - 手機 390px 寬不橫向捲動。
-- 信件照常寄出（mail.daoissimple.com 未受影響）。
 
 ### 5.12 切換後的 GitHub Pages
 
-- 觀察兩週無誤後，把 pages.yml 改成只發布一組轉址頁：每個舊頁面一個小檔，含 canonical 指向 daoissimple.com 同路徑，並立即導向。
-- 倉庫仍是唯一原始碼，GitHub Actions 繼續負責部署 Cloudflare。
+觀察兩週無誤後，把 pages.yml 改成只發布一組轉址頁：每個舊頁面一個小檔，含 canonical 指向 daoissimple.com 同路徑，並立即導向。倉庫仍是唯一原始碼。
 
-### 5.13 之後再考慮：合併帳號
+### 5.13 網域移轉到 Jianchiachi 帳號（簡家旗操作，2026-12-04 起）
 
-Bluehost 關閉、網站穩定之後，可以評估把 executive-table 與 D1 搬到 Dadaoissimple 帳號，改回 Service binding，拿掉轉送與 5.3b 的密鑰。搬遷期間不做。
+1. Dadaoissimple 帳號：daoissimple.com → DNS → 記錄 → 匯出，存下檔案；確認 DNSSEC 是關閉的。
+2. Dadaoissimple 帳號：網域註冊 → 管理網域 → daoissimple.com，確認註冊人信箱已驗證、沒有鎖定或待處理的狀態。
+3. Jianchiachi 帳號：新增網站 daoissimple.com（免費方案），匯入第 1 步的檔案，逐筆核對指向 Bluehost 的紀錄與代理狀態。
+4. Dadaoissimple 帳號：管理網域 → daoissimple.com → 設定（Configuration）→ 移轉到其他帳號，填 d7c0634ee5825ea8844019177d108e2f。
+5. jianchiachi@gmail.com 收到確認信，5 天內同意。
+6. 完成後確認：Jianchiachi 帳號裡 daoissimple.com 為 Active、舊站打得開、網域到期日 2028-03-01、自動續約開啟、付款方式已設。移轉後 30 天內不能轉到其他註冊商。
+7. 清理：刪除 Dadaoissimple 帳號的 rough-dust-704e Token；刪除 GitHub Secrets 的 SITE_CLOUDFLARE_API_TOKEN、SITE_CLOUDFLARE_ACCOUNT_ID、PROXY_SECRET；刪除 executive-table 的 PROXY_SECRET。
 
 ## 6. 第三階段：搬 WordPress 文章到幸福誌
 
@@ -442,6 +362,7 @@ Bluehost 關閉、網站穩定之後，可以評估把 executive-table 與 D1 �
 | 2026-10-06 | 文章內文排版規則定案（`DESIGN.md`「文章內文：短中長的節奏」）：段落短、中、長交錯，不連續三段以上同一種長度，每篇 3 至 6 句金句用引言樣式單獨成行，重點用粗體，結尾用短句收。元陽、普洱、蒙自與雲南系列六篇都比照宜賓篇重排，文字不動。 |
 | 2026-10-06 | 封面標題三項規則（`DESIGN.md`、`journal/_template.html`）：一、壓在照片上的標題用較深的暗罩，標題區最亮處對比要在 4.5:1 以上（全站量過，最差 4.83:1）；二、標題平常白色，滑鼠移上、手指按住或鍵盤聚焦時變亮金色 `#F2D27A`（簡家旗決定），整站共用；三、標題字級依封面寬度自動縮，不折出單獨一個字，每個標題帶 `--n`，新增文章後執行 `python3 tools/set_title_fit.py --write` 再跑 `tools/build_zhcn.py`。 |
 | 2026-11-23 | 網域已轉入 Cloudflare Registrar（Dadaoissimple 帳號，到期 2028-03-01）；第 5 節改為跨帳號：網站 Worker 建在 Dadaoissimple 帳號，/api 等用 fetch 轉送到 executive-table（Jianchiachi 帳號），executive-table 加 X-Proxy-Secret／X-Client-IP 的 IP 修正（5.3b）；後台不經轉送，照舊用 workers.dev 網址；切換目標改為 12 月中。 |
+| 2026-11-24 | 合併為單一帳號：daoissimple.com 用帳號間移轉併入 Jianchiachi 帳號（2026-12-04 起，見 5.13）；網站 Worker 建在 Jianchiachi 帳號，改用 Service binding 呼叫 executive-table，取消公開網址轉送與 PROXY_SECRET。 |
 
 新決定加在表格最下方，並同步更新第 2 節事實表。
 
