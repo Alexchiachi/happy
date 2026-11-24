@@ -11,6 +11,7 @@ import re
 import sys
 from pathlib import Path
 
+BASE = os.environ.get("SITE_ORIGIN", "https://alexchiachi.github.io/happy/")
 ROOT = Path(__file__).resolve().parent.parent
 JOURNAL_DIR = ROOT / "journal"
 
@@ -200,17 +201,17 @@ def build_article_html(title: str, date_str: str, year_month: str, lede: str, bo
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="大道至簡 · Dao is simple">
   <meta property="og:locale" content="zh_TW">
-  <meta property="og:url" content="https://alexchiachi.github.io/happy/journal/{slug}.html">
+  <meta property="og:url" content="{BASE}journal/{slug}.html">
   <meta property="og:title" content="{html.escape(title)} · 幸福誌 · 大道至簡">
   <meta property="og:description" content="{html.escape(lede[:120])}">
-  <meta property="og:image" content="https://alexchiachi.github.io/happy/images/og-default.png">
+  <meta property="og:image" content="{BASE}images/og-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="大道至簡 · 做幸福的事，讓幸福變成有價值的事">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{html.escape(title)} · 幸福誌 · 大道至簡">
   <meta name="twitter:description" content="{html.escape(lede[:120])}">
-  <meta name="twitter:image" content="https://alexchiachi.github.io/happy/images/og-default.png">
+  <meta name="twitter:image" content="{BASE}images/og-default.png">
   <meta name="theme-color" content="#FAF6EF">
   <link rel="icon" href="../images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
