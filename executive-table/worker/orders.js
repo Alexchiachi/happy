@@ -20,7 +20,7 @@
  */
 import catalog from '../../shop/products.json';
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 
 export const ORDER_STATUSES = ['待付款', '已付款', '已出貨', '取消'];
 const DELIVERY = { home: '宅配', '711': '7-11 取貨', family: '全家取貨', meet: '面交（南投市／草屯鎮）' };
@@ -58,7 +58,7 @@ export async function handleOrder(request, env, ctx, url) {
   const shipping = shippingFee(priced.subtotal, f.delivery);
 
   await ensureOrderSchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM orders WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

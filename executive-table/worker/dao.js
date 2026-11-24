@@ -12,7 +12,7 @@
  * 通關碼由這裡產生並回傳給網頁，客人憑碼從 LINE、信箱或微信聯繫，管理頁搜尋通關碼即可對照。
  */
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 import { ensureLetterSchema } from './letters.js';
 
 const LIMITS = { intent: 80, answer: 2000, name: 60, contact: 100, petal: 80 };
@@ -66,7 +66,7 @@ export async function handleDao(request, env, ctx, url) {
   if (missing.length) return json({ ok: false, code: 'invalid', fields: missing }, 400);
 
   await ensureLetterSchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM letters WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

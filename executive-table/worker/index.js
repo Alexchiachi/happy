@@ -30,7 +30,7 @@
 import { PLAN_LABEL, configure, guestEmailHtml, guestEmailText, ownerEmailHtml, ownerEmailText } from './emails.js';
 import { verifyAccess } from './access.js';
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 import { handleLetter, handleAdminLetters, LETTER_STATUSES } from './letters.js';
 import { handleDao, purgeExpiredDao } from './dao.js';
 import { handleOrder, handleAdminOrders, ORDER_STATUSES } from './orders.js';
@@ -129,7 +129,7 @@ async function handleInquiry(request, env, ctx, url) {
   if (missing.length) return json({ ok: false, code: 'invalid', fields: missing }, 400);
 
   await ensureSchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM inquiries WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

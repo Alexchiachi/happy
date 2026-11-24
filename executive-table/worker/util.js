@@ -6,6 +6,16 @@ export async function hashIp(ip) {
   return [...new Uint8Array(buf)].slice(0, 16).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// 經過自家網站 Worker 轉送時，訪客 IP 放在 X-Client-IP；
+// 只有帶著正確 X-Proxy-Secret 的請求才採信，其他一律用 CF-Connecting-IP。
+export function clientIp(request, env) {
+  const secret = env.PROXY_SECRET;
+  if (secret && request.headers.get('X-Proxy-Secret') === secret) {
+    return request.headers.get('X-Client-IP') || '';
+  }
+  return request.headers.get('CF-Connecting-IP') || '';
+}
+
 export function formatTaipei(sqlUtc) {
   const d = new Date(String(sqlUtc).replace(' ', 'T') + 'Z');
   return new Intl.DateTimeFormat('zh-TW', {
