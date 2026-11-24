@@ -10,6 +10,12 @@ export default {
       proxied.headers.set('X-Proxy-Secret', env.PROXY_SECRET);
       return fetch(proxied);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (url.hostname.endsWith('.workers.dev')) {
+      const r = new Response(res.body, res);
+      r.headers.set('X-Robots-Tag', 'noindex');
+      return r;
+    }
+    return res;
   },
 };

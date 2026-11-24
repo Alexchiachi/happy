@@ -219,10 +219,18 @@ export default {
       proxied.headers.set('X-Proxy-Secret', env.PROXY_SECRET);
       return fetch(proxied);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (url.hostname.endsWith('.workers.dev')) {
+      const r = new Response(res.body, res);
+      r.headers.set('X-Robots-Tag', 'noindex');
+      return r;
+    }
+    return res;
   },
 };
 ```
+
+- 從 workers.dev（正式的 daoissimple-site.dadaoissimple.workers.dev 與分支預覽）來的頁面加上 `X-Robots-Tag: noindex`，避免搜尋引擎把預覽站當成正式站收錄。daoissimple.com 與 new.daoissimple.com 不受影響。
 
 - PROXY_SECRET 是密鑰，不寫進檔案。產生一串 32 字以上的亂數，用 npx wrangler secret put PROXY_SECRET --config site/wrangler.jsonc 設定（Dadaoissimple 帳號），同一串也設給 executive-table（見 5.3b）。
 - 這一步先不要設 routes 或自訂網域，只部署到 workers.dev 測試。
@@ -322,9 +330,11 @@ wrangler dev 實測九條都回 301，`/consulting/` 的 Location 確實帶著 `
 
 流程：
 
-- 推到 main：跑 tools/build_site.sh，再 npx wrangler deploy --config site/wrangler.jsonc。
-- 推到其他分支：跑組站腳本，再 npx wrangler versions upload --config site/wrangler.jsonc --preview-alias <分支名>。預覽網址是 <分支名>-daoissimple-site.<Dadaoissimple 帳號的 workers.dev 子網域>.workers.dev，把它交給簡家旗看。
-- 分支名只能用小寫英文、數字、連字號。
+- PROXY_SECRET：從 GitHub Secret `PROXY_SECRET` 用 `--secrets-file` 隨版本一起上傳（deploy 與 versions upload 都支援）。步驟裡用 jq 從環境變數寫成 `$RUNNER_TEMP` 下的暫存 JSON（umask 077），`trap` 保證步驟結束一定刪除；值不出現在指令列、log 與倉庫。選它而不用部署後再 `wrangler secret put`，是因為程式與密鑰同一個版本上線，沒有「新版本已上線、密鑰還沒設」的空窗，分支預覽版本也帶得到密鑰而不影響正式版本。檔案裡沒列的密鑰會保留，不會被刪。
+- 推到 main：跑 tools/build_site.sh cloudflare，再 npx wrangler deploy --config site/wrangler.jsonc --secrets-file <暫存檔>。
+- 推到其他分支：跑組站腳本，再 npx wrangler versions upload --config site/wrangler.jsonc --secrets-file <暫存檔> --preview-alias <別名>。預覽網址是 <別名>-daoissimple-site.dadaoissimple.workers.dev，印在 workflow 的 Summary，把它交給簡家旗看。
+- 別名由分支名自動轉成：小寫、非英數字元換成 -（連續的併成一個）、頭尾不留 -；不是字母開頭就補 `b-`（Cloudflare 規定別名以小寫字母開頭）；「別名-daoissimple-site」超過 63 字元就截短別名。
+- 分支上的第一次 versions upload 會因為 Worker 還不存在而失敗，這是預期的；合併到 main、第一次 deploy 之後就正常。
 
 預覽網址上的表單會被 executive-table 的來源檢查擋下，這是正常的；表單請在 5.8 的 new.daoissimple.com 測。
 
