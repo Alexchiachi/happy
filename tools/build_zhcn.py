@@ -15,6 +15,7 @@
 每次改完繁體版就重跑一次，zh-cn/ 會整個重建。
 之後要加英文、日文，照同一個結構開 en/、ja/ 即可。
 """
+import os
 import pathlib
 import re
 import shutil
@@ -27,7 +28,9 @@ except ImportError:
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "zh-cn"
-BASE = "https://alexchiachi.github.io/happy/"
+# 網站根網址。預設是現在的 GitHub Pages；組 Cloudflare 版時用環境變數
+# SITE_ORIGIN 傳入新網域（見 tools/build_site.sh）。結尾要有斜線。
+BASE = os.environ.get("SITE_ORIGIN", "https://alexchiachi.github.io/happy/")
 CC = OpenCC("tw2sp")
 
 # 同一個 repo 裡的其他獨立專案，各自有版型與 i18n，不歸這支腳本管。

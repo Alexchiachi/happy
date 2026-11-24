@@ -19,6 +19,7 @@
 - 階段 4 觀察期：進行中，約一週。
 - 階段 5 切換到 daoissimple.com（第 5 節）：尚未開始，每一步需簡家旗同意。網域已於 2026-11-23 轉入 Cloudflare Registrar（Dadaoissimple 帳號，到期 2028-03-01）。同日第 5 節改為跨帳號轉送做法（見 5.0、5.3b）。
 - 5.3b IP 修正已上線（2026-11-24），PROXY_SECRET 尚未設定。
+- 5.2、5.4、5.5 已完成（2026-11-24），尚未部署到 Cloudflare。5.6 的兩頁法律文字待取得 WordPress 原文。
 - 階段 6 搬 WordPress 文章（第 6 節）：尚未開始。
 
 ---
@@ -171,9 +172,13 @@ yunnan.html 與 taiwan.html 的「當季選物」與「做事的人」大多是�
 
 現在 .github/workflows/pages.yml 裡寫著要發布哪些檔案。把這份清單搬到 tools/build_site.sh（輸出到 _site/），pages.yml 和新的部署流程都呼叫它，避免兩份清單各自漂移。
 
-- 腳本結尾把 _redirects 複製進 _site/（見 5.5）。
-- _site/ 加進 .gitignore。
-- 改完後先確認 pages.yml 產出的網站和改之前一模一樣，再往下做。
+**已完成（2026-11-24）。** 腳本收一個參數：
+
+- `tools/build_site.sh pages`：給 GitHub Pages，內容與搬家前完全相同。
+- `tools/build_site.sh cloudflare`：額外做 5.4 的網址改寫，並把 _redirects 複製進 _site/。
+
+pages.yml 已改成呼叫 `tools/build_site.sh pages`，_site/ 已加進 .gitignore。
+驗收：用舊做法與新腳本各產出一份，`diff -r` 比對 651 個檔案完全相同。
 
 ### 5.3 新增網站 Worker
 
@@ -246,13 +251,22 @@ executive-table 的來信、訂單、預約等端點，用 CF-Connecting-IP 做�
 
 ### 5.4 網址改成根路徑
 
-網站會從 /happy/ 子路徑搬到網域根目錄。全站搜尋並修改：
+網站會從 /happy/ 子路徑搬到網域根目錄。
 
-- 寫死的 /happy/ 路徑、alexchiachi.github.io 網址。
-- 每頁的 canonical、hreflang、Open Graph 網址，以及 sitemap.xml、robots.txt。
-- 簡體轉換工具與 sitemap 產生工具裡的網站根網址（不要手改工具產出的檔案，改工具再重跑）。
+**已完成（2026-11-24），做法與原本的構想不同**：不改原始檔，只在 `cloudflare`
+模式下改寫 _site/ 裡的副本（tools/rewrite_site_urls.py）。這樣現在的 GitHub Pages
+網站完全不受影響，也不必和 5.9 排在同一天，更不需要 SITE_BASE 開關。
 
-改完後，GitHub Pages 上的舊站會暫時出現路徑錯誤。所以這一步要和 5.9 在同一天上線，或用一個開關讓工具同時產出兩種根網址。建議做開關：SITE_BASE=/happy/（GitHub Pages）與 SITE_BASE=/（Cloudflare）。
+兩條規則，都只針對網址，不碰正文：
+
+1. 絕對網址 `https://alexchiachi.github.io/happy/…` → `https://daoissimple.com/…`
+2. 屬性值開頭的 `/happy/`（href、src、content、action、data-src、poster）→ `/`
+
+改寫範圍限 .html、.xml、.txt、.json、.webmanifest、.css、.js；executive-table/
+整個跳過（它有自己的 Worker 與網址，切換是 5.9 當天的事，BRAND_SITE_URL 也不在這步動）。
+
+簡體轉換工具 tools/build_zhcn.py 與 tools/publish_from_issue.py 的根網址改讀環境變數
+SITE_ORIGIN，預設值維持現在的 github.io，所以原始檔產出不變。
 
 ### 5.5 舊 WordPress 網址轉址
 
@@ -276,6 +290,9 @@ executive-table 的來信、訂單、預約等端點，用 CF-Connecting-IP 做�
 - 第三階段搬進來的文章沿用原路徑，不需要轉址。
 - _redirects 只作用在靜態頁，不會影響 /api/*。
 - 完整清單以 Claude Docs「daoissimple.com 頁面去向表」為準；表上標「待查」的 8 個頁面，先不加。
+
+**已完成（2026-11-24），但只有 8 條。** `/consulting/ → /services#advisory` 先拿掉：
+services.html 沒有 `id="advisory"`，只有 `id="consulting"`。要指到哪裡待簡家旗決定。
 
 ### 5.6 Paddle 審核過的網址
 

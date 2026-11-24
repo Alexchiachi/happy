@@ -15,4 +15,7 @@ eternitychildbooking/artifact.html
 
 # Cloudflare wrangler 本機暫存
 .wrangler/
+
+# tools/build_site.sh 的產出
+_site/
 node_modules/
