@@ -261,9 +261,20 @@ executive-table 的來信、訂單、預約等端點，用 CF-Connecting-IP 做�
 
 1. 絕對網址 `https://alexchiachi.github.io/happy/…` → `https://daoissimple.com/…`
 2. 屬性值開頭的 `/happy/`（href、src、content、action、data-src、poster）→ `/`
+3. 去掉 `.html`：`a.html` → `a`、`x/index.html` → `x/`、`index.html` → `./`。
+   涵蓋站內連結、canonical、hreflang、og:url、JSON-LD 與 sitemap.xml。
+   不這樣做的話，站內每一次點擊都會被 `html_handling: auto-trailing-slash`
+   多轉一次（`/about.html` → `/about`）。舊的 `.html` 網址仍然會 307 導到新網址，
+   所以已經流通出去的連結不會壞。
+
+規則 1 連純文字顯示的網址一起換（eternitychildbooking/manual.html 的連結文字、
+inner-flow/index.html 頁尾的網址字串），避免文字與連結不一致。
 
 改寫範圍限 .html、.xml、.txt、.json、.webmanifest、.css、.js；executive-table/
 整個跳過（它有自己的 Worker 與網址，切換是 5.9 當天的事，BRAND_SITE_URL 也不在這步動）。
+
+驗收（wrangler dev）：60 頁的 canonical 與 sitemap 的 85 個網址全部**直接**回 200，
+不經轉址；爬 18 頁的 176 個站內資源，沒有壞掉的連結，也沒有任何連結需要多轉一次。
 
 簡體轉換工具 tools/build_zhcn.py 與 tools/publish_from_issue.py 的根網址改讀環境變數
 SITE_ORIGIN，預設值維持現在的 github.io，所以原始檔產出不變。
@@ -291,8 +302,9 @@ SITE_ORIGIN，預設值維持現在的 github.io，所以原始檔產出不變�
 - _redirects 只作用在靜態頁，不會影響 /api/*。
 - 完整清單以 Claude Docs「daoissimple.com 頁面去向表」為準；表上標「待查」的 8 個頁面，先不加。
 
-**已完成（2026-11-24），但只有 8 條。** `/consulting/ → /services#advisory` 先拿掉：
-services.html 沒有 `id="advisory"`，只有 `id="consulting"`。要指到哪裡待簡家旗決定。
+**已完成（2026-11-24），九條。** `/consulting/` 的目標由簡家旗定為
+`/services#consulting`（services.html 沒有 `id="advisory"`，只有 `id="consulting"`）。
+wrangler dev 實測九條都回 301，`/consulting/` 的 Location 確實帶著 `#consulting`。
 
 ### 5.6 Paddle 審核過的網址
 
