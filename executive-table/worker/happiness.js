@@ -26,7 +26,7 @@
  * 選用（wrangler.jsonc 的 vars）：
  *   HAPPINESS_REPO          預設 Alexchiachi/happiness-ledger
  */
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 
 export const HAPPINESS_STATUSES = ['已存入', '暫緩', '待補送'];
 
@@ -63,7 +63,7 @@ export async function handleHappiness(request, env, ctx, url) {
 
   await ensureHappinessSchema(env);
 
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM happiness WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

@@ -14,7 +14,7 @@
  * 就改由 dadaoissimple@gmail.com 本身寄出。
  */
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 
 export const LETTER_STATUSES = ['新進', '已回覆', '已結案'];
 const LIMITS = { name: 60, email: 120, subject: 100, message: 4000, page: 200 };
@@ -47,7 +47,7 @@ export async function handleLetter(request, env, ctx, url) {
   if (missing.length) return json({ ok: false, code: 'invalid', fields: missing }, 400);
 
   await ensureLetterSchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM letters WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

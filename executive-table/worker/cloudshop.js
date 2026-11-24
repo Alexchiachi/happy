@@ -19,7 +19,7 @@
  */
 import catalog from '../../cloudshop/products.json';
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 
 export const CLOUDSHOP_STATUSES = ['待付款', '已付款', '可取貨', '已出貨', '已完成', '取消'];
 const DELIVERY = { pickup: '到店自取', home: '宅配', '711': '7-11 取貨', family: '全家取貨' };
@@ -57,7 +57,7 @@ export async function handleCloudshopOrder(request, env, ctx, url) {
   const shipping = shippingFee(priced.subtotal, f.delivery);
 
   await ensureCloudshopSchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM cloudshop_orders WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();

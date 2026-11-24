@@ -17,7 +17,7 @@
  */
 import stay from '../../anning/stay.json';
 import { sendMail } from './mail.js';
-import { json, hashIp, formatTaipei } from './util.js';
+import { json, hashIp, clientIp, formatTaipei } from './util.js';
 
 export const STAY_STATUSES = ['待確認', '已確認', '已付款', '已完成', '取消'];
 const PAY = { linepay: 'LINE Pay', bank: '匯款' };
@@ -48,7 +48,7 @@ export async function handleStay(request, env, ctx, url) {
   if (priced.error) return json({ ok: false, code: priced.error, fields: priced.fields }, 400);
 
   await ensureStaySchema(env);
-  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || '');
+  const ipHash = await hashIp(clientIp(request, env));
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM stays WHERE ip_hash = ? AND created_at > datetime('now', ?)"
   ).bind(ipHash, `-${RATE_WINDOW_MIN} minutes`).first();
